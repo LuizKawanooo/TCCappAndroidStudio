@@ -3,54 +3,51 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 
-include 'db.php'; // Inclua o arquivo de conexão com o banco de dados
+// Dados de conexão com o banco de dados
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "your_database_name";
 
-// Verifique se os dados foram enviados via POST
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    echo json_encode(["status" => "error", "message" => "Invalid request method"]);
-    exit();
+// Cria a conexão
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Checa a conexão
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
-// Obtenha os dados da requisição
+// Recebe e decodifica os dados JSON
 $data = json_decode(file_get_contents('php://input'), true);
 
-// Verifique se os dados foram decodificados corretamente
-if (!is_array($data)) {
-    echo json_encode(["status" => "error", "message" => "Invalid JSON"]);
-    exit();
-}
-
-$cod_instituicao = isset($data['institution_code']) ? $data['institution_code'] : '';
-$email = isset($data['email']) ? $data['email'] : '';
-$rm = isset($data['rm']) ? $data['rm'] : '';
-$password = isset($data['password']) ? $data['password'] : '';
-
-// Verifique se todos os campos foram preenchidos
-if (empty($cod_instituicao) || empty($email) || empty($rm) || empty($password)) {
+if (!isset($data['institution_code']) || !isset($data['email']) || !isset($data['rm']) || !isset($data['password'])) {
     echo json_encode(["status" => "error", "message" => "All fields are required"]);
     exit();
 }
 
-// Valide o código da instituição
-if (!preg_match("/^[0-9]{3}$/", $cod_instituicao)) {
+$institution_code = $data['institution_code'];
+$email = $data['email'];
+$rm = $data['rm'];
+$password = $data['password'];
+
+// Valida os dados
+if (!preg_match("/^[0-9]{3}$/", $institution_code)) {
     echo json_encode(["status" => "error", "message" => "Invalid institution code"]);
     exit();
 }
 
-// Valide o e-mail
 if (!filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match("/@etec\.sp\.gov\.br$/", $email)) {
     echo json_encode(["status" => "error", "message" => "Invalid email"]);
     exit();
 }
 
-// Faça o hash da senha
+// Cria um hash da senha
 $password_hashed = password_hash($password, PASSWORD_DEFAULT);
 
-// Prepare a consulta SQL
-$sql = "INSERT INTO registrar_usuarios (cod_instituicao, email, rm, senha) VALUES (?, ?, ?, ?)";
-
+// Prepara e executa a consulta SQL
+$sql = "INSERT INTO users (institution_code, email, rm, password) VALUES (?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ssss", $cod_instituicao, $email, $rm, $password_hashed);
+$stmt->bind_param("ssss", $institution_code, $email, $rm, $password_hashed);
 
 if ($stmt->execute()) {
     echo json_encode(["status" => "success", "message" => "User registered successfully"]);
