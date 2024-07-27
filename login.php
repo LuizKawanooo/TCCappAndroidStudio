@@ -14,6 +14,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Obtenha os dados da requisição
 $data = json_decode(file_get_contents('php://input'), true);
 
+// Verifique se os dados foram decodificados corretamente
+if (!is_array($data)) {
+    echo json_encode(["status" => "error", "message" => "Invalid JSON"]);
+    exit();
+}
+
 $rm = isset($data['rm']) ? $data['rm'] : '';
 $password = isset($data['password']) ? $data['password'] : '';
 
