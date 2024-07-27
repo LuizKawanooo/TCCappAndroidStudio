@@ -3,48 +3,45 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 
-include 'db.php'; // Inclua o arquivo de conexão com o banco de dados
+// Dados de conexão com o banco de dados
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "your_database_name";
 
-// Verifique se os dados foram enviados via POST
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    echo json_encode(["status" => "error", "message" => "Invalid request method"]);
-    exit();
+// Cria a conexão
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Checa a conexão
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
-// Obtenha os dados da requisição
+// Recebe e decodifica os dados JSON
 $data = json_decode(file_get_contents('php://input'), true);
 
-// Verifique se os dados foram decodificados corretamente
-if (!is_array($data)) {
-    echo json_encode(["status" => "error", "message" => "Invalid JSON"]);
-    exit();
-}
-
-$rm = isset($data['rm']) ? $data['rm'] : '';
-$password = isset($data['password']) ? $data['password'] : '';
-
-// Verifique se os dados foram preenchidos
-if (empty($rm) || empty($password)) {
+if (!isset($data['rm']) || !isset($data['password'])) {
     echo json_encode(["status" => "error", "message" => "All fields are required"]);
     exit();
 }
 
-// Prepare a consulta SQL
-$sql = "SELECT senha FROM registrar_usuarios WHERE rm = ?";
+$rm = $data['rm'];
+$password = $data['password'];
 
+// Prepara e executa a consulta SQL
+$sql = "SELECT password FROM users WHERE rm = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $rm);
 $stmt->execute();
 $stmt->bind_result($password_hashed);
 $stmt->fetch();
-$stmt->close();
 
-// Verifique a senha
 if (password_verify($password, $password_hashed)) {
     echo json_encode(["status" => "success", "message" => "Login successful"]);
 } else {
     echo json_encode(["status" => "error", "message" => "Invalid RM or password"]);
 }
 
+$stmt->close();
 $conn->close();
 ?>
