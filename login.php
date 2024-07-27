@@ -1,36 +1,43 @@
 <?php
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Headers: Content-Type");
 
-include '../db.php'; // Se estiver no diretório pai
+include 'db.php'; // Inclua o arquivo de conexão com o banco de dados
 
-// Adicione logs para depuração
-error_log("POST data: " . print_r($_POST, true));
+// Verifique se os dados foram enviados via POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo json_encode(["status" => "error", "message" => "Invalid request method"]);
+    exit();
+}
 
-$rm = isset($_POST['rm']) ? $_POST['rm'] : '';
-$password = isset($_POST['password']) ? $_POST['password'] : '';
+// Obtenha os dados da requisição
+$data = json_decode(file_get_contents('php://input'), true);
 
-// Adicione logs para verificar os valores das variáveis
-error_log("RM: $rm, Password: $password");
+$rm = isset($data['rm']) ? $data['rm'] : '';
+$password = isset($data['password']) ? $data['password'] : '';
 
+// Verifique se os dados foram preenchidos
 if (empty($rm) || empty($password)) {
     echo json_encode(["status" => "error", "message" => "All fields are required"]);
     exit();
 }
 
-$sql = "SELECT * FROM registrar_usuarios WHERE rm = '$rm'";
-$result = $conn->query($sql);
+// Prepare a consulta SQL
+$sql = "SELECT senha FROM registrar_usuarios WHERE rm = ?";
 
-if ($result->num_rows > 0) {
-    $user = $result->fetch_assoc();
-    if (password_verify($password, $user['senha'])) {
-        echo json_encode(["status" => "success", "message" => "Login successful"]);
-    } else {
-        echo json_encode(["status" => "error", "message" => "Invalid password"]);
-    }
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $rm);
+$stmt->execute();
+$stmt->bind_result($password_hashed);
+$stmt->fetch();
+$stmt->close();
+
+// Verifique a senha
+if (password_verify($password, $password_hashed)) {
+    echo json_encode(["status" => "success", "message" => "Login successful"]);
 } else {
-    echo json_encode(["status" => "error", "message" => "User not found"]);
+    echo json_encode(["status" => "error", "message" => "Invalid RM or password"]);
 }
 
 $conn->close();
