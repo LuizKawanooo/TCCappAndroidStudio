@@ -4,10 +4,10 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 
 // Dados de conexão com o banco de dados
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "your_database_name";
+$servername = "tccappionic-bd.mysql.uhserver.com"; // Ou o nome do seu servidor
+$username = "ionic_perfil_bd"; // Seu usuário do MySQL
+$password = "{[UOLluiz2019"; // Sua senha do MySQL
+$dbname = "tccappionic_bd"; // Nome do seu banco de dados
 
 // Cria a conexão
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -29,7 +29,7 @@ $rm = $data['rm'];
 $password = $data['password'];
 
 // Prepara e executa a consulta SQL
-$sql = "SELECT password FROM users WHERE rm = ?";
+$sql = "SELECT password FROM registrar_usuarios WHERE rm = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $rm);
 $stmt->execute();
