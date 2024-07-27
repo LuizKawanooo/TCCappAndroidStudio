@@ -1,60 +1,37 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Headers: Content-Type");
+$servername = "tccappionic-bd.mysql.uhserver.com";
+$username = "ionic_perfil_bd";
+$password = "{[UOLluiz2019";
+$dbname = "tccappionic_bd";
 
-// Dados de conexão com o banco de dados
-$servername = "tccappionic-bd.mysql.uhserver.com"; // Ou o nome do seu servidor
-$username = "ionic_perfil_bd"; // Seu usuário do MySQL
-$password = "{[UOLluiz2019"; // Sua senha do MySQL
-$dbname = "tccappionic_bd"; // Nome do seu banco de dados
-
-// Cria a conexão
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Checa a conexão
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Recebe e decodifica os dados JSON
-$data = json_decode(file_get_contents('php://input'), true);
+$data = json_decode(file_get_contents("php://input"), true);
 
-if (!isset($data['institution_code']) || !isset($data['email']) || !isset($data['rm']) || !isset($data['password'])) {
-    echo json_encode(["status" => "error", "message" => "All fields are required"]);
-    exit();
-}
-
-$institution_code = $data['institution_code'];
+$cod_instituicao = $data['cod_instituicao'];
 $email = $data['email'];
 $rm = $data['rm'];
-$password = $data['password'];
+$password = password_hash($data['password'], PASSWORD_DEFAULT);
 
-// Valida os dados
-if (!preg_match("/^[0-9]{3}$/", $institution_code)) {
-    echo json_encode(["status" => "error", "message" => "Invalid institution code"]);
-    exit();
-}
-
-if (!filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match("/@etec\.sp\.gov\.br$/", $email)) {
-    echo json_encode(["status" => "error", "message" => "Invalid email"]);
-    exit();
-}
-
-// Cria um hash da senha
-$password_hashed = password_hash($password, PASSWORD_DEFAULT);
-
-// Prepara e executa a consulta SQL
 $sql = "INSERT INTO registrar_usuarios (cod_instituicao, email, rm, password) VALUES (?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ssss", $institution_code, $email, $rm, $password_hashed);
+$stmt->bind_param("ssss", $cod_instituicao, $email, $rm, $password);
 
+$response = array();
 if ($stmt->execute()) {
-    echo json_encode(["status" => "success", "message" => "User registered successfully"]);
+    $response['status'] = 'success';
 } else {
-    echo json_encode(["status" => "error", "message" => "Error: " . $stmt->error]);
+    $response['status'] = 'error';
+    $response['error'] = $stmt->error;
 }
 
 $stmt->close();
 $conn->close();
+
+header('Content-Type: application/json');
+echo json_encode($response);
 ?>
