@@ -3,7 +3,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
-include 'db.php';
+include '../db.php'; // Se estiver no diretório pai
 
 // Adicione logs para depuração
 error_log("POST data: " . print_r($_POST, true));
