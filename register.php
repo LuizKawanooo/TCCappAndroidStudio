@@ -3,7 +3,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
-include '../db.php'; // Se estiver no diretório pai
+include 'db.php'; // Certifique-se de que este caminho está correto
 
 // Adicione logs para depuração
 error_log("POST data: " . print_r($_POST, true));
@@ -13,7 +13,6 @@ $email = isset($_POST['email']) ? $_POST['email'] : '';
 $rm = isset($_POST['rm']) ? $_POST['rm'] : '';
 $password = isset($_POST['password']) ? $_POST['password'] : '';
 
-// Adicione logs para verificar os valores das variáveis
 error_log("Cod Instituicao: $cod_instituicao, Email: $email, RM: $rm, Password: $password");
 
 if (empty($cod_instituicao) || empty($email) || empty($rm) || empty($password)) {
