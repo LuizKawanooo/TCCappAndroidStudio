@@ -14,6 +14,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Obtenha os dados da requisição
 $data = json_decode(file_get_contents('php://input'), true);
 
+// Verifique se os dados foram decodificados corretamente
+if (!is_array($data)) {
+    echo json_encode(["status" => "error", "message" => "Invalid JSON"]);
+    exit();
+}
+
 $cod_instituicao = isset($data['institution_code']) ? $data['institution_code'] : '';
 $email = isset($data['email']) ? $data['email'] : '';
 $rm = isset($data['rm']) ? $data['rm'] : '';
