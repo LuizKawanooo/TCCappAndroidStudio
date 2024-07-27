@@ -4,10 +4,10 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 
 // Dados de conexão com o banco de dados
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "your_database_name";
+$servername = "tccappionic-bd.mysql.uhserver.com"; // Ou o nome do seu servidor
+$username = "ionic_perfil_bd"; // Seu usuário do MySQL
+$password = "{[UOLluiz2019"; // Sua senha do MySQL
+$dbname = "tccappionic_bd"; // Nome do seu banco de dados
 
 // Cria a conexão
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -45,7 +45,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match("/@etec\.sp\.gov\.
 $password_hashed = password_hash($password, PASSWORD_DEFAULT);
 
 // Prepara e executa a consulta SQL
-$sql = "INSERT INTO users (institution_code, email, rm, password) VALUES (?, ?, ?, ?)";
+$sql = "INSERT INTO registrar_usuarios (cod_instituicao, email, rm, password) VALUES (?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ssss", $institution_code, $email, $rm, $password_hashed);
 
