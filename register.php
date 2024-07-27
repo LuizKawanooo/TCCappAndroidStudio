@@ -12,6 +12,12 @@ if ($conn->connect_error) {
 
 $data = json_decode(file_get_contents("php://input"), true);
 
+if (!isset($data['cod_instituicao']) || !isset($data['email']) || !isset($data['rm']) || !isset($data['password'])) {
+    $response = array('status' => 'error', 'message' => 'All fields are required');
+    echo json_encode($response);
+    exit();
+}
+
 $cod_instituicao = $data['cod_instituicao'];
 $email = $data['email'];
 $rm = $data['rm'];
@@ -26,7 +32,7 @@ if ($stmt->execute()) {
     $response['status'] = 'success';
 } else {
     $response['status'] = 'error';
-    $response['error'] = $stmt->error;
+    $response['message'] = $stmt->error;
 }
 
 $stmt->close();
