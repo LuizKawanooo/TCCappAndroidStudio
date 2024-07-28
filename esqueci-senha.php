@@ -14,26 +14,26 @@ try {
     exit;
 }
 
-// Recebe o e-mail do cliente
-$data = json_decode(file_get_contents('php://input'));
-$email = $data->email ?? '';
+// Recebe o email do cliente
+$data = json_decode(file_get_contents('php://input'), true); // true para array associativo
+$email = isset($data['email']) ? $data['email'] : '';
 
 if (empty($email)) {
-    echo json_encode(['success' => false, 'message' => 'E-mail não fornecido.']);
+    echo json_encode(['success' => false, 'message' => 'Email não fornecido.']);
     exit;
 }
 
-// Verifica se o e-mail está registrado
+// Verifica se o email está registrado
 try {
     $stmt = $pdo->prepare("SELECT id FROM registrar_usuarios WHERE email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch();
-    
+
     if (!$user) {
-        echo json_encode(['success' => false, 'message' => 'E-mail não encontrado.']);
+        echo json_encode(['success' => false, 'message' => 'Email não encontrado.']);
         exit;
     }
-    
+
     // Gera um token de redefinição
     $token = bin2hex(random_bytes(16));
     $expires_at = date('Y-m-d H:i:s', strtotime('+1 hour')); // O link expira em 1 hora
@@ -42,19 +42,19 @@ try {
     $stmt = $pdo->prepare("INSERT INTO reset_tokens (user_id, token, expires_at) VALUES (?, ?, ?)");
     $stmt->execute([$user['id'], $token, $expires_at]);
 
-    // Envia o e-mail
+    // Envia o email
     $to = $email;
     $subject = "Redefinição de Senha";
     $message = "Para redefinir sua senha, clique no link abaixo:\n\n";
-    $message .= "Para abrir o app, clique no link: myapp://alterar-senha?token=$token\n\n";
+    $message .= "Para abrir o app, clique no link: myapp://resetar-senha?token=$token\n\n";
     $message .= "Esse link expirará em 1 hora.";
     $headers = "From: no-reply@seusite.com\r\n";
     $headers .= "Reply-To: no-reply@seusite.com\r\n";
 
     if (mail($to, $subject, $message, $headers)) {
-        echo json_encode(['success' => true, 'message' => 'Link de redefinição enviado para o seu e-mail.']);
+        echo json_encode(['success' => true, 'message' => 'Link de redefinição enviado para o seu email.']);
     } else {
-        echo json_encode(['success' => false, 'message' => 'Falha ao enviar o e-mail.']);
+        echo json_encode(['success' => false, 'message' => 'Falha ao enviar o email.']);
     }
 } catch (PDOException $e) {
     echo json_encode(['success' => false, 'message' => 'Erro ao processar a solicitação.']);
