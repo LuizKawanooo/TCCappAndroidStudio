@@ -16,8 +16,8 @@ try {
 
 // Recebe o token e a nova senha
 $data = json_decode(file_get_contents('php://input'));
-$token = $data->token ?? '';
-$nova_senha = $data->nova_senha ?? '';
+$token = isset($data->token) ? $data->token : '';
+$nova_senha = isset($data->nova_senha) ? $data->nova_senha : '';
 
 if (empty($token) || empty($nova_senha)) {
     echo json_encode(['success' => false, 'message' => 'Token ou nova senha não fornecidos.']);
