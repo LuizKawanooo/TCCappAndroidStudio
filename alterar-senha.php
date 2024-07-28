@@ -6,50 +6,34 @@ $user = 'ionic_perfil_bd';
 $pass = '{[UOLluiz2019';
 
 // Conectar ao banco de dados
-$conn = new mysqli($host, $user, $pass, $db);
+$pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// Verificar a conexão
-if ($conn->connect_error) {
-    die("Conexão falhou: " . $conn->connect_error);
+// Recebe o token da solicitação
+$data = json_decode(file_get_contents('php://input'));
+$token = $data->token ?? '';
+
+// Verifica se o token foi fornecido
+if (empty($token)) {
+    echo json_encode(['success' => false, 'message' => 'Token não fornecido.']);
+    exit;
 }
 
-// Receber dados da requisição
-$data = json_decode(file_get_contents("php://input"));
+// Verifica se o token é válido
+$stmt = $pdo->prepare("SELECT user_id FROM reset_tokens WHERE token = ? AND expires_at > NOW()");
+$stmt->execute([$token]);
+$tokenData = $stmt->fetch();
 
-if (isset($data->token) && isset($data->senha)) {
-    $token = $conn->real_escape_string($data->token);
-    $nova_senha = $conn->real_escape_string($data->senha);
-
-    // Verificar se o token existe na tabela de recuperação
-    $sql = "SELECT * FROM recuperacao_senha WHERE token = '$token' AND usado = 0";
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-        // Atualizar a senha do usuário
-        $row = $result->fetch_assoc();
-        $user_id = $row['usuario_id'];
-
-        // Hash da nova senha
-        $nova_senha_hash = password_hash($nova_senha, PASSWORD_BCRYPT);
-
-        // Atualizar a senha na tabela de usuários
-        $update_sql = "UPDATE usuarios SET senha = '$nova_senha_hash' WHERE id = $user_id";
-        if ($conn->query($update_sql) === TRUE) {
-            // Marcar o token como usado
-            $update_token_sql = "UPDATE recuperacao_senha SET usado = 1 WHERE token = '$token'";
-            $conn->query($update_token_sql);
-
-            echo json_encode(["success" => true, "message" => "Senha alterada com sucesso."]);
-        } else {
-            echo json_encode(["success" => false, "message" => "Erro ao atualizar a senha: " . $conn->error]);
-        }
-    } else {
-        echo json_encode(["success" => false, "message" => "Token inválido ou já usado."]);
-    }
-} else {
-    echo json_encode(["success" => false, "message" => "Dados insuficientes."]);
+if (!$tokenData) {
+    echo json_encode(['success' => false, 'message' => 'Token inválido ou expirado.']);
+    exit;
 }
 
-// Fechar a conexão
-$conn->close();
+// Token válido, processar a solicitação para redefinir a senha
+$user_id = $tokenData['user_id'];
+
+// Aqui você pode criar um endpoint para a redefinição da senha ou processar a redefinição diretamente
+// Exemplo: gerar uma nova senha e atualizar no banco de dados
+
+echo json_encode(['success' => true, 'message' => 'Token válido. Você pode prosseguir com a redefinição da senha.']);
 ?>
