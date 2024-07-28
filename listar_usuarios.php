@@ -21,7 +21,7 @@ try {
     throw new \PDOException($e->getMessage(), (int)$e->getCode());
 }
 
-$stmt = $pdo->query('SELECT rm, senha FROM usuarios');
+$stmt = $pdo->query('SELECT rm, senha FROM registrar_usuarios');
 $usuarios = $stmt->fetchAll();
 
 echo json_encode($usuarios);
