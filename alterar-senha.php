@@ -6,34 +6,45 @@ $user = 'ionic_perfil_bd';
 $pass = '{[UOLluiz2019';
 
 // Conectar ao banco de dados
-$pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo json_encode(['success' => false, 'message' => 'Erro ao conectar ao banco de dados.']);
+    exit;
+}
 
-// Recebe o token da solicitação
+// Recebe o token e a nova senha
 $data = json_decode(file_get_contents('php://input'));
 $token = $data->token ?? '';
+$nova_senha = $data->nova_senha ?? '';
 
-// Verifica se o token foi fornecido
-if (empty($token)) {
-    echo json_encode(['success' => false, 'message' => 'Token não fornecido.']);
+if (empty($token) || empty($nova_senha)) {
+    echo json_encode(['success' => false, 'message' => 'Token ou nova senha não fornecidos.']);
     exit;
 }
 
 // Verifica se o token é válido
-$stmt = $pdo->prepare("SELECT user_id FROM reset_tokens WHERE token = ? AND expires_at > NOW()");
-$stmt->execute([$token]);
-$tokenData = $stmt->fetch();
+try {
+    $stmt = $pdo->prepare("SELECT user_id, expires_at FROM reset_tokens WHERE token = ? AND expires_at > NOW()");
+    $stmt->execute([$token]);
+    $resetToken = $stmt->fetch();
+    
+    if (!$resetToken) {
+        echo json_encode(['success' => false, 'message' => 'Token inválido ou expirado.']);
+        exit;
+    }
 
-if (!$tokenData) {
-    echo json_encode(['success' => false, 'message' => 'Token inválido ou expirado.']);
-    exit;
+    // Atualiza a senha do usuário
+    $stmt = $pdo->prepare("UPDATE registrar_usuarios SET senha = ? WHERE id = ?");
+    $stmt->execute([password_hash($nova_senha, PASSWORD_DEFAULT), $resetToken['user_id']]);
+
+    // Remove o token após o uso
+    $stmt = $pdo->prepare("DELETE FROM reset_tokens WHERE token = ?");
+    $stmt->execute([$token]);
+
+    echo json_encode(['success' => true, 'message' => 'Senha alterada com sucesso.']);
+} catch (PDOException $e) {
+    echo json_encode(['success' => false, 'message' => 'Erro ao processar a solicitação.']);
 }
-
-// Token válido, processar a solicitação para redefinir a senha
-$user_id = $tokenData['user_id'];
-
-// Aqui você pode criar um endpoint para a redefinição da senha ou processar a redefinição diretamente
-// Exemplo: gerar uma nova senha e atualizar no banco de dados
-
-echo json_encode(['success' => true, 'message' => 'Token válido. Você pode prosseguir com a redefinição da senha.']);
 ?>
