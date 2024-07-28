@@ -1,9 +1,9 @@
 <?php
 // Configurações do banco de dados
-$host = 'localhost';
-$db = 'seu_banco_de_dados';
-$user = 'seu_usuario';
-$pass = 'sua_senha';
+$host = 'tccappionic-bd.mysql.uhserver.com';
+$db   = 'tccappionic_bd';
+$user = 'ionic_perfil_bd';
+$pass = '{[UOLluiz2019';
 
 // Conectar ao banco de dados
 $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
@@ -19,7 +19,7 @@ if (empty($email)) {
 }
 
 // Verifica se o email está registrado
-$stmt = $pdo->prepare("SELECT id FROM usuarios WHERE email = ?");
+$stmt = $pdo->prepare("SELECT id FROM registrar_usuarios WHERE email = ?");
 $stmt->execute([$email]);
 $user = $stmt->fetch();
 
@@ -40,7 +40,7 @@ $stmt->execute([$user['id'], $token, $expires_at]);
 $to = $email;
 $subject = "Redefinição de Senha";
 $message = "Para redefinir sua senha, clique no link abaixo:\n\n";
-$message .= "http://seusite.com/resetar-senha.php?token=$token\n\n";
+$message .= "Para abrir o app, clique no link: myapp://resetar-senha?token=$token\n\n";
 $message .= "Esse link expirará em 1 hora.";
 $headers = "From: no-reply@seusite.com\r\n";
 $headers .= "Reply-To: no-reply@seusite.com\r\n";
