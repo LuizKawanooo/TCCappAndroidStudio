@@ -12,10 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 header('Content-Type: application/json');
 
 // Configurações do banco de dados
-$host = 'localhost';
-$db   = 'nome_do_banco';
-$user = 'usuario';
-$pass = 'senha';
+$host = 'tccappionic-bd.mysql.uhserver.com';
+$db   = 'tccappionic_bd';
+$user = 'ionic_perfil_bd';
+$pass = '{[UOLluiz2019';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
@@ -31,7 +31,7 @@ try {
     throw new \PDOException($e->getMessage(), (int)$e->getCode());
 }
 
-$stmt = $pdo->query('SELECT rm, senha FROM usuarios');
+$stmt = $pdo->query('SELECT rm, senha FROM registrar_usuarios');
 $usuarios = $stmt->fetchAll();
 
 echo json_encode($usuarios);
