@@ -46,3 +46,4 @@ if ($usuario) {
     echo json_encode(['success' => false, 'message' => 'RM ou senha incorretos']);
 }
 ?>
+
