@@ -2,10 +2,10 @@
 header('Content-Type: application/json');
 
 // Configurações do banco de dados
-$host = 'localhost';
-$db   = 'nome_do_banco';
-$user = 'usuario';
-$pass = 'senha';
+$host = 'tccappionic-bd.mysql.uhserver.com';
+$db   = 'tccappionic_bd';
+$user = 'ionic_perfil_bd';
+$pass = '{[UOLluiz2019';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
