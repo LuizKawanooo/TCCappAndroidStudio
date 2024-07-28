@@ -11,7 +11,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // Recebe o email do cliente
 $data = json_decode(file_get_contents('php://input'));
-$email = $data->email ?? '';
+$email = isset($data->email) ? $data->email : '';
 
 if (empty($email)) {
     echo json_encode(['success' => false, 'message' => 'Email não fornecido.']);
