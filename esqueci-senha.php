@@ -9,22 +9,17 @@ $pass = '{[UOLluiz2019';
 $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// Recebe o email do cliente
+// Recebe o e-mail do cliente
 $data = json_decode(file_get_contents('php://input'));
-$email = isset($data->email) ? $data->email : '';
+$email = $data->email ?? '';
 
-if (empty($email)) {
-    echo json_encode(['success' => false, 'message' => 'Email não fornecido.']);
-    exit;
-}
-
-// Verifica se o email está registrado
+// Verifica se o e-mail está registrado
 $stmt = $pdo->prepare("SELECT id FROM registrar_usuarios WHERE email = ?");
 $stmt->execute([$email]);
 $user = $stmt->fetch();
 
 if (!$user) {
-    echo json_encode(['success' => false, 'message' => 'Email não encontrado.']);
+    echo json_encode(['success' => false, 'message' => 'E-mail não encontrado.']);
     exit;
 }
 
@@ -36,18 +31,18 @@ $expires_at = date('Y-m-d H:i:s', strtotime('+1 hour')); // O link expira em 1 h
 $stmt = $pdo->prepare("INSERT INTO reset_tokens (user_id, token, expires_at) VALUES (?, ?, ?)");
 $stmt->execute([$user['id'], $token, $expires_at]);
 
-// Envia o email
+// Envia o e-mail
 $to = $email;
 $subject = "Redefinição de Senha";
 $message = "Para redefinir sua senha, clique no link abaixo:\n\n";
-$message .= "Para abrir o app, clique no link: myapp://resetar-senha?token=$token\n\n";
+$message .= "Para abrir o app, clique no link: myapp://alterar-senha?token=$token\n\n";
 $message .= "Esse link expirará em 1 hora.";
 $headers = "From: no-reply@seusite.com\r\n";
 $headers .= "Reply-To: no-reply@seusite.com\r\n";
 
 if (mail($to, $subject, $message, $headers)) {
-    echo json_encode(['success' => true, 'message' => 'Link de redefinição enviado para o seu email.']);
+    echo json_encode(['success' => true, 'message' => 'Link de redefinição enviado para o seu e-mail.']);
 } else {
-    echo json_encode(['success' => false, 'message' => 'Falha ao enviar o email.']);
+    echo json_encode(['success' => false, 'message' => 'Falha ao enviar o e-mail.']);
 }
 ?>
