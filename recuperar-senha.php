@@ -19,7 +19,7 @@ if ($user) {
     $stmt->execute(['user_id' => $user_id, 'token' => $token]);
 
     // Envia o link de recuperação por email
-    $reset_link = "myapp://telaRec?token=$token";
+    $reset_link = "AppIonicTCC://telaRec?token=$token";
     $to = $email;
     $subject = "Recuperação de Senha";
     $message = "Clique no link para recuperar sua senha: $reset_link";
