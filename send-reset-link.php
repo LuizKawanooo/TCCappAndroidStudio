@@ -30,7 +30,7 @@ try {
     $to = $email;
     $subject = 'Redefinição de Senha';
     $message = "Clique no link para redefinir sua senha: $resetLink";
-    $headers = "From: your-email@example.com\r\n";
+    $headers = "From: juviscreudo2@gmail.com\r\n";
 
     if (mail($to, $subject, $message, $headers)) {
         echo json_encode(['message' => 'Link de redefinição enviado com sucesso.']);
