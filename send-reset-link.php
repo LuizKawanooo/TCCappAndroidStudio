@@ -1,4 +1,17 @@
 <?php
+
+
+header("Access-Control-Allow-Origin: *"); // Permite qualquer origem
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS"); // Permite métodos HTTP
+header("Access-Control-Allow-Headers: Content-Type"); // Permite cabeçalhos específicos
+header("Content-Type: application/json");
+
+// O restante do seu código PHP
+
+
+
+
+
 // Recebe o e-mail do cliente
 $data = json_decode(file_get_contents('php://input'), true);
 $email = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
