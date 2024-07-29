@@ -1,6 +1,6 @@
 <?php
 // Conexão com o banco de dados
-$pdo = new PDO('mysql:host=localhost;dbname=seu_banco', 'usuario', 'senha');
+require 'database.php';
 
 // Recebe o email do cliente
 $email = $_POST['email'];
@@ -19,7 +19,7 @@ if ($user) {
     $stmt->execute(['user_id' => $user_id, 'token' => $token]);
 
     // Envia o link de recuperação por email
-    $reset_link = "https://seuapp.com/telaRec?token=$token";
+    $reset_link = "myapp://telaRec?token=$token";
     $to = $email;
     $subject = "Recuperação de Senha";
     $message = "Clique no link para recuperar sua senha: $reset_link";
