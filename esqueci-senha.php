@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
 
     // Verificar se o email existe no banco de dados
-    $stmt = $pdo->prepare('SELECT id FROM usuarios WHERE email = ?');
+    $stmt = $pdo->prepare('SELECT id FROM registrar_usuarios WHERE email = ?');
     $stmt->execute([$email]);
     $user = $stmt->fetch();
 
