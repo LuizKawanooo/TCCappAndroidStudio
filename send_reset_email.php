@@ -1,6 +1,7 @@
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+
 require 'src/PHPMailer-master/src/Exception.php';
 require 'src/PHPMailer-master/src/PHPMailer.php';
 require 'src/PHPMailer-master/src/SMTP.php';
@@ -8,7 +9,7 @@ require 'src/PHPMailer-master/src/SMTP.php';
 // Configurações do banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
 $username = "ionic_perfil_bd";
-$password = "{[UOLluiz2019";
+$password = "{[UOLluiz2019"; // Verifique se essa senha está correta
 $dbname = "tccappionic_bd";
 
 // Cria conexão com o banco de dados
@@ -19,7 +20,14 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$email = $_POST['email']; // E-mail fornecido pelo usuário
+// Sanitiza a entrada
+$email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+
+// Verifica se o e-mail é válido
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    echo json_encode(["error" => "E-mail inválido"]);
+    exit();
+}
 
 // Verifica se o e-mail existe no banco de dados
 $sql = "SELECT id FROM users WHERE email = ?";
@@ -47,7 +55,7 @@ if ($stmt->num_rows > 0) {
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Username = 'juviscreudo19@gmail.com'; // Seu e-mail do Gmail
-        $mail->Password = 'mals shwc apvl qigh'; // Sua senha de aplicativo do Gmail
+        $mail->Password = 'malsshwcapvlqigh'; // Sua senha de aplicativo do Gmail
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
@@ -58,7 +66,7 @@ if ($stmt->num_rows > 0) {
         $mail->isHTML(true);
         $mail->Subject = 'Recuperação de Senha';
         $mail->Body    = "Clique no link para redefinir sua senha: <a href='https://endologic.com.br/tcc/reset_password.php?token=$token'>Redefinir Senha</a>";
-        $mail->AltBody = "Clique no link para redefinir sua senha: https:/endologic.com.br/tcc/reset_password.php?token=$token";
+        $mail->AltBody = "Clique no link para redefinir sua senha: https://endologic.com.br/tcc/reset_password.php?token=$token";
 
         $mail->send();
         echo json_encode(["message" => "E-mail de recuperação enviado"]);
