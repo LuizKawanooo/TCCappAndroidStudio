@@ -1,9 +1,9 @@
 <?php
 // Configurações do banco de dados
-$servername = "localhost";
-$username = "db_username";
-$password = "db_password";
-$dbname = "db_name";
+$servername = "tccappionic-bd.mysql.uhserver.com";
+$username = "ionic_perfil_bd";
+$password = "{[UOLluiz2019";
+$dbname = "tccappionic_bd";
 
 // Cria conexão com o banco de dados
 $conn = new mysqli($servername, $username, $password, $dbname);
