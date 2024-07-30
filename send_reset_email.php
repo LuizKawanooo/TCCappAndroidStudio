@@ -2,9 +2,10 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'src/PHPMailer-master/src/Exception.php';
-require 'src/PHPMailer-master/src/PHPMailer.php';
-require 'src/PHPMailer-master/src/SMTP.php';
+require '/var/www/html/endologic.com.br/web/tcc/src/PHPMailer-master/src/Exception.php';
+require '/var/www/html/endologic.com.br/web/tcc/src/PHPMailer-master/src/PHPMailer.php';
+require '/var/www/html/endologic.com.br/web/tcc/src/PHPMailer-master/src/SMTP.php';
+
 
 // Configurações do banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
