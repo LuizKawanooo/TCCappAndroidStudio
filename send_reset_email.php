@@ -55,12 +55,12 @@ if ($stmt->num_rows > 0) {
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Username = 'juviscreudo19@gmail.com'; // Seu e-mail do Gmail
-        $mail->Password = 'mals shwc apvl qigh'; // Sua senha de aplicativo do Gmail
+        $mail->Password = 'malsshwcapvlqigh'; // Sua senha de aplicativo do Gmail
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
         // Configurações do e-mail
-        $mail->setFrom('juviscreudo19@gmail.com', 'Bibliotec Ofc');
+        $mail->setFrom('juviscreudo19@gmail.com', 'juviscreudo19@gmail.com');
         $mail->addAddress($email);
 
         $mail->isHTML(true);
