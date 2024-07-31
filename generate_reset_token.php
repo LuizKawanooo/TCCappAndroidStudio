@@ -1,5 +1,4 @@
 <?php
-<?php
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -11,9 +10,9 @@ require 'path/to/PHPMailer/src/Exception.php';
 require 'path/to/PHPMailer/src/PHPMailer.php';
 require 'path/to/PHPMailer/src/SMTP.php';
 
-function sendRecoveryEmail($email) {
+// Função para enviar e-mail de redefinição de senha
+function sendResetEmail($email, $token) {
     $mail = new PHPMailer(true);
-    
     try {
         // Configuração do servidor SMTP
         $mail->isSMTP();
@@ -29,9 +28,10 @@ function sendRecoveryEmail($email) {
         $mail->addAddress($email);
 
         // Conteúdo do e-mail
+        $reset_link = "https://endologic.com.br/tcc/reset_password.php?token=" . $token;
         $mail->isHTML(true);
-        $mail->Subject = 'Instruções de Recuperação de Senha';
-        $mail->Body    = "Para redefinir sua senha, por favor, acesse a página de recuperação em <a href='https://endologic.com.br/tcc/reset_password.php'>Recuperar senha</a> e siga as instruções.";
+        $mail->Subject = 'Recuperação de Senha';
+        $mail->Body    = "Clique no link para resetar sua senha: <a href='$reset_link'>$reset_link</a>";
 
         $mail->send();
         return true;
@@ -40,13 +40,39 @@ function sendRecoveryEmail($email) {
     }
 }
 
+// Função para gerar token de redefinição
+function generateResetToken($email) {
+    $conn = new mysqli("tccappionic-bd.mysql.uhserver.com", "ionic_perfil_bd", "{[UOLluiz2019", "tccappionic_bd");
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    $reset_token = bin2hex(random_bytes(16));
+    $reset_token_expiry = date("Y-m-d H:i:s", strtotime("+1 hour"));
+
+    $stmt = $conn->prepare("UPDATE registrar_usuarios SET reset_token = ?, reset_token_expiry = ? WHERE email = ?");
+    $stmt->bind_param("sss", $reset_token, $reset_token_expiry, $email);
+    $stmt->execute();
+
+    $stmt->close();
+    $conn->close();
+
+    return $reset_token;
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
-    if (sendRecoveryEmail($email)) {
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo json_encode(["message" => "Email inválido."]);
+        exit;
+    }
+
+    $token = generateResetToken($email);
+    if (sendResetEmail($email, $token)) {
         echo json_encode(["message" => "Email de recuperação enviado!"]);
     } else {
         echo json_encode(["message" => "Erro ao enviar o e-mail. Tente novamente mais tarde."]);
     }
 }
 ?>
-
