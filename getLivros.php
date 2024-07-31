@@ -1,7 +1,9 @@
 <?php
 header('Content-Type: application/json');
 
-$host = 'tccappionic-bd.mysql.uhserver.com'; // Seu host
+// Configurações de conexão
+$host = 'tccappionic-bd.mysql.uhserver.com'; // Endereço do servidor MySQL
+$port = '3306'; // Porta padrão do MySQL
 $db   = 'tccappionic_bd'; // Nome do banco de dados
 $user = 'ionic_perfil_bd'; // Seu usuário
 $pass = '{[UOLluiz2019'; // Sua senha
@@ -13,7 +15,8 @@ $offset = ($page - 1) * $limit;
 
 try {
     // Conexão com o banco de dados
-    $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
+    $dsn = "mysql:host=$host;port=$port;dbname=$db";
+    $pdo = new PDO($dsn, $user, $pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Verificar se a tabela 'livro' existe
