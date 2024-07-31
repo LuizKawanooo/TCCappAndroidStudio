@@ -1,25 +1,28 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
+header('Content-Type: application/json');
 
-// Conectar ao banco de dados
 $host = "tccappionic-bd.mysql.uhserver.com";
 $dbname = "tccappionic_bd";
 $username = "ionic_perfil_bd";
 $password = "{[UOLluiz2019";
 
-// Conecta ao banco de dados
-$pdo = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+try {
+    // Cria uma nova conexão PDO
+    $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// Consulta SQL para obter todos os livros
-$query = "SELECT * FROM livro"; // Supondo que a tabela se chama "livros"
-$stmt = $pdo->prepare($query);
-$stmt->execute();
+    // Prepara e executa a consulta SQL
+    $stmt = $pdo->prepare("SELECT * FROM livro");
+    $stmt->execute();
 
-// Obtém todos os resultados
-$livros = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Obtém todos os resultados da consulta
+    $livros = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Retorna os dados como JSON
-echo json_encode($livros);
+    // Retorna os resultados como JSON
+    echo json_encode($livros);
+
+} catch (PDOException $e) {
+    // Se ocorrer um erro, exibe a mensagem de erro
+    echo json_encode(['error' => $e->getMessage()]);
+}
 ?>
