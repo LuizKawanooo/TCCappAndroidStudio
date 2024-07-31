@@ -6,9 +6,10 @@ header("Access-Control-Allow-Headers: Content-Type");
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'path/to/PHPMailer/src/Exception.php';
-require 'path/to/PHPMailer/src/PHPMailer.php';
-require 'path/to/PHPMailer/src/SMTP.php';
+// Caminho para o diretório PHPMailer
+require 'src/PHPMailer-master/src/Exception.php';
+require 'src/PHPMailer-master/src/PHPMailer.php';
+require 'src/PHPMailer-master/src/SMTP.php';
 
 // Função para enviar e-mail de redefinição de senha
 function sendResetEmail($email, $token) {
