@@ -1,6 +1,7 @@
 <?php
 function generateResetToken($email) {
-    $conn = new mysqli("seu_host", "seu_usuario", "sua_senha", "meu_banco_de_dados");
+    $conn = new mysqli("tccappionic-bd.mysql.uhserver.com", "ionic_perfil_bd", "{[UOLluiz2019", "tccappionic_bd");
+
 
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
@@ -28,10 +29,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 function sendResetEmail($email, $token) {
-    $reset_link = "http://seu_dominio.com/reset_password.php?token=" . $token;
+    $reset_link = "https://endologic.com.br/tcc/reset_password.php?token=" . $token;
     $subject = "Recuperação de Senha";
     $message = "Clique no link para resetar sua senha: " . $reset_link;
-    $headers = "From: seu_email@example.com";
+    $headers = "From: juviscreudo19@gmail.com?";
 
     mail($email, $subject, $message, $headers);
 }
