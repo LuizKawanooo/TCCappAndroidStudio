@@ -2,10 +2,11 @@
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 
-$host = 'localhost';
-$db = 'seu_banco_de_dados';
-$user = 'seu_usuario';
-$pass = 'sua_senha';
+
+$host = 'tccappionic-bd.mysql.uhserver.com'; // Substitua pelo seu host do banco de dados
+$db = 'tccappionic_bd'; // Substitua pelo nome do seu banco de dados
+$user = 'ionic_perfil_bd'; // Substitua pelo seu usuário do banco de dados
+$pass = '{[UOLluiz2019'; // Substitua pela sua senha do banco de dados
 
 $conn = new mysqli($host, $user, $pass, $db);
 
