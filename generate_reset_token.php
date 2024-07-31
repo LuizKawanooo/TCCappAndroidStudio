@@ -68,3 +68,68 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'path/to/PHPMailer/src/Exception.php';
+require 'path/to/PHPMailer/src/PHPMailer.php';
+require 'path/to/PHPMailer/src/SMTP.php';
+
+function sendRecoveryEmail($email) {
+    $mail = new PHPMailer(true);
+    
+    try {
+        // Configuração do servidor SMTP
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com'; // Endereço do servidor SMTP
+        $mail->SMTPAuth = true;
+        $mail->Username = 'juviscreudo19@gmail.com'; // Seu usuário SMTP
+        $mail->Password = 'mals shwc apvl qigh'; // Sua senha SMTP
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Habilita a criptografia TLS
+        $mail->Port = 587; // Porta SMTP
+
+        // Remetente e destinatário
+        $mail->setFrom('juviscreudo19@gmail.com', 'Bibliotec Ofc');
+        $mail->addAddress($email);
+
+        // Conteúdo do e-mail
+        $mail->isHTML(true);
+        $mail->Subject = 'Instruções de Recuperação de Senha';
+        $mail->Body    = "Para redefinir sua senha, por favor, acesse a página de recuperação em <a href='https://endologic.com.br/tcc/reset_password.php'>Recuperar senha</a> e siga as instruções.";
+
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        return false;
+    }
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = $_POST["email"];
+    if (sendRecoveryEmail($email)) {
+        echo json_encode(["message" => "Email de recuperação enviado!"]);
+    } else {
+        echo json_encode(["message" => "Erro ao enviar o e-mail. Tente novamente mais tarde."]);
+    }
+}
+?>
+
