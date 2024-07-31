@@ -7,21 +7,18 @@ $dbname = "tccappionic_bd";
 $username = "ionic_perfil_bd";
 $password = "{[UOLluiz2019";
 
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// Conecta ao banco de dados
+$pdo = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Preparar a consulta
-    $stmt = $pdo->prepare("SELECT titulo, genero, autor, editora, tombo, ano, classificacao, n_paginas, isbn, imagem FROM livro");
-    $stmt->execute();
+// Consulta SQL para obter todos os livros
+$query = "SELECT * FROM livro"; // Supondo que a tabela se chama "livros"
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-    // Buscar todos os livros
-    $livros = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Obtém todos os resultados
+$livros = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Retornar os dados como JSON
-    echo json_encode($livros);
-
-} catch (PDOException $e) {
-    echo json_encode(["error" => $e->getMessage()]);
-}
+// Retorna os dados como JSON
+echo json_encode($livros);
 ?>
