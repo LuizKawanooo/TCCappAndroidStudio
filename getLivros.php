@@ -34,7 +34,7 @@ try {
 
     echo json_encode([
         'totalCount' => $totalCount,
-        'livros' => $livros
+        'livro' => $livros
     ]);
 
 } catch (PDOException $e) {
