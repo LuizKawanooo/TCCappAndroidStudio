@@ -1,9 +1,7 @@
 <?php
-
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
@@ -12,29 +10,24 @@ header("Access-Control-Allow-Headers: Content-Type");
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// Caminho para o diretório PHPMailer
 require 'src/PHPMailer-master/src/Exception.php';
 require 'src/PHPMailer-master/src/PHPMailer.php';
 require 'src/PHPMailer-master/src/SMTP.php';
 
-// Função para enviar e-mail de redefinição de senha
 function sendResetEmail($email, $token) {
     $mail = new PHPMailer(true);
     try {
-        // Configuração do servidor SMTP
         $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com'; // Endereço do servidor SMTP
+        $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'juviscreudo19@gmail.com'; // Seu usuário SMTP
-        $mail->Password = 'mals shwc apvl qigh'; // Sua senha SMTP
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Habilita a criptografia TLS
-        $mail->Port = 587; // Porta SMTP
+        $mail->Username = 'juviscreudo19@gmail.com';
+        $mail->Password = 'mals shwc apvl qigh';
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
 
-        // Remetente e destinatário
         $mail->setFrom('juviscreudo19@gmail.com', 'Bibliotec Ofc');
         $mail->addAddress($email);
 
-        // Conteúdo do e-mail
         $reset_link = "https://endologic.com.br/tcc/reset_password.php?token=" . $token;
         $mail->isHTML(true);
         $mail->Subject = 'Recuperação de Senha';
@@ -47,7 +40,6 @@ function sendResetEmail($email, $token) {
     }
 }
 
-// Função para gerar token de redefinição
 function generateResetToken($email) {
     $conn = new mysqli("tccappionic-bd.mysql.uhserver.com", "ionic_perfil_bd", "{[UOLluiz2019", "tccappionic_bd");
 
