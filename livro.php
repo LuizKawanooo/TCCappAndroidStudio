@@ -2,7 +2,6 @@
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 
-
 $host = 'tccappionic-bd.mysql.uhserver.com'; // Substitua pelo seu host do banco de dados
 $db = 'tccappionic_bd'; // Substitua pelo nome do seu banco de dados
 $user = 'ionic_perfil_bd'; // Substitua pelo seu usuário do banco de dados
@@ -25,7 +24,7 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $livro = $result->fetch_assoc();
-    $livro['imagem_url'] = 'http://sua-api-url/imagem.php?id=' . $id;
+    // Adiciona URLs para o PDF
     $livro['pdf_url'] = 'http://sua-api-url/pdf.php?id=' . $id;
     echo json_encode($livro);
 } else {
