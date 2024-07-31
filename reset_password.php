@@ -1,6 +1,6 @@
 <?php
 function resetPassword($token, $new_password) {
-    $conn = new mysqli("seu_host", "seu_usuario", "sua_senha", "meu_banco_de_dados");
+    $conn = new mysqli("tccappionic-bd.mysql.uhserver.com", "ionic_perfil_bd", "{[UOLluiz2019", "tccappionic_bd");
 
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
