@@ -1,13 +1,45 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
+require 'path/to/PHPMailer/src/Exception.php';
+require 'path/to/PHPMailer/src/PHPMailer.php';
+require 'path/to/PHPMailer/src/SMTP.php';
 
+// Configuração do servidor SMTP
+$mail = new PHPMailer(true);
+
+function sendResetEmail($email, $token) {
+    global $mail;
+    try {
+        // Configuração do servidor SMTP
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com'; // Endereço do servidor SMTP
+        $mail->SMTPAuth = true;
+        $mail->Username = 'juviscreudo19@gmail.com'; // Seu usuário SMTP
+        $mail->Password = 'mals shwc apvl qigh'; // Sua senha SMTP
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Habilita a criptografia TLS
+        $mail->Port = 587; // Porta SMTP
+
+        // Remetente e destinatário
+        $mail->setFrom('juviscreudo19@gmail.com', 'Bibliotec Ofc');
+        $mail->addAddress($email);
+
+        // Conteúdo do e-mail
+        $reset_link = "https://endologic.com.br/tcc/reset_password.php?token=" . $token;
+        $mail->isHTML(true);
+        $mail->Subject = 'Recuperação de Senha';
+        $mail->Body    = "Clique no link para resetar sua senha: <a href='$reset_link'>$reset_link</a>";
+
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        return false;
+    }
+}
 
 function generateResetToken($email) {
-    $conn = new mysqli("tccappionic-bd.mysql.uhserver.com", "ionic_perfil_bd", "{[UOLluiz2019", "tccappionic_bd");
-
+    $conn = new mysqli("seu_host", "seu_usuario", "sua_senha", "meu_banco_de_dados");
 
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
@@ -29,17 +61,10 @@ function generateResetToken($email) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
     $token = generateResetToken($email);
-    // Enviar email com o token (implemente a função sendResetEmail)
-    sendResetEmail($email, $token);
-    echo json_encode(["message" => "Email de recuperação enviado!"]);
-}
-
-function sendResetEmail($email, $token) {
-    $reset_link = "https://endologic.com.br/tcc/reset_password.php?token=" . $token;
-    $subject = "Recuperação de Senha";
-    $message = "Clique no link para resetar sua senha: " . $reset_link;
-    $headers = "From: juviscreudo19@gmail.com?";
-
-    mail($email, $subject, $message, $headers);
+    if (sendResetEmail($email, $token)) {
+        echo json_encode(["message" => "Email de recuperação enviado!"]);
+    } else {
+        echo json_encode(["message" => "Erro ao enviar o e-mail. Tente novamente mais tarde."]);
+    }
 }
 ?>
