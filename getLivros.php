@@ -1,10 +1,10 @@
 <?php
 header('Content-Type: application/json');
 
-$host = 'localhost'; // Seu host
+$host = 'tccappionic-bd.mysql.uhserver.com'; // Seu host
 $db   = 'tccappionic_bd'; // Nome do banco de dados
-$user = 'seu_usuario'; // Seu usuário
-$pass = 'sua_senha'; // Sua senha
+$user = 'ionic_perfil_bd'; // Seu usuário
+$pass = '{[UOLluiz2019'; // Sua senha
 
 // Parâmetros de paginação
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -16,18 +16,18 @@ try {
     $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Verificar se a tabela 'livros' existe
-    $tablesStmt = $pdo->query("SHOW TABLES LIKE 'livros'");
+    // Verificar se a tabela 'livro' existe
+    $tablesStmt = $pdo->query("SHOW TABLES LIKE 'livro'");
     if ($tablesStmt->rowCount() == 0) {
-        throw new Exception('Tabela livros não encontrada.');
+        throw new Exception('Tabela livro não encontrada.');
     }
 
     // Conta o número total de livros
-    $countStmt = $pdo->query("SELECT COUNT(*) FROM livros");
+    $countStmt = $pdo->query("SELECT COUNT(*) FROM livro");
     $totalCount = $countStmt->fetchColumn();
 
     // Busca os livros para a página atual
-    $stmt = $pdo->prepare("SELECT * FROM livros LIMIT :limit OFFSET :offset");
+    $stmt = $pdo->prepare("SELECT * FROM livro LIMIT :limit OFFSET :offset");
     $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
     $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
     $stmt->execute();
@@ -39,7 +39,7 @@ try {
         'livros' => $livros
     ]);
 
-} catch (Exception $e) {
+} catch (PDOException $e) {
     // Exibe mensagem de erro se ocorrer um problema com a conexão ou consulta
     echo json_encode(['error' => $e->getMessage()]);
 }
