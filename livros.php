@@ -1,40 +1,36 @@
 <?php
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
+header("Content-Type: application/json");
 
-$host = 'tccappionic-bd.mysql.uhserver.com'; // Substitua pelo seu host do banco de dados
-$db = 'tccappionic_bd'; // Substitua pelo nome do seu banco de dados
-$user = 'ionic_perfil_bd'; // Substitua pelo seu usuário do banco de dados
-$pass = '{[UOLluiz2019'; // Substitua pela sua senha do banco de dados
+// Configurações do banco de dados
+$servername = "tccappionic-bd.mysql.uhserver.com";
+$username = "ionic_perfil_bd";
+$password = "[UOLluiz2019";
+$dbname = "tccappionic_bd";
 
-$conn = new mysqli($host, $user, $pass, $db);
+// Cria conexão com o banco de dados
+$conn = new mysqli($servername, $username, $password, $dbname);
 
+// Verifica a conexão
 if ($conn->connect_error) {
-    die('Erro de conexão: ' . $conn->connect_error);
+    die("Conexão falhou: " . $conn->connect_error);
 }
 
-// Configurações de paginação
-$pagina = isset($_GET['pagina']) ? intval($_GET['pagina']) : 1;
-$livros_por_pagina = isset($_GET['livros_por_pagina']) ? intval($_GET['livros_por_pagina']) : 4;
-$offset = ($pagina - 1) * $livros_por_pagina;
-
-$sql = "SELECT COUNT(*) AS total FROM livro";
-$result = $conn->query($sql);
-$total = $result->fetch_assoc()['total'];
-
-$sql = "SELECT id, titulo, autor, editora, imagem FROM livro LIMIT $offset, $livros_por_pagina";
+// Consulta SQL para obter os livros
+$sql = "SELECT id, titulo, autor, imagem FROM livro";
 $result = $conn->query($sql);
 
 $livros = array();
-while ($row = $result->fetch_assoc()) {
-    $livros[] = $row;
+
+if ($result->num_rows > 0) {
+    // Adiciona cada linha do resultado ao array
+    while($row = $result->fetch_assoc()) {
+        $livros[] = $row;
+    }
 }
 
-echo json_encode(array(
-    'livros' => $livros,
-    'pagina_atual' => $pagina,
-    'total_paginas' => ceil($total / $livros_por_pagina)
-));
+// Converte o array para JSON e imprime
+echo json_encode($livros);
 
+// Fecha a conexão
 $conn->close();
 ?>
