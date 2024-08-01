@@ -16,7 +16,7 @@ if ($conn->connect_error) {
 }
 
 // Consulta SQL para obter os livros
-$sql = "SELECT id, titulo, autor, imagem FROM livro";
+$sql = "SELECT id, titulo, autor, imagem FROM livros";
 $result = $conn->query($sql);
 
 $livros = array();
