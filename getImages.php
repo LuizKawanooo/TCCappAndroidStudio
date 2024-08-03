@@ -64,25 +64,28 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Verifica a conexão
 if ($conn->connect_error) {
-    die(json_encode(['error' => 'Connection failed: ' . $conn->connect_error]));
+    echo json_encode(['error' => 'Connection failed: ' . $conn->connect_error]);
+    exit();
 }
 
 $sql = "SELECT id, imagem, imagem_status FROM livros";
 $result = $conn->query($sql);
 
 if (!$result) {
-    die(json_encode(['error' => 'Query failed: ' . $conn->error]));
+    echo json_encode(['error' => 'Query failed: ' . $conn->error]);
+    exit();
 }
 
 $images = [];
 
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
+        // Certifique-se de que a imagem está em um formato binário válido
         $imageData = $row['imagem'];
         $imageBase64 = base64_encode($imageData);
         
-        // Verifica o tipo de imagem
-        $imageType = 'image/jpeg';  // Default type
+        // Defina o tipo da imagem com base na extensão
+        $imageType = 'image/jpeg';  // Definição padrão
         if (strpos($row['imagem'], 'PNG') !== false) {
             $imageType = 'image/png';
         } elseif (strpos($row['imagem'], 'GIF') !== false) {
@@ -101,4 +104,3 @@ echo json_encode($images);
 
 $conn->close();
 ?>
-
