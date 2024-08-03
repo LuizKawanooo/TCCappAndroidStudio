@@ -26,7 +26,7 @@ if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $images[] = [
             'id' => $row['id'],
-            'image_url' => 'data:image/jpeg;base64,' . base64_encode($row['image_blob'])
+            'image_url' => 'data:image/jpeg;base64,' . base64_encode($row['imagem'])
         ];
     }
 }
