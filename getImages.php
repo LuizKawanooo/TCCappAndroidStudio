@@ -64,38 +64,20 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Verifica a conexão
 if ($conn->connect_error) {
-    echo json_encode(['error' => 'Connection failed: ' . $conn->connect_error]);
-    exit();
+    die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT id, imagem, imagem_status FROM livros";
+$sql = "SELECT id, imagem, imagem_status FROM livros"; // Inclua o imagem_status
 $result = $conn->query($sql);
-
-if (!$result) {
-    echo json_encode(['error' => 'Query failed: ' . $conn->error]);
-    exit();
-}
 
 $images = [];
 
 if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        // Certifique-se de que a imagem está em um formato binário válido
-        $imageData = $row['imagem'];
-        $imageBase64 = base64_encode($imageData);
-        
-        // Defina o tipo da imagem com base na extensão
-        $imageType = 'image/jpeg';  // Definição padrão
-        if (strpos($row['imagem'], 'PNG') !== false) {
-            $imageType = 'image/png';
-        } elseif (strpos($row['imagem'], 'GIF') !== false) {
-            $imageType = 'image/gif';
-        }
-
+    while($row = $result->fetch_assoc()) {
         $images[] = [
             'id' => $row['id'],
-            'image_url' => 'data:' . $imageType . ';base64,' . $imageBase64,
-            'status' => $row['imagem_status']
+            'image_url' => 'data:image/jpeg;base64,' . base64_encode($row['imagem']),
+            'status' => $row['imagem_status'] // Inclua o imagem_status
         ];
     }
 }
@@ -104,3 +86,4 @@ echo json_encode($images);
 
 $conn->close();
 ?>
+
