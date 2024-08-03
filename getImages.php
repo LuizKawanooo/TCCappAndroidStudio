@@ -51,8 +51,6 @@
 
 
 
-
-
 <?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -72,7 +70,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT id, imagem, livro_status FROM livros"; // Inclua o livro_status
+$sql = "SELECT id, imagem, livro_status FROM livros";
 $result = $conn->query($sql);
 
 $images = [];
@@ -82,7 +80,7 @@ if ($result->num_rows > 0) {
         $images[] = [
             'id' => $row['id'],
             'image_url' => 'data:image/jpeg;base64,' . base64_encode($row['imagem']),
-            'livro_status' => $row['livro_status'] // Inclua o livro_status
+            'livro_status' => $row['livro_status']
         ];
     }
 }
