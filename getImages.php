@@ -18,27 +18,23 @@ if ($conn->connect_error) {
 }
 
 // Consulta SQL para selecionar imagens e status
-$sql = "SELECT id, imagem, imagem_status FROM livros";
+$sql = "SELECT id, imagem, imagem_status FROM livros"; // Inclua o imagem_status
 $result = $conn->query($sql);
 
 $images = [];
 
 if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
+    while($row = $result->fetch_assoc()) {
         $images[] = [
             'id' => $row['id'],
             'image_url' => 'data:image/jpeg;base64,' . base64_encode($row['imagem']),
-            'status' => $row['imagem_status']
+            'status' => $row['imagem_status'] // Inclua o imagem_status
         ];
     }
 }
 
-// Verifica se a variável $images está vazia e retorna um JSON vazio se necessário
-if (empty($images)) {
-    echo json_encode([]);
-} else {
-    echo json_encode($images);
-}
+// Retorna o resultado em formato JSON
+echo json_encode($images);
 
 $conn->close();
 ?>
