@@ -53,11 +53,7 @@
 
 
 
-
 <?php
-// Limpar o buffer de saída para evitar caracteres indesejados
-ob_clean();
-
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
@@ -73,41 +69,25 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Verifica a conexão
 if ($conn->connect_error) {
-    http_response_code(500);
-    echo json_encode(['error' => 'Connection failed: ' . $conn->connect_error]);
-    exit();
+    die("Connection failed: " . $conn->connect_error);
 }
 
-// Query para selecionar id, imagem e livro_status
-$sql = "SELECT id, imagem, livro_status FROM livros";
+$sql = "SELECT id, imagem, livro_status FROM livros"; // Inclua o livro_status
 $result = $conn->query($sql);
-
-// Verifica se a consulta retornou resultados
-if ($result === false) {
-    http_response_code(500);
-    echo json_encode(['error' => 'Database query failed']);
-    $conn->close();
-    exit();
-}
 
 $images = [];
 
-// Verifica se há linhas retornadas e processa cada linha
 if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
+    while($row = $result->fetch_assoc()) {
         $images[] = [
             'id' => $row['id'],
             'image_url' => 'data:image/jpeg;base64,' . base64_encode($row['imagem']),
-            'livro_status' => $row['livro_status']
+            'livro_status' => $row['livro_status'] // Inclua o livro_status
         ];
     }
-} else {
-    http_response_code(204); // No Content
-    echo json_encode([]);
 }
 
 echo json_encode($images);
 
 $conn->close();
 ?>
-
