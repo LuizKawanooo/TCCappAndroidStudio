@@ -17,7 +17,6 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Consulta SQL para selecionar imagens e status
 $sql = "SELECT id, imagem, imagem_status FROM livros"; // Inclua o imagem_status
 $result = $conn->query($sql);
 
@@ -33,7 +32,6 @@ if ($result->num_rows > 0) {
     }
 }
 
-// Retorna o resultado em formato JSON
 echo json_encode($images);
 
 $conn->close();
