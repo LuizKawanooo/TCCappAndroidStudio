@@ -1,3 +1,4 @@
+
 <?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -17,7 +18,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT id, imagem FROM livros"; // Substitua "images" pelo nome da sua tabela
+$sql = "SELECT id, imagem, imagem_status FROM livros"; // Inclua o imagem_status
 $result = $conn->query($sql);
 
 $images = [];
@@ -26,7 +27,8 @@ if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $images[] = [
             'id' => $row['id'],
-            'image_url' => 'data:image/jpeg;base64,' . base64_encode($row['imagem'])
+            'image_url' => 'data:image/jpeg;base64,' . base64_encode($row['imagem']),
+            'status' => $row['imagem_status'] // Inclua o imagem_status
         ];
     }
 }
@@ -35,4 +37,3 @@ echo json_encode($images);
 
 $conn->close();
 ?>
-
