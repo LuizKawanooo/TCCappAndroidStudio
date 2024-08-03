@@ -48,6 +48,9 @@
 // ?>
 
 
+
+
+
 <?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -67,7 +70,16 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT id, imagem, imagem_status FROM livros"; // Inclua o imagem_status
+// Atualiza o status da imagem
+$updateSql = "UPDATE livros SET imagem_status = 'DISPONÍVEL2' WHERE id = 2";
+if ($conn->query($updateSql) === TRUE) {
+    echo "Record updated successfully";
+} else {
+    echo "Error updating record: " . $conn->error;
+}
+
+// Seleciona as imagens
+$sql = "SELECT id, imagem, imagem_status FROM livros";
 $result = $conn->query($sql);
 
 $images = [];
@@ -77,7 +89,7 @@ if ($result->num_rows > 0) {
         $images[] = [
             'id' => $row['id'],
             'image_url' => 'data:image/jpeg;base64,' . base64_encode($row['imagem']),
-            'status' => $row['imagem_status'] // Inclua o imagem_status
+            'status' => $row['imagem_status']
         ];
     }
 }
@@ -86,4 +98,3 @@ echo json_encode($images);
 
 $conn->close();
 ?>
-
