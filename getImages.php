@@ -51,11 +51,16 @@
 
 
 
+
+
+
+
+
+
+
+
 <?php
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header('Access-Control-Allow-Headers: Origin, Content-Type, Accept');
 
 $servername = "tccappionic-bd.mysql.uhserver.com";
 $username = "ionic_perfil_bd";
@@ -67,25 +72,27 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Verifica a conexão
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die("Falha na conexão: " . $conn->connect_error);
 }
 
-$sql = "SELECT id, imagem, livro_status FROM livros";
+// Consulta para pegar as imagens
+$sql = "SELECT id, image_url, description, livro_status FROM images";
 $result = $conn->query($sql);
 
-$images = [];
+$images = array();
 
 if ($result->num_rows > 0) {
+    // Dados das imagens
     while($row = $result->fetch_assoc()) {
-        $images[] = [
-            'id' => $row['id'],
-            'image_url' => 'data:image/jpeg;base64,' . base64_encode($row['imagem']),
-            'livro_status' => $row['livro_status']
-        ];
+        $images[] = $row;
     }
+} else {
+    echo "0 resultados";
 }
 
-echo json_encode($images);
-
+// Fecha a conexão
 $conn->close();
+
+// Retorna as imagens em formato JSON
+echo json_encode(array("images" => $images));
 ?>
