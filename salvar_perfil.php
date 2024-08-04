@@ -1,6 +1,6 @@
 <?php
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 // Handle preflight requests
@@ -11,10 +11,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 header('Content-Type: application/json');
 
+// Recebe o input JSON
 $data = json_decode(file_get_contents('php://input'), true);
 
+// Verifica se todos os parâmetros necessários estão presentes
+if (!isset($data['rm']) || !isset($data['nome_exibicao']) || !isset($data['celular'])) {
+    echo json_encode(['success' => false, 'message' => 'Dados incompletos']);
+    exit();
+}
+
 $rm = $data['rm'];
-$nome = $data['nome'];
+$nome_exibicao = $data['nome_exibicao'];
 $celular = $data['celular'];
 
 // Configurações do banco de dados
@@ -34,20 +41,20 @@ $options = [
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (\PDOException $e) {
-    echo json_encode(['success' => false, 'message' => 'Erro ao conectar ao banco de dados']);
+    echo json_encode(['success' => false, 'message' => 'Erro ao conectar ao banco de dados: ' . $e->getMessage()]);
     exit();
 }
 
 try {
     $stmt = $pdo->prepare('UPDATE registrar_usuarios SET nome_exibicao = ?, celular = ? WHERE rm = ?');
-    $stmt->execute([$nome, $celular, $rm]);
+    $result = $stmt->execute([$nome_exibicao, $celular, $rm]);
 
-    if ($stmt->rowCount() > 0) {
+    if ($result) {
         echo json_encode(['success' => true, 'message' => 'Perfil atualizado com sucesso']);
     } else {
-        echo json_encode(['success' => false, 'message' => 'Nenhuma alteração feita no perfil']);
+        echo json_encode(['success' => false, 'message' => 'Erro ao atualizar perfil']);
     }
 } catch (\PDOException $e) {
-    echo json_encode(['success' => false, 'message' => 'Erro ao atualizar perfil']);
+    echo json_encode(['success' => false, 'message' => 'Erro ao atualizar perfil: ' . $e->getMessage()]);
 }
 ?>
