@@ -1,4 +1,8 @@
 <?php
+// Enable error reporting
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
@@ -14,15 +18,30 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    echo json_encode(array("message" => "Connection failed: " . $conn->connect_error));
+    exit();
 }
 
 // Get book ID from query parameter
 $bookId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
+// Ensure the book ID is valid
+if ($bookId <= 0) {
+    echo json_encode(array("message" => "Invalid book ID"));
+    $conn->close();
+    exit();
+}
+
 // Query to fetch book details
 $sql = "SELECT * FROM livros WHERE id = ?";
 $stmt = $conn->prepare($sql);
+
+if ($stmt === false) {
+    echo json_encode(array("message" => "Failed to prepare the SQL statement: " . $conn->error));
+    $conn->close();
+    exit();
+}
+
 $stmt->bind_param("i", $bookId);
 $stmt->execute();
 $result = $stmt->get_result();
