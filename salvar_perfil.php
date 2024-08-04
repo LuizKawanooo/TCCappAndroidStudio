@@ -15,13 +15,13 @@ header('Content-Type: application/json');
 $data = json_decode(file_get_contents('php://input'), true);
 
 // Verifica se todos os parâmetros necessários estão presentes
-if (!isset($data['rm']) || !isset($data['nome_exibicao']) || !isset($data['celular'])) {
+if (!isset($data['rm']) || !isset($data['nome']) || !isset($data['celular'])) {
     echo json_encode(['success' => false, 'message' => 'Dados incompletos']);
     exit();
 }
 
 $rm = $data['rm'];
-$nome_exibicao = $data['nome_exibicao'];
+$nome = $data['nome'];
 $celular = $data['celular'];
 
 // Configurações do banco de dados
@@ -47,7 +47,7 @@ try {
 
 try {
     $stmt = $pdo->prepare('UPDATE registrar_usuarios SET nome_exibicao = ?, celular = ? WHERE rm = ?');
-    $result = $stmt->execute([$nome_exibicao, $celular, $rm]);
+    $result = $stmt->execute([$nome, $celular, $rm]);
 
     if ($result) {
         echo json_encode(['success' => true, 'message' => 'Perfil atualizado com sucesso']);
