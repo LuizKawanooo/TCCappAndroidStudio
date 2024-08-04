@@ -17,19 +17,18 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Get the book ID from the query string
+// Get book ID from query parameter
 $bookId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 // Query to fetch book details
-$sql = "SELECT titulo, genero, autor, editora, tombo, ano, classificacao, n_paginas, isbn FROM livros WHERE id = ?";
+$sql = "SELECT * FROM livros WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $bookId);
 $stmt->execute();
 $result = $stmt->get_result();
 
-$book = $result->fetch_assoc();
-
-if ($book) {
+if ($result->num_rows > 0) {
+    $book = $result->fetch_assoc();
     echo json_encode($book);
 } else {
     echo json_encode(array("message" => "Book not found"));
