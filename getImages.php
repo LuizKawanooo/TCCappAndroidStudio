@@ -17,8 +17,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Query to fetch images and status
-$sql = "SELECT id, imagem, status_livro FROM livros"; // Supondo que a tabela de imagens tenha colunas 'id', 'imagem' para o BLOB da imagem e 'status_livro'
+// Query to fetch images and status_livro
+$sql = "SELECT id, imagem, status_livro FROM livros"; // Supondo que a tabela de imagens tenha colunas 'id', 'imagem' e 'status_livro'
 $result = $conn->query($sql);
 
 $images = array();
