@@ -34,7 +34,7 @@ if ($bookId <= 0) {
 }
 
 // Query to fetch book details
-$sql = "SELECT `titulo`, `genero`, `autor`, `editora`, `tombo`, `ano`, `classificacao`, `n_paginas`, `isbn` FROM livros WHERE id = ?";
+$sql = "SELECT `titulo`, `genero`, `autor`, `editora`, `tombo`, `ano`, `classificacao`, `n_paginas`, `isbn`, `sinopse` FROM livros WHERE id = ?";
 
 $stmt = $conn->prepare($sql);
 
