@@ -41,7 +41,11 @@ $stmt->execute([$rm, $senha]);
 $usuario = $stmt->fetch();
 
 if ($usuario) {
-    echo json_encode(['success' => true, 'message' => 'Login bem-sucedido']);
+    echo json_encode([
+        'success' => true,
+        'message' => 'Login bem-sucedido',
+        'email' => $usuario['email'] // Retorna o e-mail do usuário
+    ]);
 } else {
     echo json_encode(['success' => false, 'message' => 'RM ou senha incorretos']);
 }
