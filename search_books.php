@@ -1,6 +1,5 @@
 <?php
 
-
 header("Access-Control-Allow-Origin: *"); // Permitir todas as origens
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS"); // Métodos permitidos
 header("Access-Control-Allow-Headers: Content-Type"); // Cabeçalhos permitidos
@@ -42,6 +41,9 @@ $result = $stmt->get_result();
 
 $books = array();
 while ($row = $result->fetch_assoc()) {
+    // Supondo que 'imagem' é o caminho para o arquivo .bin
+    // Você pode precisar ajustar isso para corresponder ao seu formato real
+    $row['imagem'] = '/path/to/images/' . $row['imagem']; // Ajuste o caminho para onde as imagens estão armazenadas
     $books[] = $row;
 }
 
