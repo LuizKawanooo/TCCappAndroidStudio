@@ -1,4 +1,10 @@
 <?php
+
+
+header("Access-Control-Allow-Origin: *"); // Permitir todas as origens
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS"); // Métodos permitidos
+header("Access-Control-Allow-Headers: Content-Type"); // Cabeçalhos permitidos
+
 $servername = "tccappionic-bd.mysql.uhserver.com";
 $username = "ionic_perfil_bd";
 $password = "{[UOLluiz2019";
