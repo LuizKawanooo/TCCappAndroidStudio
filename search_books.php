@@ -21,7 +21,7 @@ if ($conn->connect_error) {
 $searchTerm = isset($_GET['q']) ? '%' . $_GET['q'] . '%' : '%';
 
 // Preparar a consulta
-$sql = "SELECT `id`, `titulo`, `genero`, `autor`, `editora`, `tombo`, `ano`, `classificacao`, `n_paginas`, `isbn`, `sinopse`, `status_livros` 
+$sql = "SELECT `id`, `titulo`, `genero`, `autor`, `editora`, `tombo`, `ano`, `classificacao`, `n_paginas`, `isbn`, `sinopse`, `status_livros`, `imagem`
         FROM livros 
         WHERE `titulo` LIKE ? OR `autor` LIKE ?";
 
