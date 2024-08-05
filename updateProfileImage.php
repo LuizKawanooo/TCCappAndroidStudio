@@ -1,4 +1,10 @@
 <?php
+
+// Configurações de CORS
+header("Access-Control-Allow-Origin: *"); // Permite todas as origens. Substitua '*' pelo domínio específico se necessário.
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS"); // Métodos permitidos
+header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Cabeçalhos permitidos
+
 // Configuração do banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
 $username = "ionic_perfil_bd";
