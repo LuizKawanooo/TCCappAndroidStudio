@@ -2,17 +2,11 @@
 header('Content-Type: application/json');
 require 'db_connection.php'; // Ajuste o caminho conforme necessário
 
-// Verifica se o termo de pesquisa foi fornecido
-if (!isset($_GET['q'])) {
-    echo json_encode([]);
-    exit;
-}
-
-$searchTerm = '%' . $_GET['q'] . '%';
+$searchTerm = isset($_GET['q']) ? '%' . $_GET['q'] . '%' : '%';
 
 // Prepara e executa a consulta SQL
-$sql = "SELECT `id`, `titulo` AS `title`, `genero`, `autor` AS `author`, `editora`, `tombo`, `ano`, `classificacao`, `n_paginas`, `isbn`, `sinopse` 
-        FROM `livros` 
+$sql = "SELECT `id`, `titulo` AS `title`, `genero`, `autor` AS `author`, `editora`, `tombo`, `ano`, `classificacao`, `n_paginas`, `isbn`, `sinopse`, `image_url`, `status_livros`
+        FROM `livros`
         WHERE `titulo` LIKE ? OR `autor` LIKE ?";
 
 $stmt = $conn->prepare($sql);
