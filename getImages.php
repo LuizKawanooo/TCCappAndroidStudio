@@ -50,16 +50,18 @@ $username = "ionic_perfil_bd";
 $password = "{[UOLluiz2019";
 $dbname = "tccappionic_bd";
 
+// Conectar ao banco de dados
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+// Verifica a conexão
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die(json_encode(array("error" => "Connection failed: " . $conn->connect_error)));
 }
 
 // Obtém o parâmetro de gênero da URL
 $genre = isset($_GET['genre']) ? $_GET['genre'] : '';
 
-// Prepara a consulta SQL, considerando o parâmetro de gênero
+// Prepara a consulta SQL
 $sql = "SELECT id, imagem, status_livros, genre FROM livros";
 if ($genre) {
     $sql .= " WHERE genre = ?";
@@ -69,7 +71,7 @@ $stmt = $conn->prepare($sql);
 
 // Verifica se a preparação da consulta foi bem-sucedida
 if ($stmt === false) {
-    die("Prepare failed: " . $conn->error);
+    die(json_encode(array("error" => "Prepare failed: " . $conn->error)));
 }
 
 // Se o gênero foi fornecido, faz o bind do parâmetro
