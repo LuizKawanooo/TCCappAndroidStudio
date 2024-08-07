@@ -37,8 +37,6 @@
 // ?>
 
 
-
-
 <?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -53,7 +51,7 @@ $dbname = "tccappionic_bd";
 // Conectar ao banco de dados
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Verifica a conexão
+// Verificar a conexão
 if ($conn->connect_error) {
     die(json_encode(array("error" => "Connection failed: " . $conn->connect_error)));
 }
@@ -61,20 +59,20 @@ if ($conn->connect_error) {
 // Obtém o parâmetro de gênero da URL
 $genre = isset($_GET['genre']) ? $_GET['genre'] : '';
 
-// Prepara a consulta SQL
-$sql = "SELECT id, imagem, status_livros, genre FROM livros";
+// Construir a consulta SQL
+$sql = "SELECT id, imagem, status_livros FROM livros";
 if ($genre) {
     $sql .= " WHERE genre = ?";
 }
 
 $stmt = $conn->prepare($sql);
 
-// Verifica se a preparação da consulta foi bem-sucedida
+// Verificar se a preparação da consulta foi bem-sucedida
 if ($stmt === false) {
     die(json_encode(array("error" => "Prepare failed: " . $conn->error)));
 }
 
-// Se o gênero foi fornecido, faz o bind do parâmetro
+// Se um gênero foi fornecido, faz o bind do parâmetro
 if ($genre) {
     $stmt->bind_param("s", $genre);
 }
@@ -85,12 +83,11 @@ $result = $stmt->get_result();
 $images = array();
 
 if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
+    while ($row = $result->fetch_assoc()) {
         $images[] = array(
             "id" => $row["id"],
             "image_url" => 'data:image/jpeg;base64,' . base64_encode($row["imagem"]),
-            "status_livros" => $row["status_livros"],
-            "genre" => $row["genre"]
+            "status_livros" => $row["status_livros"]
         );
     }
     echo json_encode(array("images" => $images));
