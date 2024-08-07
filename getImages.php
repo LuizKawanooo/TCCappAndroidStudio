@@ -56,15 +56,20 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Obter o gênero da URL (query string)
+// Obtém o parâmetro de gênero da URL
 $genre = isset($_GET['genre']) ? $_GET['genre'] : '';
 
+// Prepara a consulta SQL, considerando o parâmetro de gênero
 $sql = "SELECT id, imagem, status_livros, genre FROM livros";
 if ($genre) {
-    $sql .= " WHERE genre = '$genre'";
+    $stmt = $conn->prepare("SELECT id, imagem, status_livros, genre FROM livros WHERE genre = ?");
+    $stmt->bind_param("s", $genre);
+} else {
+    $stmt = $conn->prepare($sql);
 }
 
-$result = $conn->query($sql);
+$stmt->execute();
+$result = $stmt->get_result();
 
 $images = array();
 
