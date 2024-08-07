@@ -62,10 +62,19 @@ $genre = isset($_GET['genre']) ? $_GET['genre'] : '';
 // Prepara a consulta SQL, considerando o parâmetro de gênero
 $sql = "SELECT id, imagem, status_livros, genre FROM livros";
 if ($genre) {
-    $stmt = $conn->prepare("SELECT id, imagem, status_livros, genre FROM livros WHERE genre = ?");
+    $sql .= " WHERE genre = ?";
+}
+
+$stmt = $conn->prepare($sql);
+
+// Verifica se a preparação da consulta foi bem-sucedida
+if ($stmt === false) {
+    die("Prepare failed: " . $conn->error);
+}
+
+// Se o gênero foi fornecido, faz o bind do parâmetro
+if ($genre) {
     $stmt->bind_param("s", $genre);
-} else {
-    $stmt = $conn->prepare($sql);
 }
 
 $stmt->execute();
@@ -87,5 +96,6 @@ if ($result->num_rows > 0) {
     echo json_encode(array("message" => "No images found"));
 }
 
+$stmt->close();
 $conn->close();
 ?>
