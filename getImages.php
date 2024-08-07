@@ -62,7 +62,7 @@ $genre = isset($_GET['genre']) ? $_GET['genre'] : '';
 // Construir a consulta SQL
 $sql = "SELECT id, imagem, status_livros FROM livros";
 if ($genre) {
-    $sql .= " WHERE genre = ?";
+    $sql .= " WHERE gereno = ?";
 }
 
 $stmt = $conn->prepare($sql);
