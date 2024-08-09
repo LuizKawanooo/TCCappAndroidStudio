@@ -21,7 +21,6 @@ if (isset($data['id']) && isset($data['status'])) {
     $id = intval($data['id']);
     $status = intval($data['status']);
     
-    // Atualizar o status do livro
     $update_sql = "UPDATE livros SET status_livros = ? WHERE id = ?";
     $stmt_update = $conn->prepare($update_sql);
     $stmt_update->bind_param("ii", $status, $id);
