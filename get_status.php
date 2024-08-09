@@ -33,10 +33,11 @@
 
 
 
-
-
 <?php
 header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *'); // Permite solicitações de qualquer origem
+header('Access-Control-Allow-Methods: GET, POST'); // Permite métodos GET e POST
+header('Access-Control-Allow-Headers: Content-Type');
 
 // Conectar ao banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
@@ -48,25 +49,14 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Verificar a conexão
 if ($conn->connect_error) {
-    die(json_encode(['error' => 'Connection failed: ' . $conn->connect_error]));
+    echo json_encode(['message' => 'Connection failed: ' . $conn->connect_error]);
+    exit;
 }
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-// Verificar se o ID é válido
-if ($id <= 0) {
-    echo json_encode(['error' => 'Invalid book ID']);
-    $conn->close();
-    exit;
-}
-
 $sql = "SELECT status_livros, rental_start_time, rental_end_time FROM livros WHERE id = ?";
 $stmt = $conn->prepare($sql);
-
-if ($stmt === false) {
-    die(json_encode(['error' => 'Prepare failed: ' . $conn->error]));
-}
-
 $stmt->bind_param("i", $id);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -97,6 +87,5 @@ if ($result->num_rows > 0) {
     echo json_encode(['status_livros' => 0, 'remaining_time' => 0]);
 }
 
-$stmt->close();
 $conn->close();
 ?>
