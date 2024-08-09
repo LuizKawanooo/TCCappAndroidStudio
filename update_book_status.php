@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, OPTIONS');
+header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
 $servername = "tccappionic-bd.mysql.uhserver.com";
@@ -15,20 +15,27 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Recebe o ID e o novo status do livro do frontend
-$input = json_decode(file_get_contents('php://input'), true);
-$id = $input['id'];
-$status = $input['status'];
-
-// Atualiza o status do livro
-$sql = "UPDATE livros SET status_livros = ? WHERE id = ?";
+$id = intval($_POST['id']);
+$sql = "UPDATE livros SET status_livros = 1 WHERE id = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ii", $status, $id);
+$stmt->bind_param("i", $id);
+$stmt->execute();
 
-if ($stmt->execute()) {
-    echo json_encode(array("message" => "Status updated successfully", "status" => $status));
+if ($stmt->affected_rows > 0) {
+    // Agendar a devolução após 30 segundos
+    sleep(30);
+    $sql = "UPDATE livros SET status_livros = 0 WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    
+    if ($stmt->affected_rows > 0) {
+        echo json_encode(array("message" => "Book status updated"));
+    } else {
+        echo json_encode(array("message" => "Failed to update book status"));
+    }
 } else {
-    echo json_encode(array("message" => "Failed to update status"));
+    echo json_encode(array("message" => "Failed to update book status"));
 }
 
 $stmt->close();
