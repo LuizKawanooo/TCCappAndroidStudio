@@ -60,7 +60,7 @@ if ($id <= 0) {
     exit;
 }
 
-$sql = "SELECT status_livros, rental_start_time, rental_end_time FROM books WHERE id = ?";
+$sql = "SELECT status_livros, rental_start_time, rental_end_time FROM livros WHERE id = ?";
 $stmt = $conn->prepare($sql);
 
 if ($stmt === false) {
