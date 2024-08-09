@@ -45,7 +45,6 @@
 
 
 
-
 <?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -73,13 +72,13 @@ if (isset($data['id']) && isset($data['status'])) {
     $status = intval($data['status']);
 
     if ($status === 1) {
-        // Aluguel: define o tempo de término para 30 segundos a partir de agora
+        // Define o tempo de término para 30 segundos a partir de agora
         $rental_end_time = date('Y-m-d H:i:s', time() + 30);
         $update_sql = "UPDATE livros SET status_livros = ?, rental_end_time = ? WHERE id = ?";
         $stmt_update = $conn->prepare($update_sql);
         $stmt_update->bind_param("isi", $status, $rental_end_time, $id);
     } else {
-        // Disponível: remove o tempo de término
+        // Remove o tempo de término
         $update_sql = "UPDATE livros SET status_livros = ?, rental_end_time = NULL WHERE id = ?";
         $stmt_update = $conn->prepare($update_sql);
         $stmt_update->bind_param("ii", $status, $id);
