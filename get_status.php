@@ -49,6 +49,7 @@ $dbname = "tccappionic_bd";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+// Verifique a conexão
 if ($conn->connect_error) {
     die(json_encode(['message' => 'Connection failed: ' . $conn->connect_error]));
 }
@@ -57,6 +58,12 @@ $id = intval($_GET['id']);
 
 $sql = "SELECT status_livros, rental_start_time FROM livros WHERE id = ?";
 $stmt = $conn->prepare($sql);
+
+if (!$stmt) {
+    // Exiba o erro se a preparação falhar
+    die(json_encode(['message' => 'Prepare failed: ' . $conn->error]));
+}
+
 $stmt->bind_param("i", $id);
 $stmt->execute();
 $stmt->bind_result($status_livros, $rental_start_time);
