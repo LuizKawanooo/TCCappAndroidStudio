@@ -25,11 +25,13 @@ if (isset($data['id']) && isset($data['status'])) {
     $update_sql = "UPDATE livros SET status_livros = ? WHERE id = ?";
     $stmt_update = $conn->prepare($update_sql);
     $stmt_update->bind_param("ii", $status, $id);
+    
     if ($stmt_update->execute()) {
         echo json_encode(['message' => 'Status updated successfully']);
     } else {
         echo json_encode(['message' => 'Failed to update status']);
     }
+    
     $stmt_update->close();
 } else {
     echo json_encode(['message' => 'Invalid input']);
