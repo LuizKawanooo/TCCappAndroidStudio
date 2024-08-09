@@ -45,8 +45,6 @@
 
 
 
-
-
 <?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -94,3 +92,4 @@ if (isset($data['id']) && isset($data['status'])) {
 
 $conn->close();
 ?>
+
