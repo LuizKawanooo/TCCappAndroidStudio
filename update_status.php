@@ -42,11 +42,10 @@
 
 
 
-
 <?php
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Origin: *'); // Permite solicitações de qualquer origem
+header('Access-Control-Allow-Methods: POST'); // Permite apenas o método POST
 header('Access-Control-Allow-Headers: Content-Type');
 
 // Conectar ao banco de dados
