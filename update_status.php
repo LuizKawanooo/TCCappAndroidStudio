@@ -43,8 +43,6 @@
 
 
 
-
-
 <?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -71,20 +69,12 @@ if (isset($data['id']) && isset($data['status'])) {
     
     if ($status === 1) {
         $rental_end_time = date('Y-m-d H:i:s', time() + 30); // Define o tempo de expiração para 30 segundos no futuro
-        $update_sql = "UPDATE livros SET status_livros = ?, rental_end_time = ? WHERE id = ?";
+        $update_sql = "UPDATE books SET status_livros = ?, rental_end_time = ? WHERE id = ?";
         $stmt_update = $conn->prepare($update_sql);
-        if ($stmt_update === false) {
-            echo json_encode(['message' => 'Prepare failed: ' . $conn->error]);
-            exit;
-        }
         $stmt_update->bind_param("isi", $status, $rental_end_time, $id);
     } else {
-        $update_sql = "UPDATE livros SET status_livros = ?, rental_end_time = NULL WHERE id = ?";
+        $update_sql = "UPDATE books SET status_livros = ?, rental_end_time = NULL WHERE id = ?";
         $stmt_update = $conn->prepare($update_sql);
-        if ($stmt_update === false) {
-            echo json_encode(['message' => 'Prepare failed: ' . $conn->error]);
-            exit;
-        }
         $stmt_update->bind_param("ii", $status, $id);
     }
     
