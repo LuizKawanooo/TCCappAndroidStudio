@@ -36,6 +36,7 @@
 
 
 
+
 <?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -50,27 +51,32 @@ $dbname = "tccappionic_bd";
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    echo json_encode(['message' => 'Connection failed: ' . $conn->connect_error]);
+    exit;
 }
 
 $id = intval($_GET['id']);
 
-$sql = "SELECT status_livros, rental_start_time FROM livros WHERE id = ?";
+$sql = "SELECT status_livros, rental_end_time FROM livros WHERE id = ?";
 $stmt = $conn->prepare($sql);
 if ($stmt === false) {
-    die(json_encode(['message' => 'Prepare failed: ' . $conn->error]));
+    echo json_encode(['message' => 'Prepare failed: ' . $conn->error]);
+    exit;
 }
 $stmt->bind_param("i", $id);
 $stmt->execute();
-$stmt->bind_result($status_livros, $rental_start_time);
+$stmt->bind_result($status_livros, $rental_end_time);
 $stmt->fetch();
 $stmt->close();
 
+$current_time = new DateTime();
+$rental_end = new DateTime($rental_end_time);
+$remaining_time = max(0, $rental_end->getTimestamp() - $current_time->getTimestamp());
+
 echo json_encode([
     'status_livros' => $status_livros,
-    'rental_start_time' => $rental_start_time
+    'remaining_time' => $remaining_time
 ]);
 
 $conn->close();
 ?>
-
