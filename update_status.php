@@ -44,7 +44,6 @@
 
 
 
-
 <?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -69,10 +68,10 @@ if (isset($data['id']) && isset($data['status'])) {
     $status = intval($data['status']);
     
     if ($status === 1) {
-        $timer = time() + 30; // Define o tempo de expiração para 30 segundos no futuro
-        $update_sql = "UPDATE livros SET status_livros = ?, rental_start_time = FROM_UNIXTIME(?) WHERE id = ?";
+        $timer = date('Y-m-d H:i:s', time() + 30); // Define o tempo de expiração para 30 segundos no futuro
+        $update_sql = "UPDATE livros SET status_livros = ?, rental_start_time = ? WHERE id = ?";
         $stmt_update = $conn->prepare($update_sql);
-        $stmt_update->bind_param("iii", $status, $timer, $id);
+        $stmt_update->bind_param("isi", $status, $timer, $id);
     } else {
         $update_sql = "UPDATE livros SET status_livros = ?, rental_start_time = NULL WHERE id = ?";
         $stmt_update = $conn->prepare($update_sql);
@@ -92,4 +91,3 @@ if (isset($data['id']) && isset($data['status'])) {
 
 $conn->close();
 ?>
-
