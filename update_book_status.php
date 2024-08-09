@@ -26,7 +26,7 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("ii", $status, $id);
 
 if ($stmt->execute()) {
-    echo json_encode(array("message" => "Status updated successfully"));
+    echo json_encode(array("message" => "Status updated successfully", "status" => $status));
 } else {
     echo json_encode(array("message" => "Failed to update status"));
 }
