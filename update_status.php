@@ -15,29 +15,29 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$id = intval($_POST['id']);
-$sql = "UPDATE livros SET status_livros = 1 WHERE id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $id);
-$stmt->execute();
+$data = json_decode(file_get_contents("php://input"), true);
+$bookId = $data['id'];
 
-if ($stmt->affected_rows > 0) {
-    // Agendar a devolução após 30 segundos
+if ($data['status'] == 1) {
+    // Alugando o livro
+    $sql = "UPDATE livros SET status_livros = 1 WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $bookId);
+    $stmt->execute();
+
+    // Timer para devolver o livro
     sleep(30);
+
+    // Devolver o livro após 30 segundos
     $sql = "UPDATE livros SET status_livros = 0 WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id);
+    $stmt->bind_param("i", $bookId);
     $stmt->execute();
     
-    if ($stmt->affected_rows > 0) {
-        echo json_encode(array("message" => "Book status updated"));
-    } else {
-        echo json_encode(array("message" => "Failed to update book status"));
-    }
+    echo json_encode(array("message" => "Book rented and returned after 30 seconds"));
 } else {
-    echo json_encode(array("message" => "Failed to update book status"));
+    echo json_encode(array("message" => "Invalid status"));
 }
 
-$stmt->close();
 $conn->close();
 ?>
