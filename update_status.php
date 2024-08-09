@@ -58,7 +58,8 @@ $dbname = "tccappionic_bd";
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
-    die(json_encode(['message' => 'Connection failed: ' . $conn->connect_error]));
+    echo json_encode(['message' => 'Connection failed: ' . $conn->connect_error]);
+    exit;
 }
 
 $data = json_decode(file_get_contents('php://input'), true);
@@ -71,10 +72,18 @@ if (isset($data['id']) && isset($data['status'])) {
         $timer = date('Y-m-d H:i:s', time() + 30); // Define o tempo de expiração para 30 segundos no futuro
         $update_sql = "UPDATE livros SET status_livros = ?, rental_start_time = ? WHERE id = ?";
         $stmt_update = $conn->prepare($update_sql);
+        if ($stmt_update === false) {
+            echo json_encode(['message' => 'Prepare failed: ' . $conn->error]);
+            exit;
+        }
         $stmt_update->bind_param("isi", $status, $timer, $id);
     } else {
         $update_sql = "UPDATE livros SET status_livros = ?, rental_start_time = NULL WHERE id = ?";
         $stmt_update = $conn->prepare($update_sql);
+        if ($stmt_update === false) {
+            echo json_encode(['message' => 'Prepare failed: ' . $conn->error]);
+            exit;
+        }
         $stmt_update->bind_param("ii", $status, $id);
     }
     
@@ -91,3 +100,4 @@ if (isset($data['id']) && isset($data['status'])) {
 
 $conn->close();
 ?>
+
