@@ -56,7 +56,7 @@ if ($conn->connect_error) {
 
 $id = intval($_GET['id']);
 
-$sql = "SELECT status_livros, rental_start_time FROM livros WHERE id = ?";
+$sql = "SELECT status_livros FROM livros WHERE id = ?";
 $stmt = $conn->prepare($sql);
 
 if (!$stmt) {
@@ -66,16 +66,16 @@ if (!$stmt) {
 
 $stmt->bind_param("i", $id);
 $stmt->execute();
-$stmt->bind_result($status_livros, $rental_start_time);
+$stmt->bind_result($status_livros);
 $stmt->fetch();
 $stmt->close();
 
 $response = [
-    'status_livros' => $status_livros,
-    'rental_start_time' => $rental_start_time
+    'status_livros' => $status_livros
 ];
 
 echo json_encode($response);
 
 $conn->close();
 ?>
+
