@@ -43,7 +43,6 @@
 
 
 
-
 <?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -69,16 +68,16 @@ if (isset($data['id']) && isset($data['status'])) {
     $status = intval($data['status']);
     
     if ($status === 1) {
-        $timer = date('Y-m-d H:i:s', time() + 30); // Define o tempo de expiração para 30 segundos no futuro
-        $update_sql = "UPDATE livros SET status_livros = ?, rental_start_time = ? WHERE id = ?";
+        $rental_end_time = date('Y-m-d H:i:s', time() + 30); // Define o tempo de expiração para 30 segundos no futuro
+        $update_sql = "UPDATE livros SET status_livros = ?, rental_start_time = NOW(), rental_end_time = ? WHERE id = ?";
         $stmt_update = $conn->prepare($update_sql);
         if ($stmt_update === false) {
             echo json_encode(['message' => 'Prepare failed: ' . $conn->error]);
             exit;
         }
-        $stmt_update->bind_param("isi", $status, $timer, $id);
+        $stmt_update->bind_param("isi", $status, $rental_end_time, $id);
     } else {
-        $update_sql = "UPDATE livros SET status_livros = ?, rental_start_time = NULL WHERE id = ?";
+        $update_sql = "UPDATE livros SET status_livros = ?, rental_start_time = NULL, rental_end_time = NULL WHERE id = ?";
         $stmt_update = $conn->prepare($update_sql);
         if ($stmt_update === false) {
             echo json_encode(['message' => 'Prepare failed: ' . $conn->error]);
@@ -100,4 +99,3 @@ if (isset($data['id']) && isset($data['status'])) {
 
 $conn->close();
 ?>
-
