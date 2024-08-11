@@ -1,4 +1,13 @@
 <?php
+
+
+
+
+header('Access-Control-Allow-Origin: *'); // Permite requisições de qualquer origem
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS'); // Permite os métodos HTTP desejados
+header('Access-Control-Allow-Headers: Content-Type, Authorization'); // Permite os cabeçalhos desejados
+
+
 header('Content-Type: application/json');
 
 // Configurações do banco de dados
