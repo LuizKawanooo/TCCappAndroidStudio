@@ -1,99 +1,33 @@
-// <?php
-// header('Content-Type: application/json');
-// header('Access-Control-Allow-Origin: *');
-// header('Access-Control-Allow-Methods: POST');
-// header('Access-Control-Allow-Headers: Content-Type');
-
-// $servername = "tccappionic-bd.mysql.uhserver.com";
-// $username = "ionic_perfil_bd";
-// $password = "{[UOLluiz2019";
-// $dbname = "tccappionic_bd";
-
-// $conn = new mysqli($servername, $username, $password, $dbname);
-
-// if ($conn->connect_error) {
-//     die("Connection failed: " . $conn->connect_error);
-// }
-
-// $data = json_decode(file_get_contents('php://input'), true);
-
-// if (isset($data['id']) && isset($data['status'])) {
-//     $id = intval($data['id']);
-//     $status = intval($data['status']);
-    
-//     $update_sql = "UPDATE livros SET status_livros = ? WHERE id = ?";
-//     $stmt_update = $conn->prepare($update_sql);
-//     $stmt_update->bind_param("ii", $status, $id);
-    
-//     if ($stmt_update->execute()) {
-//         echo json_encode(['message' => 'Status updated successfully']);
-//     } else {
-//         echo json_encode(['message' => 'Failed to update status']);
-//     }
-    
-//     $stmt_update->close();
-// } else {
-//     echo json_encode(['message' => 'Invalid input']);
-// }
-
-// $conn->close();
-// ?>
-
-
-
-
-
-
-
 <?php
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST');
-header('Access-Control-Allow-Headers: Content-Type');
+require 'db_connection.php';
 
-$servername = "tccappionic-bd.mysql.uhserver.com";
-$username = "ionic_perfil_bd";
-$password = "{[UOLluiz2019";
-$dbname = "tccappionic_bd";
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $bookId = $_POST['book_id'];
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+    // Fetch current status of the book
+    $query = "SELECT status_livros, rental_end_time FROM livros WHERE id = ?";
+    $stmt = $mysqli->prepare($query);
+    $stmt->bind_param("i", $bookId);
+    $stmt->execute();
+    $stmt->bind_result($statusLivros, $rentalEndTime);
+    $stmt->fetch();
+    $stmt->close();
 
-// Verifica a conexão
-if ($conn->connect_error) {
-    echo json_encode(['message' => 'Connection failed: ' . $conn->connect_error]);
-    exit;
-}
+    // Check if the book is available (status 0) or rented and the timer expired
+    $currentTime = new DateTime();
+    $isAvailable = $statusLivros == 0 || ($statusLivros == 1 && new DateTime($rentalEndTime) <= $currentTime);
 
-$data = json_decode(file_get_contents('php://input'), true);
+    if ($isAvailable) {
+        // Update status to 1 and set rental_end_time to 30 seconds from now
+        $rentalEndTime = $currentTime->add(new DateInterval('PT30S'))->format('Y-m-d H:i:s');
+        $updateQuery = "UPDATE livros SET status_livros = 1, rental_end_time = ? WHERE id = ?";
+        $updateStmt = $mysqli->prepare($updateQuery);
+        $updateStmt->bind_param("si", $rentalEndTime, $bookId);
+        $updateStmt->execute();
+        $updateStmt->close();
 
-// Verifica se 'id' e 'status' estão presentes na requisição
-if (isset($data['id']) && isset($data['status'])) {
-    $id = intval($data['id']);
-    $status = intval($data['status']);
-
-    if ($status === 1) {
-        // Define o tempo de término para 30 segundos a partir de agora
-        $rental_end_time = date('Y-m-d H:i:s', time() + 30);
-        $update_sql = "UPDATE livros SET status_livros = ?, rental_end_time = ? WHERE id = ?";
-        $stmt_update = $conn->prepare($update_sql);
-        $stmt_update->bind_param("isi", $status, $rental_end_time, $id);
+        echo json_encode(['status' => 'success', 'rental_end_time' => $rentalEndTime]);
     } else {
-        // Remove o tempo de término
-        $update_sql = "UPDATE livros SET status_livros = ?, rental_end_time = NULL WHERE id = ?";
-        $stmt_update = $conn->prepare($update_sql);
-        $stmt_update->bind_param("ii", $status, $id);
+        echo json_encode(['status' => 'unavailable']);
     }
-
-    if ($stmt_update->execute()) {
-        echo json_encode(['message' => 'Status updated successfully']);
-    } else {
-        echo json_encode(['message' => 'Failed to update status']);
-    }
-
-    $stmt_update->close();
-} else {
-    echo json_encode(['message' => 'Invalid input']);
 }
-
-$conn->close();
-?>
