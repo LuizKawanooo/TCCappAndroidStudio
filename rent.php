@@ -18,7 +18,7 @@ if (isset($input['id']) && isset($input['rental_end_time'])) {
     $id = $conn->real_escape_string($input['id']);
     $rental_end_time = $conn->real_escape_string($input['rental_end_time']);
 
-    $query = "UPDATE books SET status_livros = 1, rental_end_time = ? WHERE id = ? AND status_livros = 0";
+    $query = "UPDATE livros SET status_livros = 1, rental_end_time = ? WHERE id = ? AND status_livros = 0";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("si", $rental_end_time, $id);
 
