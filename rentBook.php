@@ -1,4 +1,15 @@
 <?php
+header("Access-Control-Allow-Origin: *"); // Allows access from any domain
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS"); // Allowed methods
+header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Allowed headers
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
+// Your existing code here
+
+
 require 'db_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -31,3 +42,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['status' => 'unavailable']);
     }
 }
+?>
