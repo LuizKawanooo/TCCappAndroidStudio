@@ -1,14 +1,8 @@
 <?php
-
-
-
-
 header('Access-Control-Allow-Origin: *'); // Permite requisições de qualquer origem
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS'); // Permite os métodos HTTP desejados
 header('Access-Control-Allow-Headers: Content-Type, Authorization'); // Permite os cabeçalhos desejados
-
-
-header('Content-Type: application/json');
+header('Content-Type: application/json'); // Define o tipo de conteúdo como JSON
 
 // Configurações do banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
@@ -21,7 +15,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Verifica a conexão
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die(json_encode(['error' => 'Connection failed: ' . $conn->connect_error]));
 }
 
 // Obtém o ID do livro e o tempo de término do corpo da solicitação
@@ -32,15 +26,20 @@ $rentalEndTime = isset($input['rentalEndTime']) ? $input['rentalEndTime'] : null
 if ($bookId > 0 && $rentalEndTime) {
     $sql = "UPDATE livros SET status_livros = 1, rental_end_time = ? WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("si", $rentalEndTime, $bookId);
 
-    if ($stmt->execute()) {
-        echo json_encode(['success' => true]);
+    if ($stmt) {
+        $stmt->bind_param("si", $rentalEndTime, $bookId);
+
+        if ($stmt->execute()) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['error' => 'Failed to update rental status']);
+        }
+
+        $stmt->close();
     } else {
-        echo json_encode(['error' => 'Failed to update rental status']);
+        echo json_encode(['error' => 'Failed to prepare SQL statement']);
     }
-
-    $stmt->close();
 } else {
     echo json_encode(['error' => 'Invalid parameters']);
 }
