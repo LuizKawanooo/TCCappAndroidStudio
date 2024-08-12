@@ -18,17 +18,30 @@ if ($conn->connect_error) {
     die(json_encode(array("error" => "Falha na conexão com o banco de dados: " . $conn->connect_error)));
 }
 
-// Verificar se o parâmetro 'genre' foi fornecido
+// Verificar se o parâmetro 'genre' ou 'search' foi fornecido
 $genre = isset($_GET['genre']) ? $conn->real_escape_string($_GET['genre']) : '';
+$searchTerm = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
 
 // Preparar a consulta SQL
 $sql = "SELECT id, imagem, status_livros FROM livros";
 $params = [];
+$conditions = [];
 
 // Adicionar a condição de filtro por gênero, se fornecido
 if (!empty($genre)) {
-    $sql .= " WHERE genero = ?";
+    $conditions[] = "genero = ?";
     $params[] = $genre;
+}
+
+// Adicionar a condição de filtro por pesquisa, se fornecido
+if (!empty($searchTerm)) {
+    $conditions[] = "descricao LIKE ?";
+    $params[] = '%' . $searchTerm . '%';
+}
+
+// Adicionar condições à consulta SQL
+if (!empty($conditions)) {
+    $sql .= " WHERE " . implode(" AND ", $conditions);
 }
 
 $sql .= " ORDER BY id"; // Ordenar os resultados por ID (ou outro critério que desejar)
@@ -36,7 +49,8 @@ $sql .= " ORDER BY id"; // Ordenar os resultados por ID (ou outro critério que 
 // Preparar e executar a consulta
 $stmt = $conn->prepare($sql);
 if (!empty($params)) {
-    $stmt->bind_param("s", $params[0]);
+    $types = str_repeat('s', count($params)); // Tipo dos parâmetros
+    $stmt->bind_param($types, ...$params);
 }
 $stmt->execute();
 $result = $stmt->get_result();
@@ -53,7 +67,7 @@ if ($result->num_rows > 0) {
     }
     echo json_encode(array("images" => $images));
 } else {
-    echo json_encode(array("message" => "No images found"));
+    echo json_encode(array("images" => []));
 }
 
 $stmt->close();
