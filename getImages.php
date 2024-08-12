@@ -19,7 +19,7 @@ if ($conn->connect_error) {
     die(json_encode(array("error" => "Falha na conexão com o banco de dados: " . $conn->connect_error)));
 }
 
-// Verificar se o parâmetro 'genre' ou 'search' foi fornecido
+// Verificar se o parâmetro 'genre', 'search' ou 'searchTerm' foi fornecido
 $genre = isset($_GET['genre']) ? $conn->real_escape_string($_GET['genre']) : '';
 $searchTerm = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
 
@@ -34,9 +34,10 @@ if (!empty($genre)) {
     $params[] = $genre;
 }
 
-// Adicionar a condição de filtro por pesquisa, se fornecido
+// Adicionar a condição de filtro por pesquisa por autor ou título, se fornecido
 if (!empty($searchTerm)) {
-    $conditions[] = "descricao LIKE ?";
+    $conditions[] = "(autor LIKE ? OR titulo LIKE ?)";
+    $params[] = '%' . $searchTerm . '%';
     $params[] = '%' . $searchTerm . '%';
 }
 
