@@ -14,6 +14,7 @@ $dbname = "tccappionic_bd";
 // Criar a conexão com o banco de dados
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+// Verificar a conexão com o banco de dados
 if ($conn->connect_error) {
     die(json_encode(array("error" => "Falha na conexão com o banco de dados: " . $conn->connect_error)));
 }
@@ -48,6 +49,12 @@ $sql .= " ORDER BY id"; // Ordenar os resultados por ID (ou outro critério que 
 
 // Preparar e executar a consulta
 $stmt = $conn->prepare($sql);
+
+// Verificar se a preparação da consulta foi bem-sucedida
+if ($stmt === false) {
+    die(json_encode(array("error" => "Falha ao preparar a consulta: " . $conn->error)));
+}
+
 if (!empty($params)) {
     $types = str_repeat('s', count($params)); // Tipo dos parâmetros
     $stmt->bind_param($types, ...$params);
