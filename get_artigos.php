@@ -1,11 +1,7 @@
 <?php
-
 header("Access-Control-Allow-Origin: *"); // Allow requests from any origin
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS"); // Allow these HTTP methods
-header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Allow these h
-
-
-
+header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Allow these headers
 
 $servername = "tccappionic-bd.mysql.uhserver.com";
 $username = "ionic_perfil_bd";
@@ -20,8 +16,8 @@ if ($conn->connect_error) {
     die("Conexão falhou: " . $conn->connect_error);
 }
 
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+if (isset($_GET['id']) && !empty($_GET['id'])) {
+    $id = intval($_GET['id']); // Ensure ID is an integer
 
     // Prepare and execute the SQL statement
     if ($stmt = $conn->prepare("SELECT pdf_nome, arquivo FROM artigos WHERE id = ?")) {
@@ -49,9 +45,9 @@ if (isset($_GET['id'])) {
         echo "Erro ao preparar a consulta.";
     }
 } else {
-    // No ID provided
+    // No ID provided or ID is empty
     http_response_code(400);
-    echo "ID não fornecido.";
+    echo "ID não fornecido ou está vazio.";
 }
 
 $conn->close();
