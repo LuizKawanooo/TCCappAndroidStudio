@@ -1,38 +1,74 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
 
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
-
-// Configurações do banco de dados
-$host = "tccappionic-bd.mysql.uhserver.com";
-$dbname = "tccappionic_bd";
+$servername = "tccappionic-bd.mysql.uhserver.com";
 $username = "ionic_perfil_bd";
 $password = "{[UOLluiz2019";
+$dbname = "tccappionic_bd";
 
-try {
-    // Cria uma conexão com o banco de dados
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// Criar a conexão com o banco de dados
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-    // Prepara e executa a consulta SQL
-    $sql = "SELECT id, titulo, pdf_nome FROM artigos";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-
-    // Recupera todos os registros
-    $artigos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    // Verifica se há artigos e retorna como JSON
-    if ($artigos) {
-        echo json_encode($artigos);
-    } else {
-        echo json_encode(['message' => 'Nenhum artigo encontrado.']);
-    }
-} catch (PDOException $e) {
-    // Retorna erro em formato JSON
-    echo json_encode(['error' => 'Erro ao consultar o banco de dados: ' . $e->getMessage()]);
+// Verificar a conexão com o banco de dados
+if ($conn->connect_error) {
+    die(json_encode(array("error" => "Falha na conexão com o banco de dados: " . $conn->connect_error)));
 }
+
+// Preparar a consulta SQL
+$sql = "SELECT id, titulo, descricao, pdf_nome FROM artigos";
+$params = [];
+$conditions = [];
+
+// Adicionar condição de filtro por título, se fornecido
+if (isset($_GET['title'])) {
+    $title = $conn->real_escape_string($_GET['title']);
+    $conditions[] = "titulo LIKE ?";
+    $params[] = '%' . $title . '%';
+}
+
+// Adicionar condições à consulta SQL
+if (!empty($conditions)) {
+    $sql .= " WHERE " . implode(" AND ", $conditions);
+}
+
+$sql .= " ORDER BY id"; // Ordenar os resultados por ID
+
+// Preparar e executar a consulta
+$stmt = $conn->prepare($sql);
+
+// Verificar se a preparação da consulta foi bem-sucedida
+if ($stmt === false) {
+    die(json_encode(array("error" => "Falha ao preparar a consulta: " . $conn->error)));
+}
+
+// Vincular parâmetros, se houver
+if (!empty($params)) {
+    $types = str_repeat('s', count($params)); // Tipo dos parâmetros
+    $stmt->bind_param($types, ...$params);
+}
+
+$stmt->execute();
+$result = $stmt->get_result();
+
+$artigos = array();
+
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        $artigos[] = array(
+            "id" => $row["id"],
+            "titulo" => $row["titulo"],
+            "descricao" => $row["descricao"],
+            "pdf_nome" => $row["pdf_nome"]
+        );
+    }
+    echo json_encode(array("artigos" => $artigos));
+} else {
+    echo json_encode(array("artigos" => []));
+}
+
+$stmt->close();
+$conn->close();
 ?>
