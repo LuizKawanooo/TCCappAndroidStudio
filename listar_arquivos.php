@@ -4,6 +4,7 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
+// Configurações do banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
 $username = "ionic_perfil_bd";
 $password = "{[UOLluiz2019";
@@ -18,12 +19,7 @@ if ($conn->connect_error) {
 }
 
 // Preparar a consulta SQL
-$sql = "SELECT id, titulo, descricao, pdf_nome FROM artigos";
-
-
-
-
-$sql .= " ORDER BY id"; // Ordenar os resultados por ID (ou outro critério que desejar)
+$sql = "SELECT id, titulo, descricao, pdf_nome FROM artigos ORDER BY id";
 
 // Preparar e executar a consulta
 $stmt = $conn->prepare($sql);
@@ -39,15 +35,17 @@ $result = $stmt->get_result();
 $arquivos = array();
 
 if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
+    while ($row = $result->fetch_assoc()) {
         $arquivos[] = array(
             "id" => $row["id"],
-            "arquivo" => 'data:image/jpeg;base64,' . base64_encode($row["imagem"]),
+            "titulo" => $row["titulo"],
+            "descricao" => $row["descricao"],
+            "pdf_nome" => $row["pdf_nome"]
         );
     }
-    echo json_encode(array("arquivo" => $arquivos));
+    echo json_encode(array("arquivos" => $arquivos));
 } else {
-    echo json_encode(array("arquivo" => []));
+    echo json_encode(array("arquivos" => []));
 }
 
 $stmt->close();
