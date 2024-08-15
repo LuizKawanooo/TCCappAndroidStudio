@@ -28,7 +28,7 @@ if (isset($_GET['id'])) {
     $stmt->fetch();
 
     if ($arquivo) {
-        $pdf_url = "https://endologic.com.br/tcc/uploads/" . $arquivo;
+        $pdf_url = "https://endologic.com.br/tcc/" . $arquivo;
         echo json_encode(["pdf_url" => $pdf_url]);
     } else {
         echo json_encode(["error" => "Artigo não encontrado."]);
