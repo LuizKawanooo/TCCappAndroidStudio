@@ -19,9 +19,6 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
     die(json_encode(['error' => 'Conexão falhou: ' . $conn->connect_error]));
-} else {
-    // Mensagem de depuração
-    // echo 'Conexão bem-sucedida';
 }
 
 $sql = "SELECT id, titulo, descricao, pdf_nome FROM artigos";
@@ -37,10 +34,10 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $artigos[] = $row;
     }
-} else {
-    // Mensagem de depuração
-    // echo 'Nenhum artigo encontrado';
 }
+
+// Mensagem de depuração
+// echo 'Dados retornados: ' . print_r($artigos, true);
 
 echo json_encode(['artigos' => $artigos]);
 
