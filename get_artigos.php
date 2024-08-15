@@ -6,37 +6,50 @@ error_reporting(E_ALL);
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
-header('Content-Type: application/json');
 
 $servername = "tccappionic-bd.mysql.uhserver.com";
 $username = "ionic_perfil_bd";
 $password = "{[UOLluiz2019";
 $dbname = "tccappionic_bd";
 
+// Conectar ao banco de dados
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+// Verificar a conexão
 if ($conn->connect_error) {
-    echo json_encode(['error' => 'Conexão falhou: ' . $conn->connect_error]);
-    exit;
+    die("Conexão falhou: " . $conn->connect_error);
 }
 
-$sql = "SELECT id, titulo, descricao, pdf_nome FROM artigos";
-$result = $conn->query($sql);
-
-if (!$result) {
-    echo json_encode(['error' => 'Erro na consulta SQL: ' . $conn->error]);
-    exit;
+// Verificar se o parâmetro ID foi fornecido
+if (!isset($_GET['id'])) {
+    die("ID do PDF não fornecido.");
 }
 
-$artigos = [];
+$id = intval($_GET['id']); // Sanitize input
 
+// Preparar e executar a consulta SQL
+$sql = "SELECT pdf_nome, arquivo FROM artigos WHERE id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Verificar se o PDF foi encontrado
 if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $artigos[] = $row;
-    }
+    $row = $result->fetch_assoc();
+    
+    // Definir os cabeçalhos para download do PDF
+    header('Content-Type: application/pdf');
+    header('Content-Disposition: inline; filename="' . $row['pdf_nome'] . '"');
+    header('Content-Length: ' . strlen($row['arquivo']));
+    
+    // Enviar o conteúdo do PDF
+    echo $row['arquivo'];
+} else {
+    echo "Nenhum PDF encontrado com o ID fornecido.";
 }
 
-echo json_encode(['artigos' => $artigos]);
-
+// Fechar a conexão
+$stmt->close();
 $conn->close();
 ?>
