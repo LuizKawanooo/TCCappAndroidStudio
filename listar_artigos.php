@@ -60,7 +60,8 @@ $password = "{[UOLluiz2019";
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+    echo "Conectado ao banco de dados.<br>";
+    
     $sql = "SELECT id, titulo, descricao, pdf_nome, data_publicacao FROM artigos";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
@@ -68,12 +69,11 @@ try {
     $artigos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     if ($artigos) {
-        // Exibe a resposta JSON para depuração
         echo json_encode($artigos);
     } else {
         echo json_encode(array("message" => "Nenhum artigo encontrado."));
     }
 } catch (PDOException $e) {
-    echo json_encode(array("message" => "Erro ao consultar o banco de dados: " . $e->getMessage()));
+    echo "Erro ao consultar o banco de dados: " . $e->getMessage();
 }
 ?>
