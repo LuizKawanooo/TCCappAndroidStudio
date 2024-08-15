@@ -61,7 +61,6 @@ try {
     // Cria uma conexão com o banco de dados
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "Conectado ao banco de dados.<br>";
 
     // Prepara e executa a consulta SQL
     $sql = "SELECT id, titulo, descricao, pdf_nome, data_publicacao FROM artigos";
@@ -71,14 +70,10 @@ try {
     // Recupera todos os registros como um array associativo
     $artigos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Verifica se há artigos e os retorna como JSON
-    if ($artigos) {
-        echo json_encode($artigos);
-    } else {
-        echo json_encode(array("message" => "Nenhum artigo encontrado."));
-    }
+    // Retorna os dados como JSON
+    echo json_encode($artigos);
 } catch (PDOException $e) {
-    // Exibe mensagens de erro em caso de falha na consulta
-    echo "Erro ao consultar o banco de dados: " . $e->getMessage();
+    // Retorna uma mensagem de erro em JSON
+    echo json_encode(array("error" => "Erro ao consultar o banco de dados: " . $e->getMessage()));
 }
 ?>
