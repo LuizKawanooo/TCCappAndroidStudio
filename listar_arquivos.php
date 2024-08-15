@@ -1,53 +1,40 @@
 <?php
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+header("Content-Type: application/json");
+header("Access-Control-Allow-Origin: *");
 
 // Configurações do banco de dados
-$servername = "tccappionic-bd.mysql.uhserver.com";
-$username = "ionic_perfil_bd";
-$password = "{[UOLluiz2019";
-$dbname = "tccappionic_bd";
+$dbHost = 'tccappionic-bd.mysql.uhserver.com';
+$dbUser = 'ionic_perfil_bd';
+$dbPass = '{[UOLluiz2019';
+$dbName = 'tccappionic_bd';
 
-// Criar a conexão com o banco de dados
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Conexão com o banco de dados
+$conn = new mysqli($dbHost, $dbUser, $dbPass, $dbName);
 
-// Verificar a conexão com o banco de dados
+// Verifica a conexão
 if ($conn->connect_error) {
-    die(json_encode(array("error" => "Falha na conexão com o banco de dados: " . $conn->connect_error)));
+    die("Connection failed: " . $conn->connect_error);
 }
 
-// Preparar a consulta SQL
-$sql = "SELECT id, titulo, descricao, pdf_nome FROM artigos ORDER BY id";
+// Recebe o ID do artigo via GET
+$artigoId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-// Preparar e executar a consulta
+// Consulta ao banco de dados
+$sql = "SELECT titulo, descricao, pdf_nome, arquivo, data_publicacao FROM artigos WHERE id = ?";
 $stmt = $conn->prepare($sql);
-
-// Verificar se a preparação da consulta foi bem-sucedida
-if ($stmt === false) {
-    die(json_encode(array("error" => "Falha ao preparar a consulta: " . $conn->error)));
-}
-
+$stmt->bind_param("i", $artigoId);
 $stmt->execute();
 $result = $stmt->get_result();
 
-$arquivos = array();
-
+// Retorna o artigo em formato JSON
 if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $arquivos[] = array(
-            "id" => $row["id"],
-            "titulo" => $row["titulo"],
-            "descricao" => $row["descricao"],
-            "pdf_nome" => $row["pdf_nome"]
-        );
-    }
-    echo json_encode(array("arquivos" => $arquivos));
+    $artigo = $result->fetch_assoc();
+    echo json_encode($artigo);
 } else {
-    echo json_encode(array("arquivos" => []));
+    echo json_encode(array('message' => 'Artigo não encontrado.'));
 }
 
+// Fecha a conexão
 $stmt->close();
 $conn->close();
 ?>
