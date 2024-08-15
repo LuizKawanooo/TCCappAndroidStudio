@@ -1,5 +1,9 @@
 <?php
-header("Access-Control-Allow-Origin: *"); // Permite requisições de qualquer origem
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
 // Configurações do banco de dados
@@ -8,11 +12,11 @@ $dbname = "tccappionic_bd";
 $username = "ionic_perfil_bd";
 $password = "{[UOLluiz2019";
 
-// Conectar ao banco de dados
-$pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
 try {
+    // Conectar ao banco de dados
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
     // Consulta SQL para buscar todos os artigos
     $sql = "SELECT id, titulo, descricao, pdf_nome, data_publicacao FROM artigos";
     $stmt = $pdo->prepare($sql);
@@ -25,7 +29,6 @@ try {
     echo json_encode($artigos);
 } catch (PDOException $e) {
     // Em caso de erro, retorna uma mensagem de erro
-    echo json_encode(array("message" => "Erro ao consultar o banco de dados."));
+    echo json_encode(array("message" => "Erro ao consultar o banco de dados: " . $e->getMessage()));
 }
-    echo $sql;
 ?>
