@@ -1,4 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
@@ -13,24 +17,23 @@ try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+    echo "Conectado ao banco de dados.<br>"; // Mensagem de depuração
+
     // Consulta SQL para buscar todos os artigos
     $sql = "SELECT id, titulo, descricao, pdf_nome, data_publicacao FROM artigos";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     
-    // Recupera todos os artigos
+    echo "Consulta executada.<br>"; // Mensagem de depuração
+    
     $artigos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    // Verifica se há artigos
     if ($artigos) {
-        // Retorna os dados no formato JSON
         echo json_encode($artigos);
     } else {
-        // Retorna uma mensagem se não houver artigos
         echo json_encode(array("message" => "Nenhum artigo encontrado."));
     }
 } catch (PDOException $e) {
-    // Em caso de erro, retorna uma mensagem de erro
-    echo json_encode(array("message" => "Erro ao consultar o banco de dados: " . $e->getMessage()));
+    echo "Erro ao consultar o banco de dados: " . $e->getMessage();
 }
 ?>
