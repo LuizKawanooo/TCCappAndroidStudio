@@ -14,34 +14,21 @@ if ($conn->connect_error) {
     die("Conexão falhou: " . $conn->connect_error);
 }
 
-if (isset($_GET['id']) && !empty($_GET['id'])) {
-    $id = intval($_GET['id']); 
+// Consulta para buscar todos os artigos
+$sql = "SELECT id, titulo, descricao, pdf_nome FROM artigos";
+$result = $conn->query($sql);
 
-    if ($stmt = $conn->prepare("SELECT pdf_nome, arquivo FROM artigos WHERE id = ?")) {
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $stmt->store_result();
-        $stmt->bind_result($pdf_nome, $arquivo);
-        $stmt->fetch();
+$artigos = [];
 
-        if ($stmt->num_rows > 0) {
-            header("Content-Type: application/pdf");
-            header("Content-Disposition: inline; filename=\"$pdf_nome\"");
-            echo $arquivo;
-        } else {
-            http_response_code(404);
-            echo "Arquivo não encontrado.";
-        }
-
-        $stmt->close();
-    } else {
-        http_response_code(500);
-        echo "Erro ao preparar a consulta.";
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $artigos[] = $row;
     }
-} else {
-    http_response_code(400);
-    echo "ID não fornecido ou está vazio.";
 }
+
+// Retorna os artigos em formato JSON
+header('Content-Type: application/json');
+echo json_encode(['artigos' => $artigos]);
 
 $conn->close();
 ?>
