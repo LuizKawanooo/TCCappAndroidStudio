@@ -27,4 +27,5 @@ try {
     // Em caso de erro, retorna uma mensagem de erro
     echo json_encode(array("message" => "Erro ao consultar o banco de dados."));
 }
+    echo $sql;
 ?>
