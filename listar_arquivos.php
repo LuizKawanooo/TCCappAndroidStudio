@@ -1,42 +1,55 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
-// Configurações do banco de dados
-$dsn = 'mysql:host=tccappionic-bd.mysql.uhserver.com;dbname=tccappionic_bd';
-$username = 'ionic_perfil_bd';
-$password = '{[UOLluiz2019';
+$servername = "tccappionic-bd.mysql.uhserver.com";
+$username = "ionic_perfil_bd";
+$password = "{[UOLluiz2019";
+$dbname = "tccappionic_bd";
 
-// Criar conexão com o banco de dados
-try {
-    $pdo = new PDO($dsn, $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// Criar a conexão com o banco de dados
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-    // Preparar a consulta SQL
-    $sql = "SELECT id, titulo, descricao, pdf_nome FROM artigos";
-    $stmt = $pdo->query($sql);
-
-    // Verificar se a consulta foi bem-sucedida
-    if ($stmt === false) {
-        echo json_encode(array("error" => "Erro na consulta: " . $pdo->errorInfo()[2]));
-        exit();
-    }
-
-    // Recuperar os resultados
-    $artigos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    // Retornar os dados como JSON
-    echo json_encode(array("artigos" => $artigos));
-} catch (PDOException $e) {
-    echo json_encode(array("error" => "Erro: " . $e->getMessage()));
+// Verificar a conexão com o banco de dados
+if ($conn->connect_error) {
+    die(json_encode(array("error" => "Falha na conexão com o banco de dados: " . $conn->connect_error)));
 }
 
-// Fechar a conexão
-$pdo = null;
+// Preparar a consulta SQL
+$sql = "SELECT id, titulo, descricao, pdf_nome FROM artigos";
+
+
+
+
+$sql .= " ORDER BY id"; // Ordenar os resultados por ID (ou outro critério que desejar)
+
+// Preparar e executar a consulta
+$stmt = $conn->prepare($sql);
+
+// Verificar se a preparação da consulta foi bem-sucedida
+if ($stmt === false) {
+    die(json_encode(array("error" => "Falha ao preparar a consulta: " . $conn->error)));
+}
+
+$stmt->execute();
+$result = $stmt->get_result();
+
+$arquivos = array();
+
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        $arquivos[] = array(
+            "id" => $row["id"],
+            "arquivo" => 'data:image/jpeg;base64,' . base64_encode($row["imagem"]),
+        );
+    }
+    echo json_encode(array("arquivo" => $arquivos));
+} else {
+    echo json_encode(array("arquivo" => []));
+}
+
+$stmt->close();
+$conn->close();
 ?>
