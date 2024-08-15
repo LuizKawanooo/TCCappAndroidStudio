@@ -29,9 +29,10 @@ try {
     if ($artigos) {
         echo json_encode($artigos);
     } else {
-        echo json_encode([]);
+        echo json_encode(['message' => 'Nenhum artigo encontrado.']);
     }
 } catch (PDOException $e) {
+    // Retorna erro em formato JSON
     echo json_encode(['error' => 'Erro ao consultar o banco de dados: ' . $e->getMessage()]);
 }
 ?>
