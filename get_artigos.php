@@ -6,6 +6,7 @@ error_reporting(E_ALL);
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header('Content-Type: application/json');
 
 $servername = "tccappionic-bd.mysql.uhserver.com";
 $username = "ionic_perfil_bd";
@@ -17,12 +18,14 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Verificar a conexão
 if ($conn->connect_error) {
-    die("Conexão falhou: " . $conn->connect_error);
+    echo json_encode(['error' => 'Conexão falhou: ' . $conn->connect_error]);
+    exit;
 }
 
 // Verificar se o parâmetro ID foi fornecido
 if (!isset($_GET['id'])) {
-    die("ID do PDF não fornecido.");
+    echo json_encode(['error' => 'ID do PDF não fornecido.']);
+    exit;
 }
 
 $id = intval($_GET['id']); // Sanitize input
@@ -46,7 +49,7 @@ if ($result->num_rows > 0) {
     // Enviar o conteúdo do PDF
     echo $row['arquivo'];
 } else {
-    echo "Nenhum PDF encontrado com o ID fornecido.";
+    echo json_encode(['error' => 'Nenhum PDF encontrado com o ID fornecido.']);
 }
 
 // Fechar a conexão
