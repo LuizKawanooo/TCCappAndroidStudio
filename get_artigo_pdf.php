@@ -1,4 +1,7 @@
 <?php
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *'); // Permite todas as origens
+header('Access-Control-Allow-Methods: GET'); // Permite apenas métodos GET
 header('Content-Type: application/pdf');
 
 $servername = "tccappionic-bd.mysql.uhserver.com";
