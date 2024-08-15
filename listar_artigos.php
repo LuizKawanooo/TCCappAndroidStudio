@@ -1,8 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
@@ -25,8 +21,14 @@ try {
     // Recupera todos os artigos
     $artigos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    // Retorna os dados no formato JSON
-    echo json_encode($artigos);
+    // Verifica se há artigos
+    if ($artigos) {
+        // Retorna os dados no formato JSON
+        echo json_encode($artigos);
+    } else {
+        // Retorna uma mensagem se não houver artigos
+        echo json_encode(array("message" => "Nenhum artigo encontrado."));
+    }
 } catch (PDOException $e) {
     // Em caso de erro, retorna uma mensagem de erro
     echo json_encode(array("message" => "Erro ao consultar o banco de dados: " . $e->getMessage()));
