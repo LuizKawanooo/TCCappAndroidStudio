@@ -4,17 +4,19 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
+// Configurações do banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
 $username = "ionic_perfil_bd";
 $password = "{[UOLluiz2019";
 $dbname = "tccappionic_bd";
 
-// Criar a conexão com o banco de dados
+// Criar conexão com o banco de dados
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Verificar a conexão com o banco de dados
+// Verificar conexão
 if ($conn->connect_error) {
-    die(json_encode(array("error" => "Falha na conexão com o banco de dados: " . $conn->connect_error)));
+    echo json_encode(array("error" => "Conexão falhou: " . $conn->connect_error));
+    exit();
 }
 
 // Preparar a consulta SQL
@@ -25,14 +27,15 @@ $result = $conn->query($sql);
 
 // Verificar se a consulta foi bem-sucedida
 if ($result === false) {
-    die(json_encode(array("error" => "Falha na consulta SQL: " . $conn->error)));
+    echo json_encode(array("error" => "Erro na consulta: " . $conn->error));
+    exit();
 }
 
 $artigos = array();
 
 // Verificar se há resultados
 if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
+    while ($row = $result->fetch_assoc()) {
         $artigos[] = $row;
     }
     echo json_encode(array("artigos" => $artigos));
@@ -40,6 +43,7 @@ if ($result->num_rows > 0) {
     echo json_encode(array("artigos" => []));
 }
 
+// Liberar o resultado e fechar a conexão
 $result->free();
 $conn->close();
 ?>
