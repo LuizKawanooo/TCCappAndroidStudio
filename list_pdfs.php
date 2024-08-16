@@ -1,4 +1,13 @@
 <?php
+
+
+// Adiciona cabeçalhos CORS
+header("Access-Control-Allow-Origin: *"); // Permite todas as origens. Substitua "*" por um domínio específico se desejar mais segurança.
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+
+
+
 $host = 'tccappionic-bd.mysql.uhserver.com';
 $db   = 'tccappionic_bd';
 $user = 'ionic_perfil_bd';
