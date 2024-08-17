@@ -11,7 +11,7 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Content-Type: application/json; charset=UTF-8");
 
 // Configurações do banco de dados
-$servername = "localhost"; // Use o hostname do seu servidor MySQL
+$servername = "tccappionic-bd.mysql.uhserver.com"; // Use o hostname do seu servidor MySQL
 $username = "ionic_perfil_bd";
 $password = "{[UOLluiz2019";
 $dbname = "tccappionic_bd";
