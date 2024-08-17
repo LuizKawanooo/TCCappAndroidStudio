@@ -1,5 +1,13 @@
 <?php
+// Permite solicitações de qualquer origem
 header("Access-Control-Allow-Origin: *");
+
+// Permite os métodos HTTP que podem ser usados na solicitação
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+
+// Permite os cabeçalhos que podem ser usados na solicitação
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
 header("Content-Type: application/json; charset=UTF-8");
 
 // Configurações do banco de dados
