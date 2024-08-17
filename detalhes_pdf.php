@@ -1,6 +1,6 @@
 <?php
 function gerarToken($id) {
-    $chave = 'sua_chave_secreta'; // Deve ser uma chave secreta conhecida apenas pelo seu servidor
+    $chave = 'c@v3b1bl1ot3c_2024!'; // Deve ser uma chave secreta conhecida apenas pelo seu servidor
     return hash_hmac('sha256', $id, $chave);
 }
 
