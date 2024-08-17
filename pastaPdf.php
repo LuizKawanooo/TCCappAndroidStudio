@@ -24,7 +24,7 @@ if (isset($_FILES['pdf'])) {
     $file = $_FILES['pdf'];
 
     // Defina o diretório de upload
-    $uploadDirectory = 'pastaPdf/';
+    $uploadDirectory = '/pastaPdf/';
     
     // Verifique se o diretório existe, se não, crie-o
     if (!is_dir($uploadDirectory)) {
