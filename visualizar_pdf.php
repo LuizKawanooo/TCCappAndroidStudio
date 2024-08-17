@@ -1,6 +1,6 @@
 <?php
 function verificarToken($id, $token) {
-    $chave = 'sua_chave_secreta'; // Deve ser a mesma chave secreta usada para gerar o token
+    $chave = 'c@v3b1bl1ot3c_2024!'; // Deve ser a mesma chave secreta usada para gerar o token
     return hash_hmac('sha256', $id, $chave) === $token;
 }
 
