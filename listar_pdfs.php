@@ -1,4 +1,11 @@
 <?php
+// Adicionar cabeçalhos CORS
+header("Access-Control-Allow-Origin: *"); // Permitir todas as origens, ajuste conforme necessário
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS"); // Permitir métodos
+header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Permitir cabeçalhos específicos
+
+
+
 $host = 'tccappionic-bd.mysql.uhserver.com';
 $user = 'ionic_perfil_bd';
 $password = '{[UOLluiz2019';
