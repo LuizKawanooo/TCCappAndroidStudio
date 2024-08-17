@@ -1,4 +1,22 @@
 <?php
+// Permitir acesso de qualquer origem
+header("Access-Control-Allow-Origin: *");
+
+// Permitir métodos HTTP específicos
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+
+// Permitir cabeçalhos específicos
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+// Verifique se é uma solicitação OPTIONS e retorne a resposta adequada
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
+
+
+
 // upload.php
 
 // Verifique se o arquivo foi enviado
