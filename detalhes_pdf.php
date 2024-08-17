@@ -1,5 +1,8 @@
 <?php
-include 'functions.php'; // Inclua o arquivo com a função gerarToken
+function gerarToken($id) {
+    $chave = 'sua_chave_secreta'; // Deve ser uma chave secreta conhecida apenas pelo seu servidor
+    return hash_hmac('sha256', $id, $chave);
+}
 
 $host = 'tccappionic-bd.mysql.uhserver.com';
 $user = 'ionic_perfil_bd';
@@ -12,8 +15,8 @@ if ($mysqli->connect_error) {
     die("Falha na conexão: " . $mysqli->connect_error);
 }
 
-$id = $_GET['id'];
-$token = gerarToken($id);
+$id = $_GET['id']; // ID do PDF a ser visualizado
+$token = gerarToken($id); // Função definida acima
 
 $query = "SELECT titulo FROM artigos WHERE id = ?";
 $stmt = $mysqli->prepare($query);
