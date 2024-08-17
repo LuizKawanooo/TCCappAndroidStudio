@@ -1,50 +1,34 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/pdf");
-header("Content-Disposition: inline; filename=artigo.pdf");
-
-// Habilitar exibição de erros
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-// Conectar ao banco de dados
-$servername = "tccappionic-bd.mysql.uhserver.com";
-$username = "ionic_perfil_bd";
-$password = "{[UOLluiz2019";
-$dbname = "tccappionic_bd";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Verificar conexão
-if ($conn->connect_error) {
-    die("Conexão falhou: " . $conn->connect_error);
-}
-
-// Verificar se o ID foi enviado via GET
-if (isset($_GET['id'])) {
-    $id = intval($_GET['id']);
-
-    // Query para obter o PDF do artigo
-    $sql = "SELECT arquivo FROM artigos WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $stmt->bind_result($arquivo);
-    $stmt->fetch();
-
-    if ($arquivo) {
-        // Definir o tipo de conteúdo e exibir o PDF
-        header("Content-Type: application/pdf");
-        echo $arquivo;
-    } else {
-        echo "Artigo não encontrado.";
+// Rota para obter o PDF de um artigo específico
+$app->get('/artigos/{id}/pdf', function ($request, $response, $args) {
+    $id = $args['id'];
+    
+    // Conecte-se ao banco de dados
+    try {
+        $db = new PDO('mysql:host=tccappionic-bd.mysql.uhserver.com;dbname=tccappionic_bd;charset=utf8', 'ionic_perfil_bd', '{[UOLluiz2019');
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
+        return $response->withStatus(500)->write('Erro de conexão com o banco de dados: ' . $e->getMessage());
     }
 
-    $stmt->close();
-} else {
-    echo "ID do artigo não fornecido.";
-}
+    // Query para buscar o PDF
+    $stmt = $db->prepare('SELECT arquivo, pdf_nome FROM artigos WHERE id = :id');
+    $stmt->bindParam(':id', $id);
+    $stmt->execute();
+    $artigo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$conn->close();
-?>
+    if ($artigo) {
+        $pdfContent = $artigo['arquivo'];  // Conteúdo binário do PDF
+        $pdfName = $artigo['pdf_nome'];
+
+        // Definir os cabeçalhos de resposta para o PDF
+        $response = $response->withHeader('Content-Type', 'application/pdf')
+                             ->withHeader('Content-Disposition', 'inline; filename="' . $pdfName . '"');
+
+        // Enviar o conteúdo do PDF
+        $response->getBody()->write($pdfContent);
+        return $response;
+    } else {
+        return $response->withStatus(404)->write('PDF não encontrado');
+    }
+});
