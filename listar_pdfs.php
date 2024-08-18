@@ -5,33 +5,24 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS"); // Permitir métodos
 header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Permitir cabeçalhos específicos
 
 
+$repoPath = '/path/to/local/clone/of/repo';
+$branch = 'master';
+$pdfDir = "$repoPath/path/to/pdf/folder";
 
-$host = 'tccappionic-bd.mysql.uhserver.com';
-$user = 'ionic_perfil_bd';
-$password = '{[UOLluiz2019';
-$database = 'tccappionic_bd';
+// Altere para o caminho onde você clona seu repositório localmente
+exec("git -C $repoPath pull origin $branch");
 
-$mysqli = new mysqli($host, $user, $password, $database);
+$files = glob("$pdfDir/*.pdf");
+$pdfs = [];
 
-if ($mysqli->connect_error) {
-    die("Falha na conexão: " . $mysqli->connect_error);
+foreach ($files as $file) {
+    $pdfs[] = [
+        'name' => basename($file),
+        'path' => $file,
+        'url' => "http://yourserver.com/path/to/$file"
+    ];
 }
 
-// Consulta para recuperar PDFs
-$query = "SELECT id, titulo FROM artigos";
-$result = $mysqli->query($query);
-
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        echo '<div class="card">';
-        echo '<h3>' . htmlspecialchars($row['titulo']) . '</h3>';
-        echo '<a href="detalhes_pdf.php?id=' . $row['id'] . '">Ver Detalhes</a>';
-        echo '</div>';
-    }
-} else {
-    echo "Nenhum PDF encontrado.";
-}
-
-$mysqli->close();
+header('Content-Type: application/json');
+echo json_encode($pdfs);
 ?>
-=
