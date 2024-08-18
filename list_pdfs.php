@@ -66,13 +66,13 @@ $ch = curl_init();
 // Define as opções do cURL
 curl_setopt($ch, CURLOPT_URL, $apiUrl);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_USERAGENT, 'MyApp');
+curl_setopt($ch, CURLOPT_USERAGENT, 'MyApp'); // GitHub requer um User-Agent
 
 // Executa a solicitação e obtém a resposta
 $response = curl_exec($ch);
 
 // Verifica se houve erro
-if (curl_errno($ch)) {
+if(curl_errno($ch)) {
     die("Erro ao acessar a API do GitHub: " . curl_error($ch));
 }
 
@@ -81,40 +81,40 @@ curl_close($ch);
 
 // Decodifica o JSON retornado pela API
 $files = json_decode($response, true);
-$categories = ['Administração', 'Contabilidade', 'Desenvolvimento de Sistemas'];
-$categoryPdfs = [];
+$categories = [];
 
-// Inicializa arrays para cada categoria
-foreach ($categories as $category) {
-    $categoryPdfs[$category] = [];
-}
-
-// Organiza PDFs por categoria
+// Organiza os arquivos por categorias
 foreach ($files as $file) {
     if ($file['type'] === 'dir') {
         $category = $file['name'];
-        if (in_array($category, $categories)) {
-            $categoryApiUrl = $file['url'];
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $categoryApiUrl);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_USERAGENT, 'MyApp');
-            $categoryResponse = curl_exec($ch);
-            curl_close($ch);
+        $categoryApiUrl = 'https://api.github.com/repos/LuizKawanooo/TCCappAndroidStudio/contents/pastaPdf/' . $category;
 
-            $categoryFiles = json_decode($categoryResponse, true);
-            foreach ($categoryFiles as $pdfFile) {
-                if (isset($pdfFile['name']) && substr($pdfFile['name'], -4) === '.pdf') {
-                    $categoryPdfs[$category][] = [
-                        'name' => $pdfFile['name'],
-                        'url' => $pdfFile['download_url']
-                    ];
-                }
+        // Inicializa cURL para obter arquivos na categoria
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $categoryApiUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'MyApp');
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        $filesInCategory = json_decode($response, true);
+        $pdfs = [];
+
+        foreach ($filesInCategory as $fileInCategory) {
+            if (isset($fileInCategory['name']) && substr($fileInCategory['name'], -4) === '.pdf') {
+                $pdfs[] = [
+                    'name' => $fileInCategory['name'],
+                    'url' => $fileInCategory['download_url']
+                ];
             }
+        }
+
+        if (!empty($pdfs)) {
+            $categories[$category] = $pdfs;
         }
     }
 }
 
 header('Content-Type: application/json');
-echo json_encode($categoryPdfs);
+echo json_encode($categories);
 ?>
