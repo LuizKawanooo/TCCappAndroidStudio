@@ -5,27 +5,37 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS"); // Permitir métodos
 header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Permitir cabeçalhos específicos
 
 
-$repoPath = '/var/www/html/TCCappAndroidStudio';
-// Branch que você deseja utilizar (normalmente 'master' ou 'main')
-$branch = 'master';
+// Caminho para o repositório GitHub Pages
+$repoPath = 'https://luizkawanooo.github.io/TCCappAndroidStudio/pastaPdf';
 
-// Caminho para a pasta onde os PDFs estão armazenados
-$pdfDir = "$repoPath/pastaPdf"; // Substitua "pastaPdf" com o nome da pasta onde estão os PDFs
+// URL da API do GitHub para listar o conteúdo do diretório
+$apiUrl = "https://api.github.com/repos/LuizKawanooo/TCCappAndroidStudio/contents/pastaPdf";
 
-// Puxar as últimas mudanças do repositório
-exec("git -C $repoPath pull origin $branch");
+// Definir o User-Agent para a solicitação (obrigatório para a API do GitHub)
+$options = [
+    "http" => [
+        "header" => "User-Agent: MyApp\r\n"
+    ]
+];
+$context = stream_context_create($options);
 
-// Listar todos os PDFs na pasta especificada
-$files = glob("$pdfDir/*.pdf");
+// Obter o conteúdo do diretório usando a API do GitHub
+$response = file_get_contents($apiUrl, false, $context);
+if ($response === FALSE) {
+    die("Erro ao acessar a API do GitHub.");
+}
+
+// Decodificar o JSON retornado pela API
+$files = json_decode($response, true);
 $pdfs = [];
 
 foreach ($files as $file) {
-    $relativePath = str_replace($repoPath, '', $file); // Caminho relativo para a URL
-    $pdfs[] = [
-        'name' => basename($file),
-        'path' => $file,
-        'url' => "https://endologic.com.br/tcc" . $relativePath
-    ];
+    if (isset($file['name']) && substr($file['name'], -4) === '.pdf') {
+        $pdfs[] = [
+            'name' => $file['name'],
+            'url' => $file['download_url'] // URL para download do arquivo
+        ];
+    }
 }
 
 header('Content-Type: application/json');
