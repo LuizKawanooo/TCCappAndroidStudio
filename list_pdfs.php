@@ -6,20 +6,25 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Permitir
 
 
 $repoPath = '/var/www/html/TCCappAndroidStudio';
+// Branch que você deseja utilizar (normalmente 'master' ou 'main')
 $branch = 'master';
-$pdfDir = "$repoPath/pastaPdf";
 
-// Altere para o caminho onde você clona seu repositório localmente
+// Caminho para a pasta onde os PDFs estão armazenados
+$pdfDir = "$repoPath/pastaPdf"; // Substitua "pastaPdf" com o nome da pasta onde estão os PDFs
+
+// Puxar as últimas mudanças do repositório
 exec("git -C $repoPath pull origin $branch");
 
+// Listar todos os PDFs na pasta especificada
 $files = glob("$pdfDir/*.pdf");
 $pdfs = [];
 
 foreach ($files as $file) {
+    $relativePath = str_replace($repoPath, '', $file); // Caminho relativo para a URL
     $pdfs[] = [
         'name' => basename($file),
         'path' => $file,
-        'url' => "http://yourserver.com/path/to/$file"
+        'url' => "https://endologic.com.br/tcc" . $relativePath
     ];
 }
 
