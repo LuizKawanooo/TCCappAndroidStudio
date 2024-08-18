@@ -5,9 +5,9 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS"); // Permitir métodos
 header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Permitir cabeçalhos específicos
 
 
-$repoPath = '/path/to/local/clone/of/repo';
+$repoPath = '/var/www/html/TCCappAndroidStudio';
 $branch = 'master';
-$pdfDir = "$repoPath/path/to/pdf/folder";
+$pdfDir = "$repoPath/pastaPdf";
 
 // Altere para o caminho onde você clona seu repositório localmente
 exec("git -C $repoPath pull origin $branch");
