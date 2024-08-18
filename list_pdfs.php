@@ -5,27 +5,29 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS"); // Permitir métodos
 header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Permitir cabeçalhos específicos
 
 
-// Caminho para o repositório GitHub Pages
-$repoPath = 'https://luizkawanooo.github.io/TCCappAndroidStudio/pastaPdf';
-
 // URL da API do GitHub para listar o conteúdo do diretório
-$apiUrl = "https://api.github.com/repos/LuizKawanooo/TCCappAndroidStudio/contents/pastaPdf";
+$apiUrl = 'https://api.github.com/repos/LuizKawanooo/TCCappAndroidStudio/contents/pastaPdf';
 
-// Definir o User-Agent para a solicitação (obrigatório para a API do GitHub)
-$options = [
-    "http" => [
-        "header" => "User-Agent: MyApp\r\n"
-    ]
-];
-$context = stream_context_create($options);
+// Inicializa cURL
+$ch = curl_init();
 
-// Obter o conteúdo do diretório usando a API do GitHub
-$response = file_get_contents($apiUrl, false, $context);
-if ($response === FALSE) {
-    die("Erro ao acessar a API do GitHub.");
+// Define as opções do cURL
+curl_setopt($ch, CURLOPT_URL, $apiUrl);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_USERAGENT, 'MyApp'); // GitHub requer um User-Agent
+
+// Executa a solicitação e obtém a resposta
+$response = curl_exec($ch);
+
+// Verifica se houve erro
+if(curl_errno($ch)) {
+    die("Erro ao acessar a API do GitHub: " . curl_error($ch));
 }
 
-// Decodificar o JSON retornado pela API
+// Fecha a conexão cURL
+curl_close($ch);
+
+// Decodifica o JSON retornado pela API
 $files = json_decode($response, true);
 $pdfs = [];
 
