@@ -147,7 +147,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <h1>LOGIN</h1>
             <div class="inp1"><p>Usuário:</p> <input type="text" name="email" required placeholder="Digite seu usuário"><br></div>
             <div class="inp2"><p>Senha:</p> <input type="password" name="password" required placeholder="Digite sua senha"><br></div>
-            <div class="inp2"><p>Código:</p> <input type="text" name="text" required placeholder="Digite o código da sua intituição"><br></div>
             <a href="register.php">Não tenho cadastro</a>
             <input type="submit" value="Login" class="btn">
         </form>
