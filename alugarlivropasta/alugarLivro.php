@@ -33,7 +33,7 @@ if ($id <= 0) {
 // Preparar e executar a consulta para verificar o status do livro
 $stmt = $conn->prepare("SELECT status_livros FROM livros WHERE id = ?");
 if (!$stmt) {
-    echo json_encode(["success" => false, "message" => "Erro na preparação da consulta: " . $conn->error]);
+    echo json_encode(["success" => false, "message" => "Erro na preparação da consulta de verificação: " . $conn->error]);
     $conn->close();
     exit();
 }
@@ -57,7 +57,7 @@ if ($result->num_rows > 0) {
         if ($stmt->execute()) {
             echo json_encode(["success" => true, "message" => "Livro alugado com sucesso"]);
         } else {
-            echo json_encode(["success" => false, "message" => "Erro ao atualizar livro: " . $stmt->error]);
+            echo json_encode(["success" => false, "message" => "Erro ao executar a atualização: " . $stmt->error]);
         }
     } else {
         echo json_encode(["success" => false, "message" => "Livro já está alugado"]);
