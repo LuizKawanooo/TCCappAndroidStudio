@@ -1,5 +1,4 @@
 <?php
-header('Access-Control-Allow-Origin: http://localhost:8100');
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *'); // Permite todas as origens, ajuste conforme necessário
 header('Access-Control-Allow-Methods: POST, GET, OPTIONS'); // Métodos permitidos
