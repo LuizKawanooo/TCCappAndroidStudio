@@ -18,7 +18,7 @@ $input = json_decode(file_get_contents('php://input'), true);
 if (isset($input['id'])) {
     $livroId = $conn->real_escape_string($input['id']);
 
-    $stmt = $conn->prepare("DELETE FROM livro WHERE id = ?");
+    $stmt = $conn->prepare("DELETE FROM livros WHERE id = ?");
     $stmt->bind_param("i", $livroId);
 
     if ($stmt->execute()) {
