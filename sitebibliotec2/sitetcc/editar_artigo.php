@@ -23,9 +23,9 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] === UPLOAD_ERR_OK) 
 }
 
 if ($arquivo) {
-    $sql = "UPDATE artigo SET titulo='$titulo', autor='$autor', ano='$ano', arquivo='$arquivo' WHERE id=$id";
+    $sql = "UPDATE artigos SET titulo='$titulo', autor='$autor', ano='$ano', arquivo='$arquivo' WHERE id=$id";
 } else {
-    $sql = "UPDATE artigo SET titulo='$titulo', autor='$autor', ano='$ano' WHERE id=$id";
+    $sql = "UPDATE artigos SET titulo='$titulo', autor='$autor', ano='$ano' WHERE id=$id";
 }
 
 if ($conn->query($sql) === TRUE) {
