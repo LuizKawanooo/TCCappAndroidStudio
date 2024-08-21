@@ -5,10 +5,10 @@ header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
 // Configurações de banco de dados
-$host = 'localhost';
-$db = 'tcc';
-$user = 'root';
-$pass = '';
+$host = 'tccappionic-bd.mysql.uhserver.com';
+$db = 'tccappionic_bd';
+$user = 'ionic_perfil_bd';
+$pass = '{[UOLluiz2019';
 
 $conn = new mysqli($host, $user, $pass, $db);
 
