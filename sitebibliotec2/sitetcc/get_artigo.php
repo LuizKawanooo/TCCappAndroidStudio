@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 
 $id = $_GET['id'];
 
-$sql = "SELECT * FROM artigo WHERE id = $id";
+$sql = "SELECT * FROM artigos WHERE id = $id";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
