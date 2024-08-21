@@ -504,7 +504,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 // Consulta SQL para recuperar os artigos cadastrados
-$sql = "SELECT * FROM artigo";
+$sql = "SELECT * FROM artigos";
 $result = $conn->query($sql);
 
 // Verifica se a consulta retornou algum resultado
@@ -626,7 +626,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Prepara a consulta SQL para inserção
-    $stmt = $conn->prepare("INSERT INTO artigo (titulo, autor, ano, arquivo) VALUES (?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano, arquivo) VALUES (?, ?, ?, ?)");
     $stmt->bind_param("ssss", $titulo, $autor, $ano, $arquivo);
 
     // Executa a consulta
