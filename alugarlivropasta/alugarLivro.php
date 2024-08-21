@@ -8,7 +8,7 @@ header('Access-Control-Allow-Headers: Content-Type'); // Cabeçalhos permitidos
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit();
 }
-?>
+
 
 
 // Conexão com o banco de dados
