@@ -31,14 +31,19 @@ if ($id <= 0) {
 
 // Preparar e executar a atualização da data de devolução
 $data_devolucao = date('Y-m-d H:i:s', strtotime('+20 seconds')); // Define a data de devolução como 20 segundos a partir de agora
-$stmt = $conn->prepare("UPDATE livros SET data_devolucao = ? WHERE id = ?");
-$stmt->bind_param("si", $data_devolucao, $id);
-if ($stmt->execute()) {
-    echo json_encode(["success" => true, "message" => "Data de devolução atualizada com sucesso"]);
+
+// Verifique se a tabela e o campo existem
+if ($stmt = $conn->prepare("UPDATE livros SET data_devolucao = ? WHERE id = ?")) {
+    $stmt->bind_param("si", $data_devolucao, $id);
+    if ($stmt->execute()) {
+        echo json_encode(["success" => true, "message" => "Data de devolução atualizada com sucesso"]);
+    } else {
+        echo json_encode(["success" => false, "message" => "Erro ao atualizar data de devolução: " . $stmt->error]);
+    }
+    $stmt->close();
 } else {
-    echo json_encode(["success" => false, "message" => "Erro ao atualizar data de devolução: " . $stmt->error]);
+    echo json_encode(["success" => false, "message" => "Erro ao preparar a consulta: " . $conn->error]);
 }
 
-$stmt->close();
 $conn->close();
 ?>
