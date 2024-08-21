@@ -584,9 +584,9 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
 
 // Consulta SQL para recuperar os livros cadastrados
 if ($search) {
-    $sql = "SELECT * FROM livro WHERE titulo LIKE '%$search%' OR autor LIKE '%$search%' OR genero LIKE '%$search%'";
+    $sql = "SELECT * FROM livros WHERE titulo LIKE '%$search%' OR autor LIKE '%$search%' OR genero LIKE '%$search%'";
 } else {
-    $sql = "SELECT * FROM livro";
+    $sql = "SELECT * FROM livros";
 }
 
 $result = $conn->query($sql);
@@ -788,7 +788,7 @@ if (isset($input['id']) && isset($input['novoStatus'])) {
     $validStatuses = ['Disponível', 'Alugado'];
     if (in_array($novoStatus, $validStatuses)) {
         // Prepara a consulta SQL para atualizar o status
-        $sql = "UPDATE livro SET status='" . ($novoStatus === 'Disponível' ? 0 : 1) . "' WHERE id='$id'";
+        $sql = "UPDATE livros SET status='" . ($novoStatus === 'Disponível' ? 0 : 1) . "' WHERE id='$id'";
 
         if ($conn->query($sql) === TRUE) {
             echo json_encode(['success' => true]);
