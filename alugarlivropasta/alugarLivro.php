@@ -1,4 +1,8 @@
 <?php
+// Adicione os cabeçalhos CORS
+header("Access-Control-Allow-Origin: *"); // Permite qualquer origem. Em produção, é recomendável usar o domínio específico.
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
 header('Content-Type: application/json');
 
 // Conexão com o banco de dados
