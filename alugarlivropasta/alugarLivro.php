@@ -1,11 +1,10 @@
 <?php
-// Adicione os cabeçalhos CORS
-header("Access-Control-Allow-Origin: *"); // Permite qualquer origem. Em produção, é recomendável usar o domínio específico.
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-header('Content-Type: application/json');
+// Adiciona cabeçalhos CORS
+header("Access-Control-Allow-Origin: *"); // Permite qualquer origem. Substitua '*' pelo domínio específico em produção
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS"); // Métodos permitidos
+header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Cabeçalhos permitidos
 
-// Conexão com o banco de dados
+// Resto do código PHP
 $servername = "tccappionic-bd.mysql.uhserver.com";
 $username = "ionic_perfil_bd";
 $password = "{[UOLluiz2019";
@@ -33,12 +32,6 @@ if ($id <= 0) {
 
 // Preparar e executar a consulta para verificar o status do livro
 $stmt = $conn->prepare("SELECT status_livros FROM livros WHERE id = ?");
-if (!$stmt) {
-    echo json_encode(["success" => false, "message" => "Erro na preparação da consulta: " . $conn->error]);
-    $conn->close();
-    exit();
-}
-
 $stmt->bind_param("i", $id);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -48,11 +41,6 @@ if ($result->num_rows > 0) {
     if ($row['status_livros'] == 0) {
         // Preparar e executar a atualização do status do livro
         $stmt = $conn->prepare("UPDATE livros SET status_livros = 1, data_aluguel = ? WHERE id = ?");
-        if (!$stmt) {
-            echo json_encode(["success" => false, "message" => "Erro na preparação da atualização: " . $conn->error]);
-            $conn->close();
-            exit();
-        }
         $stmt->bind_param("si", $data_aluguel, $id);
         if ($stmt->execute()) {
             echo json_encode(["success" => true, "message" => "Livro alugado com sucesso"]);
