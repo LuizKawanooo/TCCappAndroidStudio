@@ -599,7 +599,7 @@ if ($result) {
             $status = $row["status"] == 0 ? "Disponível" : "Alugado";
             echo "<div class='livro'>";
                 if ($row["imagem"]) {
-                    echo "<img src='image.php?id=" . $row["id"] . "' alt='imagem do livro' style='max-width: 130px; max-height: 150px;'>";
+                    echo "<img src='imagem.php?id=" . $row["id"] . "' alt='imagem do livro' style='max-width: 130px; max-height: 150px;'>";
                 }
                 echo "<center><h1>" . $row["titulo"] . "</h1></center>";
                 echo "<h2>Status: " . $status . "</h2>";
