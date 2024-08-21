@@ -27,13 +27,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $n_paginas = $_POST['n_paginas'];
     $isbn = $_POST['isbn'];
     
-    // Inicializa a variável capa
-    $capa = NULL;
+    // Inicializa a variável imagem
+    $imagem = NULL;
     
-    // Processa o upload da nova capa
-    if (isset($_FILES['capa']) && $_FILES['capa']['error'] == UPLOAD_ERR_OK) {
-        $tmp_name = $_FILES['capa']['tmp_name'];
-        $name = basename($_FILES['capa']['name']);
+    // Processa o upload da nova imagem
+    if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
+        $tmp_name = $_FILES['imagem']['tmp_name'];
+        $name = basename($_FILES['imagem']['name']);
         $upload_dir = 'uploads/';
         $upload_file = $upload_dir . $name;
         
@@ -44,33 +44,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Move o arquivo para o diretório de uploads
         if (move_uploaded_file($tmp_name, $upload_file)) {
-            $capa = $upload_file;
+            $imagem = $upload_file;
         } else {
             echo "Erro ao fazer upload da imagem.";
             exit;
         }
     }
 
-    // Se não houver nova capa, mantenha a capa antiga (caso seja necessário)
-    // Para manter a capa antiga, você pode fazer uma consulta para obter o caminho da capa atual.
-    // Aqui estou considerando que você já tem o caminho da capa atual.
-    $sql = "SELECT capa FROM livro WHERE id = ?";
+    // Se não houver nova imagem, mantenha a imagem antiga (caso seja necessário)
+    // Para manter a imagem antiga, você pode fazer uma consulta para obter o caminho da imagem atual.
+    // Aqui estou considerando que você já tem o caminho da imagem atual.
+    $sql = "SELECT imagem FROM livros WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id);
     $stmt->execute();
-    $stmt->bind_result($capa_atual);
+    $stmt->bind_result($imagem_atual);
     $stmt->fetch();
     $stmt->close();
 
-    // Se não houve upload de nova capa, mantenha a capa atual
-    if ($capa === NULL) {
-        $capa = $capa_atual;
+    // Se não houve upload de nova imagem, mantenha a imagem atual
+    if ($imagem === NULL) {
+        $imagem = $imagem_atual;
     }
 
     // Prepara a consulta SQL para atualização
-    $sql = "UPDATE livro SET titulo = ?, autor = ?, editora = ?, genero = ?, tombo = ?, ano = ?, classificacao = ?, n_paginas = ?, isbn = ?, capa = ? WHERE id = ?";
+    $sql = "UPDATE livros SET titulo = ?, autor = ?, editora = ?, genero = ?, tombo = ?, ano = ?, classificacao = ?, n_paginas = ?, isbn = ?, imagem = ? WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssssssisi", $titulo, $autor, $editora, $genero, $tombo, $ano, $classificacao, $n_paginas, $isbn, $capa, $id);
+    $stmt->bind_param("ssssssssisi", $titulo, $autor, $editora, $genero, $tombo, $ano, $classificacao, $n_paginas, $isbn, $imagem, $id);
     
     if ($stmt->execute()) {
         echo "<center><div class='title'><h2>Livro atualizado com sucesso!</h2></div></center>";
