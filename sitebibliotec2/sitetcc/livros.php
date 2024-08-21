@@ -897,7 +897,42 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
 
 
+document.addEventListener('DOMContentLoaded', function() {
+    const botoesEmprestar = document.querySelectorAll('.btn4');
 
+    botoesEmprestar.forEach(botao => {
+        botao.addEventListener('click', function() {
+            const livroId = this.getAttribute('data-livro-id');
+            const statusAtual = this.getAttribute('data-status-atual');
+
+            if (statusAtual === 'disponivel') {
+                // Enviar requisição para alterar o status do livro para 'alugado'
+                fetch('alterar_status.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        livroId: livroId,
+                        novoStatus: 'alugado'
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Atualizar o botão e exibir a cor vermelha
+                    botao.style.backgroundColor = 'red';
+                    botao.textContent = 'Alugado';
+                    botao.setAttribute('data-status-atual', 'alugado');
+                })
+                .catch(error => {
+                    console.error('Erro ao alterar o status:', error);
+                });
+            } else {
+                console.log('Livro já está alugado.');
+            }
+        });
+    });
+});
 
 
 
