@@ -1,5 +1,8 @@
 <?php
 header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *'); // Permite todas as origens, ajuste conforme necessário
+header('Access-Control-Allow-Methods: POST, GET, OPTIONS'); // Métodos permitidos
+header('Access-Control-Allow-Headers: Content-Type'); // Cabeçalhos permitidos
 
 // Conexão com o banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
