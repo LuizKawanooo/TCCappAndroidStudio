@@ -584,9 +584,9 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
 
 // Consulta SQL para recuperar os livros cadastrados
 if ($search) {
-    $sql = "SELECT * FROM livros WHERE titulo LIKE '%$search%' OR autor LIKE '%$search%' OR genero LIKE '%$search%'";
+    $sql = "SELECT * FROM livro WHERE titulo LIKE '%$search%' OR autor LIKE '%$search%' OR genero LIKE '%$search%'";
 } else {
-    $sql = "SELECT * FROM livros";
+    $sql = "SELECT * FROM livro";
 }
 
 $result = $conn->query($sql);
@@ -596,18 +596,22 @@ if ($result) {
     if ($result->num_rows > 0) {
         echo "<div class='container'>";
         while ($row = $result->fetch_assoc()) {
+            // Converte o status numérico para texto
+            $statusTexto = $row["status"] == 0 ? 'Disponível' : 'Alugado';
+            
             echo "<div class='livro'>";
-                if ($row["imagem"]) {
+                if ($row["capa"]) {
                     echo "<img src='image.php?id=" . $row["id"] . "' alt='imagem do livro' style='max-width: 130px; max-height: 150px;'>";
                 }
-                echo "<center><h1>" . $row["titulo"] . "</h1></center>";
-                echo "<h2>" . $row["status"] . "</h2>";
+                echo "<center><h1>" . htmlspecialchars($row["titulo"]) . "</h1></center>";
+                echo "<h2>Status: " . htmlspecialchars($statusTexto) . "</h2>";
                 echo "<div class='botoes'>";
-                echo "<div class='btn3' data-id='" . $row["id"] . "'>Editar</div>";
-                echo "<div class='btn-excluir' data-id='" . $row["id"] . "'>Excluir</div>";
+                echo "<div class='btn3' data-id='" . htmlspecialchars($row["id"]) . "'>Editar</div>";
+                echo "<div class='btn-excluir' data-id='" . htmlspecialchars($row["id"]) . "'>Excluir</div>";
                 echo "</div>";
-                echo "</div>";
+            echo "</div>";
         }
+        echo "</div>";
     } else {
         echo "<p style='color:#fff; font-size:40px; position: absolute; top: 51%; left: 60%; transform:translate(-50%, -50%);'>Nenhum Livro Encontrado</p>";
     }
@@ -617,6 +621,7 @@ if ($result) {
 
 $conn->close();
 ?>
+
 
 
 <div id="popup" class="popup">
