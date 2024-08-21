@@ -763,17 +763,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <?php
 // Conexão com o banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
-
 $username = "ionic_perfil_bd";
-
 $password = "{[UOLluiz2019";
-
 $dbname = "tccappionic_bd";
- 
-// Cria a conexão
 
+// Cria a conexão
 $conn = new mysqli($servername, $username, $password, $dbname);
- 
 
 // Verifica a conexão
 if ($conn->connect_error) {
@@ -785,29 +780,29 @@ $input = json_decode(file_get_contents('php://input'), true);
 
 if (isset($input['id']) && isset($input['novoStatus'])) {
     $id = $conn->real_escape_string($input['id']);
-    $novoStatus = $conn->real_escape_string($input['novoStatus']);
+    $novoStatus = intval($conn->real_escape_string($input['novoStatus'])); // Converte para inteiro
 
-    // Verifica se o novoStatus é um valor válido
-    $validStatuses = ['Disponível', 'Alugado'];
-    if (in_array($novoStatus, $validStatuses)) {
+    // Verifica se o novoStatus é 0 ou 1
+    if ($novoStatus === 0 || $novoStatus === 1) {
         // Prepara a consulta SQL para atualizar o status
-        $sql = "UPDATE livros SET status='$novoStatus' WHERE id='$id'";
+        $sql = "UPDATE livro SET status='$novoStatus' WHERE id='$id'";
 
         if ($conn->query($sql) === TRUE) {
-            echo "";
+            echo json_encode('');
         } else {
-            echo "";
+            echo json_encode('');
         }
     } else {
-        echo "";
+        echo json_encode('');
     }
 } else {
-    echo "";
+    echo json_encode('');
 }
 
 // Fecha a conexão com o banco de dados
 $conn->close();
 ?>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -848,8 +843,8 @@ document.addEventListener('DOMContentLoaded', function() {
     botoesAlterarStatus.forEach(botao => {
         botao.addEventListener('click', function() {
             const livroId = this.getAttribute('data-id');
-            const statusAtual = this.getAttribute('data-status');
-            const novoStatus = statusAtual === 'disponível' ? 'alugado' : 'disponível';
+            const statusAtual = parseInt(this.getAttribute('data-status')); // Converte para inteiro
+            const novoStatus = statusAtual === 0 ? 1 : 0; // Alterna entre 0 e 1
 
             // Enviar requisição para alterar o status do livro
             fetch('alterar_status.php', {
@@ -858,18 +853,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    livroId: livroId,
+                    id: livroId,
                     novoStatus: novoStatus
                 })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    botao.textContent = novoStatus === 'disponível' ? 'Emprestar' : 'Devolver';
+                    botao.textContent = novoStatus === 0 ? 'Emprestar' : 'Devolver';
                     botao.setAttribute('data-status', novoStatus);
                     // Atualize o texto do status na página
                     const statusElement = botao.previousElementSibling;
-                    statusElement.textContent = 'Status: ' + novoStatus;
+                    statusElement.textContent = 'Status: ' + (novoStatus === 0 ? 'Disponível' : 'Alugado');
                 } else {
                     console.error('Erro ao alterar o status:', data.error);
                 }
