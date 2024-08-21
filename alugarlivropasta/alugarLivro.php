@@ -1,15 +1,15 @@
 <?php
 header('Content-Type: application/json');
-
-// Permitir CORS
-header('Access-Control-Allow-Origin: *'); // Permite todas as origens
-header('Access-Control-Allow-Methods: POST, OPTIONS'); // Métodos permitidos
+header('Access-Control-Allow-Origin: *'); // Permitir todas as origens
+header('Access-Control-Allow-Methods: POST, GET, OPTIONS'); // Métodos permitidos
 header('Access-Control-Allow-Headers: Content-Type'); // Cabeçalhos permitidos
 
-// Se for uma requisição OPTIONS, apenas responda com cabeçalhos CORS
+// Verificar se é uma requisição OPTIONS e sair se for
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit();
 }
+?>
+
 
 // Conexão com o banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
