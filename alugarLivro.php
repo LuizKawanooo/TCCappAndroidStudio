@@ -1,17 +1,23 @@
 <?php
 header('Content-Type: application/json');
 
+// Permitir CORS
+header('Access-Control-Allow-Origin: *'); // Permite todas as origens
+header('Access-Control-Allow-Methods: POST, GET, OPTIONS'); // Métodos permitidos
+header('Access-Control-Allow-Headers: Content-Type'); // Cabeçalhos permitidos
+
 // Conexão com o banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
 $username = "ionic_perfil_bd";
-$password = "{[UOLluiz2019";
+$password = "{[UOLluiz2019"; // Verifique se a senha está correta e não possui caracteres especiais não escapados
 $dbname = "tccappionic_bd";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Verificar a conexão
 if ($conn->connect_error) {
-    die("Conexão falhou: " . $conn->connect_error);
+    echo json_encode(["success" => false, "message" => "Conexão falhou: " . $conn->connect_error]);
+    exit();
 }
 
 // Receber dados da requisição
