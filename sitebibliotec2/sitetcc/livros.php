@@ -596,20 +596,18 @@ if ($result) {
     if ($result->num_rows > 0) {
         echo "<div class='container'>";
         while ($row = $result->fetch_assoc()) {
-            $status = $row["status"] == 0 ? "Disponível" : "Alugado";
             echo "<div class='livro'>";
                 if ($row["imagem"]) {
-                    echo "<img src='imagem.php?id=" . $row["id"] . "' alt='imagem do livro' style='max-width: 130px; max-height: 150px;'>";
+                    echo "<img src='image.php?id=" . $row["id"] . "' alt='imagem do livro' style='max-width: 130px; max-height: 150px;'>";
                 }
                 echo "<center><h1>" . $row["titulo"] . "</h1></center>";
-                echo "<h2>Status: " . $status . "</h2>";
+                echo "<h2>" . $row["status"] . "</h2>";
                 echo "<div class='botoes'>";
                 echo "<div class='btn3' data-id='" . $row["id"] . "'>Editar</div>";
                 echo "<div class='btn-excluir' data-id='" . $row["id"] . "'>Excluir</div>";
                 echo "</div>";
                 echo "</div>";
         }
-        echo "</div>";
     } else {
         echo "<p style='color:#fff; font-size:40px; position: absolute; top: 51%; left: 60%; transform:translate(-50%, -50%);'>Nenhum Livro Encontrado</p>";
     }
@@ -765,12 +763,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <?php
 // Conexão com o banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
-$username = "ionic_perfil_bd";
-$password = "{[UOLluiz2019";
-$dbname = "tccappionic_bd";
 
+$username = "ionic_perfil_bd";
+
+$password = "{[UOLluiz2019";
+
+$dbname = "tccappionic_bd";
+ 
 // Cria a conexão
+
 $conn = new mysqli($servername, $username, $password, $dbname);
+ 
 
 // Verifica a conexão
 if ($conn->connect_error) {
@@ -788,24 +791,23 @@ if (isset($input['id']) && isset($input['novoStatus'])) {
     $validStatuses = ['Disponível', 'Alugado'];
     if (in_array($novoStatus, $validStatuses)) {
         // Prepara a consulta SQL para atualizar o status
-        $sql = "UPDATE livros SET status='" . ($novoStatus === 'Disponível' ? 0 : 1) . "' WHERE id='$id'";
+        $sql = "UPDATE livros SET status='$novoStatus' WHERE id='$id'";
 
         if ($conn->query($sql) === TRUE) {
-            echo json_encode(['success' => true]);
+            echo "";
         } else {
-            echo json_encode(['success' => false, 'error' => $conn->error]);
+            echo "";
         }
     } else {
-        echo json_encode(['success' => false, 'error' => 'Status inválido']);
+        echo "";
     }
 } else {
-    echo json_encode(['success' => false, 'error' => 'Dados inválidos']);
+    echo "";
 }
 
 // Fecha a conexão com o banco de dados
 $conn->close();
 ?>
-
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -839,7 +841,47 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const botoesAlterarStatus = document.querySelectorAll('.btn-alterar-status');
 
+    botoesAlterarStatus.forEach(botao => {
+        botao.addEventListener('click', function() {
+            const livroId = this.getAttribute('data-id');
+            const statusAtual = this.getAttribute('data-status');
+            const novoStatus = statusAtual === 'disponível' ? 'alugado' : 'disponível';
+
+            // Enviar requisição para alterar o status do livro
+            fetch('alterar_status.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    livroId: livroId,
+                    novoStatus: novoStatus
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    botao.textContent = novoStatus === 'disponível' ? 'Emprestar' : 'Devolver';
+                    botao.setAttribute('data-status', novoStatus);
+                    // Atualize o texto do status na página
+                    const statusElement = botao.previousElementSibling;
+                    statusElement.textContent = 'Status: ' + novoStatus;
+                } else {
+                    console.error('Erro ao alterar o status:', data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao alterar o status:', error);
+            });
+        });
+    });
+});
+
+</script>
 <script>
                     const adicionarLivroBtn = document.getElementById('adicionar-livro-btn');
                     const editarLivroBtn = document.getElementById('editar-livro-btn');
@@ -897,7 +939,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
 
 
-document.addEventListener('DOMContentLoaded', function() {
+
+
+
+                    document.addEventListener('DOMContentLoaded', function() {
     const botoesEmprestar = document.querySelectorAll('.btn4');
 
     botoesEmprestar.forEach(botao => {
@@ -933,9 +978,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-
-
-
 
             </script>
 
