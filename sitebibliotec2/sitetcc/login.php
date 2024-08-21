@@ -9,40 +9,31 @@
 <body>
 
 <?php
-session_start();
-include 'conexao.php';
+        session_start();
+        include 'conexao.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $email = $_POST['email'];
+            $password = $_POST['password'];
 
-    // Prepare and execute SQL statement
-    $stmt = $conn->prepare("SELECT ID_bibliotecario, password FROM bibliotecario WHERE email = ?");
-    
-    if ($stmt === false) {
-        die('Prepare failed: ' . htmlspecialchars($conn->error));
-    }
+            $stmt = $conn->prepare("SELECT ID_bibliotecario, password FROM bibliotecario WHERE email = ?");
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($id, $hashed_password);
+            $stmt->fetch();
 
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $stmt->store_result();
-    $stmt->bind_result($id, $hashed_password);
-    $stmt->fetch();
+            if ($stmt->num_rows == 1 && password_verify($password, $hashed_password)) {
+                $_SESSION['user_id'] = $id;
+                header("Location: inicio.php");
+            } else {
+                echo "<p style='color:#f00; font-size:20px; position: absolute; top: 58%; left: 50%; transform:translate(-50%, -50%);'>Email ou senha inválidos.</p>";
+            }
 
-    // Check if email exists and verify password
-    if ($stmt->num_rows == 1 && password_verify($password, $hashed_password)) {
-        $_SESSION['user_id'] = $id;
-        header("Location: inicio.php");
-        exit();
-    } else {
-        echo "<p style='color:#f00; font-size:20px; position: absolute; top: 58%; left: 50%; transform:translate(-50%, -50%);'>Email ou senha inválidos.</p>";
-    }
-
-    $stmt->close();
-    $conn->close();
-}
-?>
-
+            $stmt->close();
+            $conn->close();
+        }
+        ?>
 
         <style>
                 
@@ -147,6 +138,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <h1>LOGIN</h1>
             <div class="inp1"><p>Usuário:</p> <input type="text" name="email" required placeholder="Digite seu usuário"><br></div>
             <div class="inp2"><p>Senha:</p> <input type="password" name="password" required placeholder="Digite sua senha"><br></div>
+            <div class="inp2"><p>Código:</p> <input type="text" name="text" required placeholder="Digite o código da sua intituição"><br></div>
             <a href="register.php">Não tenho cadastro</a>
             <input type="submit" value="Login" class="btn">
         </form>
