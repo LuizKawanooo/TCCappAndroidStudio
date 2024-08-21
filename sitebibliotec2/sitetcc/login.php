@@ -16,7 +16,7 @@
             $email = $_POST['email'];
             $password = $_POST['password'];
 
-            $stmt = $conn->prepare("SELECT ID_bibliotecario, password FROM bibliotecario WHERE email = ?");
+            $stmt = $conn->prepare("SELECT * FROM usuarios WHERE username='$username' AND password=MD5('$password')");
             $stmt->bind_param("s", $email);
             $stmt->execute();
             $stmt->store_result();
