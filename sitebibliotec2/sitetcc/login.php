@@ -9,6 +9,7 @@
 <body>
 
 <?php
+        session_start();
         include 'conexao.php';
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -133,7 +134,7 @@
 
 
     
-        <form method="post" class="container">
+        <form method="post" action="login.php" class="container">
             <h1>LOGIN</h1>
             <div class="inp1"><p>Usuário:</p> <input type="text" name="email" required placeholder="Digite seu usuário"><br></div>
             <div class="inp2"><p>Senha:</p> <input type="password" name="password" required placeholder="Digite sua senha"><br></div>
