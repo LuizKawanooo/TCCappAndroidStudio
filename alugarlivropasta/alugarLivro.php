@@ -1,8 +1,5 @@
 <?php
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *'); // Permite todas as origens, ajuste conforme necessário
-header('Access-Control-Allow-Methods: POST, GET, OPTIONS'); // Métodos permitidos
-header('Access-Control-Allow-Headers: Content-Type'); // Cabeçalhos permitidos
 
 // Conexão com o banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
@@ -33,7 +30,7 @@ if ($id <= 0) {
 // Preparar e executar a consulta para verificar o status do livro
 $stmt = $conn->prepare("SELECT status_livros FROM livros WHERE id = ?");
 if (!$stmt) {
-    echo json_encode(["success" => false, "message" => "Erro na preparação da consulta de verificação: " . $conn->error]);
+    echo json_encode(["success" => false, "message" => "Erro na preparação da consulta: " . $conn->error]);
     $conn->close();
     exit();
 }
@@ -48,16 +45,15 @@ if ($result->num_rows > 0) {
         // Preparar e executar a atualização do status do livro
         $stmt = $conn->prepare("UPDATE livros SET status_livros = 1, data_aluguel = ? WHERE id = ?");
         if (!$stmt) {
-            echo json_encode(["success" => false, "message" => "Erro na preparação da consulta de atualização: " . $conn->error]);
+            echo json_encode(["success" => false, "message" => "Erro na preparação da atualização: " . $conn->error]);
             $conn->close();
             exit();
         }
-
         $stmt->bind_param("si", $data_aluguel, $id);
         if ($stmt->execute()) {
             echo json_encode(["success" => true, "message" => "Livro alugado com sucesso"]);
         } else {
-            echo json_encode(["success" => false, "message" => "Erro ao executar a atualização: " . $stmt->error]);
+            echo json_encode(["success" => false, "message" => "Erro ao atualizar livro: " . $stmt->error]);
         }
     } else {
         echo json_encode(["success" => false, "message" => "Livro já está alugado"]);
