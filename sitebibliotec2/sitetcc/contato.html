@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bibliotec - contato</title>
+    <link rel="shortcut icon" href="img/logo.png">
+</head>
+<body>
+
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+                body{
+                    background-color: #ededed;
+
+                }
+                * {
+                    margin: 0 auto;
+                    padding: 0;
+                    box-sizing: border-box;
+                    font-family: 'Open Sans', sans-serif;
+                }
+
+                #menu-h{
+                    background-image: linear-gradient(to right, #30cfd0 0%, #330867 100%);
+                }
+
+                #img{
+                    position: absolute;
+                    padding-left: 7px;
+                    padding-top: 3px;
+                }
+
+                #menu-h ul {
+                    max-width: 610px;
+                    list-style: none;
+                    padding: 0;
+                }
+
+                #menu-h ul li {
+                    display: inline;
+                }
+
+                #menu-h ul li a {
+                    color: #FFF;
+                    padding: 20px;
+                    display: inline-block;
+                    text-decoration: none;
+                    transition: background .4s;
+                }
+
+                #menu-h ul li a:hover {
+                    background-color: #30cfd0;
+                }
+                #menu-sair ul {
+                    max-width: 520px;
+                    list-style: none;
+                    padding: 0;
+                    
+                }
+                
+                #menu-sair ul li {
+                    display: inline;
+                    
+                }
+                
+                #menu-sair ul li a {
+                    position: absolute;
+                    left: 96%;
+                    top: 0%;
+                    color: #FFF;
+                    padding: 20px;
+                    
+                    text-decoration: none;
+                    transition: background .4s;
+                    
+                }
+                
+                #menu-sair ul li a:hover {
+                    background-color: #f00;
+                }
+
+                .title{
+                    font-weight: bold;
+                    font-family: Roboto, sans-serif;
+                    font-size: 80px;
+                    background-image: linear-gradient(to right, #30cfd0 0%, #330867 100%);
+                    width: 100vw;
+                    height: 45vh;
+                    position: absolute;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #FFF;
+                }
+
+                .container{
+                    position: absolute;
+                    display: flex;
+                    width: 70vw;
+                    height: 40vh;
+                    top: 75%;
+                    left: 50%;
+                    transform: translate(-50%,-50%);
+                }
+                .contato{
+                    font-weight: bold;
+                    font-family: Roboto, sans-serif;
+                    width: 390px;
+                }
+
+                .img{
+                    width: 100px;
+                    padding-bottom: 20px;
+                    top: 15%;
+                }
+
+                .contato h3{
+                    color: #58585a;
+                }
+            </style>
+
+    <nav id="menu-h">
+        
+        <ul>
+
+            <li><a href="inicio.php">Início</a></li>
+            <li><a href="livros.php">Livros</a></li>
+            <li><a href="ranking.php">Ranking</a></li>
+            <li><a href="computadores.php">Computadores</a></li>
+            <li><a href="tcc.php">TCC</a></li>
+            <li><a href="contato.html">Contato</a></li>
+
+        </ul>
+    </nav>
+
+    <nav id="menu-sair">
+        <ul>
+            <li><a href="login.php">Sair</a></li>
+        </ul>
+    </nav>
+
+    <div class="title">Como você prefere falar com a gente?</div>
+
+    <div class="container">
+        
+        <div class="contato">
+            <img src="img/email.png" alt="" class="img">
+            <h1>E-mail</h1><br><br>
+            <h3>Precisa de alguma ajuda?</h3><br><br>
+            <h3>bibliconnect@gmail.com</h3>
+        </div>
+
+        <div class="contato">
+            <img src="img/telefone.png" alt="" class="img">
+            <h1>Telefone</h1><br><br>
+            <h3>Pode nos ligar a qualquer hora</h3><br><br>
+            <h3>(11) 96862-3204</h3>
+        </div>
+
+        <div class="contato">
+            <img src="img/insta.png" alt="" class="img">
+            <h1>Instagram</h1><br><br>
+            <h3>Quer ser nosso seguidor?</h3><br><br>
+            <h3>@bibliconnect</h3>
+        </div>
+
+    </div>
+</body>
+</html>
