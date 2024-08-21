@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bibliotec - Login</title>
+    <title>Bibliotec - artigos</title>
     <link rel="shortcut icon" href="img/logo.png">
 </head>
 <body>
