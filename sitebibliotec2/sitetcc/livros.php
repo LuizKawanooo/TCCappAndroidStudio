@@ -839,45 +839,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.btn-alterar-status').forEach(button => {
-        button.addEventListener('click', function() {
-            const livroId = this.getAttribute('data-id');
-            const statusAtual = this.getAttribute('data-status');
-            const novoStatus = statusAtual === 'Disponível' ? 'Alugado' : 'Disponível';
 
-            // Enviar requisição para alterar o status do livro
-            fetch('alterar_status.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: livroId,
-                    novoStatus: novoStatus
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    this.textContent = novoStatus === 'Disponível' ? 'Emprestar' : 'Devolver';
-                    this.setAttribute('data-status', novoStatus);
-                    // Atualize o texto do status na página
-                    const statusElement = this.previousElementSibling;
-                    statusElement.textContent = 'Status: ' + novoStatus;
-                } else {
-                    console.error('Erro ao alterar o status:', data.error);
-                }
-            })
-            .catch(error => {
-                console.error('Erro ao alterar o status:', error);
-            });
-        });
-    });
-});
-
-</script>
 <script>
                     const adicionarLivroBtn = document.getElementById('adicionar-livro-btn');
                     const editarLivroBtn = document.getElementById('editar-livro-btn');
