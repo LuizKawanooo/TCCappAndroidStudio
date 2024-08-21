@@ -9,31 +9,34 @@
 <body>
 
 <?php
-        session_start();
-        include 'conexao.php';
+session_start();
+include 'conexao.php';
 
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $email = $_POST['email'];
-            $password = $_POST['password'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $institution_code = $_POST['institution_code'];
 
-            $stmt = $conn->prepare("SELECT ID_bibliotecario, password FROM bibliotecario WHERE email = ?");
-            $stmt->bind_param("s", $email);
-            $stmt->execute();
-            $stmt->store_result();
-            $stmt->bind_result($id, $hashed_password);
-            $stmt->fetch();
+    // Prepare the query to prevent SQL injection
+    $stmt = $conn->prepare("SELECT ID_bibliotecario, password FROM bibliotecario WHERE email = ? AND institution_code = ?");
+    $stmt->bind_param("ss", $email, $institution_code);
+    $stmt->execute();
+    $stmt->store_result();
+    $stmt->bind_result($id, $hashed_password);
+    $stmt->fetch();
 
-            if ($stmt->num_rows == 1 && password_verify($password, $hashed_password)) {
-                $_SESSION['user_id'] = $id;
-                header("Location: inicio.php");
-            } else {
-                echo "<p style='color:#f00; font-size:20px; position: absolute; top: 58%; left: 50%; transform:translate(-50%, -50%);'>Email ou senha inválidos.</p>";
-            }
+    if ($stmt->num_rows == 1 && password_verify($password, $hashed_password)) {
+        $_SESSION['user_id'] = $id;
+        header("Location: inicio.php");
+        exit();
+    } else {
+        echo "<p style='color:#f00; font-size:20px; position: absolute; top: 58%; left: 50%; transform:translate(-50%, -50%);'>Email, senha ou código da instituição inválidos.</p>";
+    }
 
-            $stmt->close();
-            $conn->close();
-        }
-        ?>
+    $stmt->close();
+    $conn->close();
+}
+?>
 
         <style>
                 
