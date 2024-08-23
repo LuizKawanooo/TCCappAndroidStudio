@@ -1,10 +1,12 @@
 <?php
 header('Content-Type: application/json');
 
-$host = 'localhost';
+$host = 'tccappionic-bd.mysql.uhserver.com';
 $dbname = 'tccappionic_bd';
 $username = 'ionic_perfil_bd';
 $password = '{[UOLluiz2019';
+
+
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
