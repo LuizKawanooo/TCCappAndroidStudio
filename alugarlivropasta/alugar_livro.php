@@ -14,12 +14,9 @@ try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Recebe o ID do livro
-    $input = json_decode(file_get_contents('php://input'), true);
-
-    // Verifica se o ID foi enviado
-    if (isset($input['id'])) {
-        $id = $input['id'];
+    // Recebe o ID do livro via GET
+    if (isset($_GET['id'])) {
+        $id = $_GET['id'];
 
         // Verifica o status atual do livro
         $stmt = $pdo->prepare("SELECT status_livros FROM livros WHERE id = :id");
