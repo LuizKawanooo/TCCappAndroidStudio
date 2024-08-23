@@ -1,4 +1,9 @@
 <?php
+header("Access-Control-Allow-Origin: *"); // Permite todas as origens
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS"); // Permite métodos HTTP
+header("Access-Control-Allow-Headers: Content-Type"); // Permite cabeçalhos específicos
+
+
 header('Content-Type: application/json');
 
 $host = 'tccappionic-bd.mysql.uhserver.com';
