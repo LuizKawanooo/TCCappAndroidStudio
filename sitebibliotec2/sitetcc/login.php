@@ -16,7 +16,7 @@
             $email = $_POST['email'];
             $password = $_POST['password'];
 
-            $stmt = $conn->prepare("SELECT ID_bibliotecario, password FROM bibliotecario WHERE email = ?");
+            $stmt = $conn->prepare("SELECT password FROM bibliotecario WHERE email = ?");
             $stmt->bind_param("s", $email);
             $stmt->execute();
             $stmt->store_result();
@@ -24,7 +24,7 @@
             $stmt->fetch();
 
             if ($stmt->num_rows == 1 && password_verify($password, $hashed_password)) {
-                $_SESSION['ID_bibliotecario'] = $id;
+              
                 header("Location: inicio.php");
             } else {
                 echo "<p style='color:#f00; font-size:20px; position: absolute; top: 58%; left: 50%; transform:translate(-50%, -50%);'>Email ou senha inválidos.</p>";
