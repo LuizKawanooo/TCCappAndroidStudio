@@ -24,7 +24,7 @@
             $stmt->fetch();
 
             if ($stmt->num_rows == 1 && password_verify($password, $hashed_password)) {
-                $_SESSION['user_id'] = $id;
+                $_SESSION['ID_bibliotecario'] = $id;
                 header("Location: inicio.php");
             } else {
                 echo "<p style='color:#f00; font-size:20px; position: absolute; top: 58%; left: 50%; transform:translate(-50%, -50%);'>Email ou senha inválidos.</p>";
