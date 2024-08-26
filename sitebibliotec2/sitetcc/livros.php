@@ -693,17 +693,12 @@ $conn->close();
 <?php
 // Conexão com o banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
-
 $username = "ionic_perfil_bd";
-
 $password = "{[UOLluiz2019";
-
 $dbname = "tccappionic_bd";
- 
-// Cria a conexão
 
+// Cria a conexão
 $conn = new mysqli($servername, $username, $password, $dbname);
- 
 
 // Verifica a conexão
 if ($conn->connect_error) {
@@ -722,42 +717,52 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $classificacao = $_POST['classificacao'];
     $n_paginas = $_POST['n_paginas'];
     $isbn = $_POST['isbn'];
-    
+
     // Processa o upload da imagem
     $imagem = NULL;
     if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
         $tmp_name = $_FILES['imagem']['tmp_name'];
-        $name = basename($_FILES['imagem']['name']);
-        $upload_dir = 'uploads/';
-        $upload_file = $upload_dir . $name;
-        
-        // Cria o diretório de uploads se não existir
-        if (!file_exists($upload_dir)) {
-            mkdir($upload_dir, 0777, true);
-        }
+        $imageData = file_get_contents($tmp_name);
 
-        // Move o arquivo para o diretório de uploads
-        if (move_uploaded_file($tmp_name, $upload_file)) {
-            $imagem = $upload_file;
+        // Verifica se o arquivo é uma imagem JPEG
+        $fileType = mime_content_type($tmp_name);
+        if ($fileType == 'image/jpeg') {
+            $imagem = $imageData;
         } else {
-            echo "Erro ao fazer upload da imagem.";
+            echo "Arquivo não é uma imagem JPEG.";
+            exit;
         }
     }
 
     // Prepara a consulta SQL para inserção
     $sql = "INSERT INTO livros (titulo, genero, autor, editora, tombo, ano, classificacao, n_paginas, isbn, imagem) 
-            VALUES ('$titulo', '$genero', '$autor', '$editora', '$tombo', '$ano', '$classificacao', '$n_paginas', '$isbn', '$imagem')";
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    if ($conn->query($sql) === TRUE) {
-        echo "<script>window.location.href = 'livros.php';</script>";
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param(
+            "sssssssssb",
+            $titulo, $genero, $autor, $editora, $tombo, $ano, $classificacao, $n_paginas, $isbn, $imagem
+        );
+
+        // Executa a consulta
+        if ($stmt->execute()) {
+            echo "<script>window.location.href = 'livros.php';</script>";
+        } else {
+            echo "Erro ao inserir registro: " . $stmt->error;
+        }
+
+        // Fecha a consulta
+        $stmt->close();
     } else {
-        echo "Erro ao inserir registro: " . $conn->error;
+        // Exibe a mensagem de erro se a preparação da consulta falhar
+        echo "Erro na preparação da consulta: " . $conn->error;
     }
 
     // Fecha a conexão com o banco de dados
     $conn->close();
 }
 ?>
+
 
 
 <?php
