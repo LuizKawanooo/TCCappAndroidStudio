@@ -13,6 +13,9 @@ if ($conn->connect_error) {
     die("Erro na conexão: " . $conn->connect_error);
 }
 
+// Define o tipo MIME padrão para imagens
+$mimeType = 'image/jpeg'; // Defina o tipo MIME padrão aqui
+
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
     $sql = "SELECT imagem FROM livros WHERE id = ?";
@@ -26,12 +29,12 @@ if (isset($_GET['id'])) {
         $stmt->execute();
         
         // Faz o bind dos resultados
-        $stmt->bind_result($imagem, $tipo);
+        $stmt->bind_result($imagem);
         
         // Busca os resultados
         if ($stmt->fetch()) {
             // Define o tipo de conteúdo correto
-            header("Content-type: $tipo");
+            header("Content-Type: $mimeType");
             echo $imagem;
         } else {
             echo "Nenhuma imagem encontrada.";
