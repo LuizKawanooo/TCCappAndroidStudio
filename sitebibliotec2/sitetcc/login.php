@@ -9,31 +9,38 @@
 <body>
 
 <?php
-        session_start();
-        include 'conexao.php';
+session_start();
+include 'conexao.php';
 
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $email = $_POST['email'];
-            $password = $_POST['password'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
 
-            $stmt = $conn->prepare("SELECT password FROM bibliotecario WHERE email = ?");
-            $stmt->bind_param("s", $email);
-            $stmt->execute();
-            $stmt->store_result();
-            $stmt->bind_result($id, $hashed_password);
-            $stmt->fetch();
+    // Prepare e execute a consulta
+    $stmt = $conn->prepare("SELECT ID_bibliotecario, password FROM bibliotecario WHERE email = ?");
+    if ($stmt === false) {
+        die('Prepare failed: ' . htmlspecialchars($conn->error));
+    }
 
-            if ($stmt->num_rows == 1 && password_verify($password, $hashed_password)) {
-              
-                header("Location: inicio.php");
-            } else {
-                echo "<p style='color:#f00; font-size:20px; position: absolute; top: 58%; left: 50%; transform:translate(-50%, -50%);'>Email ou senha inválidos.</p>";
-            }
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $stmt->store_result();
+    $stmt->bind_result($id, $hashed_password);
+    $stmt->fetch();
 
-            $stmt->close();
-            $conn->close();
-        }
-        ?>
+    if ($stmt->num_rows == 1 && password_verify($password, $hashed_password)) {
+        // Iniciar sessão e redirecionar
+        $_SESSION['user_id'] = $id;
+        header("Location: inicio.php");
+        exit();
+    } else {
+        echo "<p style='color:#f00; font-size:20px;'>Email ou senha inválidos.</p>";
+    }
+
+    $stmt->close();
+    $conn->close();
+}
+?>
 
         <style>
                 
