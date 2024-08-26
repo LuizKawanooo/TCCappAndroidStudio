@@ -15,7 +15,7 @@ if ($conn->connect_error) {
 
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
-    $sql = "SELECT imagem, tipo FROM livros WHERE id = ?";
+    $sql = "SELECT imagem FROM livros WHERE id = ?";
 
     // Prepara a consulta
     if ($stmt = $conn->prepare($sql)) {
