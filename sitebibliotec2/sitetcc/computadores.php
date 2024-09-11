@@ -373,7 +373,7 @@
                             document.getElementById("popup").style.display = "none";
                         }
                     </script>
-
+        // barra de navegção das páginas
     <nav id="menu-h">
         <ul>
 
@@ -386,19 +386,19 @@
 
         </ul>
     </nav>
-
+        // sair para a página de login
     <nav id="menu-sair">
                     <ul>
                         <li><a href="login.php">Sair</a></li>
                     </ul>
                 </nav>
-
+        // footer onda fundo da página
     <div class="footer">
         <svg viewBox="0 0 869 344" xmlns="http://www.w3.org/2000/svg">
             <path d="M 272 0.0130308C 164.8 1.21303 46 85.1797 0 127.013L 0 342.013L 867 342.013L 867 6.51303C 779 0.013031 684.5 127.013 616.5 127.013C 548.5 127.013 406 -1.48697 272 0.0130308Z"/>
         </svg>
     </div>
-
+        // container dos computadores
     <div class="container">
         <div class="computadores">
             <img src="img/comp.png" alt=""class="pc">
@@ -452,9 +452,9 @@
     
     
     
-
+    // abrir popup para verificar horários dos pcs
     <button onclick="openPopup()" id="btn1">Horários</button>
-
+        // popup para verificar horários dos computadores
     <div id="popup" class="popup" style="<?php echo ($_SERVER["REQUEST_METHOD"] == "POST" ? 'display: block;' : 'display: none;'); ?>">
     <div class="table">
         <span class="close" onclick="closePopup()">&times;</span>
@@ -495,7 +495,7 @@
                 <option value="15:00 às 16:00">15:00 às 16:00</option>
                 <option value="16:00 às 17:00">16:00 às 17:00</option>
             </select><br><br><br><br>
-
+    
             <button type="submit" class="btn2">Verificar Disponibilidade</button>
         </form>
     </div>
