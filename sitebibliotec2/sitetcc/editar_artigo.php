@@ -17,7 +17,7 @@ $titulo = $_POST['titulo'];
 $autor = $_POST['autor'];
 $ano = $_POST['ano'];
 $arquivo = null;
-
+// faz upload de arquivos
 if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] === UPLOAD_ERR_OK) {
     $arquivo = file_get_contents($_FILES['arquivo']['tmp_name']);
 }
@@ -35,6 +35,7 @@ if ($conn->query($sql) === TRUE) {
 }
 
 $conn->close();
+//recarrega a página
 header('Location: tcc.php');
 ?>
                      
