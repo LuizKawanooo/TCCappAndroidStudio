@@ -361,7 +361,7 @@
                 align-items: center;
                 cursor: pointer;
                 margin-top: 70px;
-                top: 79%;
+                top: 73%;
             }
             .btn3{
                 font-family: Roboto, sans-serif;
@@ -538,7 +538,7 @@ $conn->close();
 
 <div id="popup" class="popup">
     <div class="table">
-        <h1>Adicionar Artigo</h1>
+        <h1>Adicionar TCC</h1>
         <form action="tcc.php" method="post" enctype="multipart/form-data"> <!-- Adicionado enctype para envio de arquivos -->
             <label for="titulo">Título:</label><br>
             <input type="text" id="artigo-nome" name="titulo" class="inp"><br>
@@ -559,7 +559,7 @@ $conn->close();
 
 <div id="popup-editar" class="popup">
     <div class="tablee">
-        <h1>Editar Artigo</h1>
+        <h1>Editar TCC</h1>
         <form id="editar-form" action="editar_artigo.php" method="post">
             <!-- Campos do formulário -->
             <input type="hidden" id="editar-id" name="id">
