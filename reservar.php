@@ -15,33 +15,25 @@ $options = [
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (\PDOException $e) {
-    echo json_encode(['success' => false, 'message' => 'Erro de conexão: ' . $e->getMessage()]);
+    echo 'Erro de conexão: ' . $e->getMessage();
     exit;
 }
 
-// Processa a solicitação de reserva
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Obtém os dados da solicitação
-    $data = json_decode(file_get_contents('php://input'), true);
-
-    if (isset($data['horario']) && isset($data['computador_id'])) {
-        $horario = $data['horario'];
-        $computador_id = $data['computador_id'];
-
-        try {
-            // Atualiza o horário para reservado
-            $stmt = $pdo->prepare('UPDATE horarios SET status = 1, btnVermelho = "Sim" WHERE horario = ? AND computador_id = ?');
-            $stmt->execute([$horario, $computador_id]);
-
-            // Retorna a resposta
-            echo json_encode(['success' => true]);
-        } catch (\PDOException $e) {
-            echo json_encode(['success' => false, 'message' => 'Erro ao atualizar o banco de dados: ' . $e->getMessage()]);
-        }
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Dados ausentes na solicitação']);
-    }
-} else {
-    echo json_encode(['success' => false, 'message' => 'Método HTTP não suportado']);
+// Obtém os dados da solicitação (a partir da linha de comando)
+if ($argc !== 3) {
+    echo "Uso: php reserve.php <horario> <computador_id>\n";
+    exit;
 }
-?>
+
+$horario = $argv[1];
+$computador_id = $argv[2];
+
+try {
+    // Atualiza o horário para reservado
+    $stmt = $pdo->prepare('UPDATE horarios SET status = 1, btnVermelho = "Sim" WHERE horario = ? AND computador_id = ?');
+    $stmt->execute([$horario, $computador_id]);
+
+    echo "Reserva feita com sucesso.\n";
+} catch (\PDOException $e) {
+    echo 'Erro ao atualizar o banco de dados: ' . $e->getMessage() . "\n";
+}
