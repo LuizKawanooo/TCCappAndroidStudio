@@ -9,17 +9,27 @@ $username = "ionic_perfil_bd"; // seu nome de usuário
 $password = "{[UOLluiz2019"; // sua senha
 $dbname = "tccappionic_bd";
 
+// Conectar ao banco de dados
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+// Verificar conexão
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die(json_encode(["success" => false, "message" => "Connection failed: " . $conn->connect_error]));
 }
 
 // Ler horários e reservas
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $result = $conn->query("SELECT h.horario, r.status, r.computador_id, r.btnVermelho, r.reserva_time 
-                            FROM horarios h 
-                            LEFT JOIN reservas r ON h.id = r.horario_id");
+    $query = "SELECT h.horario, r.status, r.computador_id, r.btnVermelho, r.reserva_time 
+              FROM horarios h 
+              LEFT JOIN reservas r ON h.id = r.horario_id";
+    
+    $result = $conn->query($query);
+    
+    if ($result === false) {
+        echo json_encode(["success" => false, "message" => "Error executing query: " . $conn->error]);
+        exit;
+    }
+    
     $horarios = $result->fetch_all(MYSQLI_ASSOC);
     echo json_encode($horarios);
     exit;
@@ -34,14 +44,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($horario) && isset($computadorId)) {
         // Obter o ID do horário
         $stmt = $conn->prepare("SELECT id FROM horarios WHERE horario = ?");
+        if ($stmt === false) {
+            echo json_encode(["success" => false, "message" => "Prepare failed: " . $conn->error]);
+            exit;
+        }
         $stmt->bind_param("s", $horario);
         $stmt->execute();
         $stmt->bind_result($horarioId);
         $stmt->fetch();
         $stmt->close();
         
+        if (!$horarioId) {
+            echo json_encode(["success" => false, "message" => "Horário não encontrado"]);
+            exit;
+        }
+        
         // Verificar se o horário foi reservado recentemente
         $stmt = $conn->prepare("SELECT reserva_time FROM reservas WHERE horario_id = ? AND computador_id = ?");
+        if ($stmt === false) {
+            echo json_encode(["success" => false, "message" => "Prepare failed: " . $conn->error]);
+            exit;
+        }
         $stmt->bind_param("ii", $horarioId, $computadorId);
         $stmt->execute();
         $stmt->bind_result($reservaTime);
@@ -63,6 +86,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Atualizar status para todos os computadores e definir botão vermelho
         $stmt = $conn->prepare("INSERT INTO reservas (computador_id, horario_id, status, btnVermelho, reserva_time) VALUES (?, ?, 1, 'Sim', NOW())
                                 ON DUPLICATE KEY UPDATE status = 1, btnVermelho = 'Sim', reserva_time = NOW()");
+        if ($stmt === false) {
+            echo json_encode(["success" => false, "message" => "Prepare failed: " . $conn->error]);
+            exit;
+        }
         $stmt->bind_param("ii", $computadorId, $horarioId);
         $stmt->execute();
         $stmt->close();
