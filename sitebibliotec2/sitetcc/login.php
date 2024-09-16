@@ -133,7 +133,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: #f00;
             font-size: 20px;
             position: absolute;
-            top: 96%;
+            top: 76%;
             left: 50%;
             transform: translate(-50%, -50%);
         }
