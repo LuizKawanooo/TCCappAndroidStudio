@@ -243,7 +243,7 @@
                 top: 160px;
                 left: 13%;
                 transform: translate(-50%,-50%);
-                z-index: 1;
+                z-index: 0;
             }
             
             .barra-de-pesquisa {
@@ -563,7 +563,7 @@
     Adicionar
 </div>
 
-    <button id="adicionar-livro-btn">oi</button>
+
 
 
 <div class="barra-de-pesquisa">
