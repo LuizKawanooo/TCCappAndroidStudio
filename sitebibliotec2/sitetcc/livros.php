@@ -243,7 +243,7 @@
                 top: 160px;
                 left: 13%;
                 transform: translate(-50%,-50%);
-                z-index: 200000;
+                z-index: 1;
             }
             
             .barra-de-pesquisa {
@@ -290,7 +290,7 @@
                 height: 280%; /* Preencher toda a altura */
                 background-color: rgba(0,0,0,0.5); /* Fundo escuro semi-transparente */
                 background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 95%, rgba(0,0,0,0) 100%);
-
+                 z-index: 500;
                 
                 
             }
@@ -306,6 +306,7 @@
                 height: 210%; /* Preencher toda a altura */
                 background-color: rgba(0,0,0,0.5); /* Fundo escuro semi-transparente */
                 position: fixed;
+                 z-index: 500;
             }
             
             
@@ -356,6 +357,7 @@
                 position: absolute;
                 top: -7%;
                 left: 34%;
+                z-index: 500;
                 background-color: #D9D9D9;
                 margin: 20% auto; /* Centralizar verticalmente e deixar uma margem de 25% em cima e em baixo */
                 padding: 20px;  
@@ -366,6 +368,7 @@
                 display: grid;
                 justify-content: center;
                 border-radius: 10px;
+                z-index: 500;
                 position: absolute;
                 top: -7%;
                 left: 34%;
