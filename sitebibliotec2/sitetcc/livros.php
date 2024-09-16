@@ -238,8 +238,8 @@
                 flex-direction: row;
                 align-items: center;
                 cursor: pointer;
-                position: fixed;
-                top: 89%;
+                position: relative;
+                top: 20%;
                 left: 60%;
                 transform: translate(-50%,-50%);
                 z-index: 1;
