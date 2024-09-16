@@ -360,7 +360,7 @@
                 flex-direction: row;
                 align-items: center;
                 cursor: pointer;
-                margin-top: 70px;
+                margin-top: 40px;
                 top: 73%;
             }
             .btn3{
