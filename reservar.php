@@ -15,25 +15,52 @@ $options = [
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (\PDOException $e) {
-    echo 'Erro de conexão: ' . $e->getMessage();
+    echo json_encode(['success' => false, 'message' => 'Erro de conexão: ' . $e->getMessage()]);
     exit;
 }
 
-// Obtém os dados da solicitação (a partir da linha de comando)
-if ($argc !== 3) {
-    echo "Uso: php reserve.php <horario> <computador_id>\n";
-    exit;
+// Processa a solicitação de reserva
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = json_decode(file_get_contents('php://input'), true);
+
+    if (isset($data['horario']) && isset($data['computador_id'])) {
+        $horario = $data['horario'];
+        $computador_id = $data['computador_id'];
+
+        try {
+            // Atualiza o horário para reservado
+            $stmt = $pdo->prepare('UPDATE horarios SET status = 1, btnVermelho = "Sim", reserva_time = NOW() WHERE horario = ? AND computador_id = ?');
+            $stmt->execute([$horario, $computador_id]);
+
+            // Retorna a resposta
+            echo json_encode(['success' => true]);
+        } catch (\PDOException $e) {
+            echo json_encode(['success' => false, 'message' => 'Erro ao atualizar o banco de dados: ' . $e->getMessage()]);
+        }
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Dados ausentes na solicitação']);
+    }
+} elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    // Obtém o status dos horários
+    try {
+        $stmt = $pdo->query('SELECT horario, computador_id, status, btnVermelho, TIMESTAMPDIFF(MINUTE, reserva_time, NOW()) AS elapsed_minutes FROM horarios');
+        $result = $stmt->fetchAll();
+
+        foreach ($result as &$row) {
+            // Se o horário foi reservado há mais de 30 minutos, redefine o status
+            if ($row['status'] == 1 && $row['elapsed_minutes'] >= 30) {
+                $stmt = $pdo->prepare('UPDATE horarios SET status = 0, btnVermelho = "Não" WHERE horario = ? AND computador_id = ?');
+                $stmt->execute([$row['horario'], $row['computador_id']]);
+                $row['status'] = 0;
+                $row['btnVermelho'] = "Não";
+            }
+        }
+
+        echo json_encode(['success' => true, 'data' => $result]);
+    } catch (\PDOException $e) {
+        echo json_encode(['success' => false, 'message' => 'Erro ao consultar o banco de dados: ' . $e->getMessage()]);
+    }
+} else {
+    echo json_encode(['success' => false, 'message' => 'Método HTTP não suportado']);
 }
-
-$horario = $argv[1];
-$computador_id = $argv[2];
-
-try {
-    // Atualiza o horário para reservado
-    $stmt = $pdo->prepare('UPDATE horarios SET status = 1, btnVermelho = "Sim" WHERE horario = ? AND computador_id = ?');
-    $stmt->execute([$horario, $computador_id]);
-
-    echo "Reserva feita com sucesso.\n";
-} catch (\PDOException $e) {
-    echo 'Erro ao atualizar o banco de dados: ' . $e->getMessage() . "\n";
-}
+?>
