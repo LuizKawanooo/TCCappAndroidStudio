@@ -114,6 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         p {
             font-size: 20px;
+            padding-left:10px;
         }
         h1 {
             font-size: 40px;
@@ -158,7 +159,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <div class="inp2">
             <p>Senha:</p>
-            <center><input type="password" name="password" required placeholder="Digite sua senha"><br></center>center>
+            <center><input type="password" name="password" required placeholder="Digite sua senha"><br></center>
         </div>
         <a href="register.php">Não tenho cadastro</a>
         <input type="submit" value="Login" class="btn">
