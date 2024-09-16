@@ -398,7 +398,7 @@
             <path d="M 272 0.0130308C 164.8 1.21303 46 85.1797 0 127.013L 0 342.013L 867 342.013L 867 6.51303C 779 0.013031 684.5 127.013 616.5 127.013C 548.5 127.013 406 -1.48697 272 0.0130308Z"/>
         </svg>
     </div>
-        // container dos computadores
+    
     <div class="container">
         <div class="computadores">
             <img src="img/comp.png" alt=""class="pc">
@@ -452,9 +452,8 @@
     
     
     
-    // abrir popup para verificar horários dos pcs
     <button onclick="openPopup()" id="btn1">Horários</button>
-        // popup para verificar horários dos computadores
+      
     <div id="popup" class="popup" style="<?php echo ($_SERVER["REQUEST_METHOD"] == "POST" ? 'display: block;' : 'display: none;'); ?>">
     <div class="table">
         <span class="close" onclick="closePopup()">&times;</span>
