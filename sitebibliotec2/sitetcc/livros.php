@@ -243,7 +243,7 @@
                 top: 160px;
                 left: 13%;
                 transform: translate(-50%,-50%);
-                z-index: 1;
+
             }
             
             .barra-de-pesquisa {
