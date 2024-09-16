@@ -515,9 +515,7 @@
   
         </style>
 
-<div class="adicionar-livro-btn" id="adicionar-livro-btn">
-    Adicionar
-</div>
+
     
 
 <div class="footer">
@@ -561,7 +559,11 @@
 
 </div>
 
+<div class="adicionar-livro-btn" id="adicionar-livro-btn">
+    Adicionar
+</div>
 
+    <button id="adicionar-livro-btn">oi</button>
 
 
 <div class="barra-de-pesquisa">
