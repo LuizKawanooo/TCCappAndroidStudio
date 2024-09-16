@@ -8,28 +8,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Prepare and execute the SQL statement
     $stmt = $conn->prepare("SELECT ID_bibliotecario, password FROM bibliotecario WHERE email = ?");
+    if (!$stmt) {
+        die("Erro ao preparar a consulta: " . $conn->error);
+    }
+
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $stmt->store_result();
-    $stmt->bind_result($id, $hashed_password);
+    $stmt->bind_result($id, $stored_password);
     $stmt->fetch();
 
     // Check if the user exists and the password is correct
-    if ($stmt->num_rows == 1 && password_verify($password, $hashed_password)) {
-        // Store user ID in session
-        $_SESSION['ID_bibliotecario'] = $id;
-        
-        // Redirect to the home page
-        header("Location: inicio.php");
-        exit(); // Ensure no further code is executed after redirection
+    if ($stmt->num_rows == 1) {
+        // Directly compare the input password with the stored password
+        if ($password === $stored_password) {
+            // Store user ID in session
+            $_SESSION['ID_bibliotecario'] = $id;
+            
+            // Redirect to the home page
+            header("Location: inicio.php");
+            exit(); // Ensure no further code is executed after redirection
+        } else {
+            $error_message = "Senha inválida.";
+        }
     } else {
-        $error_message = "Email ou senha inválidos.";
+        $error_message = "Email não encontrado.";
     }
 
     $stmt->close();
     $conn->close();
 }
 ?>
+
 
 
 <!DOCTYPE html>
