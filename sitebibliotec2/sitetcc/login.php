@@ -6,6 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
+    // Prepare and execute the SQL statement
     $stmt = $conn->prepare("SELECT ID_bibliotecario, password FROM bibliotecario WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -13,11 +14,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_result($id, $hashed_password);
     $stmt->fetch();
 
+    // Check if the user exists and the password is correct
     if ($stmt->num_rows == 1 && password_verify($password, $hashed_password)) {
-        // Store user ID in session and redirect
-        $_SESSION['user_id'] = $id;
+        // Store user ID in session
+        $_SESSION['ID_bibliotecario'] = $id;
+        
+        // Redirect to the home page
         header("Location: inicio.php");
-        exit();
+        exit(); // Ensure no further code is executed after redirection
     } else {
         $error_message = "Email ou senha inválidos.";
     }
@@ -26,6 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-br">
