@@ -9,31 +9,50 @@
 <body>
 
 <?php
-        session_start();
-        include ("conexao.php");
+session_start();
+include("conexao.php");
 
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $email = $_POST['email'];
-            $password = $_POST['password'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Obtém o email e a senha do POST
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
 
-            $stmt = $conn->prepare("SELECT ID_bibliotecario, password FROM bibliotecario WHERE email = ?");
-            $stmt->bind_param("s", $email);
-            $stmt->execute();
-            $stmt->store_result();
-            $stmt->bind_result($id, $hashed_password);
-            $stmt->fetch();
+    // Verifica se o email e a senha não estão vazios
+    if (!empty($email) && !empty($password)) {
+        // Prepara e executa a consulta SQL
+        $stmt = $conn->prepare("SELECT ID_bibliotecario, password FROM bibliotecario WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $stmt->store_result();
+        $stmt->bind_result($id, $hashed_password);
+        $stmt->fetch();
 
-            if ($stmt->num_rows == 1 && password_verify($password, $hashed_password)) {
-                  
-                header("Location: inicio.php");
-            } else {
-                echo "<p style='color:#f00; font-size:20px; position: absolute; top: 58%; left: 50%; transform:translate(-50%, -50%);'>Email ou senha inválidos.</p>";
-            }
-
-            $stmt->close();
-            $conn->close();
+        // Verifica se o email corresponde e a senha é válida
+        if ($stmt->num_rows == 1 && password_verify($password, $hashed_password)) {
+            // Inicializa a sessão e redireciona para a página inicial
+            $_SESSION['ID_bibliotecario'] = $id;
+            $_SESSION['email'] = $email;
+            header("Location: inicio.php");
+            exit(); // Certifique-se de parar a execução do script após o redirecionamento
+        } else {
+            $error_message = "Email ou senha inválidos.";
         }
-        ?>
+
+        // Fecha a declaração e a conexão
+        $stmt->close();
+        $conn->close();
+    } else {
+        $error_message = "Por favor, preencha todos os campos.";
+    }
+}
+?>
+
+<!-- Exibição de mensagem de erro (se houver) -->
+<?php if (!empty($error_message)): ?>
+    <p style='color:#f00; font-size:20px; position: absolute; top: 58%; left: 50%; transform:translate(-50%, -50%);'>
+        <?php echo htmlspecialchars($error_message); ?>
+    </p>
+<?php endif; ?>
 
         <style>
                 
