@@ -227,7 +227,7 @@
                 width: 120px;
                 font-family: Roboto, sans-serif;
                 font-size: 14px;
-                color: #fff;
+                color: #5DFA73;
                 background-color: #005aeb;
                 padding: 10px 30px;
                 border: none;
