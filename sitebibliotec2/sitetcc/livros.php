@@ -241,7 +241,7 @@
                 cursor: pointer;
                 position: relative;
                 top: 20%;
-                left: 60%;
+                left: 10%;
                 transform: translate(-50%,-50%);
                 z-index: 1;
             }
