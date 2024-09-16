@@ -224,7 +224,7 @@
                 top: 15%;
             }
             .adicionar-livro-btn{
-                width: 150px;
+                width: 130px;
                 font-family: Roboto, sans-serif;
                 font-size: 14px;
                 color: #fff;
@@ -240,8 +240,8 @@
                 align-items: center;
                 cursor: pointer;
                 position: relative;
-                top: 20%;
-                left: 10%;
+                top: 350px;
+                left: 20%;
                 transform: translate(-50%,-50%);
                 z-index: 1;
             }
