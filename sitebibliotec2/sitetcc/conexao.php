@@ -1,4 +1,4 @@
-// conexao com banco de dados
+
 <?php
 
 $servername = "tccappionic-bd.mysql.uhserver.com";
