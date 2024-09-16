@@ -21,7 +21,7 @@
             $stmt->execute();
             $stmt->store_result();
             $stmt->bind_result($id, $hashed_password);
-            $stmt->fetch();
+            $stmt->fetch_assoc();
 
             if ($stmt->num_rows == 1 && password_verify($password, $hashed_password)) {
                   
