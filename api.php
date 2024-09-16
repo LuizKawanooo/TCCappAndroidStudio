@@ -9,7 +9,6 @@ $username = "ionic_perfil_bd"; // seu nome de usuário
 $password = "{[UOLluiz2019"; // sua senha
 $dbname = "tccappionic_bd";
 
-
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
@@ -18,7 +17,7 @@ if ($conn->connect_error) {
 
 // Ler horários e reservas
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $result = $conn->query("SELECT h.horario, r.status, r.computador_id FROM horarios h LEFT JOIN reservas r ON h.id = r.horario_id");
+    $result = $conn->query("SELECT h.horario, r.status, r.computador_id, r.reserva_time FROM horarios h LEFT JOIN reservas r ON h.id = r.horario_id");
     $horarios = $result->fetch_all(MYSQLI_ASSOC);
     echo json_encode($horarios);
     exit;
@@ -39,22 +38,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->fetch();
         $stmt->close();
         
-        // Verificar se o horário já está reservado
-        $stmt = $conn->prepare("SELECT status FROM reservas WHERE horario_id = ? AND computador_id = ?");
+        // Verificar se o horário foi reservado recentemente
+        $stmt = $conn->prepare("SELECT reserva_time FROM reservas WHERE horario_id = ? AND computador_id = ?");
         $stmt->bind_param("ii", $horarioId, $computadorId);
         $stmt->execute();
-        $stmt->bind_result($status);
+        $stmt->bind_result($reservaTime);
         $stmt->fetch();
         $stmt->close();
         
-        if ($status === 1) {
-            echo json_encode(["success" => false, "message" => "Horário já reservado"]);
-            exit;
+        if ($reservaTime) {
+            $currentTime = new DateTime();
+            $reservationTime = new DateTime($reservaTime);
+            $interval = $currentTime->diff($reservationTime);
+            $minutesPassed = ($interval->h * 60) + $interval->i;
+            
+            if ($minutesPassed < 30) {
+                echo json_encode(["success" => false, "message" => "Horário reservado recentemente. Tente novamente mais tarde."]);
+                exit;
+            }
         }
         
         // Atualizar status para todos os computadores
-        $stmt = $conn->prepare("INSERT INTO reservas (computador_id, horario_id, status) VALUES (?, ?, 1)
-                                ON DUPLICATE KEY UPDATE status = 1");
+        $stmt = $conn->prepare("INSERT INTO reservas (computador_id, horario_id, status, reserva_time) VALUES (?, ?, 1, NOW())
+                                ON DUPLICATE KEY UPDATE status = 1, reserva_time = NOW()");
         $stmt->bind_param("ii", $computadorId, $horarioId);
         $stmt->execute();
         $stmt->close();
