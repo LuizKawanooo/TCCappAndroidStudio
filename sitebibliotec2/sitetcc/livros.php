@@ -728,14 +728,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $isbn = $_POST['isbn'];
 
     // *********************************************************************************************************************************************************************************************************************************************
-// Processa o upload da imagem
+
+
+    // Processa o upload da imagem
 if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
     $tmp_name = $_FILES['imagem']['tmp_name'];
     $imageData = file_get_contents($tmp_name);
 
     // Verifica se o arquivo é uma imagem JPEG
     $fileType = mime_content_type($tmp_name);
-    if ($fileType == 'image/jpeg') {
+    if ($fileType == 'image/jpeg' && $imageData !== false) {
         // Prepara a inserção no banco de dados
         $stmt = $conn->prepare("INSERT INTO livros (imagem) VALUES (?)");
         $stmt->bind_param("b", $imageData); // 'b' para BLOB
@@ -749,11 +751,12 @@ if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
 
         $stmt->close();
     } else {
-        echo "Arquivo não é uma imagem JPEG.";
+        echo "Arquivo não é uma imagem JPEG ou falhou ao ler a imagem.";
     }
 } else {
     echo "Nenhum arquivo foi enviado ou ocorreu um erro no upload.";
 }
+
 
 
 
