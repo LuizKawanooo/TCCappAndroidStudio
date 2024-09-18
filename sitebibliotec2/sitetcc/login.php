@@ -94,6 +94,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border: none;
             outline: none;
         }
+        #pp{
+            padding-left:50px;
+        }
         
         .btn {
             font-family: Roboto, sans-serif;
@@ -154,11 +157,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <p class="error"><?php echo $error_message; ?></p>
         <?php endif; ?>
         <div class="inp1">
-            <p>Usuário:</p>
+            <p id="pp">Usuário:</p>
             <center><input type="text" name="email" required placeholder="Digite seu usuário"><br></center>
         </div>
         <div class="inp2">
-            <p>Senha:</p>
+            <p id="pp">Senha:</p>
             <center><input type="password" name="password" required placeholder="Digite sua senha"><br></center>
         </div>
         <a href="register.php">Não tenho cadastro</a>
