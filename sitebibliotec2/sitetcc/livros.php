@@ -727,7 +727,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $n_paginas = $_POST['n_paginas'];
     $isbn = $_POST['isbn'];
 
-    // Processa o upload da imagem
+    // *********************************************************************************************************************************************************************************************************************************************
+     // Processa o upload da imagem
     $imagem = NULL;
     if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
         $tmp_name = $_FILES['imagem']['tmp_name'];
@@ -737,9 +738,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $fileType = mime_content_type($tmp_name);
         if ($fileType == 'image/jpeg') {
             $imagem = $imageData;
+
+            // Prepara a inserção no banco de dados
+            $stmt = $pdo->prepare("INSERT INTO sua_tabela (imagem) VALUES (:imagem)");
+            $stmt->bindParam(':imagem', $imagem, PDO::PARAM_LOB);
+
+            // Executa a inserção
+            if ($stmt->execute()) {
+                echo "Imagem enviada com sucesso!";
+            } else {
+                echo "Erro ao enviar a imagem.";
+            }
         } else {
             echo "Arquivo não é uma imagem JPEG.";
-            exit;
         }
     }
 
