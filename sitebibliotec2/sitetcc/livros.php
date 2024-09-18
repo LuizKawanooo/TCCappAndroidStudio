@@ -651,10 +651,7 @@ $conn->close();
             <label for="isbn">ISBN:</label><br>
             <input type="text" id="isbn" name="isbn" class="inp"><br>
             <br>
-            
-                
-            <input type="file" id="livro-imagem" name="imagem" accept="image/jpeg, image/png, image/gif" required> <!-- Adiciona input para selecionar a imagem e define tipos aceitos -->
-            
+            <input type="file" id="livro-imagem" name="imagem" accept="image/*"> <!-- Adiciona input para selecionar a imagem -->
             <br>
             <input type="submit" value="Enviar" class="btn2">
         </form>
@@ -701,9 +698,7 @@ $conn->close();
 
 
 
-    // *******************************************************************************************************************************************************************************************************************************************
 
-    
 <?php
 // Conexão com o banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
@@ -732,26 +727,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $n_paginas = $_POST['n_paginas'];
     $isbn = $_POST['isbn'];
 
-    // Debug: Verifique o número de páginas
-    echo "Número de Páginas: " . $n_paginas . "<br>"; // Para verificação
-
     // Processa o upload da imagem
     $imagem = NULL;
     if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
         $tmp_name = $_FILES['imagem']['tmp_name'];
         $imageData = file_get_contents($tmp_name);
 
-        // Verifica se o arquivo é uma imagem
+        // Verifica se o arquivo é uma imagem JPEG
         $fileType = mime_content_type($tmp_name);
-        if (in_array($fileType, ['image/jpeg', 'image/png', 'image/gif'])) {
+        if ($fileType == 'image/jpeg') {
             $imagem = $imageData;
         } else {
-            echo "Arquivo não é uma imagem válida (JPEG, PNG ou GIF).";
+            echo "Arquivo não é uma imagem JPEG.";
             exit;
         }
-    } else {
-        echo "Erro no upload da imagem: " . $_FILES['imagem']['error'];
-        exit;
     }
 
     // Prepara a consulta SQL para inserção
@@ -782,12 +771,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
 }
 ?>
-
-
-
-
-
-    // *******************************************************************************************************************************************************************************************************************************************
 
 
 
