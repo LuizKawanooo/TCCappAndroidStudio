@@ -732,6 +732,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $n_paginas = $_POST['n_paginas'];
     $isbn = $_POST['isbn'];
 
+    // Debug: Verifique o número de páginas
+    echo "Número de Páginas: " . $n_paginas . "<br>"; // Para verificação
+
     // Processa o upload da imagem
     $imagem = NULL;
     if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
@@ -771,6 +774,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Fecha a consulta
         $stmt->close();
     } else {
+        // Exibe a mensagem de erro se a preparação da consulta falhar
         echo "Erro na preparação da consulta: " . $conn->error;
     }
 
@@ -778,6 +782,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
 }
 ?>
+
 
 
 
