@@ -729,30 +729,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // *********************************************************************************************************************************************************************************************************************************************
      // Processa o upload da imagem
-    $imagem = NULL;
-    if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
-        $tmp_name = $_FILES['imagem']['tmp_name'];
-        $imageData = file_get_contents($tmp_name);
+$imagem = NULL;
+if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
+    $tmp_name = $_FILES['imagem']['tmp_name'];
+    $imageData = file_get_contents($tmp_name);
 
-        // Verifica se o arquivo é uma imagem JPEG
-        $fileType = mime_content_type($tmp_name);
-        if ($fileType == 'image/jpeg') {
-            $imagem = $imageData;
+    // Verifica se o arquivo é uma imagem JPEG
+    $fileType = mime_content_type($tmp_name);
+    if ($fileType == 'image/jpeg') {
+        $imagem = $imageData;
 
-            // Prepara a inserção no banco de dados
-            $stmt = $pdo->prepare("INSERT INTO livros (imagem) VALUES (:imagem)");
-            $stmt->bindParam(':imagem', $imagem, PDO::PARAM_LOB);
+        // Prepara a inserção no banco de dados
+        $stmt = $pdo->prepare("INSERT INTO livros (imagem) VALUES (:imagem)");
+        $stmt->bindParam(':imagem', $imagem, PDO::PARAM_LOB);
 
-            // Executa a inserção
-            if ($stmt->execute()) {
-                echo "Imagem enviada com sucesso!";
-            } else {
-                echo "Erro ao enviar a imagem.";
-            }
+        // Executa a inserção
+        if ($stmt->execute()) {
+            echo "Imagem enviada com sucesso!";
         } else {
-            echo "Arquivo não é uma imagem JPEG.";
+            echo "Erro ao enviar a imagem.";
         }
+    } else {
+        echo "Arquivo não é uma imagem JPEG.";
     }
+}
+
 
     // Prepara a consulta SQL para inserção
     $sql = "INSERT INTO livros (titulo, genero, autor, editora, tombo, ano, classificacao, n_paginas, isbn, imagem) 
