@@ -732,7 +732,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Supondo que o título seja enviado pelo formulário
 $titulo = isset($_POST['titulo']) ? $_POST['titulo'] : ''; // Obtém o título do formulário
-    
+    $autor = $_POST['autor'];
+    $genero = $_POST['genero'];
+    $editora = $_POST['editora'];
+    $tombo = $_POST['tombo'];
+    $ano = $_POST['ano'];
+    $classificacao = $_POST['classificacao'];
+    $n_paginas = $_POST['n_paginas'];
+    $isbn = $_POST['isbn'];
 
 // Processa o upload da imagem
 if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
