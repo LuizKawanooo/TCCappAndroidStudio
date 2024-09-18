@@ -756,6 +756,7 @@ if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
 }
 
 
+
     // Prepara a consulta SQL para inserção
     $sql = "INSERT INTO livros (titulo, genero, autor, editora, tombo, ano, classificacao, n_paginas, isbn, imagem) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
