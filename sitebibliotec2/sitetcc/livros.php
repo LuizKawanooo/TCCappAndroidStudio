@@ -732,17 +732,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Supondo que o título seja enviado pelo formulário
 $titulo = isset($_POST['titulo']) ? $_POST['titulo'] : ''; // Obtém o título do formulário
+    
 
 // Processa o upload da imagem
 if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
     $tmp_name = $_FILES['imagem']['tmp_name'];
     $imageData = file_get_contents($tmp_name);
 
+    // Verifica se o conteúdo foi lido corretamente
+    if ($imageData === false) {
+        die("Erro ao ler o conteúdo da imagem.");
+    }
+
     // Verifica se o arquivo é uma imagem JPEG
     $fileType = mime_content_type($tmp_name);
-    if ($fileType == 'image/jpeg' && $imageData !== false) {
+    if ($fileType == 'image/jpeg') {
         // Prepara a inserção no banco de dados
         $stmt = $conn->prepare("INSERT INTO livros (titulo, imagem) VALUES (?, ?)");
+
+        // Verifica se a preparação da consulta falhou
+        if ($stmt === false) {
+            die("Erro na preparação da consulta: " . $conn->error);
+        }
+
         $stmt->bind_param("sb", $titulo, $imageData); // 's' para string e 'b' para BLOB
 
         // Executa a inserção
@@ -754,11 +766,12 @@ if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
 
         $stmt->close();
     } else {
-        echo "Arquivo não é uma imagem JPEG ou falhou ao ler a imagem.";
+        echo "Arquivo não é uma imagem JPEG. Tipo MIME: " . $fileType;
     }
 } else {
-    echo "Nenhum arquivo foi enviado ou ocorreu um erro no upload.";
+    echo "Nenhum arquivo foi enviado ou ocorreu um erro no upload: " . $_FILES['imagem']['error'];
 }
+
 
 
 
