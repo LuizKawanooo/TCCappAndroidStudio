@@ -740,7 +740,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $imagem = $imageData;
 
             // Prepara a inserção no banco de dados
-            $stmt = $pdo->prepare("INSERT INTO sua_tabela (imagem) VALUES (:imagem)");
+            $stmt = $pdo->prepare("INSERT INTO livros (imagem) VALUES (:imagem)");
             $stmt->bindParam(':imagem', $imagem, PDO::PARAM_LOB);
 
             // Executa a inserção
