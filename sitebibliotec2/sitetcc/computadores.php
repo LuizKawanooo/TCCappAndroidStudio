@@ -399,6 +399,56 @@
         </svg>
     </div>
     
+    <div class="container">
+        <div class="computadores">
+            <img src="img/comp.png" alt=""class="pc">
+            <h1>Computador 1</h1>
+            
+        </div>
+
+        <div class="computadores">
+            <img src="img/comp.png" alt=""class="pc">
+            <h1>Computador 2</h1>
+            
+        </div>
+
+        <div class="computadores">
+            <img src="img/comp.png" alt=""class="pc">
+            <h1>Computador 3</h1>
+            
+        </div>
+
+        <div class="computadores">
+            <img src="img/comp.png" alt=""class="pc">
+            <h1>Computador 4</h1>
+            
+        </div>
+
+        <div class="computadores">
+            <img src="img/comp.png" alt=""class="pc">
+            <h1>Computador 5</h1>
+            
+        </div>
+
+        <div class="computadores">
+            <img src="img/comp.png" alt=""class="pc">
+            <h1>Computador 6</h1>
+            
+        </div>
+
+        <div class="computadores">
+            <img src="img/comp.png" alt=""class="pc">
+            <h1>Computador 7</h1>
+            
+        </div>
+
+        <div class="computadores">
+            <img src="img/comp.png" alt=""class="pc">
+            <h1>Computador 8</h1>
+            
+        </div>
+
+    </div>
     
     
     
@@ -409,30 +459,6 @@
         <span class="close" onclick="closePopup()">&times;</span>
         <br>
 
-            <form action="" method="POST" enctype="multipart/form-data">
-    <label for="imagem">Upload da Planta da Sala:</label><br>
-    <input type="file" id="imagem" name="imagem" accept="image/*" required><br><br>
-    <button type="submit" class="btn2">Enviar Imagem</button>
-</form>
-
-<?php
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['imagem'])) {
-    $imagem = $_FILES['imagem'];
-    $target_dir = "uploads/"; // Certifique-se de que essa pasta exista
-    $target_file = $target_dir . basename($imagem["name"]);
-
-    // Verifica se o arquivo é uma imagem
-    $check = getimagesize($imagem["tmp_name"]);
-    if($check !== false) {
-        move_uploaded_file($imagem["tmp_name"], $target_file);
-        echo "<img id='img' src='$target_file' style='max-width: 100%; height: auto; position: absolute; top: 10%; left: 50%; transform: translate(-50%, -50%);'/>";
-    } else {
-        echo "Arquivo não é uma imagem.";
-    }
-}
-?>
-
-        
         <?php if (!empty($mensagem)): ?>
             <p><?php echo $mensagem; ?></p>
         <?php endif; ?>
