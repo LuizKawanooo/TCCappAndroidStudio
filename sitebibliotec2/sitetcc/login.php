@@ -114,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         p {
             font-size: 20px;
-            padding-left:50px;
+           
         }
         h1 {
             font-size: 40px;
