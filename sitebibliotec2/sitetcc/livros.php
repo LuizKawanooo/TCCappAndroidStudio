@@ -651,7 +651,10 @@ $conn->close();
             <label for="isbn">ISBN:</label><br>
             <input type="text" id="isbn" name="isbn" class="inp"><br>
             <br>
-            <input type="file" id="livro-imagem" name="imagem" accept="image/*"> <!-- Adiciona input para selecionar a imagem -->
+            
+                
+            <input type="file" id="livro-imagem" name="imagem" accept="image/jpeg, image/png, image/gif" required> <!-- Adiciona input para selecionar a imagem e define tipos aceitos -->
+            
             <br>
             <input type="submit" value="Enviar" class="btn2">
         </form>
@@ -743,6 +746,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Arquivo não é uma imagem válida (JPEG, PNG ou GIF).";
             exit;
         }
+    } else {
+        echo "Erro no upload da imagem: " . $_FILES['imagem']['error'];
+        exit;
     }
 
     // Prepara a consulta SQL para inserção
@@ -765,7 +771,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Fecha a consulta
         $stmt->close();
     } else {
-        // Exibe a mensagem de erro se a preparação da consulta falhar
         echo "Erro na preparação da consulta: " . $conn->error;
     }
 
