@@ -730,7 +730,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // *********************************************************************************************************************************************************************************************************************************************
 
 
-    // Processa o upload da imagem
+    // Supondo que o título seja enviado pelo formulário
+$titulo = isset($_POST['titulo']) ? $_POST['titulo'] : ''; // Obtém o título do formulário
+
+// Processa o upload da imagem
 if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
     $tmp_name = $_FILES['imagem']['tmp_name'];
     $imageData = file_get_contents($tmp_name);
@@ -739,8 +742,8 @@ if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
     $fileType = mime_content_type($tmp_name);
     if ($fileType == 'image/jpeg' && $imageData !== false) {
         // Prepara a inserção no banco de dados
-        $stmt = $conn->prepare("INSERT INTO livros (imagem) VALUES (?)");
-        $stmt->bind_param("b", $imageData); // 'b' para BLOB
+        $stmt = $conn->prepare("INSERT INTO sua_tabela (titulo, imagem) VALUES (?, ?)");
+        $stmt->bind_param("sb", $titulo, $imageData); // 's' para string e 'b' para BLOB
 
         // Executa a inserção
         if ($stmt->execute()) {
@@ -756,6 +759,7 @@ if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
 } else {
     echo "Nenhum arquivo foi enviado ou ocorreu um erro no upload.";
 }
+
 
 
 
