@@ -742,7 +742,7 @@ if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
     $fileType = mime_content_type($tmp_name);
     if ($fileType == 'image/jpeg' && $imageData !== false) {
         // Prepara a inserção no banco de dados
-        $stmt = $conn->prepare("INSERT INTO sua_tabela (titulo, imagem) VALUES (?, ?)");
+        $stmt = $conn->prepare("INSERT INTO livros (titulo, imagem) VALUES (?, ?)");
         $stmt->bind_param("sb", $titulo, $imageData); // 's' para string e 'b' para BLOB
 
         // Executa a inserção
