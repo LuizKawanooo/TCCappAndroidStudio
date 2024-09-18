@@ -698,7 +698,9 @@ $conn->close();
 
 
 
+    // *******************************************************************************************************************************************************************************************************************************************
 
+    
 <?php
 // Conexão com o banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
@@ -727,62 +729,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $n_paginas = $_POST['n_paginas'];
     $isbn = $_POST['isbn'];
 
-    // *********************************************************************************************************************************************************************************************************************************************
+    // Processa o upload da imagem
+    $imagem = NULL;
+    if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
+        $tmp_name = $_FILES['imagem']['tmp_name'];
+        $imageData = file_get_contents($tmp_name);
 
-
-    // Supondo que o título seja enviado pelo formulário
-$titulo = isset($_POST['titulo']) ? $_POST['titulo'] : ''; // Obtém o título do formulário
-    $autor = $_POST['autor'];
-    $genero = $_POST['genero'];
-    $editora = $_POST['editora'];
-    $tombo = $_POST['tombo'];
-    $ano = $_POST['ano'];
-    $classificacao = $_POST['classificacao'];
-    $n_paginas = $_POST['n_paginas'];
-    $isbn = $_POST['isbn'];
-
-// Processa o upload da imagem
-if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
-    $tmp_name = $_FILES['imagem']['tmp_name'];
-    $imageData = file_get_contents($tmp_name);
-
-    // Verifica se o conteúdo foi lido corretamente
-    if ($imageData === false) {
-        die("Erro ao ler o conteúdo da imagem.");
-    }
-
-    // Verifica se o arquivo é uma imagem JPEG
-    $fileType = mime_content_type($tmp_name);
-    if ($fileType == 'image/jpeg') {
-        // Prepara a inserção no banco de dados
-        $stmt = $conn->prepare("INSERT INTO livros (titulo, imagem) VALUES (?, ?)");
-
-        // Verifica se a preparação da consulta falhou
-        if ($stmt === false) {
-            die("Erro na preparação da consulta: " . $conn->error);
-        }
-
-        $stmt->bind_param("sb", $titulo, $imageData); // 's' para string e 'b' para BLOB
-
-        // Executa a inserção
-        if ($stmt->execute()) {
-            echo "Imagem enviada com sucesso!";
+        // Verifica se o arquivo é uma imagem
+        $fileType = mime_content_type($tmp_name);
+        if (in_array($fileType, ['image/jpeg', 'image/png', 'image/gif'])) {
+            $imagem = $imageData;
         } else {
-            echo "Erro ao enviar a imagem: " . $stmt->error;
+            echo "Arquivo não é uma imagem válida (JPEG, PNG ou GIF).";
+            exit;
         }
-
-        $stmt->close();
-    } else {
-        echo "Arquivo não é uma imagem JPEG. Tipo MIME: " . $fileType;
     }
-} else {
-    echo "Nenhum arquivo foi enviado ou ocorreu um erro no upload: " . $_FILES['imagem']['error'];
-}
-
-
-
-
-
 
     // Prepara a consulta SQL para inserção
     $sql = "INSERT INTO livros (titulo, genero, autor, editora, tombo, ano, classificacao, n_paginas, isbn, imagem) 
@@ -812,6 +773,11 @@ if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
     $conn->close();
 }
 ?>
+
+
+
+
+    // *******************************************************************************************************************************************************************************************************************************************
 
 
 
