@@ -399,56 +399,6 @@
         </svg>
     </div>
     
-    <div class="container">
-        <div class="computadores">
-            <img src="img/comp.png" alt=""class="pc">
-            <h1>Computador 1</h1>
-            
-        </div>
-
-        <div class="computadores">
-            <img src="img/comp.png" alt=""class="pc">
-            <h1>Computador 2</h1>
-            
-        </div>
-
-        <div class="computadores">
-            <img src="img/comp.png" alt=""class="pc">
-            <h1>Computador 3</h1>
-            
-        </div>
-
-        <div class="computadores">
-            <img src="img/comp.png" alt=""class="pc">
-            <h1>Computador 4</h1>
-            
-        </div>
-
-        <div class="computadores">
-            <img src="img/comp.png" alt=""class="pc">
-            <h1>Computador 5</h1>
-            
-        </div>
-
-        <div class="computadores">
-            <img src="img/comp.png" alt=""class="pc">
-            <h1>Computador 6</h1>
-            
-        </div>
-
-        <div class="computadores">
-            <img src="img/comp.png" alt=""class="pc">
-            <h1>Computador 7</h1>
-            
-        </div>
-
-        <div class="computadores">
-            <img src="img/comp.png" alt=""class="pc">
-            <h1>Computador 8</h1>
-            
-        </div>
-
-    </div>
     
     
     
