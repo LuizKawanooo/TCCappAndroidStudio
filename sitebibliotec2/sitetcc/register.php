@@ -208,28 +208,67 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div id="popup" class="popup">
         <h1>Solicitar Registro</h1>
-        <p>Insira as devidas informações nos campos, em seguida copie a mensagem e encaminhe no endereço de E-mail: bibliconnect@gmail.com</p>
         <form method="post" action="register.php">
-        <textarea id="emailField" name="email" required>Meu nome é [Seu Nome] e sou [sua posição ou função] na [Nome da Escola]. Estou entrando em contato para solicitar o registro da nossa escola no sistema de biblioteca Bibliotec, com o objetivo de facilitar o acesso dos nossos alunos e funcionários aos recursos oferecidos por esse sistema.
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required>
 
-A nossa escola, localizada em [Endereço Completo], está bastante interessada em integrar-se ao Bibliotec para enriquecer a nossa oferta educacional e proporcionar um ambiente de aprendizado mais dinâmico e acessível.
+        <label for="posicao">Posição ou Função:</label>
+        <input type="text" id="posicao" name="posicao" required>
 
-Para formalizar o registro, gostaríamos de saber quais são os requisitos e o procedimento necessário. Estamos à disposição para fornecer qualquer documentação adicional ou informações que possam ser necessárias para completar o processo.
+        <label for="nome_escola">Nome da Escola:</label>
+        <input type="text" id="nome_escola" name="nome_escola" required>
 
-Agradecemos antecipadamente pela sua atenção e ficamos no aguardo de suas instruções sobre os próximos passos.
+        <label for="endereco">Endereço:</label>
+        <input type="text" id="endereco" name="endereco" required>
 
-Atenciosamente,
+        <label for="telefone">Telefone:</label>
+        <input type="tel" id="telefone" name="telefone" required>
 
-[Seu Nome]
-[Seu Cargo]
-[Nome da Escola]
-[Telefone]
-[Email]</textarea>
-            
-            <button type="button" class="copy-btn" onclick="copyEmail()">Copiar E-mail</button>
-        </form>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <button type="submit">Registrar</button>
+        <button type="button" class="copy-btn" onclick="copyEmail()">Copiar E-mail</button>
+    </form>
         <button class="close" onclick="closePopup()">Fechar</button>
     </div>
+
+    <?php
+$servername = "tccappionic-bd.mysql.uhserver.com";
+$username = "ionic_perfil_bd";
+$password = "{[UOLluiz2019";
+$dbname = "tccappionic_bd";
+
+// Cria a conexão
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Verifica a conexão
+if ($conn->connect_error) {
+    die("Erro na conexão: " . $conn->connect_error);
+}
+
+// Verifica se o formulário foi enviado
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nome = $conn->real_escape_string($_POST['nome']);
+    $posicao = $conn->real_escape_string($_POST['posicao']);
+    $nome_escola = $conn->real_escape_string($_POST['nome_escola']);
+    $endereco = $conn->real_escape_string($_POST['endereco']);
+    $telefone = $conn->real_escape_string($_POST['telefone']);
+    $email = $conn->real_escape_string($_POST['email']);
+
+    // Consulta para inserir os dados
+    $sql = "INSERT INTO registro (nome, posicao, nome_escola, endereco, telefone, email) VALUES ('$nome', '$posicao', '$nome_escola', '$endereco', '$telefone', '$email')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "Registro criado com sucesso!";
+    } else {
+        echo "Erro: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+$conn->close();
+?>
+
 
     <div class="title">
         <h1>SISTEMA BIBLIOTEC</h1>
