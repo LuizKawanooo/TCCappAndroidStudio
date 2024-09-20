@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("ss", $email, $password);
 
     if ($stmt->execute()) {
-        echo "<p style='color:#2ACA22; z-index: 1; font-size:20px; position: absolute; top: 58%; left: 50%; transform:translate(-50%, -50%);'>Usuário cadastrado com sucesso.</p>";
+        echo "<p style='color:#2ACA22; z-index: 1; font-size:20px; position: absolute; top: 58%; left: 50%; transform:translate(-50%, -50%);'>Registro enviado com sucesso!</p>";
     } else {
         echo "Erro: " . $stmt->error;
     }
@@ -248,7 +248,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "INSERT INTO registro (nome, posicao, nome_escola, endereco, telefone, email) VALUES ('$nome', '$posicao', '$nome_escola', '$endereco', '$telefone', '$email')";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Registro criado com sucesso!";
+        echo "";
     } else {
         echo "Erro: " . $sql . "<br>" . $conn->error;
     }
