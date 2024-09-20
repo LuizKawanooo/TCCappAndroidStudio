@@ -189,9 +189,9 @@ $result = $conn->query($sql);
 if ($result) {
     $row = $result->fetch_assoc();
     $total_livros_alugados = $row["quantidade_livros_alugados"];
-    echo "Total de livros alugados: " . $total_livros_alugados;
+    echo "";
 } else {
-    echo "Erro na consulta: " . $conn->error;
+    echo "" . $conn->error;
 }
 ?>
 
