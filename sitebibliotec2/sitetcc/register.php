@@ -87,8 +87,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             padding-left: 5px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            border: none;
-            outline: none;
         }
 
         .solicita {
@@ -190,18 +188,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
         }
 
-        textarea {
-            height: 500px; /* Define a altura do textarea */
-            width: 500px;  /* Define a largura do textarea */
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            resize: none; /* Remove a opção de redimensionar */
-            overflow: auto; /* Adiciona barra de rolagem se necessário */
-            font-family: 'Open Sans', sans-serif;
-            font-size: 14px;
-            line-height: 1.5; /* Espaçamento entre linhas */
-        }
     </style>
 </head>
 <body>
