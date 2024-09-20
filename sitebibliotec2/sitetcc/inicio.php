@@ -177,6 +177,24 @@
                 echo "0";
             }
          ?>
+        <?php
+if ($conn->connect_error) {
+    die("Falha na conexão: " . $conn->connect_error);
+}
+
+// Consulta para contar o número de livros alugados
+$sql = "SELECT COUNT(*) AS quantidade_livros_alugados FROM livros WHERE status_livros = 1;";
+$result = $conn->query($sql);
+
+if ($result) {
+    $row = $result->fetch_assoc();
+    $total_livros_alugados = $row["quantidade_livros_alugados"];
+    echo "Total de livros alugados: " . $total_livros_alugados;
+} else {
+    echo "Erro na consulta: " . $conn->error;
+}
+?>
+
 
 
         <?php
@@ -261,7 +279,7 @@
 
     <div class="dados">
         <img src="img/relogio.png" alt=""  class="emp">
-        <h1>LIVROS EMPRESTADOS <br> <br>TOTAL:</h1>
+        <h1>LIVROS EMPRESTADOS <br> <br>TOTAL:<?php echo " ".$total_livros_alugados ?></h1>
     </div>
 
     <div class="dados">
