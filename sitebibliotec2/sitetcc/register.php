@@ -196,22 +196,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <h1 style="text-align: center; color: #333;">Solicitar Registro</h1>
     <form method="post" action="register.php" style="display: flex; flex-direction: column; gap: 15px;">
         
-        <label for="nome" style="margin-bottom: 5px; text-align: left;">Nome:</label>
+        <label for="nome" style=" text-align: left;">Nome:</label>
         <input type="text" id="nome" name="nome" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; width: 90%;">
 
-        <label for="posicao" style="margin-bottom: 5px; text-align: left;">Posição ou Função:</label>
+        <label for="posicao" style=" text-align: left;">Posição ou Função:</label>
         <input type="text" id="posicao" name="posicao" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; width: 90%;">
 
-        <label for="nome_escola" style="margin-bottom: 5px; text-align: left;">Nome da Escola:</label>
+        <label for="nome_escola" style=" text-align: left;">Nome da Escola:</label>
         <input type="text" id="nome_escola" name="nome_escola" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; width: 90%;">
 
-        <label for="endereco" style="margin-bottom: 5px; text-align: left;">Endereço:</label>
+        <label for="endereco" style=" text-align: left;">Endereço:</label>
         <input type="text" id="endereco" name="endereco" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; width: 90%;">
 
-        <label for="telefone" style="margin-bottom: 5px; text-align: left;">Telefone:</label>
+        <label for="telefone" style=" text-align: left;">Telefone:</label>
         <input type="tel" id="telefone" name="telefone" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; width: 90%;">
 
-        <label for="email" style="margin-bottom: 5px; text-align: left;">Email:</label>
+        <label for="email" style=" text-align: left;">Email:</label>
         <input type="email" id="email" name="email" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; width: 90%;">
 
         <button type="submit" style="padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Registrar</button>
