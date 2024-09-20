@@ -159,7 +159,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             left: 50%;
             transform: translate(-50%, -50%);
             width: 600px;
-            height: 750px;
+            height: 650px;
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 0 80px rgba(0, 0, 0, 0.4);
