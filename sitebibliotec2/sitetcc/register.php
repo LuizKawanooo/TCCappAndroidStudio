@@ -194,28 +194,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div id="popup" class="popup">
         <h1>Solicitar Registro</h1>
-        <form method="post" action="register.php">
-    <br>
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" name="nome" required>
-<br>
-        <label for="posicao">Posição ou Função:</label>
-        <input type="text" id="posicao" name="posicao" required>
-<br>
-        <label for="nome_escola">Nome da Escola:</label>
-        <input type="text" id="nome_escola" name="nome_escola" required>
-<br>
-        <label for="endereco">Endereço:</label>
-        <input type="text" id="endereco" name="endereco" required>
-<br>
-        <label for="telefone">Telefone:</label>
-        <input type="tel" id="telefone" name="telefone" required>
-<br>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-<br>
-        <button type="submit">Registrar</button>
-        <button type="button" class="copy-btn" onclick="copyEmail()">Copiar E-mail</button>
+        <form method="post" action="register.php" style="display: flex; flex-direction: column; gap: 15px;">
+        <label for="nome" style="font-weight: bold;">Nome:</label>
+        <input type="text" id="nome" name="nome" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+
+        <label for="posicao" style="font-weight: bold;">Posição ou Função:</label>
+        <input type="text" id="posicao" name="posicao" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+
+        <label for="nome_escola" style="font-weight: bold;">Nome da Escola:</label>
+        <input type="text" id="nome_escola" name="nome_escola" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+
+        <label for="endereco" style="font-weight: bold;">Endereço:</label>
+        <input type="text" id="endereco" name="endereco" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+
+        <label for="telefone" style="font-weight: bold;">Telefone:</label>
+        <input type="tel" id="telefone" name="telefone" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+
+        <label for="email" style="font-weight: bold;">Email:</label>
+        <input type="email" id="email" name="email" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+
+        <button type="submit" style="padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Registrar</button>
+        <button type="button" class="copy-btn" onclick="copyEmail()" style="padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Copiar E-mail</button>
     </form>
         <button class="close" onclick="closePopup()">Fechar</button>
     </div>
