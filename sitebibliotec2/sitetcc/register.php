@@ -192,9 +192,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
 
-    <div id="popup" class="popup">
-        <h1>Solicitar Registro</h1>
-        <form method="post" action="register.php" style="display: flex; flex-direction: column; gap: 15px;">
+<div id="popup" class="popup" style="padding: 20px; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); max-width: 400px; margin: auto;">
+    <h1 style="text-align: center; color: #333;">Solicitar Registro</h1>
+    <form method="post" action="register.php" style="display: flex; flex-direction: column; gap: 15px;">
         <label for="nome" style="font-weight: bold;">Nome:</label>
         <input type="text" id="nome" name="nome" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
 
@@ -216,8 +216,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <button type="submit" style="padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Registrar</button>
         <button type="button" class="copy-btn" onclick="copyEmail()" style="padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Copiar E-mail</button>
     </form>
-        <button class="close" onclick="closePopup()">Fechar</button>
-    </div>
+    <button class="close" onclick="closePopup()" style="margin-top: 15px; padding: 10px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">Fechar</button>
+</div>
+
 
     <?php
 $servername = "tccappionic-bd.mysql.uhserver.com";
