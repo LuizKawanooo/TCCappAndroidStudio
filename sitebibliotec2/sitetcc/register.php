@@ -170,8 +170,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         #popupbackground{
-                        background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 95%, rgba(0,0,0,0) 100%);
-
+            background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 95%, rgba(0,0,0,0) 100%);
+            width: 200%;
         }
 
         
