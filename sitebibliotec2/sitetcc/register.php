@@ -169,10 +169,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
         }
 
-        #popupbackground{
-            background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 95%, rgba(0,0,0,0) 100%);
-            width: 200%;
-        }
+
 
         
         
@@ -198,7 +195,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </style>
 </head>
 <body>
-<div id="popupbakcground">
+
 <div id="popup" class="popup" style="padding: 20px; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); max-width: 400px; margin: auto;">
     <h1 style="text-align: center; color: #333;">Solicitar Registro</h1>
     <form method="post" action="register.php" style="display: flex; flex-direction: column; gap: 15px;">
@@ -225,7 +222,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </form>
     <button class="close" onclick="closePopup()" style="margin-top: 15px; padding: 10px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">Fechar</button>
 </div>
-</div>
+
 
 
     <?php
