@@ -606,16 +606,23 @@ if ($result) {
         echo "<div class='container'>";
         while ($row = $result->fetch_assoc()) {
             echo "<div class='livro'>";
-                if ($row["imagem"]) {
-                    echo "<img src='image.php?id=" . $row["id"] . "' alt='imagem do livro' style='max-width: 130px; max-height: 150px;'>";
-                }
-                echo "<center><h1>" . $row["titulo"] . "</h1></center>";
-                echo "<h2>" . $row["status"] . "</h2>";
-                echo "<div class='botoes'>";
-                echo "<div class='btn3' data-id='" . $row["id"] . "'>Editar</div>";
-                echo "<div class='btn-excluir' data-id='" . $row["id"] . "'>Excluir</div>";
-                echo "</div>";
-                echo "</div>";
+            if ($row["imagem"]) {
+                echo "<img src='image.php?id=" . $row["id"] . "' alt='imagem do livro' style='max-width: 130px; max-height: 150px;'>";
+            }
+            echo "<center><h1>" . $row["titulo"] . "</h1></center>";
+
+            // Verifica o status do livro e exibe a mensagem apropriada
+            if ($row["status_livros"] == 0) {
+                echo "<h2 style='color: green;'>Livro disponível</h2>";
+            } elseif ($row["status_livros"] == 1) {
+                echo "<h2 style='color: red;'>Livro alugado</h2>";
+            }
+
+            echo "<div class='botoes'>";
+            echo "<div class='btn3' data-id='" . $row["id"] . "'>Editar</div>";
+            echo "<div class='btn-excluir' data-id='" . $row["id"] . "'>Excluir</div>";
+            echo "</div>";
+            echo "</div>";
         }
     } else {
         echo "<p style='color:#fff; font-size:40px; position: absolute; top: 51%; left: 60%; transform:translate(-50%, -50%);'>Nenhum Livro Encontrado</p>";
@@ -626,6 +633,7 @@ if ($result) {
 
 $conn->close();
 ?>
+
 
 
 <div id="popup" class="popup">
