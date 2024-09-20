@@ -214,7 +214,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <label for="email" style=" text-align: left;">Email:</label>
         <input type="email" id="email" name="email" required style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; width: 90%;">
 
-        <button type="submit" style="padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; width: 100px;">Registrar</button>
+        <button type="submit" style="padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; width: 100px; position: relative; left: 50%; transform: translate(-50%);">Registrar</button>
     </form>
     <button class="close" onclick="closePopup()" style="margin-top: 15px; padding: 10px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">Fechar</button>
 </div>
