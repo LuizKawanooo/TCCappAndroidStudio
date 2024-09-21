@@ -1,106 +1,52 @@
 <?php
+// reservar.php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
-$servername = "tccappionic-bd.mysql.uhserver.com"; // ou o endereço do seu servidor
-$username = "ionic_perfil_bd"; // seu nome de usuário
-$password = "{[UOLluiz2019"; // sua senha
-$dbname = "tccappionic_bd";
+// Inclui o arquivo de configuração para conectar ao banco de dados
+require_once 'config.php';
 
-// Conectar ao banco de dados
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Obtém o conteúdo da requisição POST
+$data = json_decode(file_get_contents('php://input'), true);
 
-// Verificar conexão
-if ($conn->connect_error) {
-    die(json_encode(["success" => false, "message" => "Connection failed: " . $conn->connect_error]));
-}
-
-// Ler horários e reservas
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $query = "SELECT h.horario, r.status, r.computador_id, r.btnVermelho, r.reserva_time 
-              FROM horarios h 
-              LEFT JOIN reservas r ON h.id = r.horario_id";
-    
-    $result = $conn->query($query);
-    
-    if ($result === false) {
-        echo json_encode(["success" => false, "message" => "Error executing query: " . $conn->error]);
-        exit;
-    }
-    
-    $horarios = $result->fetch_all(MYSQLI_ASSOC);
-    echo json_encode($horarios);
-    exit;
-}
-
-// Atualizar status
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $data = json_decode(file_get_contents("php://input"), true);
-    $horario = $data['horario'];
+// Verifica se todos os campos necessários foram enviados
+if (
+    isset($data['computador_id']) &&
+    isset($data['horario']) &&
+    isset($data['aluno_nome']) &&
+    isset($data['email_contato'])
+) {
     $computadorId = $data['computador_id'];
-    
-    if (isset($horario) && isset($computadorId)) {
-        // Obter o ID do horário
-        $stmt = $conn->prepare("SELECT id FROM horarios WHERE horario = ?");
-        if ($stmt === false) {
-            echo json_encode(["success" => false, "message" => "Prepare failed: " . $conn->error]);
-            exit;
-        }
-        $stmt->bind_param("s", $horario);
-        $stmt->execute();
-        $stmt->bind_result($horarioId);
-        $stmt->fetch();
-        $stmt->close();
-        
-        if (!$horarioId) {
-            echo json_encode(["success" => false, "message" => "Horário não encontrado"]);
-            exit;
-        }
-        
-        // Verificar se o horário foi reservado recentemente
-        $stmt = $conn->prepare("SELECT reserva_time FROM reservas WHERE horario_id = ? AND computador_id = ?");
-        if ($stmt === false) {
-            echo json_encode(["success" => false, "message" => "Prepare failed: " . $conn->error]);
-            exit;
-        }
-        $stmt->bind_param("ii", $horarioId, $computadorId);
-        $stmt->execute();
-        $stmt->bind_result($reservaTime);
-        $stmt->fetch();
-        $stmt->close();
-        
-        if ($reservaTime) {
-            $currentTime = new DateTime();
-            $reservationTime = new DateTime($reservaTime);
-            $interval = $currentTime->diff($reservationTime);
-            $minutesPassed = ($interval->h * 60) + $interval->i;
-            
-            if ($minutesPassed < 30) {
-                echo json_encode(["success" => false, "message" => "Horário reservado recentemente. Tente novamente mais tarde."]);
-                exit;
-            }
-        }
-        
-        // Atualizar status para todos os computadores e definir botão vermelho
-        $stmt = $conn->prepare("INSERT INTO reservas (computador_id, horario_id, status, btnVermelho, reserva_time) VALUES (?, ?, 1, 'Sim', NOW())
-                                ON DUPLICATE KEY UPDATE status = 1, btnVermelho = 'Sim', reserva_time = NOW()");
-        if ($stmt === false) {
-            echo json_encode(["success" => false, "message" => "Prepare failed: " . $conn->error]);
-            exit;
-        }
-        $stmt->bind_param("ii", $computadorId, $horarioId);
-        $stmt->execute();
-        $stmt->close();
-        
-        echo json_encode(["success" => true]);
-        exit;
-    } else {
-        echo json_encode(["success" => false, "message" => "Invalid input"]);
-        exit;
-    }
-}
+    $horario = $data['horario'];
+    $alunoNome = $data['aluno_nome'];
+    $emailContato = $data['email_contato'];
 
-$conn->close();
-?>
+    try {
+        // Conexão com o banco de dados
+        $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8", $db_user, $db_pass);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        // Verifica se o horário já está reservado na tabela reservas_computadores
+        $checkStmt = $pdo->prepare("SELECT * FROM reservas_computadores WHERE computador_id = ? AND horario = ?");
+        $checkStmt->execute([$computadorId, $horario]);
+        if ($checkStmt->rowCount() > 0) {
+            echo json_encode(['success' => false, 'message' => 'Horário já reservado!']);
+            exit;
+        }
+
+        // Insere a nova reserva na tabela reservas_computadores
+        $insertStmt = $pdo->prepare("INSERT INTO reservas_computadores (computador_id, horario, aluno_nome, email_contato) VALUES (?, ?, ?, ?)");
+        $insertStmt->execute([$computadorId, $horario, $alunoNome, $emailContato]);
+
+        // Retorna uma resposta de sucesso
+        echo json_encode(['success' => true, 'message' => 'Reserva realizada com sucesso!']);
+    } catch (PDOException $e) {
+        // Em caso de erro, retorna a mensagem de erro
+        echo json_encode(['success' => false, 'message' => 'Erro ao reservar horário: ' . $e->getMessage()]);
+    }
+} else {
+    // Retorna erro se os campos não foram enviados corretamente
+    echo json_encode(['success' => false, 'message' => 'Dados incompletos para reserva.']);
+}
