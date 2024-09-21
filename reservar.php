@@ -1,9 +1,6 @@
 <?php
-// reservar.php
-header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+header('Content-Type: application/json');
 
 // Configurações do banco de dados
 define('DB_HOST', 'tccappionic-bd.mysql.uhserver.com');
@@ -49,7 +46,9 @@ $insertStmt->bind_param("isss", $computadorId, $horarioFormatado, $alunoNome, $e
 if ($insertStmt->execute()) {
     echo json_encode(['success' => true, 'message' => 'Reserva feita com sucesso!']);
 } else {
-    echo json_encode(['success' => false, 'message' => 'Erro ao fazer a reserva.']);
+    // Adiciona logs de erro
+    $error = $insertStmt->error;
+    echo json_encode(['success' => false, 'message' => 'Erro ao fazer a reserva: ' . $error]);
 }
 
 // Fecha a conexão
