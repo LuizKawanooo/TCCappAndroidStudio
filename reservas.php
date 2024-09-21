@@ -6,17 +6,34 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
-require_once 'config.php';
 
-try {
-    $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8", $db_user, $db_pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// Definições do banco de dados
+define('DB_HOST', 'tccappionic-bd.mysql.uhserver.com');
+define('DB_USER', 'ionic_perfil_bd');
+define('DB_PASS', '{[UOLluiz2019');
+define('DB_NAME', 'tccappionic_bd');
 
-    $stmt = $pdo->prepare("SELECT * FROM reservas_computadores");
-    $stmt->execute();
-    $reservas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Conexão com o banco de dados
+$conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-    echo json_encode(['success' => true, 'data' => $reservas]);
-} catch (PDOException $e) {
-    echo json_encode(['success' => false, 'message' => 'Erro ao buscar reservas: ' . $e->getMessage()]);
+// Verifica a conexão
+if (!$conn) {
+    die(json_encode(['success' => false, 'message' => 'Falha na conexão: ' . mysqli_connect_error()]));
 }
+
+// Consulta para buscar todas as reservas
+$sql = "SELECT * FROM reservas_computadores";
+$result = mysqli_query($conn, $sql);
+
+$reservas = [];
+if ($result) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $reservas[] = $row;
+    }
+    echo json_encode(['success' => true, 'data' => $reservas]);
+} else {
+    echo json_encode(['success' => false, 'message' => 'Erro ao buscar reservas: ' . mysqli_error($conn)]);
+}
+
+// Fecha a conexão
+mysqli_close($conn);
