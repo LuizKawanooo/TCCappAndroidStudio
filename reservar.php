@@ -5,55 +5,50 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
-// Definições do banco de dados
 define('DB_HOST', 'tccappionic-bd.mysql.uhserver.com');
 define('DB_USER', 'ionic_perfil_bd');
 define('DB_PASS', '{[UOLluiz2019');
 define('DB_NAME', 'tccappionic_bd');
 
-// Conexão com o banco de dados
-$conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-// Verifica a conexão
-if (!$conn) {
-    die(json_encode(['success' => false, 'message' => 'Falha na conexão: ' . mysqli_connect_error()]));
+// Verifica a conexão com o banco de dados
+if ($conn->connect_error) {
+    die(json_encode(['success' => false, 'message' => 'Falha na conexão: ' . $conn->connect_error]));
 }
 
-// Obtém o conteúdo da requisição POST
-$data = json_decode(file_get_contents('php://input'), true);
+// Obtém os dados do POST
+$data = json_decode(file_get_contents("php://input"));
 
-// Verifica se todos os campos necessários foram enviados
-if (
-    isset($data['computador_id']) &&
-    isset($data['horario']) &&
-    isset($data['aluno_nome']) &&
-    isset($data['email_contato'])
-) {
-    $computadorId = $data['computador_id'];
-    $horario = $data['horario'];
-    $alunoNome = $data['aluno_nome'];
-    $emailContato = $data['email_contato'];
+$computadorId = $data->computador_id;
+$horario = $data->horario;
+$alunoNome = $data->aluno_nome;
+$emailContato = $data->email_contato;
 
-    // Verifica se o horário já está reservado
-    $checkSql = "SELECT * FROM reservas_computadores WHERE computador_id = '$computadorId' AND horario = '$horario'";
-    $checkResult = mysqli_query($conn, $checkSql);
+// Verifica se já existe uma reserva para o computador e horário selecionados
+$query = "SELECT * FROM reservas_computadores WHERE computador_id = ? AND horario = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("is", $computadorId, $horario);
+$stmt->execute();
+$result = $stmt->get_result();
 
-    if (mysqli_num_rows($checkResult) > 0) {
-        echo json_encode(['success' => false, 'message' => 'Horário já reservado!']);
-        exit;
-    }
+if ($result->num_rows > 0) {
+    echo json_encode(['success' => false, 'message' => 'Esse horário já está reservado.']);
+    exit;
+}
 
-    // Insere a nova reserva
-    $insertSql = "INSERT INTO reservas_computadores (computador_id, horario, aluno_nome, email_contato) VALUES ('$computadorId', '$horario', '$alunoNome', '$emailContato')";
-    if (mysqli_query($conn, $insertSql)) {
-        echo json_encode(['success' => true, 'message' => 'Reserva realizada com sucesso!']);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Erro ao reservar horário: ' . mysqli_error($conn)]);
-    }
+// Se não existir, continua para inserir a nova reserva
+$insertQuery = "INSERT INTO reservas_computadores (computador_id, horario, aluno_nome, email_contato) VALUES (?, ?, ?, ?)";
+$insertStmt = $conn->prepare($insertQuery);
+$insertStmt->bind_param("isss", $computadorId, $horario, $alunoNome, $emailContato);
+
+if ($insertStmt->execute()) {
+    echo json_encode(['success' => true, 'message' => 'Reserva realizada com sucesso!']);
 } else {
-    echo json_encode(['success' => false, 'message' => 'Dados incompletos para reserva.']);
+    echo json_encode(['success' => false, 'message' => 'Erro ao realizar a reserva: ' . $insertStmt->error]);
 }
 
-// Fecha a conexão
-mysqli_close($conn);
-
+$insertStmt->close();
+$stmt->close();
+$conn->close();
+?>
