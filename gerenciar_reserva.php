@@ -1,4 +1,17 @@
 <?php
+
+// Adiciona cabeçalhos CORS
+header("Access-Control-Allow-Origin: *"); // Permite acesso de qualquer origem
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS"); // Permite os métodos usados
+header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Permite os cabeçalhos usados
+
+// Verificação se é uma requisição OPTIONS
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
+
 // Conexão com o banco de dados
 $host = 'tccappionic-bd.mysql.uhserver.com';
 $user = 'ionic_perfil_bd';
