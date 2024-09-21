@@ -1,6 +1,10 @@
 <?php
+// Permitir o acesso de qualquer origem
 header('Access-Control-Allow-Origin: *');
-header('Content-Type: application/json');
+// Permitir métodos HTTP específicos
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+// Permitir cabeçalhos específicos
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 // Configurações do banco de dados
 define('DB_HOST', 'tccappionic-bd.mysql.uhserver.com');
