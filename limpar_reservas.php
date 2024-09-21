@@ -9,22 +9,23 @@ $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 // Verifica se houve erro na conexão
 if ($conn->connect_error) {
-    die('Erro de conexão: ' . $conn->connect_error);
+    die(json_encode(['success' => false, 'message' => 'Erro de conexão: ' . $conn->connect_error]));
 }
 
-// Remove as reservas que foram feitas há mais de 1 minuto
-$currentTime = date("Y-m-d H:i:s", strtotime("-1 minute"));
+// Obtém o ID do computador da requisição
+$computadorId = isset($_GET['computadorId']) ? intval($_GET['computadorId']) : 0;
 
-$deleteQuery = "DELETE FROM reservas_computadores WHERE horario < ?";
-$stmt = $conn->prepare($deleteQuery);
-$stmt->bind_param("s", $currentTime);
-
-if ($stmt->execute()) {
-    echo json_encode(['success' => true, 'message' => 'Reservas antigas removidas.']);
+if ($computadorId > 0) {
+    // Limpa a reserva do banco de dados
+    $updateQuery = "UPDATE reservas_computadores SET horario = NULL, aluno_nome = NULL, email_contato = NULL WHERE id = $computadorId";
+    if ($conn->query($updateQuery) === TRUE) {
+        echo json_encode(['success' => true, 'message' => 'Reserva limpa com sucesso.']);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Erro ao limpar a reserva: ' . $conn->error]);
+    }
 } else {
-    echo json_encode(['success' => false, 'message' => 'Erro ao remover reservas: ' . $conn->error]);
+    echo json_encode(['success' => false, 'message' => 'ID do computador inválido.']);
 }
 
-$stmt->close();
 $conn->close();
 ?>
