@@ -27,8 +27,8 @@ $horario = $data['horario'];
 $alunoNome = $data['aluno_nome'];
 $emailContato = $data['email_contato'];
 
-// Formata o horário para HH:MM:SS
-$horarioFormatado = $horario . ':00';
+// Formata o horário para HH:MM (sem segundos)
+$horarioFormatado = $horario; // Mantenha apenas HH:MM
 
 // Verifica se já existe uma reserva para o computador e horário selecionados
 $query = "SELECT * FROM reservas_computadores WHERE computador_id = ? AND horario = ?";
