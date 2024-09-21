@@ -1,7 +1,6 @@
 <?php
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
+header('Content-Type: application/json');
 
 define('DB_HOST', 'tccappionic-bd.mysql.uhserver.com');
 define('DB_USER', 'ionic_perfil_bd');
@@ -15,17 +14,33 @@ if ($conn->connect_error) {
     exit;
 }
 
-$query = "SELECT computador_id, status FROM reservas_computadores";
-$result = $conn->query($query);
-
+// Busca todos os computadores
 $computadores = [];
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $disponibilidade = $row['status'] === 'reservado' ? 'Reservado' : 'Disponível';
-        $computadores[] = ['id' => $row['computador_id'], 'disponibilidade' => $disponibilidade];
+$queryComputadores = "SELECT id FROM computadores"; // Ajuste se necessário
+$resultComputadores = $conn->query($queryComputadores);
+
+while ($row = $resultComputadores->fetch_assoc()) {
+    $idComputador = $row['id'];
+    
+    // Busca as reservas para este computador
+    $reservas = [];
+    $queryReservas = "SELECT horario FROM reservas_computadores WHERE computador_id = ?";
+    $stmt = $conn->prepare($queryReservas);
+    $stmt->bind_param("i", $idComputador);
+    $stmt->execute();
+    $resultReservas = $stmt->get_result();
+
+    while ($reserva = $resultReservas->fetch_assoc()) {
+        $reservas[] = $reserva['horario'];
     }
+    
+    $computadores[] = [
+        'id' => $idComputador,
+        'reservas' => $reservas
+    ];
 }
 
-echo json_encode(['success' => true, 'data' => $computadores]);
+$stmt->close();
 $conn->close();
-?>
+
+echo json_encode(['success' => true, 'data' => $computadores]);
