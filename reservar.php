@@ -16,7 +16,7 @@ $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 // Verifica se houve erro na conexão
 if ($conn->connect_error) {
-    echo json_encode(['success' => false, 'message' => 'Erro de conexão: ' . $conn->connect_error]);
+    echo json_encode(['success' => false, 'message' => 'Erro de conexão com o servidor. Por favor, tente novamente mais tarde.']);
     exit;
 }
 
@@ -40,7 +40,7 @@ $result = $stmt->get_result();
 
 // Se já existir uma reserva
 if ($result->num_rows > 0) {
-    echo json_encode(['success' => false, 'message' => 'Esse horário já está reservado.']);
+    echo json_encode(['success' => false, 'message' => 'Esse horário já está reservado. Por favor, escolha outro.']);
 } else {
     // Insere a nova reserva
     $insertQuery = "INSERT INTO reservas_computadores (computador_id, horario, aluno_nome, email_contato, status, data_reserva) VALUES (?, ?, ?, ?, 'reservado', NOW())";
@@ -60,7 +60,7 @@ if ($result->num_rows > 0) {
         $updateStmt->execute();
         $updateStmt->close();
     } else {
-        echo json_encode(['success' => false, 'message' => 'Erro ao fazer a reserva: ' . $insertStmt->error]);
+        echo json_encode(['success' => false, 'message' => 'Ocorreu um erro ao tentar realizar a reserva. Por favor, tente novamente.']);
     }
 }
 
