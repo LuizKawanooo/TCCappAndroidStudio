@@ -12,20 +12,17 @@ if ($conn->connect_error) {
     die('Erro de conexão: ' . $conn->connect_error);
 }
 
-// Obtem a data e hora atual
-$currentTime = date("Y-m-d H:i:s");
+// Remove as reservas que foram feitas há mais de 1 minuto
+$currentTime = date("Y-m-d H:i:s", strtotime("-1 minute"));
 
-// Atualiza as reservas que foram feitas há mais de 30 segundos
-$updateQuery = "UPDATE reservas_computadores SET aluno_nome = '', email_contato = '', horario = '', computador_id = NULL 
-                WHERE TIMESTAMPDIFF(SECOND, horario, ?) > 30";
-
-$stmt = $conn->prepare($updateQuery);
+$deleteQuery = "DELETE FROM reservas_computadores WHERE horario < ?";
+$stmt = $conn->prepare($deleteQuery);
 $stmt->bind_param("s", $currentTime);
 
 if ($stmt->execute()) {
-    echo json_encode(['success' => true, 'message' => 'Reservas limpas com sucesso.']);
+    echo json_encode(['success' => true, 'message' => 'Reservas antigas removidas.']);
 } else {
-    echo json_encode(['success' => false, 'message' => 'Erro ao limpar reservas: ' . $stmt->error]);
+    echo json_encode(['success' => false, 'message' => 'Erro ao remover reservas: ' . $conn->error]);
 }
 
 $stmt->close();
