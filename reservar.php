@@ -12,18 +12,19 @@ define('DB_NAME', 'tccappionic_bd');
 
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-// Verifica a conexão com o banco de dados
 if ($conn->connect_error) {
-    die(json_encode(['success' => false, 'message' => 'Falha na conexão: ' . $conn->connect_error]));
+    die(json_encode(['success' => false, 'message' => 'Conexão falhou: ' . $conn->connect_error]));
 }
 
-// Obtém os dados do POST
 $data = json_decode(file_get_contents("php://input"));
 
 $computadorId = $data->computador_id;
-$horario = $data->horario;
+$horario = $data->horario; // Esperando que seja no formato 'HH:MM:SS'
 $alunoNome = $data->aluno_nome;
 $emailContato = $data->email_contato;
+
+// Log da entrada
+error_log("Tentando reservar: Computador ID: $computadorId, Horário: $horario");
 
 // Verifica se já existe uma reserva para o computador e horário selecionados
 $query = "SELECT * FROM reservas_computadores WHERE computador_id = ? AND horario = ?";
@@ -37,18 +38,18 @@ if ($result->num_rows > 0) {
     exit;
 }
 
-// Se não existir, continua para inserir a nova reserva
+// Insere a nova reserva
 $insertQuery = "INSERT INTO reservas_computadores (computador_id, horario, aluno_nome, email_contato) VALUES (?, ?, ?, ?)";
-$insertStmt = $conn->prepare($insertQuery);
-$insertStmt->bind_param("isss", $computadorId, $horario, $alunoNome, $emailContato);
-
-if ($insertStmt->execute()) {
+$stmtInsert = $conn->prepare($insertQuery);
+$stmtInsert->bind_param("isss", $computadorId, $horario, $alunoNome, $emailContato);
+if ($stmtInsert->execute()) {
     echo json_encode(['success' => true, 'message' => 'Reserva realizada com sucesso!']);
 } else {
-    echo json_encode(['success' => false, 'message' => 'Erro ao realizar a reserva: ' . $insertStmt->error]);
+    echo json_encode(['success' => false, 'message' => 'Erro ao reservar: ' . $stmtInsert->error]);
 }
 
-$insertStmt->close();
 $stmt->close();
+$stmtInsert->close();
 $conn->close();
 ?>
+
