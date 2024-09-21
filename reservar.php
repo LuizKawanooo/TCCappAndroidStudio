@@ -28,6 +28,12 @@ $horario = $data->horario;
 $alunoNome = $data->aluno_nome;
 $emailContato = $data->email_contato;
 
+// Verifica se os campos obrigatórios estão preenchidos
+if (empty($alunoNome) || empty($emailContato)) {
+    echo json_encode(['success' => false, 'message' => 'Nome e e-mail são obrigatórios.']);
+    exit;
+}
+
 // Formata o horário para o formato correto (HH:MM:SS)
 $horarioFormatado = date("H:i:s", strtotime($horario));
 
