@@ -58,7 +58,7 @@ if ($result->num_rows > 0) {
         echo json_encode(['success' => true, 'message' => 'Reserva realizada com sucesso!']);
         
         // Limpa a reserva após 30 segundos
-        sleep(40);
+        sleep(30);
         
         // Atualiza a reserva para zerar os campos de nome e email e mudar o status
         $updateQuery = "UPDATE reservas_computadores SET aluno_nome = '', email_contato = '', status = 'disponível' WHERE computador_id = ? AND horario = ?";
