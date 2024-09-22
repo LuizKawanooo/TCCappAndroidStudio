@@ -75,6 +75,17 @@ function adicionarReserva($pdo) {
     $rental_end_time = date('Y-m-d H:i:s', strtotime('+1 minute'));
     $status = 1; // Exemplo: 1 para "reservado"
 
+    // Verificar se já existe uma reserva para o mesmo computador e horário
+    $checkStmt = $pdo->prepare("SELECT COUNT(*) FROM reservas_computadores WHERE computador_id = ? AND horario = ?");
+    $checkStmt->execute([$computador_id, $horario]);
+    $existingReservations = $checkStmt->fetchColumn();
+
+    if ($existingReservations > 0) {
+        echo json_encode(['success' => false, 'message' => 'Este horário já está reservado para o computador selecionado.']);
+        return;
+    }
+
+    // Inserir nova reserva
     $stmt = $pdo->prepare("INSERT INTO reservas_computadores (computador_id, horario, aluno_nome, email_contato, data_reserva, rental_end_time, status) VALUES (?, ?, ?, ?, ?, ?, ?)");
     
     try {
