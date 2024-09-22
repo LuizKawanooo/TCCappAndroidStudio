@@ -48,24 +48,13 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     echo json_encode(['success' => false, 'message' => 'Esse horário já está reservado. Por favor, escolha outro.']);
 } else {
-    // Insere a nova reserva com rental_end_time
-    $rentalEndTime = date("Y-m-d H:i:s", strtotime("+30 seconds"));
-    $insertQuery = "INSERT INTO reservas_computadores (computador_id, horario, aluno_nome, email_contato, status, rental_end_time, data_reserva) VALUES (?, ?, ?, ?, 'reservado', ?, NOW())";
+    // Insere a nova reserva sem tempo de expiração automática
+    $insertQuery = "INSERT INTO reservas_computadores (computador_id, horario, aluno_nome, email_contato, status, data_reserva) VALUES (?, ?, ?, ?, 'reservado', NOW())";
     $insertStmt = $conn->prepare($insertQuery);
-    $insertStmt->bind_param("issss", $computadorId, $horarioFormatado, $alunoNome, $emailContato, $rentalEndTime);
+    $insertStmt->bind_param("isss", $computadorId, $horarioFormatado, $alunoNome, $emailContato);
     
     if ($insertStmt->execute()) {
         echo json_encode(['success' => true, 'message' => 'Reserva realizada com sucesso!']);
-        
-        // Limpa a reserva após 30 segundos
-        sleep(30);
-        
-        // Atualiza a reserva para zerar os campos de nome e email e mudar o status
-        $updateQuery = "UPDATE reservas_computadores SET aluno_nome = '', email_contato = '', status = 'disponível' WHERE computador_id = ? AND horario = ?";
-        $updateStmt = $conn->prepare($updateQuery);
-        $updateStmt->bind_param("is", $computadorId, $horarioFormatado);
-        $updateStmt->execute();
-        $updateStmt->close();
     } else {
         echo json_encode(['success' => false, 'message' => 'Ocorreu um erro ao tentar realizar a reserva. Por favor, tente novamente.']);
     }
