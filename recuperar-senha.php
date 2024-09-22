@@ -1,9 +1,15 @@
 <?php
 
 // Configurações de cabeçalhos CORS
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Origin: http://localhost:8100'); // Altere para o seu domínio de origem
+header('Access-Control-Allow-Methods: POST, OPTIONS'); // Permita os métodos necessários
+header('Access-Control-Allow-Headers: Content-Type'); // Permita os cabeçalhos necessários
 header('Content-Type: application/json');
+
+// Verifica se a solicitação é do tipo OPTIONS (preflight)
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    exit; // Se for uma solicitação OPTIONS, apenas saia
+}
 
 // Conexão com o banco de dados
 require 'db.php';
