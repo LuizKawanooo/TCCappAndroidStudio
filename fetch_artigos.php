@@ -1,7 +1,7 @@
 <?php
 // Configurações de cabeçalhos CORS
 header('Access-Control-Allow-Origin: *'); // Permite acesso de qualquer origem
-header('Access-Control-Allow-Methods: GET, POST'); // Métodos permitidos
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE'); // Métodos permitidos
 header('Access-Control-Allow-Headers: Content-Type, Authorization'); // Cabeçalhos permitidos
 header('Content-Type: application/json'); // Tipo de conteúdo da resposta
 
@@ -28,8 +28,6 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $artigos[] = $row;
     }
-} else {
-    $artigos = []; // Se não houver artigos, retorna um array vazio
 }
 
 $conn->close();
