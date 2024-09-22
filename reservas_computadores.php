@@ -72,7 +72,7 @@ function adicionarReserva($pdo) {
     $aluno_nome = $data['aluno_nome'];
     $email_contato = $data['email_contato'];
     $data_reserva = date('Y-m-d H:i:s');
-    $rental_end_time = date('Y-m-d H:i:s', strtotime('+30 minutes'));
+    $rental_end_time = date('Y-m-d H:i:s', strtotime('+1 minute'));
     $status = 1; // Exemplo: 1 para "reservado"
 
     $stmt = $pdo->prepare("INSERT INTO reservas_computadores (computador_id, horario, aluno_nome, email_contato, data_reserva, rental_end_time, status) VALUES (?, ?, ?, ?, ?, ?, ?)");
