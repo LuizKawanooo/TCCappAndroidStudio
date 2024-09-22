@@ -3,7 +3,7 @@ include 'db.php'; // Incluindo a conexão ao banco de dados
 
 function limparReservasAntigas($conn) {
     $timestampLimite = date('Y-m-d H:i:s', strtotime('-30 seconds'));
-    $sql = "DELETE FROM reservas WHERE horario < ?";
+    $sql = "DELETE FROM reservas_computadores WHERE horario < ?";
 
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $timestampLimite);
