@@ -1,22 +1,25 @@
 <?php
-// Conexão com o banco de dados
-define('DB_HOST', 'tccappionic-bd.mysql.uhserver.com');
-define('DB_USER', 'ionic_perfil_bd');
-define('DB_PASS', '{[UOLluiz2019');
-define('DB_NAME', 'tccappionic_bd');
+// processarReservasExpiradas.php
 
+// Definições do banco de dados
+define('DB_HOST', 'tccappionic-bd.mysql.uhserver.com'); // Host do banco de dados
+define('DB_USER', 'ionic_perfil_bd'); // Usuário do banco de dados
+define('DB_PASS', '{[UOLluiz2019'); // Senha do banco de dados
+define('DB_NAME', 'tccappionic_bd'); // Nome do banco de dados
+
+// Conexão com o banco de dados
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 // Verifica a conexão
 if ($conn->connect_error) {
-    die("Erro de conexão com o banco de dados: " . $conn->connect_error);
+    error_log("Erro de conexão: " . $conn->connect_error);
+    exit;
 }
 
-// Obtém todas as reservas expiradas (onde o rental_end_time é menor que o horário atual)
+// Seleciona todas as reservas expiradas
 $query = "SELECT * FROM reservas_computadores WHERE rental_end_time <= NOW() AND status = 'reservado'";
 $result = $conn->query($query);
 
-// Processa cada reserva expirada
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $computadorId = $row['computador_id'];
@@ -25,22 +28,25 @@ if ($result->num_rows > 0) {
         $emailContato = $row['email_contato'];
         $dataReserva = $row['data_reserva'];
         $rentalEndTime = $row['rental_end_time'];
-
-        // Move a reserva para o histórico
-        $insertHistoryQuery = "INSERT INTO reservas_historico (computador_id, horario, aluno_nome, email_contato, data_reserva, rental_end_time, data_remocao)
-                               VALUES (?, ?, ?, ?, ?, ?, NOW())";
+        
+        // Mover para o histórico
+        $insertHistoryQuery = "INSERT INTO reservas_historico (computador_id, horario, aluno_nome, email_contato, status, rental_end_time, data_reserva, data_remocao)
+                               VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
         $insertHistoryStmt = $conn->prepare($insertHistoryQuery);
-        $insertHistoryStmt->bind_param("isssss", $computadorId, $horario, $alunoNome, $emailContato, $dataReserva, $rentalEndTime);
-
+        $status = 'disponível'; // Alterar status para 'disponível' no histórico
+        $insertHistoryStmt->bind_param("issssss", $computadorId, $horario, $alunoNome, $emailContato, $status, $rentalEndTime, $dataReserva);
+        
         if ($insertHistoryStmt->execute()) {
-            // Limpa os dados da reserva original, mantendo o status como 'disponível'
+            // Limpar a reserva original
             $updateQuery = "UPDATE reservas_computadores SET aluno_nome = '', email_contato = '', status = 'disponível', rental_end_time = NULL WHERE computador_id = ? AND horario = ?";
             $updateStmt = $conn->prepare($updateQuery);
             $updateStmt->bind_param("is", $computadorId, $horario);
             $updateStmt->execute();
             $updateStmt->close();
+        } else {
+            error_log("Erro ao mover reserva para o histórico: " . $conn->error);
         }
-
+        
         $insertHistoryStmt->close();
     }
 }
