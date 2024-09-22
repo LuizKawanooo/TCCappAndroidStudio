@@ -23,14 +23,22 @@ if ($conn->connect_error) {
 $sql = "SELECT * FROM artigos";
 $result = $conn->query($sql);
 
-$artigos = [];
+// Verifica se existem artigos
 if ($result->num_rows > 0) {
+    // Exibe os artigos
     while ($row = $result->fetch_assoc()) {
-        $artigos[] = $row;
+        echo "<div class='artigo'>";
+        echo "<h1>Título: " . $row["titulo"] . "</h1>";
+        echo "<p>Autor: " . $row["autor"] . "</p>";
+        echo "<p>Ano: " . $row["ano"] . "</p>";
+        // Botão de download
+        echo "<a href='uploads/" . $row["arquivo"] . "' download class='btn-download'>Download</a>";
+        echo "</div>";
     }
+} else {
+    echo "Nenhum artigo encontrado.";
 }
 
+// Fecha a conexão com o banco de dados
 $conn->close();
-
-echo json_encode($artigos);
 ?>
