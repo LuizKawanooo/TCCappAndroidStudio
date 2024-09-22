@@ -5,12 +5,11 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 
-
 // Conexão com o banco de dados
-$servername = "tccappionic-bd.mysql.uhserver.com"; // Nome do servidor
-$username = "ionic_perfil_bd"; // Usuário do MySQL
-$password = "{[UOLluiz2019"; // Senha do MySQL
-$dbname = "tccappionic_bd"; // Nome do banco de dados
+$servername = "tccappionic-bd.mysql.uhserver.com"; 
+$username = "ionic_perfil_bd"; 
+$password = "{[UOLluiz2019"; 
+$dbname = "tccappionic_bd"; 
 
 // Crie a conexão
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -37,14 +36,16 @@ if ($result->num_rows > 0) {
     // Atualiza o token na tabela
     $stmt = $conn->prepare("UPDATE registrar_usuarios SET token = ? WHERE id = ?");
     $stmt->bind_param("si", $token, $user_id);
-    $stmt->execute();
+
+    if (!$stmt->execute()) {
+        echo json_encode(["success" => false, "message" => "Erro ao atualizar o token."]);
+        exit();
+    }
 
     // Envia o link de recuperação por email
     if (preg_match('/@etec\.sp\.gov\.br$/', $email)) {
-        // Lógica para email institucional
         $reset_link = "AppIonicTCC://recuperar-senha?token=$token";
     } else {
-        // Lógica para outros emails
         $reset_link = "AppIonicTCC://resetar-senha?token=$token";
     }
 
@@ -53,9 +54,11 @@ if ($result->num_rows > 0) {
     $message = "Clique no link para recuperar sua senha: $reset_link";
     $headers = "From: no-reply@bibliotec.com";
 
-    mail($to, $subject, $message, $headers);
-
-    echo json_encode(["success" => true, "message" => "Um link de recuperação de senha foi enviado para seu email."]);
+    if (mail($to, $subject, $message, $headers)) {
+        echo json_encode(["success" => true, "message" => "Um link de recuperação de senha foi enviado para seu email."]);
+    } else {
+        echo json_encode(["success" => false, "message" => "Erro ao enviar o email."]);
+    }
 } else {
     echo json_encode(["success" => false, "message" => "Email não encontrado."]);
 }
