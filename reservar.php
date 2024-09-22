@@ -48,7 +48,7 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     echo json_encode(['success' => false, 'message' => 'Esse horário já está reservado. Por favor, escolha outro.']);
 } else {
-    // Insere a nova reserva sem delay
+    // Insere a nova reserva com rental_end_time
     $rentalEndTime = date("Y-m-d H:i:s", strtotime("+30 seconds"));
     $insertQuery = "INSERT INTO reservas_computadores (computador_id, horario, aluno_nome, email_contato, status, rental_end_time, data_reserva) VALUES (?, ?, ?, ?, 'reservado', ?, NOW())";
     $insertStmt = $conn->prepare($insertQuery);
@@ -56,12 +56,38 @@ if ($result->num_rows > 0) {
     
     if ($insertStmt->execute()) {
         echo json_encode(['success' => true, 'message' => 'Reserva realizada com sucesso!']);
+
+        // Inicia uma tarefa assíncrona para mover para o histórico e limpar a reserva após 30 segundos
+        $computadorIdCopy = $computadorId;
+        $horarioCopy = $horarioFormatado;
+        $rentalEndTimeCopy = $rentalEndTime;
+
+        // Executa a função após 30 segundos
+        sleep(30);
+
+        // Mover para o histórico
+        $moveToHistoryQuery = "INSERT INTO reservas_historico (computador_id, horario, aluno_nome, email_contato, data_reserva, rental_end_time, data_remocao)
+                               SELECT computador_id, horario, aluno_nome, email_contato, data_reserva, rental_end_time, NOW()
+                               FROM reservas_computadores
+                               WHERE computador_id = ? AND horario = ?";
+        $moveToHistoryStmt = $conn->prepare($moveToHistoryQuery);
+        $moveToHistoryStmt->bind_param("is", $computadorIdCopy, $horarioCopy);
+        $moveToHistoryStmt->execute();
+
+        // Atualiza a reserva para remover os dados e mudar o status
+        $updateQuery = "UPDATE reservas_computadores SET aluno_nome = '', email_contato = '', status = 'disponível' WHERE computador_id = ? AND horario = ?";
+        $updateStmt = $conn->prepare($updateQuery);
+        $updateStmt->bind_param("is", $computadorIdCopy, $horarioCopy);
+        $updateStmt->execute();
+        
+        $moveToHistoryStmt->close();
+        $updateStmt->close();
     } else {
         echo json_encode(['success' => false, 'message' => 'Ocorreu um erro ao tentar realizar a reserva. Por favor, tente novamente.']);
     }
 }
 
-// Fechar conexões
 $stmt->close();
 $insertStmt->close();
 $conn->close();
+?>
