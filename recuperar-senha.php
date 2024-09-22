@@ -8,6 +8,11 @@ header('Content-Type: application/json');
 // Conexão com o banco de dados
 require 'db.php';
 
+if (!$pdo) {
+    echo json_encode(["success" => false, "message" => "Falha na conexão com o banco de dados."]);
+    exit;
+}
+
 // Recebe o email do cliente
 $email = $_POST['email'];
 
@@ -30,7 +35,7 @@ if ($user) {
         $reset_link = "AppIonicTCC://recuperar-senha?token=$token";
     } else {
         // Lógica para outros emails
-        $reset_link = "AppIonicTCC://resetar-senha?token=$token";
+        $reset_link = "https://AppIonicTCC.com/resetar-senha?token=$token";
     }
 
     $to = $email;
