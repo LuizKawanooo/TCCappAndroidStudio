@@ -6,36 +6,36 @@ header('Access-Control-Allow-Methods: POST');
 header('Content-Type: application/json');
 
 // Conexão com o banco de dados
-$servername = "tccappionic-bd.mysql.uhserver.com"; // Nome do seu servidor
-$username = "ionic_perfil_bd"; // Seu usuário do MySQL
-$password = "{[UOLluiz2019"; // Sua senha do MySQL
-$dbname = "tccappionic_bd"; // Nome do seu banco de dados
+$servername = "tccappionic-bd.mysql.uhserver.com"; // Nome do servidor
+$username = "ionic_perfil_bd"; // Usuário do MySQL
+$password = "{[UOLluiz2019"; // Senha do MySQL
+$dbname = "tccappionic_bd"; // Nome do banco de dados
 
-// Cria a conexão
+// Crie a conexão
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Verifique a conexão
 if ($conn->connect_error) {
-    die(json_encode(["success" => false, "message" => "Falha na conexão: " . $conn->connect_error]));
+    die("Connection failed: " . $conn->connect_error);
 }
 
 // Recebe o email do cliente
-$email = $_POST['email'];
+$email = trim($_POST['email']);
 
 // Verifica se o email está registrado
-$query = $conn->prepare("SELECT id FROM password_resets WHERE email = ?");
+$query = $conn->prepare("SELECT id FROM registrar_usuarios WHERE email = ?");
 $query->bind_param("s", $email);
 $query->execute();
 $result = $query->get_result();
-$user = $result->fetch_assoc();
 
-if ($user) {
+if ($result->num_rows > 0) {
+    $user = $result->fetch_assoc();
     $user_id = $user['id'];
     $token = bin2hex(random_bytes(32));
-    
-    // Insere o token no banco de dados
-    $stmt = $conn->prepare("INSERT INTO senha_recovery_tokens (user_id, token) VALUES (?, ?)");
-    $stmt->bind_param("is", $user_id, $token);
+
+    // Atualiza o token na tabela
+    $stmt = $conn->prepare("UPDATE registrar_usuarios SET token = ? WHERE id = ?");
+    $stmt->bind_param("si", $token, $user_id);
     $stmt->execute();
 
     // Envia o link de recuperação por email
@@ -44,7 +44,7 @@ if ($user) {
         $reset_link = "AppIonicTCC://recuperar-senha?token=$token";
     } else {
         // Lógica para outros emails
-        $reset_link = "https://AppIonicTCC.com/resetar-senha?token=$token";
+        $reset_link = "AppIonicTCC://resetar-senha?token=$token";
     }
 
     $to = $email;
@@ -59,6 +59,5 @@ if ($user) {
     echo json_encode(["success" => false, "message" => "Email não encontrado."]);
 }
 
-// Fecha a conexão
 $conn->close();
 ?>
