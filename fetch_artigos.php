@@ -19,6 +19,27 @@ if ($conn->connect_error) {
     die(json_encode(["error" => "Connection failed: " . $conn->connect_error]));
 }
 
+// Verifica se foi passado um ID para download
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $sql = "SELECT * FROM artigos WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . $row['titulo'] . '.pdf"');
+        echo $row['arquivo']; // Envia o BLOB do arquivo
+        exit(); // Termina a execução após enviar o arquivo
+    } else {
+        echo json_encode(["error" => "Arquivo não encontrado."]);
+        exit();
+    }
+}
+
 // Consulta SQL para recuperar os artigos cadastrados
 $sql = "SELECT * FROM artigos";
 $result = $conn->query($sql);
