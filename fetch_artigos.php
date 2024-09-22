@@ -1,7 +1,7 @@
 <?php
 // Configurações de cabeçalhos CORS
 header('Access-Control-Allow-Origin: *'); // Permite acesso de qualquer origem
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE'); // Métodos permitidos
+header('Access-Control-Allow-Methods: GET, POST'); // Métodos permitidos
 header('Access-Control-Allow-Headers: Content-Type, Authorization'); // Cabeçalhos permitidos
 header('Content-Type: application/json'); // Tipo de conteúdo da resposta
 
@@ -23,22 +23,16 @@ if ($conn->connect_error) {
 $sql = "SELECT * FROM artigos";
 $result = $conn->query($sql);
 
-// Verifica se existem artigos
+$artigos = [];
 if ($result->num_rows > 0) {
-    // Exibe os artigos
     while ($row = $result->fetch_assoc()) {
-        echo "<div class='artigo'>";
-        echo "<h1>Título: " . $row["titulo"] . "</h1>";
-        echo "<p>Autor: " . $row["autor"] . "</p>";
-        echo "<p>Ano: " . $row["ano"] . "</p>";
-        // Botão de download
-        echo "<a href='uploads/" . $row["arquivo"] . "' download class='btn-download'>Download</a>";
-        echo "</div>";
+        $artigos[] = $row;
     }
 } else {
-    echo "Nenhum artigo encontrado.";
+    $artigos = []; // Se não houver artigos, retorna um array vazio
 }
 
-// Fecha a conexão com o banco de dados
 $conn->close();
+
+echo json_encode($artigos);
 ?>
