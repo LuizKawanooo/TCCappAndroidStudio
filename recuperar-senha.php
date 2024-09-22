@@ -1,9 +1,10 @@
 <?php
 
 // Configurações de cabeçalhos CORS
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST');
-header('Content-Type: application/json');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+
 
 // Conexão com o banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com"; // Nome do servidor
