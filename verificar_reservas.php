@@ -27,7 +27,7 @@ try {
 // Função para mover reservas expiradas para o histórico e remover da tabela original
 function moverReservasExpiradas($pdo) {
     // Seleciona as reservas expiradas
-    $stmt = $pdo->prepare("SELECT * FROM reservas_computadores WHERE DATE_ADD(data_reserva, INTERVAL 30 SECOND) < NOW()");
+    $stmt = $pdo->prepare("SELECT * FROM reservas_computadores WHERE DATE_ADD(data_reserva, INTERVAL 1 MINUTE) < NOW()");
     $stmt->execute();
     $reservasExpiradas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
