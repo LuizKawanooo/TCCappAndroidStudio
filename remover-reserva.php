@@ -2,8 +2,6 @@
 
 include ("db.php");
 
-// Inclua suas definições de conexão com o banco de dados aqui
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
