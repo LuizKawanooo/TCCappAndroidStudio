@@ -47,6 +47,6 @@ if ($user) {
 
     echo json_encode(["message" => "Um link de recuperação de senha foi enviado para seu email."]);
 } else {
-    echo json_encode(["message" => "Email não encontrado."]);
+    echo json_encode(["message" => "Email não encontrado "]);
 }
 ?>
