@@ -32,7 +32,7 @@ if ($conn->connect_error) {
 }
 
 // Limpar reservas antigas
-$sql = "DELETE FROM reservas WHERE TIMESTAMPDIFF(SECOND, horario, NOW()) > 30";
+$sql = "DELETE FROM reservas_computadores WHERE TIMESTAMPDIFF(SECOND, horario, NOW()) > 30";
 if ($conn->query($sql) === TRUE) {
     echo json_encode(['success' => true]);
 } else {
