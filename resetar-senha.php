@@ -1,29 +1,36 @@
 <?php
+// Configurações de cabeçalhos CORS
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST');
+header('Content-Type: application/json');
+
 // Conexão com o banco de dados
-require 'database.php';
+// (mesma configuração do script anterior)
 
-// Recebe o token e a nova senha do cliente
-$token = $_POST['token'];
-$novaSenha = password_hash($_POST['novaSenha'], PASSWORD_BCRYPT);
+// Recebe o token e a nova senha
+$data = json_decode(file_get_contents("php://input"));
+$token = $data->token;
+$novaSenha = password_hash($data->novaSenha, PASSWORD_BCRYPT);
 
-// Verifica o token
-$query = $pdo->prepare("SELECT user_id FROM senha_recovery_tokens WHERE token = :token");
-$query->execute(['token' => $token]);
-$record = $query->fetch(PDO::FETCH_ASSOC);
+// Verifica se o token existe
+$query = $conn->prepare("SELECT id FROM registrar_usuarios WHERE token = ?");
+$query->bind_param("s", $token);
+$query->execute();
+$result = $query->get_result();
 
-if ($record) {
-    $user_id = $record['user_id'];
-    
-    // Atualiza a senha do usuário
-    $stmt = $pdo->prepare("UPDATE registrar_usuarios SET senha = :novaSenha WHERE id = :user_id");
-    $stmt->execute(['novaSenha' => $novaSenha, 'user_id' => $user_id]);
+if ($result->num_rows > 0) {
+    $user = $result->fetch_assoc();
+    $user_id = $user['id'];
 
-    // Remove o token
-    $stmt = $pdo->prepare("DELETE FROM senha_recovery_tokens WHERE token = :token");
-    $stmt->execute(['token' => $token]);
+    // Atualiza a senha e limpa o token
+    $stmt = $conn->prepare("UPDATE registrar_usuarios SET senha = ?, token = NULL WHERE id = ?");
+    $stmt->bind_param("si", $novaSenha, $user_id);
+    $stmt->execute();
 
-    echo "Senha redefinida com sucesso.";
+    echo json_encode(["success" => true, "message" => "Senha redefinida com sucesso."]);
 } else {
-    echo "Token inválido ou expirado.";
+    echo json_encode(["success" => false, "message" => "Token inválido."]);
 }
+
+$conn->close();
 ?>
