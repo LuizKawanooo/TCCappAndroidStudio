@@ -5,7 +5,18 @@ header('Access-Control-Allow-Methods: POST');
 header('Content-Type: application/json');
 
 // Conexão com o banco de dados
-// (mesma configuração do script anterior)
+$servername = "tccappionic-bd.mysql.uhserver.com"; // Nome do servidor
+$username = "ionic_perfil_bd"; // Usuário do MySQL
+$password = "{[UOLluiz2019"; // Senha do MySQL
+$dbname = "tccappionic_bd"; // Nome do banco de dados
+
+// Crie a conexão
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Verifique a conexão
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
 // Recebe o token e a nova senha
 $data = json_decode(file_get_contents("php://input"));
