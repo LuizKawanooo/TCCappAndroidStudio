@@ -19,30 +19,32 @@ if ($conn->connect_error) {
 // Rota para download do PDF
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    $sql = "SELECT titulo, arquivo FROM artigos WHERE id = ?";
+    $sql = "SELECT * FROM artigos WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    
+    if ($stmt) {
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $filePath = $row['arquivo'];
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            // Definir cabeçalhos para download
+            header('Content-Type: application/pdf');
+            header('Content-Disposition: attachment; filename="' . basename($row['titulo']) . '.pdf"');
+            header('Content-Length: ' . strlen($row['arquivo']));
 
-        // Verifica se o arquivo existe
-        if (file_exists($filePath)) {
-            header('Content-Disposition: attachment; filename="' . basename($filePath) . '"');
-            header('Content-Length: ' . filesize($filePath));
-            readfile($filePath);
-            exit();
+            // Enviar o BLOB do arquivo
+            echo $row['arquivo'];
         } else {
+            http_response_code(404);
             echo json_encode(["error" => "Arquivo não encontrado."]);
         }
     } else {
-        echo json_encode(["error" => "Arquivo não encontrado."]);
+        http_response_code(500);
+        echo json_encode(["error" => "Erro na consulta ao banco de dados."]);
     }
-} else {
-    echo json_encode(["error" => "ID não fornecido."]);
+    exit();
 }
 
 $conn->close();
