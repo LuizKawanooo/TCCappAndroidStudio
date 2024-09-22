@@ -1,5 +1,19 @@
 <?php
-header('Content-Type: application/json');
+
+// Permitir acesso de qualquer origem
+header("Access-Control-Allow-Origin: *");
+
+// Permitir métodos específicos
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+
+// Permitir cabeçalhos específicos
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+// Caso o método seja OPTIONS, apenas retorne um status 200
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
 
 // Configuração do banco de dados
 $host = 'tccappionic-bd.mysql.uhserver.com';
