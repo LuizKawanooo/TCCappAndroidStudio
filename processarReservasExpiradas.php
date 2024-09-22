@@ -33,16 +33,16 @@ if ($result->num_rows > 0) {
         $insertHistoryQuery = "INSERT INTO reservas_historico (computador_id, horario, aluno_nome, email_contato, status, rental_end_time, data_reserva, data_remocao)
                                VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
         $insertHistoryStmt = $conn->prepare($insertHistoryQuery);
-        $status = 'disponível'; // Alterar status para 'disponível' no histórico
+        $status = 'expirado'; // Status no histórico para reservas expiradas
         $insertHistoryStmt->bind_param("issssss", $computadorId, $horario, $alunoNome, $emailContato, $status, $rentalEndTime, $dataReserva);
         
         if ($insertHistoryStmt->execute()) {
-            // Limpar a reserva original
-            $updateQuery = "UPDATE reservas_computadores SET aluno_nome = '', email_contato = '', status = 'disponível', rental_end_time = NULL WHERE computador_id = ? AND horario = ?";
-            $updateStmt = $conn->prepare($updateQuery);
-            $updateStmt->bind_param("is", $computadorId, $horario);
-            $updateStmt->execute();
-            $updateStmt->close();
+            // Remover a reserva original
+            $deleteQuery = "DELETE FROM reservas_computadores WHERE computador_id = ? AND horario = ?";
+            $deleteStmt = $conn->prepare($deleteQuery);
+            $deleteStmt->bind_param("is", $computadorId, $horario);
+            $deleteStmt->execute();
+            $deleteStmt->close();
         } else {
             error_log("Erro ao mover reserva para o histórico: " . $conn->error);
         }
