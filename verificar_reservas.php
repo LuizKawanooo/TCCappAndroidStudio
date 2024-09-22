@@ -34,7 +34,7 @@ function moverReservasExpiradas($pdo) {
     if (count($reservasExpiradas) > 0) {
         foreach ($reservasExpiradas as $reserva) {
             // Mover para reservas_historico
-            $insertStmt = $pdo->prepare("INSERT INTO reservas_historico (computador_id, horario, aluno_nome, email_contato, data_reserva, rental_end_time, status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $insertStmt = $pdo->prepare("INSERT INTO reservas_historico (computador_id, horario, aluno_nome, email_contato, data_reserva, rental_end_time, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)");
             $insertStmt->execute([
                 $reserva['computador_id'],
                 $reserva['horario'],
@@ -42,7 +42,6 @@ function moverReservasExpiradas($pdo) {
                 $reserva['email_contato'],
                 $reserva['data_reserva'],
                 $reserva['rental_end_time'],
-                $reserva['status'],
                 $reserva['created_at']
             ]);
 
