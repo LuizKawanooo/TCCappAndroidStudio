@@ -1,5 +1,6 @@
 <?php
-// remover-reserva.php
+
+require 'config.php';
 
 // Inclua suas definições de conexão com o banco de dados aqui
 
