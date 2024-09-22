@@ -1,39 +1,41 @@
 <?php
 // reservas.php
 
-header('Content-Type: application/json');
+// Permitir o acesso de qualquer origem
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
-
+// Permitir métodos HTTP específicos
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+// Permitir cabeçalhos específicos
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 // Definições do banco de dados
-define('DB_HOST', 'tccappionic-bd.mysql.uhserver.com');
-define('DB_USER', 'ionic_perfil_bd');
-define('DB_PASS', '{[UOLluiz2019');
-define('DB_NAME', 'tccappionic_bd');
+define('DB_HOST', 'tccappionic-bd.mysql.uhserver.com'); // Host do banco de dados
+define('DB_USER', 'ionic_perfil_bd'); // Usuário do banco de dados
+define('DB_PASS', '{[UOLluiz2019'); // Senha do banco de dados
+define('DB_NAME', 'tccappionic_bd'); // Nome do banco de dados
 
 // Conexão com o banco de dados
-$conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-// Verifica a conexão
-if (!$conn) {
-    die(json_encode(['success' => false, 'message' => 'Falha na conexão: ' . mysqli_connect_error()]));
+// Verifica se houve erro na conexão
+if ($conn->connect_error) {
+    echo json_encode(['success' => false, 'message' => 'Erro de conexão com o servidor. Por favor, tente novamente mais tarde.']);
+    exit;
 }
 
-// Consulta para buscar todas as reservas
-$sql = "SELECT * FROM reservas_computadores";
-$result = mysqli_query($conn, $sql);
+// Seleciona todas as reservas ativas
+$query = "SELECT * FROM reservas_computadores WHERE status = 'reservado'";
+$result = $conn->query($query);
 
 $reservas = [];
-if ($result) {
-    while ($row = mysqli_fetch_assoc($result)) {
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
         $reservas[] = $row;
     }
-    echo json_encode(['success' => true, 'data' => $reservas]);
-} else {
-    echo json_encode(['success' => false, 'message' => 'Erro ao buscar reservas: ' . mysqli_error($conn)]);
 }
 
-// Fecha a conexão
-mysqli_close($conn);
+echo json_encode(['success' => true, 'data' => $reservas]);
+
+$conn->close();
+?>
