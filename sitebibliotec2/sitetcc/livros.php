@@ -706,7 +706,7 @@ $conn->close();
 
 
 
-
+//============================================================================================================================================================================================================================================
 
 <?php
 // Conexão com o banco de dados
@@ -740,14 +740,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $imagem = NULL;
     if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
         $tmp_name = $_FILES['imagem']['tmp_name'];
-        $imageData = file_get_contents($tmp_name);
-
-        // Verifica se o arquivo é uma imagem JPEG
+        
+        // Verifica se o arquivo é uma imagem
         $fileType = mime_content_type($tmp_name);
-        if ($fileType == 'image/jpeg') {
-            $imagem = $imageData;
+        if (strpos($fileType, 'image/') === 0) {
+            // Cria uma nova imagem a partir do arquivo
+            $image = imagecreatefromstring(file_get_contents($tmp_name));
+
+            // Se a imagem foi criada corretamente
+            if ($image !== false) {
+                // Salva a imagem como JPEG em um buffer
+                ob_start();
+                imagejpeg($image);
+                $imagem = ob_get_contents();
+                ob_end_clean();
+
+                // Libera a memória da imagem
+                imagedestroy($image);
+            } else {
+                echo "Erro ao criar a imagem.";
+                exit;
+            }
         } else {
-            echo "Arquivo não é uma imagem JPEG.";
+            echo "Arquivo não é uma imagem.";
             exit;
         }
     }
@@ -772,7 +787,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Fecha a consulta
         $stmt->close();
     } else {
-        // Exibe a mensagem de erro se a preparação da consulta falhar
         echo "Erro na preparação da consulta: " . $conn->error;
     }
 
@@ -781,7 +795,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-
+//============================================================================================================================================================================================================================================
 
 <?php
 // Conexão com o banco de dados
