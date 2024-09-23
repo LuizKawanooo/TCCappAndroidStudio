@@ -526,6 +526,7 @@
 
     <div class="gen">
         <h1>GÊNEROS</h1>
+        <div class="generos" data-genero="Todos">Todos</div>
         <div class="generos" data-genero="Infantil">Infantil</div>
         <div class="generos" data-genero="Ficção">Ficção</div>
         <div class="generos" data-genero="Romance">Romance</div>
