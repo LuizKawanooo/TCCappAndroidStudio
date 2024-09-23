@@ -695,7 +695,8 @@ $conn->close();
             <label for="editar-isbn">ISBN:</label><br>
             <input type="text" id="editar-isbn" name="isbn" class="inp"><br>
             <br>
-            <input type="file" id="livro-imagem" name="imagem" accept="image/*">
+           //=== <input type="file" id="livro-imagem" name="imagem" accept="image/*"> //====
+             Imagem: <input type="file" name="imagem" accept="image/jpeg" required><br>
             <br>
             <input type="submit" value="Salvar" class="btn2">
         </form>
@@ -725,7 +726,6 @@ if ($conn->connect_error) {
 
 // Verifica se o formulário foi enviado
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Prepara os dados para inserção no banco de dados
     $titulo = $_POST['titulo'];
     $autor = $_POST['autor'];
     $genero = $_POST['genero'];
@@ -740,31 +740,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $imagem = NULL;
     if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
         $tmp_name = $_FILES['imagem']['tmp_name'];
-        
-        // Verifica se o arquivo é uma imagem
+
+        // Verifica se o arquivo é uma imagem JPEG
         $fileType = mime_content_type($tmp_name);
-        if (strpos($fileType, 'image/') === 0) {
-            // Cria uma nova imagem a partir do arquivo
-            $image = imagecreatefromstring(file_get_contents($tmp_name));
-
-            // Se a imagem foi criada corretamente
-            if ($image !== false) {
-                // Salva a imagem como JPEG em um buffer
-                ob_start();
-                imagejpeg($image);
-                $imagem = ob_get_contents();
-                ob_end_clean();
-
-                // Libera a memória da imagem
-                imagedestroy($image);
-            } else {
-                echo "Erro ao criar a imagem.";
-                exit;
-            }
+        if ($fileType === 'image/jpeg') {
+            // Lê o conteúdo da imagem
+            $imagem = file_get_contents($tmp_name);
         } else {
-            echo "Arquivo não é uma imagem.";
+            echo "Arquivo não é uma imagem JPEG.";
             exit;
         }
+    } else {
+        echo "Erro no upload da imagem: " . $_FILES['imagem']['error'];
+        exit;
     }
 
     // Prepara a consulta SQL para inserção
@@ -772,10 +760,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param(
-            "sssssssssb",
-            $titulo, $genero, $autor, $editora, $tombo, $ano, $classificacao, $n_paginas, $isbn, $imagem
-        );
+        $stmt->bind_param("sssssssssb", $titulo, $genero, $autor, $editora, $tombo, $ano, $classificacao, $n_paginas, $isbn, $imagem);
 
         // Executa a consulta
         if ($stmt->execute()) {
