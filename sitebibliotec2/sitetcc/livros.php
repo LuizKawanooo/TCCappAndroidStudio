@@ -695,8 +695,8 @@ $conn->close();
             <label for="editar-isbn">ISBN:</label><br>
             <input type="text" id="editar-isbn" name="isbn" class="inp"><br>
             <br>
-           //=== <input type="file" id="livro-imagem" name="imagem" accept="image/*"> //====
-             Imagem: <input type="file" name="imagem" accept="image/jpeg" required><br>
+            <input type="file" id="livro-imagem" name="imagem" accept="image/*">
+    
             <br>
             <input type="submit" value="Salvar" class="btn2">
         </form>
@@ -706,8 +706,6 @@ $conn->close();
 
 
 
-
-//============================================================================================================================================================================================================================================
 
 <?php
 // Conexão com o banco de dados
@@ -726,6 +724,7 @@ if ($conn->connect_error) {
 
 // Verifica se o formulário foi enviado
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Prepara os dados para inserção no banco de dados
     $titulo = $_POST['titulo'];
     $autor = $_POST['autor'];
     $genero = $_POST['genero'];
@@ -740,19 +739,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $imagem = NULL;
     if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
         $tmp_name = $_FILES['imagem']['tmp_name'];
+        $imageData = file_get_contents($tmp_name);
 
         // Verifica se o arquivo é uma imagem JPEG
         $fileType = mime_content_type($tmp_name);
-        if ($fileType === 'image/jpeg') {
-            // Lê o conteúdo da imagem
-            $imagem = file_get_contents($tmp_name);
+        if ($fileType == 'image/jpeg') {
+            $imagem = $imageData;
         } else {
             echo "Arquivo não é uma imagem JPEG.";
             exit;
         }
-    } else {
-        echo "Erro no upload da imagem: " . $_FILES['imagem']['error'];
-        exit;
     }
 
     // Prepara a consulta SQL para inserção
@@ -760,7 +756,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param("sssssssssb", $titulo, $genero, $autor, $editora, $tombo, $ano, $classificacao, $n_paginas, $isbn, $imagem);
+        $stmt->bind_param(
+            "sssssssssb",
+            $titulo, $genero, $autor, $editora, $tombo, $ano, $classificacao, $n_paginas, $isbn, $imagem
+        );
 
         // Executa a consulta
         if ($stmt->execute()) {
@@ -772,6 +771,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Fecha a consulta
         $stmt->close();
     } else {
+        // Exibe a mensagem de erro se a preparação da consulta falhar
         echo "Erro na preparação da consulta: " . $conn->error;
     }
 
@@ -780,7 +780,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-//============================================================================================================================================================================================================================================
 
 <?php
 // Conexão com o banco de dados
