@@ -150,6 +150,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         transform: translate(-50%,-50%);
                         align-items: center;
                     }
+                    .imagem-container {
+                        position: relative;
+                        width: 100%;
+                        height: 100%;
+                    }
+                            input[type="file"] {
+                        width: 80vw; /* Largura do input de imagem */
+                        height: 80vh; /* Altura do input de imagem */
+                        margin-top: 50px; /* Espaço entre o título e o input */
+                        border: 2px dashed #005aeb; /* Estilo da borda */
+                        border-radius: 5px; /* Bordas arredondadas */
+                        padding: 10px;
+                        background-color: #f9f9f9;
+                        cursor: pointer;
+                    }
+        
+                        button[type="submit"] {
+                            font-family: Roboto, sans-serif;
+                            color: #fff;
+                            background-color: #005aeb;
+                            padding: 10px 30px;
+                            border: none;
+                            border-radius: 50px;
+                            cursor: pointer;
+                            margin-top: 20px; /* Espaço acima do botão */
+                            transition: background 0.3s;
+                        }
+                        button[type="submit"]:hover {
+                            background-color: #0047a1; /* Cor ao passar o mouse */
+                        }
 
                     .computadores {
                         background-color: #fff;
