@@ -346,7 +346,11 @@
                       align-items: center;
                       justify-content: center;
                       border: 2px dashed #cacaca;
-                      background-color: rgba(255, 255, 255, 1);
+                      background-color: #DEEEF6;
+                        position: absolute;
+                        z-index: auto;
+                        left: 50%;
+                        transform: translate(-50%,-50%);
                       padding: 1.5rem;
                       border-radius: 10px;
                       box-shadow: 0px 48px 35px -48px rgba(0,0,0,0.1);
