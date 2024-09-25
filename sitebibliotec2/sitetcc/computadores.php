@@ -350,7 +350,7 @@
                         position: absolute;
                         z-index: auto;
                         left: 50%;
-                        top: 50%;
+                        top: 40%;
                         transform: translate(-50%,-50%);
                       padding: 1.5rem;
                       border-radius: 10px;
