@@ -134,18 +134,7 @@
                         fill: #ffffff;
                     }
 
-                    .container{
-                        padding: 20px;
-                        display: flex;
-                        flex-wrap: wrap;
-                        width: 80vw;
-                        height: 80vh;
-                        position: absolute;
-                        top: 50%;
-                        left: 50%;
-                        transform: translate(-50%,-50%);
-                        align-items: center;
-                    }
+                   
 
                     .computadores {
                         background-color: #fff;
