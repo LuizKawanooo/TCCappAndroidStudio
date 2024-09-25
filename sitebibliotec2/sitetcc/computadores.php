@@ -136,23 +136,6 @@
 
                    
 
-                    .computadores {
-                        background-color: #fff;
-                        height: 300px;
-                        width: 300px;
-                        justify-content: center;
-                        font-size: 10px;
-                        text-align: left;
-                        align-items: center;
-                        display: flex;
-                        padding-bottom: 80px;
-                        color: #252527;
-                        -webkit-box-shadow: 2px 11px 31px -10px rgba(0,0,0,0.6);
-                        -moz-box-shadow: 2px 11px 31px -10px rgba(0,0,0,0.6);
-                        box-shadow: 2px 11px 31px -10px rgba(0,0,0,0.6);
-                        flex-basis: calc(25% - 20px);
-                    }
-
                     .pc{
                         padding-top: 15px;
                         max-width: 20%;
