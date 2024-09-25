@@ -450,7 +450,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
            </div>
            <input type="file" id="file" name="file required">
     </label>
-    <button type="submit" class="btn2">Submit</button>
+    <button type="submit" >Submit</button>
 </form>
 
     <?php if (!empty($mensagem)): ?>
