@@ -143,9 +143,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         display: flex;
                         flex-wrap: wrap;
                         width: 80vw;
-                        height: 50vh;
+                        height: 60vh;
                         position: absolute;
-                        top: 50%;
+                        top: 45%;
                         left: 50%;
                         transform: translate(-50%,-50%);
                         align-items: center;
@@ -157,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
                             input[type="file"] {
                         width: 80vw; /* Largura do input de imagem */
-                        height: 50vh; /* Altura do input de imagem */
+                        height: 60vh; /* Altura do input de imagem */
                         
                         border: 2px dashed #005aeb; /* Estilo da borda */
                         border-radius: 5px; /* Bordas arredondadas */
