@@ -335,8 +335,9 @@
                     }
 
                     .custum-file-upload {
-                      height: 200px;
-                      width: 300px;
+                      height: 600px;
+                      width: 1300px;
+                      margin-top: 70px;  
                       display: flex;
                       flex-direction: column;
                       align-items: space-between;
