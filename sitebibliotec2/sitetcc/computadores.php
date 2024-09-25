@@ -387,6 +387,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <li><a href="login.php">Sair</a></li>
         </ul>
     </nav>
+
+     <div class="footer">
+        <svg viewBox="0 0 869 344" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 272 0.0130308C 164.8 1.21303 46 85.1797 0 127.013L 0 342.013L 867 342.013L 867 6.51303C 779 0.013031 684.5 127.013 616.5 127.013C 548.5 127.013 406 -1.48697 272 0.0130308Z"/>
+        </svg>
+    </div>
     
     <div class="container">
         <h2>Enviar Imagem do Computador</h2>
