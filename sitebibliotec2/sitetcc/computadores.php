@@ -153,12 +153,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     .imagem{
                         position: relative;
                         width: 100%;
-                        height: 60%;
+                        height: 100%;
                     }
                             input[type="file"] {
                         width: 80vw; /* Largura do input de imagem */
-                        height: 80vh; /* Altura do input de imagem */
-                        margin-top: 50px; /* Espaço entre o título e o input */
+                        height: 50vh; /* Altura do input de imagem */
+                        
                         border: 2px dashed #005aeb; /* Estilo da borda */
                         border-radius: 5px; /* Bordas arredondadas */
                         padding: 10px;
