@@ -143,7 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         display: flex;
                         flex-wrap: wrap;
                         width: 80vw;
-                        height: 80vh;
+                        height: 50vh;
                         position: absolute;
                         top: 50%;
                         left: 50%;
