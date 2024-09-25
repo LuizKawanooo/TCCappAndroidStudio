@@ -145,7 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         width: 80vw;
                         height: 60vh;
                         position: absolute;
-                        top: 45%;
+                        top: 35%;
                         left: 50%;
                         transform: translate(-50%,-50%);
                         align-items: center;
