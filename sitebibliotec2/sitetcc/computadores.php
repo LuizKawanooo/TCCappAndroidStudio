@@ -442,11 +442,7 @@
         </svg>
     </div>
     
-    <div class="container">
-        
-
-
-    </div>
+  
 <form action="" method="POST">
     <label class="custum-file-upload" for="file">
         <div class="icon">
