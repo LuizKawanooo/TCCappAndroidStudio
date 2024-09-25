@@ -153,7 +153,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     .imagem{
                         position: relative;
                         width: 100%;
-                        height: 100%;
+                        height: 60%;
                     }
                             input[type="file"] {
                         width: 80vw; /* Largura do input de imagem */
