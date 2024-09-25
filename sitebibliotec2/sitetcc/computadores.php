@@ -225,7 +225,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         display: flex;
                         flex-direction: row;
                         align-items: center;
-                        top: 130%;
+                        top: 131%;
                         left: 50%;
                         transform: translate(-50%, -50%);
                         cursor: pointer;
