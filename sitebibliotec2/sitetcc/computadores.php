@@ -30,9 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Recupera a imagem para exibição
         $imagemExibida = base64_encode($imagem);
-    }
-
-    if (isset($_POST['numero'], $_POST['data'], $_POST['horario'])) {
+    } elseif (isset($_POST['numero'], $_POST['data'], $_POST['horario'])) {
         $numero = $_POST['numero'];
         $data = $_POST['data'];
         $horario = $_POST['horario'];
@@ -63,8 +61,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <style>
-        
-    </style>
         <style>
                     @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
                     body{
@@ -376,6 +372,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 </style>
 
+    </style>
+
     <script>
         function openPopup() {
             document.getElementById("popup").style.display = "block";
@@ -426,7 +424,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <button onclick="openPopup()" id="btn1">Horários</button>
       
-    <div id="popup" class="popup" style="<?php echo ($_SERVER["REQUEST_METHOD"] == "POST" ? 'display: block;' : 'display: none;'); ?>">
+    <div id="popup" class="popup" style="<?php echo ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_FILES['imagem']) ? 'display: block;' : 'display: none;'); ?>">
         <div class="table">
             <span class="close" onclick="closePopup()">&times;</span>
             <br>
