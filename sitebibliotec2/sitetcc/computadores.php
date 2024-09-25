@@ -150,7 +150,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         transform: translate(-50%,-50%);
                         align-items: center;
                     }
-                    .imagem-container {
+                    .imagem{
                         position: relative;
                         width: 100%;
                         height: 100%;
