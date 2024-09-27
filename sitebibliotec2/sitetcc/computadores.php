@@ -1,5 +1,5 @@
 <?php
-// Conexão com o banco de dados
+// Conexão com o banco de dados (substitua com suas credenciais)
 $host = 'tccappionic-bd.mysql.uhserver.com';
 $db = 'tccappionic_bd';
 $user = 'ionic_perfil_bd';
@@ -14,31 +14,49 @@ try {
     die('Erro na conexão: ' . $e->getMessage());
 }
 
-// Mensagem de feedback
+// Inicializa a variável de mensagem
 $mensagem = '';
+$imagePath = '';
 
-// Verifica se um arquivo foi enviado
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['imagem'])) {
-    $numero = $_POST['numero'];
-    $data = $_POST['data'];
-    $horario = $_POST['horario'];
-    $usuario_email = $_POST['usuario_email'];
-    $imagem = $_FILES['imagem'];
+// Verificar se foi enviado um número de computador pelo formulário
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['numero'], $_POST['data'], $_POST['horario'])) {
+        $numero = $_POST['numero'];
+        $data = $_POST['data'];
+        $horario = $_POST['horario'];
 
-    // Lê o conteúdo do arquivo da imagem
-    $imagemBlob = file_get_contents($imagem['tmp_name']);
+        // Consultar o banco de dados para verificar a disponibilidade do computador
+        $sql = "SELECT * FROM computador WHERE numero = ? AND data_disponibilidade = ? AND horario_disponibilidade = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$numero, $data, $horario]);
+        $computador = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Insere os dados no banco de dados
-    $sql = "INSERT INTO computador (data_disponibilidade, horario_disponibilidade, usuario_email, imagem) VALUES (?, ?, ?, ?)";
-    $stmt = $pdo->prepare($sql);
-    
-    if ($stmt->execute([$data, $horario, $usuario_email, $imagemBlob])) {
-        $mensagem = "Imagem e informações carregadas com sucesso.";
-    } else {
-        $mensagem = "Erro ao salvar as informações no banco de dados.";
+        if ($computador) {
+            $mensagem = "<p style='color:#f00; font-size:20px;'>O computador não está disponível</p>";
+        } else {
+            $mensagem = "<p style='color:#2ACA22; font-size:20px;'>O computador está disponível</p>";
+        }
+    }
+
+    // Lidar com o upload da imagem
+    if (isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
+        $uploads_dir = 'uploads/'; // Diretório onde as imagens serão salvas
+        $tmp_name = $_FILES['file']['tmp_name'];
+        $name = basename($_FILES['file']['name']);
+        $imagePath = $uploads_dir . $name;
+
+        // Verifica se o diretório existe, se não, cria
+        if (!is_dir($uploads_dir)) {
+            mkdir($uploads_dir, 0755, true);
+        }
+
+        if (move_uploaded_file($tmp_name, $imagePath)) {
+            $mensagem .= "<p style='color:#2ACA22;'>Imagem upload com sucesso: <img src='$imagePath' style='max-width: 300px;'></p>";
+        } else {
+            $mensagem .= "<p style='color:#f00;'>Erro ao fazer upload da imagem</p>";
+        }
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -49,56 +67,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['imagem'])) {
     <title>Bibliotec - Computadores</title>
     <link rel="shortcut icon" href="img/logo.png">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
         body {
             background-image: linear-gradient(to right, #30cfd0 0%, #330867 100%);
             overflow: hidden;
-        }
-        * {
-            margin: 0 auto;
-            padding: 0;
-            box-sizing: border-box;
             font-family: 'Open Sans', sans-serif;
         }
-        /* Estilos adicionais */
         .popup {
-            display: none; /* Oculta o pop-up por padrão */
-            position: fixed;
-            top: 50%;
-            left: 50%;
+            display: none; 
+            position: fixed; 
+            top: 20%; 
+            left: 50%; 
             transform: translate(-50%, -50%);
-            width: 300px;
+            width: 80%; 
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
             padding: 20px;
-            background-color: white;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            z-index: 1000;
         }
-        .overlay {
-            display: none; /* Oculta a sobreposição por padrão */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
+        .close {
+            cursor: pointer;
+            float: right;
+            font-size: 24px;
         }
     </style>
-    <script>
-        function openPopup() {
-            document.getElementById("popup").style.display = "block";
-            document.getElementById("overlay").style.display = "block";
-        }
-        
-        function closePopup() {
-            document.getElementById("popup").style.display = "none";
-            document.getElementById("overlay").style.display = "none";
-        }
-    </script>
 </head>
 <body>
 
-<nav id="menu-h">
+<nav>
     <ul>
         <li><a href="inicio.php">Início</a></li>
         <li><a href="livros.php">Livros</a></li>
@@ -106,25 +101,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['imagem'])) {
         <li><a href="computadores.php">Computadores</a></li>
         <li><a href="tcc.php">TCC</a></li>
         <li><a href="contato.html">Contato</a></li>
+        <li><a href="login.php">Sair</a></li>
     </ul>
 </nav>
 
-<button onclick="openPopup()">Adicionar Computador</button>
+<button onclick="document.getElementById('popup').style.display='block'">Horários</button>
 
-<div class="overlay" id="overlay" onclick="closePopup()"></div>
+<div id="popup" class="popup" style="<?php echo ($_SERVER["REQUEST_METHOD"] == "POST" ? 'display: block;' : 'display: none;'); ?>">
+    <span class="close" onclick="document.getElementById('popup').style.display='none'">&times;</span>
 
-<div class="popup" id="popup">
-    <span onclick="closePopup()" style="cursor:pointer;">&times; Fechar</span>
-    <h3>Adicionar Computador</h3>
-    
-    <?php if ($mensagem): ?>
+    <?php if (!empty($mensagem)): ?>
         <p><?php echo $mensagem; ?></p>
     <?php endif; ?>
 
     <form action="" method="POST" enctype="multipart/form-data">
-        <label for="numero">Número do Computador:</label>
-        <select name="numero" required>
-            <option value="0">Selecione um computador</option>
+        <label for="file">Upload da Planta:</label>
+        <input type="file" name="file" id="file" required><br><br>
+
+        <label for="numero">Número do Computador:</label><br>
+        <select id="numero" name="numero" required>
+            <option value="0"></option>
             <option value="1">Computador 1</option>
             <option value="2">Computador 2</option>
             <option value="3">Computador 3</option>
@@ -133,13 +129,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['imagem'])) {
             <option value="6">Computador 6</option>
             <option value="7">Computador 7</option>
             <option value="8">Computador 8</option>
-        </select>
-        <br>
-        <label for="data">Data:</label>
-        <input type="date" name="data" required>
-        <br>
-        <label for="horario">Horário:</label>
-        <select name="horario" required>
+        </select><br><br>
+
+        <label for="data">Data:</label><br>
+        <input type="date" id="data" name="data" required><br><br>
+
+        <label for="horario">Horário:</label><br>
+        <select id="horario" name="horario" required>
+            <option value="0"></option>
             <option value="07:00 às 08:00">07:00 às 08:00</option>
             <option value="08:00 às 09:00">08:00 às 09:00</option>
             <option value="09:00 às 10:00">09:00 às 10:00</option>
@@ -150,15 +147,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['imagem'])) {
             <option value="14:00 às 15:00">14:00 às 15:00</option>
             <option value="15:00 às 16:00">15:00 às 16:00</option>
             <option value="16:00 às 17:00">16:00 às 17:00</option>
-        </select>
-        <br>
-        <label for="usuario_email">Email do Usuário:</label>
-        <input type="email" name="usuario_email" required>
-        <br>
-        <label for="imagem">Selecione a imagem:</label>
-        <input type="file" name="imagem" accept="image/*" required>
-        <br>
-        <input type="submit" value="Upload">
+        </select><br><br>
+
+        <button type="submit">Verificar Disponibilidade</button>
     </form>
 </div>
 
