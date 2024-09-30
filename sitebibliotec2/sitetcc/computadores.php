@@ -38,20 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // Tratamento do upload de imagem
-    if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
-        $imageData = file_get_contents($_FILES['image']['tmp_name']);
-        $sql = "INSERT INTO imagens (data) VALUES (?)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$imageData]);
-        
-        // Obter a última imagem inserida
-        $lastId = $pdo->lastInsertId();
-        $sql = "SELECT data FROM imagens WHERE id = ?";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$lastId]);
-        $image = $stmt->fetchColumn();
-    }
+    
 }
 ?>
 
@@ -363,54 +350,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         height: 40px;
                     }
 
-                    .custum-file-upload {
-                      height: 600px;
-                      width: 1300px;
-                      margin-top: 70px;  
-                      display: flex;
-                      flex-direction: column;
-                      align-items: space-between;
-                      gap: 20px;
-                      cursor: pointer;
-                      align-items: center;
-                      justify-content: center;
-                      border: 2px dashed #cacaca;
-                      background-color: #DCDCDC;
-                        position: absolute;
-                        z-index: auto;
-                        left: 50%;
-                        top: 40%;
-                        transform: translate(-50%,-50%);
-                      padding: 1.5rem;
-                      border-radius: 10px;
-                      box-shadow: 0px 48px 35px -48px rgba(0,0,0,0.1);
-                    }
-                    
-                    .custum-file-upload .icon {
-                      display: flex;
-                      align-items: center;
-                      justify-content: center;
-                    }
-                    
-                    .custum-file-upload .icon svg {
-                      height: 80px;
-                      fill: rgba(75, 85, 99, 1);
-                    }
-                    
-                    .custum-file-upload .text {
-                      display: flex;
-                      align-items: center;
-                      justify-content: center;
-                    }
-                    
-                    .custum-file-upload .text span {
-                      font-weight: 400;
-                      color: rgba(75, 85, 99, 1);
-                    }
-                    
-                    .custum-file-upload input {
-                      display: none;
-                    }
+                   
     </style>
 </head>
 <body>
