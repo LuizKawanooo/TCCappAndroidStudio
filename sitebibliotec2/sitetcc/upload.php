@@ -27,7 +27,6 @@ if (isset($_POST['upload'])) {
 
         // Verifica se o arquivo já existe
         if (file_exists($targetFile)) {
-            echo "Desculpe, arquivo já existe.";
             header("Location: computadores.php");
             exit;
         }
@@ -35,7 +34,6 @@ if (isset($_POST['upload'])) {
         // Permite certos formatos de arquivo
         $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
         if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
-            echo "Desculpe, apenas arquivos JPG, JPEG, PNG & GIF são permitidos.";
                             header("Location: computadores.php");
                     exit;
         }
@@ -55,7 +53,6 @@ if (isset($_POST['upload'])) {
                     header("Location: computadores.php?message=Imagem atualizada com sucesso!");
                     exit;
                 } else {
-                    echo "Erro ao atualizar a imagem no banco de dados.";
                     header("Location: computadores.php");
                     exit;
                 }
@@ -72,17 +69,14 @@ if (isset($_POST['upload'])) {
                     echo "Erro ao armazenar no banco de dados.";
                 }
                 */
-                echo "Nenhuma imagem foi encontrada para atualizar.";
                 header("Location: computadores.php");
                     exit;
             }
         } else {
-            echo "Desculpe, ocorreu um erro ao mover seu arquivo.";
             header("Location: computadores.php");
                     exit;
         }
     } else {
-        echo "Nenhum arquivo foi enviado ou ocorreu um erro.";
         header("Location: computadores.php");
                     exit;
     }
