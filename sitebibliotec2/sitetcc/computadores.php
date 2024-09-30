@@ -451,8 +451,7 @@ foreach ($imagens as $imagem) {
     <h1>Upload de Imagem</h1>
     <br>
 <form action="upload.php" method="post" enctype="multipart/form-data">
-    <label for="nome">Nome da Planta:</label>
-    <input type="text" name="nome" id="nome" required>
+
     <br>
     <label for="imagem">Escolha uma imagem:</label>
     <input type="file" name="imagem" id="imagem" required>
