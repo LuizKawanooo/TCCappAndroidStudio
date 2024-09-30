@@ -50,7 +50,7 @@ if (isset($_POST['upload'])) {
                 $sqlUpdate = "UPDATE plantas SET imagem = ? WHERE nome = ?";
                 $stmtUpdate = $pdo->prepare($sqlUpdate);
                 if ($stmtUpdate->execute([$targetFile, $nomePlanta])) {
-                    header("Location: sucesso.php?message=Imagem atualizada com sucesso!");
+                    header("Location: computadores.php?message=Imagem atualizada com sucesso!");
                     exit;
                 } else {
                     echo "Erro ao atualizar a imagem no banco de dados.";
