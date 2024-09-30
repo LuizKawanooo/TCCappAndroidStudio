@@ -42,60 +42,7 @@
     }
 
 
-       // Verifica se o formulário de upload foi enviado
-if (isset($_POST['upload'])) {
-    var_dump($_FILES); // Verificar se o arquivo está sendo enviado
-
-    $targetDir = "uploads/"; // Pasta onde a imagem será salva
-    $targetFile = $targetDir . basename($_FILES["imagem"]["name"]);
-    $uploadOk = 1;
-    $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-
-    // Verifica se a imagem é um arquivo de imagem real
-    if (isset($_POST["upload"])) {
-        $check = getimagesize($_FILES["imagem"]["tmp_name"]);
-        if ($check !== false) {
-            $uploadOk = 1;
-        } else {
-            echo "Arquivo não é uma imagem.";
-            $uploadOk = 0;
-        }
-    }
-
-    // Verifica se o arquivo já existe
-    if (file_exists($targetFile)) {
-        echo "Desculpe, arquivo já existe.";
-        $uploadOk = 0;
-    }
-
-    // Permite certos formatos de arquivo
-    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-    && $imageFileType != "gif") {
-        echo "Desculpe, apenas arquivos JPG, JPEG, PNG & GIF são permitidos.";
-        $uploadOk = 0;
-    }
-
-    // Verifica se $uploadOk está definido como 0 por um erro
-    if ($uploadOk == 0) {
-        echo "Desculpe, seu arquivo não foi enviado.";
-    } else {
-        // Tenta mover o arquivo enviado para o diretório especificado
-        if (move_uploaded_file($_FILES["imagem"]["tmp_name"], $targetFile)) {
-            // Insere o caminho da imagem no banco de dados
-            $sql = "INSERT INTO plantas (imagem) VALUES (?)";
-            $stmt = $pdo->prepare($sql);
-            
-            if ($stmt->execute([$targetFile])) {
-                echo "O arquivo ". htmlspecialchars(basename($_FILES["imagem"]["name"])). " foi enviado e armazenado no banco de dados com sucesso.";
-            } else {
-                echo "Erro ao armazenar no banco de dados.";
-            }
-        } else {
-            echo "Desculpe, ocorreu um erro ao mover seu arquivo.";
-        }
-    }
-}
-
+      
 
     // Buscar imagens do banco de dados
 $sql = "SELECT imagem FROM plantas";
@@ -104,7 +51,7 @@ $stmt->execute();
 $imagens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 foreach ($imagens as $imagem) {
-    echo '<img src="' . htmlspecialchars($imagem['imagem']) . '" style="max-width:200px; max-height:200px; margin: 10px;">';
+    echo '<img src="' . htmlspecialchars($imagem['imagem']) . '" style="max-width:200px; max-height:200px; position: absolute; left: 50%; transform: translateX(-50%); bottom: 100px;">';
 }
 
         
