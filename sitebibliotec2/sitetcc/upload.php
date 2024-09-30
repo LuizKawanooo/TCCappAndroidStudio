@@ -44,7 +44,9 @@ if (isset($_POST['upload'])) {
             $sql = "INSERT INTO plantas (nome, imagem) VALUES (?, ?)";
             $stmt = $pdo->prepare($sql);
             if ($stmt->execute([$nomePlanta, $targetFile])) {
-                echo "O arquivo " . htmlspecialchars(basename($_FILES['imagem']['name'])) . " foi enviado e armazenado no banco de dados com sucesso.";
+                // Redireciona para uma página de sucesso ou a página principal
+                header("Location: computadores.php?message=Upload realizado com sucesso!");
+                exit;
             } else {
                 echo "Erro ao armazenar no banco de dados.";
             }
