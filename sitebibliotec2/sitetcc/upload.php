@@ -40,15 +40,35 @@ if (isset($_POST['upload'])) {
 
         // Tenta mover o arquivo enviado para o diretório especificado
         if (move_uploaded_file($_FILES['imagem']['tmp_name'], $targetFile)) {
-            // Insere o caminho da imagem e o nome da planta no banco de dados
-            $sql = "INSERT INTO plantas (nome, imagem) VALUES (?, ?)";
-            $stmt = $pdo->prepare($sql);
-            if ($stmt->execute([$nomePlanta, $targetFile])) {
-                // Redireciona para uma página de sucesso ou a página principal
-                header("Location: computadores.php?message=Upload realizado com sucesso!");
-                exit;
+            // Verifica se já existe uma imagem para a planta
+            $sqlSelect = "SELECT * FROM plantas WHERE nome = ?";
+            $stmtSelect = $pdo->prepare($sqlSelect);
+            $stmtSelect->execute([$nomePlanta]);
+
+            if ($stmtSelect->rowCount() > 0) {
+                // Se a imagem já existir, faz um UPDATE
+                $sqlUpdate = "UPDATE plantas SET imagem = ? WHERE nome = ?";
+                $stmtUpdate = $pdo->prepare($sqlUpdate);
+                if ($stmtUpdate->execute([$targetFile, $nomePlanta])) {
+                    header("Location: sucesso.php?message=Imagem atualizada com sucesso!");
+                    exit;
+                } else {
+                    echo "Erro ao atualizar a imagem no banco de dados.";
+                }
             } else {
-                echo "Erro ao armazenar no banco de dados.";
+                // Se não existir, pode optar por não fazer nada ou inserir (caso desejado)
+                // Aqui, se quiser inserir, descomente o código abaixo:
+                /*
+                $sqlInsert = "INSERT INTO plantas (nome, imagem) VALUES (?, ?)";
+                $stmtInsert = $pdo->prepare($sqlInsert);
+                if ($stmtInsert->execute([$nomePlanta, $targetFile])) {
+                    header("Location: sucesso.php?message=Imagem inserida com sucesso!");
+                    exit;
+                } else {
+                    echo "Erro ao armazenar no banco de dados.";
+                }
+                */
+                echo "Nenhuma imagem foi encontrada para atualizar.";
             }
         } else {
             echo "Desculpe, ocorreu um erro ao mover seu arquivo.";
