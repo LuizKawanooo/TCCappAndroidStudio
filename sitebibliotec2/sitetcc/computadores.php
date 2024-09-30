@@ -77,13 +77,6 @@ foreach ($imagens as $imagem) {
                         overflow: hidden;
 
                     }
-                      .wave {
-                        position: absolute; /* Permite posicionar no canto inferior */
-                        bottom: 0; /* Posiciona na parte inferior */
-                        left: 0; /* Alinha à esquerda */
-                        width: 100%; /* Largura total do contêiner */
-                        height: auto; /* Altura automática */
-                    }
                     
                     * {
                         margin: 0 auto;
@@ -402,16 +395,12 @@ foreach ($imagens as $imagem) {
                     </ul>
                 </nav>
         
-<!--     <div class="footer">
+    <div class="footer">
         <svg viewBox="0 0 869 344" xmlns="http://www.w3.org/2000/svg">
             <path d="M 272 0.0130308C 164.8 1.21303 46 85.1797 0 127.013L 0 342.013L 867 342.013L 867 6.51303C 779 0.013031 684.5 127.013 616.5 127.013C 548.5 127.013 406 -1.48697 272 0.0130308Z"/>
         </svg>
-    </div> -->
+    </div>
 
-        <svg class="wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-        <path fill="#ffffff" fill-opacity="1" d="M0,160L60,138.7C120,117,240,75,360,74.7C480,75,600,117,720,144C840,171,960,181,1080,165.3C1200,149,1320,107,1380,85.3L1440,64L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path>
-    </svg>
-    
 
 
 
