@@ -402,6 +402,16 @@ foreach ($imagens as $imagem) {
                         height: 40px;
                     }
 
+                    
+                        img {
+                            position: absolute; /* Posiciona a imagem em relação ao corpo */
+                            left: 50%; /* Centraliza horizontalmente */
+                            transform: translateX(-50%); /* Ajusta para o centro */
+                            bottom: 100px; /* Distância do fundo, ajuste conforme necessário */
+                            max-width: 200px; /* Largura máxima */
+                            max-height: 200px; /* Altura máxima */
+                        }
+
 
                 </style>
 
@@ -414,14 +424,6 @@ foreach ($imagens as $imagem) {
                             document.getElementById("popup").style.display = "none";
                         }
 
-                        img {
-                            position: absolute; /* Posiciona a imagem em relação ao corpo */
-                            left: 50%; /* Centraliza horizontalmente */
-                            transform: translateX(-50%); /* Ajusta para o centro */
-                            bottom: 100px; /* Distância do fundo, ajuste conforme necessário */
-                            max-width: 200px; /* Largura máxima */
-                            max-height: 200px; /* Altura máxima */
-                        }
                     </script>
      
     <nav id="menu-h">
