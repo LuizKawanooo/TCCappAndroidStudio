@@ -434,11 +434,13 @@ foreach ($imagens as $imagem) {
         }
 </style>
 
+
+    
     <form action="upload.php" method="post" enctype="multipart/form-data">
         <label for="imagem">Escolha uma imagem:</label>
         <input type="file" name="imagem" id="imagem" required>
         <br>
-        <button type="submit" class="upload-button">
+        <input type="submit" class="upload-button">
             <svg
                 aria-hidden="true"
                 stroke="currentColor"
@@ -463,7 +465,7 @@ foreach ($imagens as $imagem) {
                 ></path>
             </svg>
             Enviar
-        </button>
+        </input>
     </form>
 
 
