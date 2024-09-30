@@ -42,8 +42,10 @@
     }
 
 
-        // Verifica se o formulário foi enviado
+       // Verifica se o formulário de upload foi enviado
 if (isset($_POST['upload'])) {
+    var_dump($_FILES); // Verificar se o arquivo está sendo enviado
+
     $targetDir = "uploads/"; // Pasta onde a imagem será salva
     $targetFile = $targetDir . basename($_FILES["imagem"]["name"]);
     $uploadOk = 1;
@@ -53,7 +55,6 @@ if (isset($_POST['upload'])) {
     if (isset($_POST["upload"])) {
         $check = getimagesize($_FILES["imagem"]["tmp_name"]);
         if ($check !== false) {
-            echo "Arquivo é uma imagem - " . $check["mime"] . ".";
             $uploadOk = 1;
         } else {
             echo "Arquivo não é uma imagem.";
@@ -64,12 +65,6 @@ if (isset($_POST['upload'])) {
     // Verifica se o arquivo já existe
     if (file_exists($targetFile)) {
         echo "Desculpe, arquivo já existe.";
-        $uploadOk = 0;
-    }
-
-    // Verifica o tamanho do arquivo (opcional)
-    if ($_FILES["imagem"]["size"] > 500000) {
-        echo "Desculpe, o arquivo é muito grande.";
         $uploadOk = 0;
     }
 
@@ -89,10 +84,14 @@ if (isset($_POST['upload'])) {
             // Insere o caminho da imagem no banco de dados
             $sql = "INSERT INTO plantas (imagem) VALUES (?)";
             $stmt = $pdo->prepare($sql);
-            $stmt->execute([$targetFile]);
-            echo "O arquivo ". htmlspecialchars(basename($_FILES["imagem"]["name"])). " foi enviado com sucesso.";
+            
+            if ($stmt->execute([$targetFile])) {
+                echo "O arquivo ". htmlspecialchars(basename($_FILES["imagem"]["name"])). " foi enviado e armazenado no banco de dados com sucesso.";
+            } else {
+                echo "Erro ao armazenar no banco de dados.";
+            }
         } else {
-            echo "Desculpe, ocorreu um erro ao enviar seu arquivo.";
+            echo "Desculpe, ocorreu um erro ao mover seu arquivo.";
         }
     }
 }
