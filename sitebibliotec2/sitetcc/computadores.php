@@ -40,6 +40,75 @@
             $mensagem = "<p style='color:#2ACA22; font-size:20px; position: absolute; top: 68%; left: 50%; transform:translate(-50%, -50%);'>O computador está disponível</p>";
         }
     }
+
+
+        // Verifica se o formulário foi enviado
+if (isset($_POST['upload'])) {
+    $targetDir = "uploads/"; // Pasta onde a imagem será salva
+    $targetFile = $targetDir . basename($_FILES["imagem"]["name"]);
+    $uploadOk = 1;
+    $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+
+    // Verifica se a imagem é um arquivo de imagem real
+    if (isset($_POST["upload"])) {
+        $check = getimagesize($_FILES["imagem"]["tmp_name"]);
+        if ($check !== false) {
+            echo "Arquivo é uma imagem - " . $check["mime"] . ".";
+            $uploadOk = 1;
+        } else {
+            echo "Arquivo não é uma imagem.";
+            $uploadOk = 0;
+        }
+    }
+
+    // Verifica se o arquivo já existe
+    if (file_exists($targetFile)) {
+        echo "Desculpe, arquivo já existe.";
+        $uploadOk = 0;
+    }
+
+    // Verifica o tamanho do arquivo (opcional)
+    if ($_FILES["imagem"]["size"] > 500000) {
+        echo "Desculpe, o arquivo é muito grande.";
+        $uploadOk = 0;
+    }
+
+    // Permite certos formatos de arquivo
+    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+    && $imageFileType != "gif") {
+        echo "Desculpe, apenas arquivos JPG, JPEG, PNG & GIF são permitidos.";
+        $uploadOk = 0;
+    }
+
+    // Verifica se $uploadOk está definido como 0 por um erro
+    if ($uploadOk == 0) {
+        echo "Desculpe, seu arquivo não foi enviado.";
+    } else {
+        // Tenta mover o arquivo enviado para o diretório especificado
+        if (move_uploaded_file($_FILES["imagem"]["tmp_name"], $targetFile)) {
+            // Insere o caminho da imagem no banco de dados
+            $sql = "INSERT INTO plantas (imagem) VALUES (?)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$targetFile]);
+            echo "O arquivo ". htmlspecialchars(basename($_FILES["imagem"]["name"])). " foi enviado com sucesso.";
+        } else {
+            echo "Desculpe, ocorreu um erro ao enviar seu arquivo.";
+        }
+    }
+}
+
+
+    // Buscar imagens do banco de dados
+$sql = "SELECT imagem FROM plantas";
+$stmt = $pdo->prepare($sql);
+$stmt->execute();
+$imagens = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($imagens as $imagem) {
+    echo '<img src="' . htmlspecialchars($imagem['imagem']) . '" style="max-width:200px; max-height:200px; margin: 10px;">';
+}
+
+        
 ?>
 
 <!DOCTYPE html>
@@ -374,7 +443,11 @@
     
 
 
-    
+    <form action="" method="POST" enctype="multipart/form-data">
+    <input type="file" name="imagem" accept="image/*" required>
+    <button type="submit" name="upload">Upload Imagem</button>
+</form>
+
     
     
     <button onclick="openPopup()" id="btn1">Horários</button>
