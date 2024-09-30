@@ -28,6 +28,7 @@ if (isset($_POST['upload'])) {
         // Verifica se o arquivo já existe
         if (file_exists($targetFile)) {
             echo "Desculpe, arquivo já existe.";
+            header("Location: computadores.php");
             exit;
         }
 
