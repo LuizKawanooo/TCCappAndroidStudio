@@ -442,11 +442,29 @@ foreach ($imagens as $imagem) {
     
 
 
-    <form action="" method="POST" enctype="multipart/form-data">
-    <input type="file" name="imagem" accept="image/*" required>
-    <button type="submit" name="upload">Upload Imagem</button>
-</form>
 
+
+
+
+
+    
+    <h1>Upload de Imagem</h1>
+    <form action="upload.php" method="post" enctype="multipart/form-data">
+        <label for="imagem">Escolha uma imagem:</label>
+        <input type="file" name="imagem" id="imagem" required>
+        <br>
+        <input type="submit" name="upload" value="Enviar">
+    </form>
+
+
+
+
+
+
+
+
+
+    
     
     
     <button onclick="openPopup()" id="btn1">Horários</button>
