@@ -19,9 +19,12 @@ try {
 if (isset($_POST['upload'])) {
     // Verifica se a imagem foi enviada
     if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
+        // Captura o nome da planta
+        $nomePlanta = $_POST['nome'];
+
         $targetDir = "uploads/"; // Pasta onde a imagem será salva
         $targetFile = $targetDir . basename($_FILES['imagem']['name']);
-        
+
         // Verifica se o arquivo já existe
         if (file_exists($targetFile)) {
             echo "Desculpe, arquivo já existe.";
@@ -37,10 +40,10 @@ if (isset($_POST['upload'])) {
 
         // Tenta mover o arquivo enviado para o diretório especificado
         if (move_uploaded_file($_FILES['imagem']['tmp_name'], $targetFile)) {
-            // Insere o caminho da imagem no banco de dados
-            $sql = "INSERT INTO plantas (imagem) VALUES (?)";
+            // Insere o caminho da imagem e o nome da planta no banco de dados
+            $sql = "INSERT INTO plantas (nome, imagem) VALUES (?, ?)";
             $stmt = $pdo->prepare($sql);
-            if ($stmt->execute([$targetFile])) {
+            if ($stmt->execute([$nomePlanta, $targetFile])) {
                 echo "O arquivo " . htmlspecialchars(basename($_FILES['imagem']['name'])) . " foi enviado e armazenado no banco de dados com sucesso.";
             } else {
                 echo "Erro ao armazenar no banco de dados.";
