@@ -28,6 +28,22 @@ $plantas = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Imagens Armazenadas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+        }
+        img {
+            width: 100px;
+            height: auto; /* Mantém a proporção da imagem */
+        }
+    </style>
 </head>
 <body>
     <h1>Imagens Armazenadas</h1>
@@ -35,7 +51,7 @@ $plantas = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <ul>
             <?php foreach ($plantas as $planta): ?>
                 <li>
-                    <img src="<?php echo htmlspecialchars($planta['imagem']); ?>" alt="Imagem" style="width: 100px;">
+                    <img src="<?php echo htmlspecialchars($planta['imagem']); ?>" alt="Imagem de <?php echo htmlspecialchars($planta['nome']); ?>">
                 </li>
             <?php endforeach; ?>
         </ul>
