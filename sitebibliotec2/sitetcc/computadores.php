@@ -433,7 +433,7 @@ foreach ($imagens as $imagem) {
     
 
     <br>
-<form style="margin-left: 150px;" action="upload.php" method="post" enctype="multipart/form-data">
+<form style="margin-left: 660px;" action="upload.php" method="post" enctype="multipart/form-data">
 
     <br>
     <label for="imagem">Escolha uma imagem:</label>
