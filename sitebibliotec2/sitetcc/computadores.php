@@ -51,7 +51,7 @@ $stmt->execute();
 $imagens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 foreach ($imagens as $imagem) {
-    echo '<img src="' . htmlspecialchars($imagem['imagem']) . '" style="max-width:1700px; max-height:900px; position: relative; left: 50%; transform: translateX(-50%); bottom: 100px; z-index: 10000;">';
+    echo '<img src="' . htmlspecialchars($imagem['imagem']) . '" style="max-width:1500px; max-height:600px; position: absolute; left: 50%; transform: translateX(-50%); bottom: 150px; z-index: 10000;">';
 }
 
         
