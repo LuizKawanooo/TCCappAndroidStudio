@@ -68,7 +68,28 @@ foreach ($imagens as $imagem) {
 </head>
 <body>
 
+    
+
                 <style>
+
+                    body {
+            /* Defina a imagem de fundo */
+            background-image: url('img/background.jpg'); /* Substitua pelo caminho da sua imagem */
+            background-repeat: no-repeat; /* Impede a repetição da imagem */
+            background-size: cover; /* A imagem cobre toda a tela */
+            background-attachment: fixed; /* A imagem fica fixa ao rolar */
+            background-position: center; /* Centraliza a imagem */
+            height: 100vh; /* Altura da tela */
+            margin: 0; /* Remove a margem padrão do body */
+            color: white; /* Cor do texto para melhor contraste */
+            display: flex; /* Alinhamento do conteúdo */
+            justify-content: center; /* Centraliza horizontalmente */
+            align-items: center; /* Centraliza verticalmente */
+            text-align: center; /* Alinhamento do texto */
+        }
+
+
+                    
                     @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
                     body{
                         background-image: linear-gradient(to right, #30cfd0 0%, #330867 100%);
@@ -392,11 +413,11 @@ foreach ($imagens as $imagem) {
                     </ul>
                 </nav>
         
-    <div class="footer">
+<!--     <div class="footer">
         <svg viewBox="0 0 869 344" xmlns="http://www.w3.org/2000/svg">
             <path d="M 272 0.0130308C 164.8 1.21303 46 85.1797 0 127.013L 0 342.013L 867 342.013L 867 6.51303C 779 0.013031 684.5 127.013 616.5 127.013C 548.5 127.013 406 -1.48697 272 0.0130308Z"/>
         </svg>
-    </div>
+    </div> -->
     
 
 
