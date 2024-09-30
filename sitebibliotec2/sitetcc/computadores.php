@@ -1,26 +1,29 @@
 <?php
-// Conexão com o banco de dados (substitua com suas credenciais)
-$host = 'tccappionic-bd.mysql.uhserver.com';
-$db   = 'tccappionic_bd';
-$user = 'ionic_perfil_bd';
-$pass = '{[UOLluiz2019';
-$charset = 'utf8mb4';	
+    // Conexão com o banco de dados (substitua com suas credenciais)
+    $host = 'tccappionic-bd.mysql.uhserver.com';
+    $db   = 'tccappionic_bd';
+    $user = 'ionic_perfil_bd';
+    $pass = '{[UOLluiz2019';
+    $charset = 'utf8mb4';
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+    $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 
-try {
-    $pdo = new PDO($dsn, $user, $pass);
-} catch (PDOException $e) {
-    die('Erro na conexão: ' . $e->getMessage());
-}
+    try {
+        $pdo = new PDO($dsn, $user, $pass);
+    } catch (PDOException $e) {
+        die('Erro na conexão: ' . $e->getMessage());
+    }
 
-// Inicializa a variável de mensagem
-$mensagem = '';
-$image = '';
 
-// Verificar se foi enviado um número de computador pelo formulário
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['numero'], $_POST['data'], $_POST['horario'])) {
+
+
+
+
+    // Inicializa a variável de mensagem
+    $mensagem = '';
+
+    // Verificar se foi enviado um número de computador pelo formulário
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['numero'], $_POST['data'], $_POST['horario'])) {
         $numero = $_POST['numero'];
         $data = $_POST['data'];
         $horario = $_POST['horario'];
@@ -32,27 +35,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $computador = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($computador) {
-            $mensagem = "<p style='color:#f00; font-size:20px;'>O computador não está disponível</p>";
+            $mensagem = "<p style='color:#f00; font-size:20px; position: absolute; top: 68%; left: 50%; transform:translate(-50%, -50%);'>O computador não está disponível</p>";
         } else {
-            $mensagem = "<p style='color:#2ACA22; font-size:20px;'>O computador está disponível</p>";
+            $mensagem = "<p style='color:#2ACA22; font-size:20px; position: absolute; top: 68%; left: 50%; transform:translate(-50%, -50%);'>O computador está disponível</p>";
         }
     }
-
-    // Tratamento do upload de imagem
-    if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
-        $imageData = file_get_contents($_FILES['image']['tmp_name']);
-        $sql = "INSERT INTO imagens (data) VALUES (?)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$imageData]);
-        
-        // Obter a última imagem inserida
-        $lastId = $pdo->lastInsertId();
-        $sql = "SELECT data FROM imagens WHERE id = ?";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$lastId]);
-        $image = $stmt->fetchColumn();
-    }
-}
 ?>
 
 <!DOCTYPE html>
@@ -62,28 +49,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bibliotec - computadores</title>
     <link rel="shortcut icon" href="img/logo.png">
-    <style>
-        /* Seu CSS anterior */
-        .upload-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .image-preview {
-            max-width: 100px;
-            max-height: 100px;
-            margin-bottom: 10px;
-        }
-        #upload-btn {
-            padding: 10px 20px;
-            background-color: #005aeb;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+    <?php include 'conexao.php';?>
+</head>
+<body>
 
-               @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+                <style>
+                    @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
                     body{
                         background-image: linear-gradient(to right, #30cfd0 0%, #330867 100%);
                         overflow: hidden;
@@ -411,10 +382,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     .custum-file-upload input {
                       display: none;
                     }
-    </style>
-</head>
-<body>
- <nav id="menu-h">
+
+                </style>
+
+                    <script>
+                        function openPopup() {
+                            document.getElementById("popup").style.display = "block";
+                        }
+                        
+                        function closePopup() {
+                            document.getElementById("popup").style.display = "none";
+                        }
+                    </script>
+     
+    <nav id="menu-h">
         <ul>
 
             <li><a href="inicio.php">Início</a></li>
@@ -502,5 +483,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
     </div>
 </div>
+
+
+    
+
 </body>
 </html>
