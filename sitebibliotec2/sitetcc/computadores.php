@@ -203,6 +203,7 @@ foreach ($imagens as $imagem) {
                         width: 100%; /* Preencher toda a largura */
                         height: 200%; /* Preencher toda a altura */
                         background-color: rgba(0,0,0,0.5);
+                        z-index: 1000000;
                     }
                     
                     .close {
