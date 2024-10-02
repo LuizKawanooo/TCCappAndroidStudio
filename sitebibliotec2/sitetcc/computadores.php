@@ -428,6 +428,7 @@ foreach ($imagens as $imagem) {
             background-color: #45a049; /* Cor do botão ao passar o mouse */
         }
     input[type="file"] {
+        display: none;
         border: none;
         background: #c2c2c2;
         height: 35px;
