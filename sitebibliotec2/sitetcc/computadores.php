@@ -366,7 +366,7 @@ echo '<div style="background-color: #d3d3d3; width: 1600px; height: 700px; borde
                             position: absolute; /* Posiciona a imagem em relação ao corpo */
                             left: 50%; /* Centraliza horizontalmente */
                             transform: translateX(-50%); /* Ajusta para o centro */
-                            bottom: 100px; /* Distância do fundo, ajuste conforme necessário */
+                            bottom: 50px; /* Distância do fundo, ajuste conforme necessário */
                             max-width: 200px; /* Largura máxima */
                             max-height: 200px; /* Altura máxima */
                         }
