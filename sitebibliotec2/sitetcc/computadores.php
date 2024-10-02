@@ -463,7 +463,7 @@ echo '<div style="background-color: #d3d3d3; width: 1600px; height: 700px; borde
 
 
 
-    <style>
+<style>
 .custom-file-label {
   background-color: #ffffff;
   color: black;
@@ -493,35 +493,34 @@ echo '<div style="background-color: #d3d3d3; width: 1600px; height: 700px; borde
   background-color: #218838;
 }
 
-    </style>
+</style>
 
-    <script>
-        function displayFileName() {
-          const input = document.getElementById('file-upload');
-          const fileNameSpan = document.getElementById('file-name');
-        
-          if (input.files.length > 0) {
-            fileNameSpan.textContent = input.files[0].name;
-          } else {
-            fileNameSpan.textContent = "Adicione aqui sua planta";
-          }
-        }
+<script>
+function displayFileName() {
+  const input = document.getElementById('file-upload');
+  const fileNameSpan = document.getElementById('file-name');
 
-    </script>
-
+  if (input.files.length > 0) {
+    fileNameSpan.textContent = input.files[0].name;
+  } else {
+    fileNameSpan.textContent = "Adicione aqui sua planta";
+  }
+}
+</script>
 
 <br>
-<form style="display: flex; justify-content: center; align-items: center; margin-bottom: 7px;" action="upload.php" method="post" enctype="multipart/form-data">
-    
-    <!-- Botão de enviar -->
-    <input class="upload-button" type="submit" name="upload" value="Enviar" style="margin-right: 20px;">
+<form style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px;" action="upload.php" method="post" enctype="multipart/form-data">
     
     <!-- Label e input file -->
-    <label for="file-upload" class="custom-file-label">Selecionar Arquivo</label>
-    <input id="file-upload" onchange="displayFileName()" class="fileinput" type="file" name="imagem" required style="display: none;">
-    
-    <!-- Texto do nome do arquivo -->
-    <span id="file-name" style="margin-left: 10px; color: white;">Adicione aqui sua planta</span>
+    <div style="display: flex; align-items: center;">
+        <label for="file-upload" class="custom-file-label">Selecionar Arquivo</label>
+        <input id="file-upload" onchange="displayFileName()" class="fileinput" type="file" name="imagem" required style="display: none;">
+        <!-- Texto do nome do arquivo -->
+        <span id="file-name" style="margin-left: 10px; color: black;">Adicione aqui sua planta</span>
+    </div>
+
+    <!-- Botão de enviar -->
+    <input class="upload-button" type="submit" name="upload" value="Enviar" style="margin-left: 20px;">
 </form>
 
 
