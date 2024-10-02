@@ -472,7 +472,7 @@ echo '<div style="background-color: #d3d3d3; width: 1600px; height: 700px; borde
   cursor: pointer;
   display: inline-block;
   margin-right: 10px;
-  margin-bottom: 15px;
+  margin-top: -7px;
 }
 
 #file-name {
@@ -510,7 +510,7 @@ function displayFileName() {
 
 <br>
 <!-- Adicionando margem ao formulário para distância do fundo cinza -->
-<form style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; margin-top: 7px;" action="upload.php" method="post" enctype="multipart/form-data">
+<form style="display: flex; justify-content: space-between; align-items: center; margin-top: -7px;" action="upload.php" method="post" enctype="multipart/form-data">
     
     <!-- Label e input file -->
     <div style="display: flex; align-items: center;">
