@@ -509,7 +509,8 @@ function displayFileName() {
 </script>
 
 <br>
-<form style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px;" action="upload.php" method="post" enctype="multipart/form-data">
+<!-- Adicionando margem ao formulário para distância do fundo cinza -->
+<form style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; margin-top: 7px;" action="upload.php" method="post" enctype="multipart/form-data">
     
     <!-- Label e input file -->
     <div style="display: flex; align-items: center;">
