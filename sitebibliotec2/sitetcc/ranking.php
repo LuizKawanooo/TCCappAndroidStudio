@@ -434,10 +434,10 @@
             <tbody>
                 <?php
                 // Consultar dados de leitores e calcular pontos
-                $sql = "SELECT leitor.nome, COUNT(livros_lidos.ID_leitor) * 100 AS pontos 
-                        FROM leitor 
+                $sql = "SELECT registrar_usuarios.nome_exibicao, COUNT(livros_lidos.ID_leitor) * 100 AS pontos 
+                        FROM registrar_usuarios 
                         LEFT JOIN livros_lidos ON leitor.ID_leitor = livros_lidos.ID_leitor 
-                        GROUP BY leitor.ID_leitor, leitor.nome 
+                        GROUP BY leitor.ID_leitor, registrar_usuarios.nome_exibicao 
                         ORDER BY pontos DESC";
                 $result = $conn->query($sql);
 
