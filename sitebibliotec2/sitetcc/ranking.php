@@ -471,7 +471,11 @@
 
 
     
-
+<style>
+    .ranking-table{
+        overflow-y: scroll;
+    }
+</style>
 
     <?php
 // Conexão com o banco de dados
