@@ -27,6 +27,7 @@
             bottom: -10%;
             left: 0;
             fill: #ffffff;
+            z-index: -1;
             }
 
             #img{
