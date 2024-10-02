@@ -54,7 +54,7 @@ foreach ($imagens as $imagem) {
     // echo '<img src="' . htmlspecialchars($imagem['imagem']) . '" style="max-width:1500px; max-height:600px; position: absolute; left: 50%; transform: translateX(-50%); bottom: 150px; z-index: 10000;">';
 
    echo '<div style="background-color: #d3d3d3; width: 1700px; height: 600px; border-radius: 15px; position: absolute; left: 50%; transform: translateX(-50%); bottom: 150px; z-index: 10000; display: flex; justify-content: center; align-items: center;">
-        <img src="' . htmlspecialchars($imagem['imagem']) . '" style="max-width:1500px; max-height:600px;">
+        <img src="' . htmlspecialchars($imagem['imagem']) . '" style="max-width:1500px; max-height:600px; position: absolute; left: 50%; transform: translateX(-50%); bottom: 150px;">
       </div>';
 
 
