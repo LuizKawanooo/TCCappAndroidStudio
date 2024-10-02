@@ -472,12 +472,12 @@
 
     
 <style>
-    .ranking-table{
+    body{
         overflow-y: scroll;
     }
 </style>
 
-    <?php
+ <?php
 // Conexão com o banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
 $username = "ionic_perfil_bd";
@@ -513,8 +513,10 @@ if ($conn->connect_error) {
             if ($result->num_rows > 0) {
                 // Exibir dados na tabela
                 while ($row = $result->fetch_assoc()) {
+                    // Verificar se o nome está vazio e substituir por "Nome do aluno inválido"
+                    $nome = !empty($row['nome_exibicao']) ? $row['nome_exibicao'] : "Nome do aluno inválido";
                     echo "<tr>
-                            <td>{$row['nome_exibicao']}</td>
+                            <td>{$nome}</td>
                             <td>{$row['pontos']}</td>
                           </tr>";
                 }
