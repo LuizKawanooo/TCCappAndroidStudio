@@ -472,8 +472,15 @@
 
 
 
-        <style>
+ <style>
         /* Personalização da barra de rolagem da div */
+        .scrollable-div {
+            height: 800px; /* Altura definida para a div */
+            overflow-y: scroll; /* Ativa o scroll vertical */
+            padding: 10px; /* Espaçamento interno */
+            background-color: #f0f0f0; /* Cor de fundo da div */
+        }
+
         .scrollable-div::-webkit-scrollbar {
             width: 12px; /* Largura da barra de rolagem */
         }
@@ -490,12 +497,37 @@
         .scrollable-div::-webkit-scrollbar-thumb:hover {
             background: #4169E1; /* Cor ao passar o mouse sobre a barra */
         }
+
+        .ranking-table {
+            margin: 0; /* Remove margem para evitar espaços indesejados */
+            width: 100%; /* A tabela ocupa toda a largura da div */
+        }
+
+        th, td {
+            padding: 8px; /* Espaçamento nas células da tabela */
+            text-align: left; /* Alinhamento à esquerda */
+        }
+
+        table {
+            border-collapse: collapse; /* Remove espaçamento entre bordas */
+            width: 100%; /* A tabela ocupa toda a largura da div */
+        }
+
+        th {
+            background-color: #4682B4; /* Cor de fundo dos cabeçalhos */
+            color: white; /* Cor do texto dos cabeçalhos */
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2; /* Cor de fundo das linhas pares */
+        }
     </style>
 
     
 
     
- <?php
+ 
+<?php
 // Conexão com o banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
 $username = "ionic_perfil_bd";
@@ -511,46 +543,44 @@ if ($conn->connect_error) {
 }
 ?>
 
-    
+<div class="scrollable-div">
+    <div class="ranking-table">
+        <center><h1>Ranking de Leitores</h1></center>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Pontos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                // Consultar dados de leitores e seus pontos
+                $sql = "SELECT nome_exibicao, pontos 
+                        FROM registrar_usuarios 
+                        ORDER BY pontos DESC";
+                $result = $conn->query($sql);
 
-<div class="scrollable-div" style="overflow-y: scroll;">
-<div class="ranking-table">
-    <center><h1>Ranking de Leitores</h1></center>
-    <table>
-        <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Pontos</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            // Consultar dados de leitores e seus pontos
-            $sql = "SELECT nome_exibicao, pontos 
-                    FROM registrar_usuarios 
-                    ORDER BY pontos DESC";
-            $result = $conn->query($sql);
-
-            if ($result->num_rows > 0) {
-                // Exibir dados na tabela
-                while ($row = $result->fetch_assoc()) {
-                    // Verificar se o nome está vazio e substituir por "Nome do aluno inválido"
-                    $nome = !empty($row['nome_exibicao']) ? $row['nome_exibicao'] : "Nome do aluno inválido";
-                    echo "<tr>
-                            <td>{$nome}</td>
-                            <td>{$row['pontos']}</td>
-                          </tr>";
+                if ($result->num_rows > 0) {
+                    // Exibir dados na tabela
+                    while ($row = $result->fetch_assoc()) {
+                        // Verificar se o nome está vazio e substituir por "Nome do aluno inválido"
+                        $nome = !empty($row['nome_exibicao']) ? $row['nome_exibicao'] : "Nome do aluno inválido";
+                        echo "<tr>
+                                <td>{$nome}</td>
+                                <td>{$row['pontos']}</td>
+                              </tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='2'>Nenhum dado encontrado</td></tr>";
                 }
-            } else {
-                echo "<tr><td colspan='2'>Nenhum dado encontrado</td></tr>";
-            }
 
-            // Fechar conexão
-            $conn->close();
-            ?>
-        </tbody>
-    </table>
-</div>
+                // Fechar conexão
+                $conn->close();
+                ?>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 
