@@ -472,7 +472,7 @@ echo '<div style="background-color: #d3d3d3; width: 1600px; height: 700px; borde
   cursor: pointer;
   display: inline-block;
   margin-right: 10px;
-  margin-bottom: 7px;
+  margin-bottom: 15px;
 }
 
 #file-name {
@@ -510,14 +510,14 @@ function displayFileName() {
 
 <br>
 <!-- Adicionando margem ao formulário para distância do fundo cinza -->
-<form style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; margin-top: 7px;" action="upload.php" method="post" enctype="multipart/form-data">
+<form style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; margin-top: 7px;" action="upload.php" method="post" enctype="multipart/form-data">
     
     <!-- Label e input file -->
     <div style="display: flex; align-items: center;">
         <label for="file-upload" class="custom-file-label">Selecionar Arquivo</label>
         <input id="file-upload" onchange="displayFileName()" class="fileinput" type="file" name="imagem" required style="display: none;">
         <!-- Texto do nome do arquivo -->
-        <span id="file-name" style="margin-left: 10px; color: black;">Adicione aqui sua planta</span>
+        <span id="file-name" style="margin-left: 10px; color: white;">Adicione aqui sua planta</span>
     </div>
 
     <!-- Botão de enviar -->
