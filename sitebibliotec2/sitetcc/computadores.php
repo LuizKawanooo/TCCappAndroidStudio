@@ -427,7 +427,7 @@ foreach ($imagens as $imagem) {
         .upload-button:hover {
             background-color: #45a049; /* Cor do botão ao passar o mouse */
         }
-    .fileinput{
+    .fileinput input{
         border: none; 
         background: #c2c2c2;
         height: 35px;
