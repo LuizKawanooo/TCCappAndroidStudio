@@ -476,7 +476,7 @@ echo '<div style="background-color: #d3d3d3; width: 1600px; height: 700px; borde
 }
 
 #file-name {
-  font-size: 14px;
+  font-size: 19px;
   color: #666;
 }
 
