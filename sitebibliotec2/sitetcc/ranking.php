@@ -500,7 +500,7 @@
 
         .ranking-table {
             margin: 0; /* Remove margem para evitar espaços indesejados */
-            width: 100%; /* A tabela ocupa toda a largura da div */
+            width: 80%; /* A tabela ocupa toda a largura da div */
         }
 
         th, td {
