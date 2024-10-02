@@ -471,13 +471,30 @@
 
 
 
-    
-<style>
-    body{
-        overflow-y: scroll;
-    }
-</style>
 
+        <style>
+        /* Personalização da barra de rolagem da div */
+        .scrollable-div::-webkit-scrollbar {
+            width: 12px; /* Largura da barra de rolagem */
+        }
+
+        .scrollable-div::-webkit-scrollbar-track {
+            background: #ADD8E6; /* Cor do fundo da barra de rolagem */
+        }
+
+        .scrollable-div::-webkit-scrollbar-thumb {
+            background: #4682B4; /* Cor da barra de rolagem */
+            border-radius: 6px; /* Bordas arredondadas da barra */
+        }
+
+        .scrollable-div::-webkit-scrollbar-thumb:hover {
+            background: #4169E1; /* Cor ao passar o mouse sobre a barra */
+        }
+    </style>
+
+    
+
+    
  <?php
 // Conexão com o banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
@@ -494,6 +511,9 @@ if ($conn->connect_error) {
 }
 ?>
 
+    
+
+<div class="scrollable-div" style="overflow-y: scroll;">
 <div class="ranking-table">
     <center><h1>Ranking de Leitores</h1></center>
     <table>
@@ -531,8 +551,7 @@ if ($conn->connect_error) {
         </tbody>
     </table>
 </div>
-
-
+</div>
 
 
 
