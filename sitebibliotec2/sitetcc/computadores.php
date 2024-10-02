@@ -456,7 +456,7 @@ foreach ($imagens as $imagem) {
 
 
     <style>
-        .custom-file-label {
+.custom-file-label {
   background-color: #ffffff;
   color: black;
   padding: 10px 20px;
@@ -470,7 +470,6 @@ foreach ($imagens as $imagem) {
 #file-name {
   font-size: 14px;
   color: #666;
-    
 }
 
 .upload-button {
@@ -504,23 +503,19 @@ foreach ($imagens as $imagem) {
 
 
 <br>
-<form style="margin-left: 570px;" action="upload.php" method="post" enctype="multipart/form-data">
-    <br>
-
-    <!-- Label customizada para o botão de seleção de arquivo -->
-    <label for="file-upload" class="custom-file-label">Selecionar Arquivo</label>
+<form style="display: flex; justify-content: center; align-items: center;" action="upload.php" method="post" enctype="multipart/form-data">
     
-    <!-- Input file escondido -->
+    <!-- Botão de enviar -->
+    <input class="upload-button" type="submit" name="upload" value="Enviar" style="margin-right: 20px;">
+    
+    <!-- Label e input file -->
+    <label for="file-upload" class="custom-file-label">Selecionar Arquivo</label>
     <input id="file-upload" onchange="displayFileName()" class="fileinput" type="file" name="imagem" required style="display: none;">
     
-    <!-- Espaço para exibir o nome do arquivo selecionado com o novo texto padrão -->
-    <span id="file-name" style="color: white;">Adicione aqui sua planta</span>
-    
-    <br>
-    
-    <!-- Botão para enviar o arquivo -->
-    <input class="upload-button" type="submit" name="upload" value="Enviar">
+    <!-- Texto do nome do arquivo -->
+    <span id="file-name" style="margin-left: 10px;">Adicione aqui sua planta</span>
 </form>
+
 
 
 
