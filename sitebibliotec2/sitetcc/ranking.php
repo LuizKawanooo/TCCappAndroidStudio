@@ -472,13 +472,15 @@
 
 
 
- <style>
+    <style>
         /* Personalização da barra de rolagem da div */
         .scrollable-div {
+            width: 80%; /* Largura definida para a div */
             height: 800px; /* Altura definida para a div */
             overflow-y: scroll; /* Ativa o scroll vertical */
             padding: 10px; /* Espaçamento interno */
             background-color: #f0f0f0; /* Cor de fundo da div */
+            margin: 0 auto; /* Centraliza a div horizontalmente */
         }
 
         .scrollable-div::-webkit-scrollbar {
@@ -500,7 +502,7 @@
 
         .ranking-table {
             margin: 0; /* Remove margem para evitar espaços indesejados */
-            width: 80%; /* A tabela ocupa toda a largura da div */
+            width: 100%; /* A tabela ocupa toda a largura da div */
         }
 
         th, td {
@@ -522,7 +524,6 @@
             background-color: #f2f2f2; /* Cor de fundo das linhas pares */
         }
     </style>
-
     
 
     
