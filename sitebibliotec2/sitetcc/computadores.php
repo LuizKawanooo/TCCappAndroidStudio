@@ -464,7 +464,7 @@ foreach ($imagens as $imagem) {
   cursor: pointer;
   display: inline-block;
   margin-right: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 7px;
 }
 
 #file-name {
