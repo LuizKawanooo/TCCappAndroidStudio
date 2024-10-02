@@ -440,15 +440,83 @@ foreach ($imagens as $imagem) {
 
     
 
-    <br>
+<!--     <br>
 <form style="margin-left: 570px;" action="upload.php" method="post" enctype="multipart/form-data">
 
     <br>
     
-    <input class="fileinput" type="file" name="imagem" id="imagem" required>
+    <input id="file-upload" onchange="displayFileName()" class="fileinput" type="file" name="imagem" id="imagem" required>
    
     
     <br>
+    <input class="upload-button" type="submit" name="upload" value="Enviar">
+</form> -->
+
+
+
+
+    <style>
+        .custom-file-label {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+#file-name {
+  font-size: 14px;
+  color: #666;
+}
+
+.upload-button {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.upload-button:hover {
+  background-color: #218838;
+}
+
+    </style>
+
+    <script>
+        function displayFileName() {
+          const input = document.getElementById('file-upload');
+          const fileNameSpan = document.getElementById('file-name');
+        
+          if (input.files.length > 0) {
+            fileNameSpan.textContent = input.files[0].name;
+          } else {
+            fileNameSpan.textContent = "Nenhum arquivo selecionado";
+          }
+        }
+
+    </script>
+
+
+    <br>
+<form style="margin-left: 570px;" action="upload.php" method="post" enctype="multipart/form-data">
+    <br>
+
+    <!-- Label customizada para o botão de seleção de arquivo -->
+    <label for="file-upload" class="custom-file-label">Selecionar Arquivo</label>
+    
+    <!-- Input file escondido -->
+    <input id="file-upload" onchange="displayFileName()" class="fileinput" type="file" name="imagem" required style="display: none;">
+    
+    <!-- Espaço para exibir o nome do arquivo selecionado -->
+    <span id="file-name">Nenhum arquivo selecionado</span>
+    
+    <br>
+    
+    <!-- Botão para enviar o arquivo -->
     <input class="upload-button" type="submit" name="upload" value="Enviar">
 </form>
 
