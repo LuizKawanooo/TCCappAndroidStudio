@@ -457,18 +457,20 @@ foreach ($imagens as $imagem) {
 
     <style>
         .custom-file-label {
-  background-color: #d6d6d6;
-  color: white;
+  background-color: #ffffff;
+  color: black;
   padding: 10px 20px;
   border-radius: 4px;
   cursor: pointer;
   display: inline-block;
   margin-right: 10px;
+  margin-bottom: 15px;
 }
 
 #file-name {
   font-size: 14px;
   color: #666;
+    
 }
 
 .upload-button {
