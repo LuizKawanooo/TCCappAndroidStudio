@@ -457,7 +457,7 @@ foreach ($imagens as $imagem) {
 
     <style>
         .custom-file-label {
-  background-color: #007bff;
+  background-color: #d6d6d6;
   color: white;
   padding: 10px 20px;
   border-radius: 4px;
@@ -494,14 +494,14 @@ foreach ($imagens as $imagem) {
           if (input.files.length > 0) {
             fileNameSpan.textContent = input.files[0].name;
           } else {
-            fileNameSpan.textContent = "Nenhum arquivo selecionado";
+            fileNameSpan.textContent = "Adicione aqui sua planta";
           }
         }
 
     </script>
 
 
-    <br>
+<br>
 <form style="margin-left: 570px;" action="upload.php" method="post" enctype="multipart/form-data">
     <br>
 
@@ -511,14 +511,15 @@ foreach ($imagens as $imagem) {
     <!-- Input file escondido -->
     <input id="file-upload" onchange="displayFileName()" class="fileinput" type="file" name="imagem" required style="display: none;">
     
-    <!-- Espaço para exibir o nome do arquivo selecionado -->
-    <span id="file-name">Nenhum arquivo selecionado</span>
+    <!-- Espaço para exibir o nome do arquivo selecionado com o novo texto padrão -->
+    <span id="file-name">Adicione aqui sua planta</span>
     
     <br>
     
     <!-- Botão para enviar o arquivo -->
     <input class="upload-button" type="submit" name="upload" value="Enviar">
 </form>
+
 
 
 
