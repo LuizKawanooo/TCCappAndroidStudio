@@ -642,25 +642,25 @@ $conn->close();
         <h1>Adicionar livro</h1>
         <form action="livros.php" method="post" enctype="multipart/form-data"> <!-- Adicionado enctype para envio de arquivos -->
             <label for="titulo">Título:</label><br>
-            <input type="text" id="livro-nome" name="titulo" class="inp"><br>
+            <input type="text" id="livro-nome" name="titulo" class="inp" required><br>
             <label for="autor">Autor:</label><br>
-            <input type="text" id="livro-autor" name="autor" class="inp"><br>
+            <input type="text" id="livro-autor" name="autor" class="inp" required><br>
             <label for="editora">Edição:</label><br>
-            <input type="text" id="editora" name="editora" class="inp"><br>
+            <input type="text" id="editora" name="editora" class="inp" required><br>
             <label for="genero">Gênero:</label><br>
-            <input type="text" id="genero" name="genero" class="inp"><br>
+            <input type="text" id="genero" name="genero" class="inp" required><br>
             <label for="tombo">Tombo:</label><br>
-            <input type="text" id="tombo" name="tombo" class="inp"><br>
+            <input type="text" id="tombo" name="tombo" class="inp" required><br>
             <label for="ano">Data:</label><br>
-            <input type="date" id="data" name="ano" class="inpd"><br>
+            <input type="date" id="data" name="ano" class="inpd" required><br>
             <label for="classificacao">Classificação:</label><br>
-            <input type="text" id="classificacao" name="classificacao" class="inp"><br>
+            <input type="text" id="classificacao" name="classificacao" class="inp" required><br>
             <label for="n_paginas">Número de Páginas:</label><br>
-            <input type="number" id="n_paginas" name="n_paginas" min="1" class="inp"><br>
+            <input type="number" id="n_paginas" name="n_paginas" min="1" class="inp" required><br>
             <label for="isbn">ISBN:</label><br>
-            <input type="text" id="isbn" name="isbn" class="inp"><br>
+            <input type="text" id="isbn" name="isbn" class="inp" required><br>
             <br>
-            <input type="file" id="livro-imagem" name="imagem" accept="image/*"> <!-- Adiciona input para selecionar a imagem -->
+            <input type="file" id="livro-imagem" name="imagem" accept="image/*" required> <!-- Adiciona input para selecionar a imagem -->
             <br>
             <input type="submit" value="Enviar" class="btn2">
         </form>
