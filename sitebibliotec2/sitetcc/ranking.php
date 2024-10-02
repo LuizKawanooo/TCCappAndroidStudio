@@ -422,7 +422,7 @@
         </ul>
     </nav>
 
-    <div class="ranking-table">
+<!--     <div class="ranking-table">
         <center><h1>Ranking de Leitores</h1></center>
         <table><br>
             <thead>
@@ -458,7 +458,74 @@
                 ?>
             </tbody>
         </table>
-    </div>
+    </div> -->
+
+
+
+
+
+
+
+
+
+
+
+    
+
+    <div class="ranking-table">
+    <center><h1>Ranking de Leitores</h1></center>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Pontos</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            // Consultar dados de leitores e calcular pontos
+            $sql = "SELECT registrar_usuarios.nome_exibicao, COUNT(livros_lidos.leitor_ID) * 100 AS pontos 
+                    FROM registrar_usuarios 
+                    LEFT JOIN livros_lidos ON registrar_usuarios.leitor_ID = livros_lidos.leitor_ID 
+                    GROUP BY registrar_usuarios.leitor_ID, registrar_usuarios.nome_exibicao 
+                    ORDER BY pontos DESC";
+
+            $result = $conn->query($sql);
+
+            if ($result && $result->num_rows > 0) {
+                // Exibir dados na tabela
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>
+                            <td>{$row['nome_exibicao']}</td>
+                            <td>{$row['pontos']}</td>
+                          </tr>";
+                }
+            } else {
+                echo "<tr><td colspan='2'>Nenhum dado encontrado</td></tr>";
+            }
+
+            // Fechar conexão
+            $conn->close();
+            ?>
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
 
     <div class="footer">
         <svg viewBox="0 0 869 344" xmlns="http://www.w3.org/2000/svg">
