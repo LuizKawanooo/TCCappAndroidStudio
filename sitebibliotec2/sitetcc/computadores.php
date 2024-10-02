@@ -427,8 +427,11 @@ foreach ($imagens as $imagem) {
         .upload-button:hover {
             background-color: #45a049; /* Cor do botão ao passar o mouse */
         }
-    .fileinput input{
-        border: none; background: #c2c2c2; height: 35px; box-shadow: 2px 11px 31px -10px rgba(0, 0, 0, 0.6);
+    input[type="file"] {
+        border: none;
+        background: #c2c2c2;
+        height: 35px;
+        box-shadow: 2px 11px 31px -10px rgba(0, 0, 0, 0.6);
     }
 
 </style>
@@ -441,7 +444,7 @@ foreach ($imagens as $imagem) {
 
     <br>
     
-    <input style="border: none; background: #c2c2c2; height: 35px; box-shadow: 2px 11px 31px -10px rgba(0, 0, 0, 0.6);" class="fileinput" type="file" name="imagem" id="imagem" required>
+    <input class="fileinput" type="file" name="imagem" id="imagem" required>
    
     
     <br>
