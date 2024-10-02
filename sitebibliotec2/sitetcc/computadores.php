@@ -511,7 +511,7 @@ echo '<div style="background-color: #d3d3d3; width: 1600px; height: 700px; borde
 
 
 <br>
-<form style="display: flex; justify-content: center; align-items: center;" action="upload.php" method="post" enctype="multipart/form-data">
+<form style="display: flex; justify-content: center; align-items: center; margin-bottom: 7px;" action="upload.php" method="post" enctype="multipart/form-data">
     
     <!-- Botão de enviar -->
     <input class="upload-button" type="submit" name="upload" value="Enviar" style="margin-right: 20px;">
