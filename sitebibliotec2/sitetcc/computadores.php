@@ -427,6 +427,12 @@ foreach ($imagens as $imagem) {
         .upload-button:hover {
             background-color: #45a049; /* Cor do botão ao passar o mouse */
         }
+    .fileinput{
+        border: none; 
+        background: #c2c2c2;
+        height: 35px;
+        box-shadow: 2px 11px 31px -10px rgba(0, 0, 0, 0.6);
+    }
 
 </style>
 
@@ -437,9 +443,9 @@ foreach ($imagens as $imagem) {
 <form style="margin-left: 570px;" action="upload.php" method="post" enctype="multipart/form-data">
 
     <br>
-    <label for="imagem">Escolha uma imagem:</label>
     
-    <input type="file" name="imagem" id="imagem" required>
+    <input class="fileinput" type="file" name="imagem" id="imagem" required>
+   
     
     <br>
     <input class="upload-button" type="submit" name="upload" value="Enviar">
