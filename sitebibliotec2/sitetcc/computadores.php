@@ -512,7 +512,7 @@ foreach ($imagens as $imagem) {
     <input id="file-upload" onchange="displayFileName()" class="fileinput" type="file" name="imagem" required style="display: none;">
     
     <!-- Espaço para exibir o nome do arquivo selecionado com o novo texto padrão -->
-    <span id="file-name">Adicione aqui sua planta</span>
+    <span id="file-name" style="color: white;">Adicione aqui sua planta</span>
     
     <br>
     
