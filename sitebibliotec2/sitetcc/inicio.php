@@ -207,7 +207,7 @@ if ($result) {
             }
             
             // Consulta para contar o número de linhas na tabela
-            $sql = "SELECT COUNT(*) AS quantidade_leitor FROM leitor;";
+            $sql = "SELECT COUNT(*) AS quantidade_leitor FROM registrar_usuarios;";
             $result = $conn->query($sql);
             
             if ($result->num_rows > 0) {
