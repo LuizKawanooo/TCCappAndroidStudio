@@ -22,13 +22,12 @@ if ($conn->connect_error) {
     exit();
 }
 
-// Get user ID and book ID from query parameters
+// Get user ID from query parameters
 $userId = isset($_GET['user_id']) ? intval($_GET['user_id']) : 0;
-$bookId = isset($_GET['book_id']) ? intval($_GET['book_id']) : 0;
 
-// Ensure both user ID and book ID are valid
-if ($userId <= 0 || $bookId <= 0) {
-    echo json_encode(array("message" => "Invalid user ID or book ID"));
+// Ensure the user ID is valid
+if ($userId <= 0) {
+    echo json_encode(array("message" => "Invalid user ID"));
     $conn->close();
     exit();
 }
@@ -50,7 +49,12 @@ $updateStmt->execute();
 if ($updateStmt->affected_rows > 0) {
     echo json_encode(array("message" => "100 points added successfully"));
 } else {
-    echo json_encode(array("message" => "Failed to add points"));
+    // Check if the user exists
+    if ($conn->affected_rows === 0) {
+        echo json_encode(array("message" => "User not found or points not updated"));
+    } else {
+        echo json_encode(array("message" => "Failed to add points, please try again later"));
+    }
 }
 
 $updateStmt->close();
