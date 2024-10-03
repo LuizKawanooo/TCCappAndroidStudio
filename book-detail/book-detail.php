@@ -63,6 +63,15 @@
 
 
 
+
+
+
+
+
+
+
+
+
 <?php
 // Enable error reporting
 error_reporting(E_ALL);
@@ -89,7 +98,7 @@ if ($conn->connect_error) {
 
 // Get book ID and user ID from query parameters
 $bookId = isset($_GET['id']) ? intval($_GET['id']) : 0;
-$userId = isset($_GET['user_id']) ? intval($_GET['user_id']) : 0;
+$userId = isset($_GET['user_id']) ? intval($_GET['user_id']) : 0; // Assuming you're passing the user ID
 
 // Ensure the book ID and user ID are valid
 if ($bookId <= 0 || $userId <= 0) {
@@ -98,44 +107,34 @@ if ($bookId <= 0 || $userId <= 0) {
     exit();
 }
 
-// Query to fetch book details
-$sql = "SELECT `id` ,`titulo`, `genero`, `autor`, `editora`, `tombo`, `ano`, `classificacao`, `n_paginas`, `isbn`, `sinopse` FROM livros WHERE id = ?";
+// Check if the book is available
+$sqlCheck = "SELECT status_livros FROM livros WHERE id = ?";
+$stmtCheck = $conn->prepare($sqlCheck);
+$stmtCheck->bind_param("i", $bookId);
+$stmtCheck->execute();
+$resultCheck = $stmtCheck->get_result();
 
-$stmt = $conn->prepare($sql);
+if ($resultCheck->num_rows > 0) {
+    $bookStatus = $resultCheck->fetch_assoc()['status_livros'];
 
-if ($stmt === false) {
-    echo json_encode(array("message" => "Failed to prepare the SQL statement: " . $conn->error));
-    $conn->close();
-    exit();
-}
+    if ($bookStatus == 0) { // If the book is available
+        // Update the book status to rented
+        $sqlUpdate = "UPDATE livros SET status_livros = 1, rental_start_time = NOW(), rental_end_time = DATE_ADD(NOW(), INTERVAL 30 SECOND) WHERE id = ?";
+        $stmtUpdate = $conn->prepare($sqlUpdate);
+        $stmtUpdate->bind_param("i", $bookId);
+        $stmtUpdate->execute();
 
-$stmt->bind_param("i", $bookId);
-$stmt->execute();
-$result = $stmt->get_result();
+        // Execute addpoints.php
+        include 'addpoints.php'; // Make sure addpoints.php handles the logic correctly
 
-if ($result->num_rows > 0) {
-    $book = $result->fetch_assoc();
-    
-    // Add 100 points to the user's account by calling addpoints.php
-    $addPointsUrl = "https://endologic.com.br/book-detail/addpoints.php?user_id=$userId&book_id=$bookId";
-    
-    // Execute the request to add points
-    $response = file_get_contents($addPointsUrl);
-    $pointsResponse = json_decode($response, true);
-    
-    if (isset($pointsResponse['message']) && $pointsResponse['message'] === "100 points added successfully") {
-        echo json_encode(array(
-            "message" => "Book rented successfully, 100 points added",
-            "book" => $book
-        ));
+        echo json_encode(array("message" => "Book rented successfully, points added."));
     } else {
-        echo json_encode(array("message" => "Book rented successfully, but failed to add points", "book" => $book));
+        echo json_encode(array("message" => "Book is already rented."));
     }
-    
 } else {
     echo json_encode(array("message" => "Book not found"));
 }
 
-$stmt->close();
+$stmtCheck->close();
 $conn->close();
 ?>
