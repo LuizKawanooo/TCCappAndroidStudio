@@ -63,7 +63,6 @@
 // ?>
 
 
-
 <?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -86,12 +85,12 @@ if ($conn->connect_error) {
 // Recebe dados enviados no corpo da requisição
 $data = json_decode(file_get_contents("php://input"), true);
 
-// Verifica se userId foi passado
-$userId = isset($data['userId']) ? intval($data['userId']) : 0;
-$pointsToAdd = 100; // Define pontos a serem adicionados como fixo
+$userId = isset($data['userRM']) ? intval($data['userRM']) : 0; // Verifique se está correto
+$pointsToAdd = 100; // Define sempre 100 pontos a serem adicionados
 
 // Valida dados
 if ($userId <= 0 || $pointsToAdd <= 0) {
+    http_response_code(400); // Código de erro para dados inválidos
     echo json_encode(array("status" => "error", "message" => "Dados inválidos."));
     $conn->close();
     exit();
@@ -103,15 +102,13 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("ii", $pointsToAdd, $userId);
 
 if ($stmt->execute()) {
-    if ($stmt->affected_rows > 0) { // Verifica se a linha foi realmente afetada
-        echo json_encode(array("status" => "success", "message" => "Pontos adicionados com sucesso."));
-    } else {
-        echo json_encode(array("status" => "error", "message" => "Nenhuma linha atualizada. Verifique se o ID do usuário é válido."));
-    }
+    echo json_encode(array("status" => "success", "message" => "Pontos adicionados com sucesso."));
 } else {
-    echo json_encode(array("status" => "error", "message" => "Erro ao adicionar pontos: " . $stmt->error));
+    http_response_code(500); // Código de erro 500 em caso de falha
+    echo json_encode(array("status" => "error", "message" => "Erro ao adicionar pontos."));
 }
 
 $stmt->close();
 $conn->close();
 ?>
+
