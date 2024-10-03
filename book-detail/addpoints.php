@@ -23,6 +23,7 @@ if ($conn->connect_error) {
 }
 
 // Get user ID from query parameters
+$data = json_decode(file_get_contents("php://input"), true);
 $userId = isset($_GET['user_id']) ? intval($_GET['user_id']) : 0;
 
 // Ensure the user ID is valid
