@@ -115,9 +115,6 @@ $sql = "SELECT `id` ,`titulo`, `genero`, `autor`, `editora`, `tombo`, `ano`, `cl
 
 $stmt = $conn->prepare($sql);
 
-  // Execute addpoints.php
-        include 'addpoints.php'; // Make sure addpoints.php handles the logic correctly
-
 if ($stmt === false) {
     echo json_encode(array("message" => "Failed to prepare the SQL statement: " . $conn->error));
     $conn->close();
