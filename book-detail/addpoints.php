@@ -86,8 +86,9 @@ if ($conn->connect_error) {
 // Recebe dados enviados no corpo da requisição
 $data = json_decode(file_get_contents("php://input"), true);
 
+// Verifica se userId foi passado
 $userId = isset($data['userId']) ? intval($data['userId']) : 0;
-$pointsToAdd = 100;
+$pointsToAdd = 100; // Define pontos a serem adicionados como fixo
 
 // Valida dados
 if ($userId <= 0 || $pointsToAdd <= 0) {
@@ -102,9 +103,13 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("ii", $pointsToAdd, $userId);
 
 if ($stmt->execute()) {
-    echo json_encode(array("status" => "success", "message" => "Pontos adicionados com sucesso."));
+    if ($stmt->affected_rows > 0) { // Verifica se a linha foi realmente afetada
+        echo json_encode(array("status" => "success", "message" => "Pontos adicionados com sucesso."));
+    } else {
+        echo json_encode(array("status" => "error", "message" => "Nenhuma linha atualizada. Verifique se o ID do usuário é válido."));
+    }
 } else {
-    echo json_encode(array("status" => "error", "message" => "Erro ao adicionar pontos."));
+    echo json_encode(array("status" => "error", "message" => "Erro ao adicionar pontos: " . $stmt->error));
 }
 
 $stmt->close();
