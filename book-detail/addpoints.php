@@ -64,15 +64,10 @@
 
 
 
-
 <?php
-// Enable error reporting
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, OPTIONS');
+header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
 $servername = "tccappionic-bd.mysql.uhserver.com";
@@ -80,52 +75,38 @@ $username = "ionic_perfil_bd";
 $password = "{[UOLluiz2019";
 $dbname = "tccappionic_bd";
 
-// Create connection
+// Conexão com o banco de dados
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
+// Verifica a conexão
 if ($conn->connect_error) {
-    echo json_encode(array("message" => "Connection failed: " . $conn->connect_error));
-    exit();
+    die(json_encode(array("status" => "error", "message" => "Falha na conexão: " . $conn->connect_error)));
 }
 
-// Get user ID and points from the request body
+// Recebe dados enviados no corpo da requisição
 $data = json_decode(file_get_contents("php://input"), true);
+
 $userId = isset($data['userId']) ? intval($data['userId']) : 0;
 $pointsToAdd = isset($data['pointsToAdd']) ? intval($data['pointsToAdd']) : 0;
 
-// Ensure the user ID is valid
-if ($userId <= 0) {
-    echo json_encode(array("message" => "Invalid user ID"));
+// Valida dados
+if ($userId <= 0 || $pointsToAdd <= 0) {
+    echo json_encode(array("status" => "error", "message" => "Dados inválidos."));
     $conn->close();
     exit();
 }
 
-// Query to add points to the user’s points
-$updateSql = "UPDATE registrar_usuarios SET pontos = pontos + ? WHERE id = ?";
-$updateStmt = $conn->prepare($updateSql);
+// Atualiza os pontos do usuário
+$sql = "UPDATE registrar_usuarios SET pontos = pontos + ? WHERE id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ii", $pointsToAdd, $userId);
 
-if ($updateStmt === false) {
-    echo json_encode(array("message" => "Failed to prepare the SQL update statement: " . $conn->error));
-    $conn->close();
-    exit();
-}
-
-// Bind the points and user ID to the query
-$updateStmt->bind_param("ii", $pointsToAdd, $userId);
-$updateStmt->execute();
-
-if ($updateStmt->affected_rows > 0) {
-    echo json_encode(array("message" => "$pointsToAdd points added successfully"));
+if ($stmt->execute()) {
+    echo json_encode(array("status" => "success", "message" => "Pontos adicionados com sucesso."));
 } else {
-    // Check if the user exists
-    if ($conn->affected_rows === 0) {
-        echo json_encode(array("message" => "User not found or points not updated"));
-    } else {
-        echo json_encode(array("message" => "Failed to add points, please try again later"));
-    }
+    echo json_encode(array("status" => "error", "message" => "Erro ao adicionar pontos."));
 }
 
-$updateStmt->close();
+$stmt->close();
 $conn->close();
 ?>
