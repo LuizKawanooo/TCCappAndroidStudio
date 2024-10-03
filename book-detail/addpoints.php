@@ -19,21 +19,24 @@ if ($conn->connect_error) {
 
 // Recebe dados enviados no corpo da requisição
 $data = json_decode(file_get_contents("php://input"), true);
+var_dump($data); // Para verificar o que foi recebido
 
-$userId = isset($data['userId']) ? intval($data['userId']) : 0;
+// Obtem o RM do usuário
+$userRM = isset($data['userRM']) ? $data['userRM'] : '';
+
 $pointsToAdd = 100;
 
 // Valida dados
-if ($userId <= 0 || $pointsToAdd <= 0) {
+if (empty($userRM) || $pointsToAdd <= 0) {
     echo json_encode(array("status" => "error", "message" => "Dados inválidos."));
     $conn->close();
     exit();
 }
 
 // Atualiza os pontos do usuário
-$sql = "UPDATE registrar_usuarios SET pontos = pontos + ? WHERE id = ?";
+$sql = "UPDATE registrar_usuarios SET pontos = pontos + ? WHERE rm = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ii", $pointsToAdd, $userId);
+$stmt->bind_param("is", $pointsToAdd, $userRM); // Mudou o tipo para "is" para aceitar string (RM)
 
 if ($stmt->execute()) {
     echo json_encode(array("status" => "success", "message" => "Pontos adicionados com sucesso."));
