@@ -75,7 +75,6 @@
 
 
 
-
 <?php
 // Enable error reporting
 error_reporting(E_ALL);
@@ -111,8 +110,7 @@ if ($bookId <= 0) {
 }
 
 // Query to fetch book details
-$sql = "SELECT `id` ,`titulo`, `genero`, `autor`, `editora`, `tombo`, `ano`, `classificacao`, `n_paginas`, `isbn`, `sinopse` FROM livros WHERE id = ?";
-
+$sql = "SELECT `id`, `titulo`, `genero`, `autor`, `editora`, `tombo`, `ano`, `classificacao`, `n_paginas`, `isbn`, `sinopse` FROM livros WHERE id = ?";
 $stmt = $conn->prepare($sql);
 
 if ($stmt === false) {
@@ -135,7 +133,3 @@ if ($result->num_rows > 0) {
 $stmt->close();
 $conn->close();
 ?>
-
-
-
-
