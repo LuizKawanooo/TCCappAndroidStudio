@@ -129,4 +129,3 @@ if ($updateStmt->affected_rows > 0) {
 $updateStmt->close();
 $conn->close();
 ?>
-
