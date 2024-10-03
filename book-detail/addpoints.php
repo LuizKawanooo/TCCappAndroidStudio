@@ -87,7 +87,7 @@ if ($conn->connect_error) {
 $data = json_decode(file_get_contents("php://input"), true);
 
 $userId = isset($data['userId']) ? intval($data['userId']) : 0;
-$pointsToAdd = isset($data['pointsToAdd']) ? intval($data['pointsToAdd']) : 0;
+$pointsToAdd = 100;
 
 // Valida dados
 if ($userId <= 0 || $pointsToAdd <= 0) {
