@@ -222,8 +222,10 @@ echo '<div style="background-color: #d3d3d3; width: 1600px; height: 700px; borde
                         display: flex;
                         width: 20px;
                         height: 20px;
+                        background: red;
                         position: absolute;
-                        left: 59%;
+                        left: 69%;
+                        color: white;
                     }
                     
                     .close:hover,
@@ -249,8 +251,7 @@ echo '<div style="background-color: #d3d3d3; width: 1600px; height: 700px; borde
 
 
                     .table close{
-                        padding-left: 250px;
-                        color: red;
+                        padding-left: 100px;
 
                     }
                     #input{
