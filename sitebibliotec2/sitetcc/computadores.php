@@ -555,6 +555,7 @@ $dataAtual = date('Y-m-d');
 
 // Mensagem de status
 $mensagem = '';
+$reservaDetalhes = '';
 
 // Verificar reservas ao enviar o formulário
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -562,31 +563,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $data = $_POST['data'];
     $horario = $_POST['horario'];
 
-    // Obter os horários de início e fim
+    // Obter o horário de início
     list($inicio, $fim) = explode(' às ', $horario);
-
-    // Criar data e hora completas
-    $dataHoraInicio = $data . ' ' . $inicio;
-    $dataHoraFim = $data . ' ' . $fim;
 
     // Montar a consulta SQL
     $query = "SELECT * FROM reservas_computadores 
               WHERE computador_id = ? 
               AND data_reserva = ? 
               AND (
-                  (horario BETWEEN ? AND ?) OR 
-                  (horario BETWEEN ADDTIME(?, '00:30:00') AND ADDTIME(?, '00:30:00'))
+                  horario = ? OR 
+                  horario = ADDTIME(?, '00:30:00')
               )";
     
     $stmt = $conn->prepare($query);
     
     if ($stmt) {
-        $stmt->bind_param("issss", $numero, $data, $inicio, $fim, $inicio, $fim);
+        $stmt->bind_param("isss", $numero, $data, $inicio, $inicio);
         $stmt->execute();
         $resultado = $stmt->get_result();
 
         if ($resultado->num_rows > 0) {
-            $mensagem = "Computador reservado, disponível em 30 minutos.";
+            // Obter detalhes da reserva
+            $reserva = $resultado->fetch_assoc();
+            $mensagem = "Computador reservado! Detalhes da reserva:";
+            $reservaDetalhes = "Nome: " . $reserva['aluno_nome'] . ", Email: " . $reserva['email_contato'] . ", Status: " . $reserva['status'];
         } else {
             $mensagem = "Computador disponível!";
         }
@@ -607,6 +607,9 @@ $conn->close();
 
         <?php if (!empty($mensagem)): ?>
             <p><?php echo $mensagem; ?></p>
+            <?php if (!empty($reservaDetalhes)): ?>
+                <p><?php echo $reservaDetalhes; ?></p>
+            <?php endif; ?>
         <?php endif; ?>
 
         <form id="bookingForm" action="" method="POST" onsubmit="return validateForm()">
@@ -680,6 +683,7 @@ function validateForm() {
     return true; // Permite o envio do formulário
 }
 </script>
+
 
 
 
