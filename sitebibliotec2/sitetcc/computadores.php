@@ -564,8 +564,7 @@ function displayFileName() {
                 <option value="4">Computador 4</option>
                 <option value="5">Computador 5</option>
                 <option value="6">Computador 6</option>
-                <option value="7">Computador 7</option>
-                <option value="8">Computador 8</option>
+    
             </select><br><br>
 
             <label for="data">Data:</label><br>
