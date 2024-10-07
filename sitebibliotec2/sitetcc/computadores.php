@@ -249,7 +249,7 @@ echo '<div style="background-color: #d3d3d3; width: 1600px; height: 700px; borde
 
 
                     .table close{
-                        margin-left: 160px;
+                        margin-left: 250px;
                         width: 15px;
                         height: 15px;
                         background: red;
