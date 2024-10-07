@@ -240,8 +240,12 @@ echo '<div style="background-color: #d3d3d3; width: 1600px; height: 700px; borde
                         background-color: #D9D9D9;
                         margin: 20% auto; /* Centralizar verticalmente e deixar uma margem de 25% em cima e em baixo */
                         padding: 20px;
-                        width: 22%; /* Largura do pop-up */
-                        height: 400px;
+                        width: 32%; /* Largura do pop-up */
+                        height: 650px;
+                        position: relative;
+                        left: 50%;
+                        top: 50%;
+                        transform: translate(-50%, -50%);
                     }
 
                     .table close{
@@ -543,7 +547,7 @@ function displayFileName() {
     
     
     
-    <button onclick="openPopup()" id="btn1">Horários</button>
+    <button onclick="openPopup()" id="btn1">Horários Reservados</button>
 
 
 
