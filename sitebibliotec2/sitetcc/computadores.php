@@ -556,6 +556,7 @@ $dataAtual = date('Y-m-d');
 // Mensagem de status
 $mensagem = '';
 $horariosIndisponiveis = [];
+$computadoresReservados = [];
 
 // Verificar reservas ao enviar o formulário
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -563,7 +564,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $data = $_POST['data'];
     $horario = $_POST['horario'];
 
-    // Montar a consulta SQL
+    // Montar a consulta SQL para verificar se o horário específico está reservado
     $query = "SELECT * FROM reservas_computadores 
               WHERE computador_id = ? 
               AND horario = ?";
@@ -579,13 +580,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Obter detalhes da reserva
             while ($reserva = $resultado->fetch_assoc()) {
                 $horariosIndisponiveis[] = $reserva['horario'];
+                $mensagem = "Computador reservado por " . $reserva['aluno_nome'] . ".";
             }
-            $mensagem = "Computador reservado por " . $reserva['aluno_nome'] . ".";
         } else {
             $mensagem = "Computador disponível!";
         }
 
         $stmt->close();
+    } else {
+        $mensagem = "Erro na preparação da consulta: " . $conn->error;
+    }
+
+    // Consulta para obter todos os horários reservados para o computador na data selecionada
+    $queryReservas = "SELECT horario FROM reservas_computadores 
+                      WHERE computador_id = ? 
+                      AND DATE(data_reserva) = ?"; // Supondo que a coluna da data de reserva se chama `data_reserva`
+
+    $stmtReservas = $conn->prepare($queryReservas);
+    if ($stmtReservas) {
+        $stmtReservas->bind_param("is", $numero, $data);
+        $stmtReservas->execute();
+        $resultadoReservas = $stmtReservas->get_result();
+
+        while ($reserva = $resultadoReservas->fetch_assoc()) {
+            $computadoresReservados[] = $reserva['horario'];
+        }
+
+        $stmtReservas->close();
     } else {
         $mensagem = "Erro na preparação da consulta: " . $conn->error;
     }
@@ -607,15 +628,23 @@ $conn->close();
             </p>
         <?php endif; ?>
 
-            <?php if (!empty($horariosIndisponiveis)): ?>
-                <p><strong>Horários Reservados:</strong></p>
-                <ul>
-                    <?php foreach ($horariosIndisponiveis as $horarioReservado): ?>
-                        <li><?php echo $horarioReservado; ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php endif; ?>
+        <?php if (!empty($horariosIndisponiveis)): ?>
+            <p><strong>Horários Reservados para este computador:</strong></p>
+            <ul>
+                <?php foreach ($horariosIndisponiveis as $horarioReservado): ?>
+                    <li><?php echo $horarioReservado; ?></li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
 
+        <?php if (!empty($computadoresReservados)): ?>
+            <p><strong>Todos os Horários Reservados:</strong></p>
+            <ul>
+                <?php foreach ($computadoresReservados as $horarioReservado): ?>
+                    <li><?php echo $horarioReservado; ?></li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
 
         <form id="bookingForm" action="" method="POST" onsubmit="return validateForm()">
             <label for="numero">Número do Computador:</label><br>
@@ -664,49 +693,6 @@ $conn->close();
     </div>
 </div>
 
-<!-- <script>
-function validateForm() {
-    const selectedDate = document.getElementById('data').value;
-    const selectedTime = document.getElementById('horario').value;
-
-    if (!selectedDate || !selectedTime) {
-        return true; // Se a data ou horário não estiverem selecionados, não faz a verificação
-    }
-
-    return true; // Permite o envio do formulário
-}
-</script> -->
-
-
-
-    
-
-<!-- <script>
-function validateForm() {
-    const selectedDate = document.getElementById('data').value;
-    const selectedTime = document.getElementById('horario').value;
-
-    if (!selectedDate || !selectedTime) {
-        return true; // Se a data ou horário não estiverem selecionados, não faz a verificação
-    }
-
-    const [startTime] = selectedTime.split(' às ');
-    const [startHour, startMinute] = startTime.split(':');
-    const selectedDateTime = new Date(selectedDate);
-    selectedDateTime.setHours(startHour, startMinute, 0, 0); // Reseta segundos e milissegundos
-
-    const currentDateTime = new Date();
-
-    // Comparar os horários
-    if (selectedDateTime < currentDateTime) {
-        alert('O horário selecionado já passou. Por favor, selecione um horário válido.');
-        return false; // Impede o envio do formulário
-    }
-
-    return true; // Permite o envio do formulário
-}
-</script>
- -->
 
 
 
