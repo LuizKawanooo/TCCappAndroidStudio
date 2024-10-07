@@ -555,7 +555,6 @@ $dataAtual = date('Y-m-d');
 
 // Mensagem de status
 $mensagem = '';
-$reservaDetalhes = '';
 
 // Verificar reservas ao enviar o formulário
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -563,7 +562,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $data = $_POST['data'];
     $horario = $_POST['horario'];
 
-    // Obter o horário de início
+    // Obter os horários de início e fim
     list($inicio, $fim) = explode(' às ', $horario);
 
     // Montar a consulta SQL
@@ -571,22 +570,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               WHERE computador_id = ? 
               AND data_reserva = ? 
               AND (
-                  horario = ? OR 
-                  horario = ADDTIME(?, '00:30:00')
+                  (horario BETWEEN ? AND ?) OR 
+                  (horario BETWEEN ADDTIME(?, '00:30:00') AND ADDTIME(?, '00:30:00'))
               )";
-    
+
     $stmt = $conn->prepare($query);
-    
+
     if ($stmt) {
-        $stmt->bind_param("isss", $numero, $data, $inicio, $inicio);
+        $stmt->bind_param("isssss", $numero, $data, $inicio, $fim, $inicio, $fim);
         $stmt->execute();
         $resultado = $stmt->get_result();
 
         if ($resultado->num_rows > 0) {
-            // Obter detalhes da reserva
-            $reserva = $resultado->fetch_assoc();
-            $mensagem = "Computador reservado! Detalhes da reserva:";
-            $reservaDetalhes = "Nome: " . $reserva['aluno_nome'] . ", Email: " . $reserva['email_contato'] . ", Status: " . $reserva['status'];
+            $mensagem = "Computador reservado, disponível em 30 minutos.";
         } else {
             $mensagem = "Computador disponível!";
         }
@@ -607,9 +603,6 @@ $conn->close();
 
         <?php if (!empty($mensagem)): ?>
             <p><?php echo $mensagem; ?></p>
-            <?php if (!empty($reservaDetalhes)): ?>
-                <p><?php echo $reservaDetalhes; ?></p>
-            <?php endif; ?>
         <?php endif; ?>
 
         <form id="bookingForm" action="" method="POST" onsubmit="return validateForm()">
@@ -678,15 +671,11 @@ function validateForm() {
 
     const currentDateTime = new Date();
 
-    // Ajuste de fuso horário se necessário
-    const timezoneOffset = currentDateTime.getTimezoneOffset() * 60000; // Offset em milissegundos
-    const localDateTime = new Date(currentDateTime.getTime() + timezoneOffset);
-
     // Log para verificar o horário atual
-    console.log("Horário atual:", localDateTime);
+    console.log("Horário atual:", currentDateTime);
 
     // Comparar os horários
-    if (selectedDateTime < localDateTime) {
+    if (selectedDateTime < currentDateTime) {
         alert('O horário selecionado já passou. Por favor, selecione um horário válido.');
         return false; // Impede o envio do formulário
     }
