@@ -659,7 +659,7 @@ $conn->close();
     </div>
 </div>
 
-<script>
+<!-- <script>
 function validateForm() {
     const selectedDate = document.getElementById('data').value;
     const selectedTime = document.getElementById('horario').value;
@@ -694,7 +694,7 @@ function validateForm() {
     return true; // Permite o envio do formulário
 }
 </script>
-
+ -->
 
 
 
