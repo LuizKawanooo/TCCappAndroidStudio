@@ -571,7 +571,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               AND data_reserva = ? 
               AND (
                   (horario BETWEEN ? AND ?) OR 
-                  (horario BETWEEN ADDTIME(?, '00:30:00') AND ADDTIME(?, '00:30:00'))
+                  (rental_end_time BETWEEN ADDTIME(?, '00:30:00') AND ADDTIME(?, '00:30:00'))
               )";
 
     $stmt = $conn->prepare($query);
@@ -582,7 +582,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $resultado = $stmt->get_result();
 
         if ($resultado->num_rows > 0) {
-            $mensagem = "Computador reservado, disponível em 30 minutos.";
+            // Obter detalhes da reserva
+            $reserva = $resultado->fetch_assoc();
+            $mensagem = "Computador reservado por " . $reserva['aluno_nome'] . " até " . $reserva['rental_end_time'] . ".";
         } else {
             $mensagem = "Computador disponível!";
         }
@@ -652,7 +654,7 @@ $conn->close();
     </div>
 </div>
 
-<!-- <script>
+<script>
 function validateForm() {
     const selectedDate = document.getElementById('data').value;
     const selectedTime = document.getElementById('horario').value;
@@ -666,13 +668,7 @@ function validateForm() {
     const selectedDateTime = new Date(selectedDate);
     selectedDateTime.setHours(startHour, startMinute, 0, 0); // Reseta segundos e milissegundos
 
-    // Log para verificar o horário selecionado
-    console.log("Horário selecionado:", selectedDateTime);
-
     const currentDateTime = new Date();
-
-    // Log para verificar o horário atual
-    console.log("Horário atual:", currentDateTime);
 
     // Comparar os horários
     if (selectedDateTime < currentDateTime) {
@@ -683,7 +679,7 @@ function validateForm() {
     return true; // Permite o envio do formulário
 }
 </script>
- -->
+
 
 
 
