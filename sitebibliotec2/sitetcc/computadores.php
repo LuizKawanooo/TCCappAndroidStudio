@@ -607,14 +607,15 @@ $conn->close();
             </p>
         <?php endif; ?>
 
-        <?php if (!empty($horariosIndisponiveis)): ?>
-            <p><strong>Horários Reservados:</strong></p>
-            <ul>
-                <?php foreach ($horariosIndisponiveis as $horarioReservado): ?>
-                    <li><?php echo $horarioReservado; ?></li>
-                <?php endforeach; ?>
-            </ul>
-        <?php endif; ?>
+            <?php if (!empty($horariosIndisponiveis)): ?>
+                <p><strong>Horários Reservados:</strong></p>
+                <ul>
+                    <?php foreach ($horariosIndisponiveis as $horarioReservado): ?>
+                        <li><?php echo $horarioReservado; ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+
 
         <form id="bookingForm" action="" method="POST" onsubmit="return validateForm()">
             <label for="numero">Número do Computador:</label><br>
