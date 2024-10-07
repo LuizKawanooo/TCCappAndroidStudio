@@ -547,62 +547,28 @@ function displayFileName() {
 
 
 
-<?php
+
+
+
+
+
+
+
+    <?php
 include "conexao.php";
-
-// Data atual
-$dataAtual = date('Y-m-d');
-
-// Mensagem de status
-$mensagem = '';
-$horariosIndisponiveis = [];
-$computadoresReservados = [];
 
 // Consulta inicial para carregar todas as reservas
 $queryReservas = "SELECT computador_id, horario, aluno_nome FROM reservas_computadores";
 $resultadoReservas = $conn->query($queryReservas);
 
+$computadoresReservados = [];
+
 if ($resultadoReservas) {
     while ($reserva = $resultadoReservas->fetch_assoc()) {
-        $computadoresReservados[] = [
-            'computador_id' => $reserva['computador_id'],
+        $computadoresReservados[$reserva['computador_id']][] = [
             'horario' => $reserva['horario'],
             'aluno_nome' => $reserva['aluno_nome']
         ];
-    }
-}
-
-// Verificar reservas ao enviar o formulário
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $numero = $_POST['numero'];
-    $data = $_POST['data'];
-    $horario = $_POST['horario'];
-
-    // Montar a consulta SQL para verificar se o horário específico está reservado
-    $query = "SELECT * FROM reservas_computadores 
-              WHERE computador_id = ? 
-              AND horario = ?";
-
-    $stmt = $conn->prepare($query);
-
-    if ($stmt) {
-        $stmt->bind_param("is", $numero, $horario);
-        $stmt->execute();
-        $resultado = $stmt->get_result();
-
-        if ($resultado->num_rows > 0) {
-            // Obter detalhes da reserva
-            while ($reserva = $resultado->fetch_assoc()) {
-                $horariosIndisponiveis[] = $reserva['horario'];
-                $mensagem = "Computador reservado por " . $reserva['aluno_nome'] . ".";
-            }
-        } else {
-            $mensagem = "Computador disponível!";
-        }
-
-        $stmt->close(); // Fecha o statement se foi preparado corretamente
-    } else {
-        $mensagem = "Erro na preparação da consulta: " . $conn->error;
     }
 }
 
@@ -614,78 +580,35 @@ $conn->close();
         <span class="close" onclick="closePopup()">&times;</span>
         <br>
 
-        <?php if (!empty($mensagem)): ?>
-            <p style="<?php echo strpos($mensagem, 'reservado') !== false ? 'color: red;' : ''; ?>">
-                <?php echo $mensagem; ?>
-            </p>
-        <?php endif; ?>
-
-        <?php if (!empty($horariosIndisponiveis)): ?>
-            <p><strong>Horários Reservados para este computador:</strong></p>
-            <ul>
-                <?php foreach ($horariosIndisponiveis as $horarioReservado): ?>
-                    <li><?php echo $horarioReservado; ?></li>
-                <?php endforeach; ?>
-            </ul>
-        <?php endif; ?>
+        <h2>Reservas dos Computadores</h2>
 
         <?php if (!empty($computadoresReservados)): ?>
-            <p><strong>Todos os Horários Reservados:</strong></p>
-            <ul>
-                <?php foreach ($computadoresReservados as $reserva): ?>
-                    <li>
-                        Computador <?php echo $reserva['computador_id']; ?> reservado por <?php echo $reserva['aluno_nome']; ?> no horário <?php echo $reserva['horario']; ?>.
-                    </li>
-                <?php endforeach; ?>
-            </ul>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Número do Computador</th>
+                        <th>Nome do Aluno</th>
+                        <th>Horário</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($computadoresReservados as $computadorId => $reservas): ?>
+                        <?php foreach ($reservas as $reserva): ?>
+                            <tr>
+                                <td><?php echo $computadorId; ?></td>
+                                <td><?php echo $reserva['aluno_nome']; ?></td>
+                                <td><?php echo $reserva['horario']; ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p>Nenhuma reserva encontrada.</p>
         <?php endif; ?>
-
-        <form id="bookingForm" action="" method="POST" onsubmit="return validateForm()">
-            <label for="numero">Número do Computador:</label><br>
-            <select class="numero" id="numero" name="numero" required>
-                <option value="0"></option>
-                <option value="1">Computador 1</option>
-                <option value="2">Computador 2</option>
-                <option value="3">Computador 3</option>
-                <option value="4">Computador 4</option>
-                <option value="5">Computador 5</option>
-                <option value="6">Computador 6</option>
-            </select><br><br>
-
-            <label for="data">Data:</label><br>
-            <input type="date" id="data" name="data" value="<?php echo $dataAtual; ?>" readonly required><br><br>
-
-            <label for="horario">Horário:</label><br>
-            <select class="horarios" id="horario" name="horario" required>
-                <option value="0"></option>
-                <option value="07:30:00">07:30 às 08:00</option>
-                <option value="08:00:00">08:00 às 08:30</option>
-                <option value="08:30:00">08:30 às 09:00</option>
-                <option value="09:00:00">09:00 às 09:30</option>
-                <option value="09:30:00">09:30 às 10:00</option>
-                <option value="10:00:00">10:00 às 10:30</option>
-                <option value="10:30:00">10:30 às 11:00</option>
-                <option value="11:00:00">11:00 às 11:30</option>
-                <option value="11:30:00">11:30 às 12:00</option>
-                <option value="12:00:00">12:00 às 12:30</option>
-                <option value="12:30:00">12:30 às 13:00</option>
-                <option value="13:00:00">13:00 às 13:30</option>
-                <option value="13:30:00">13:30 às 14:00</option>
-                <option value="14:00:00">14:00 às 14:30</option>
-                <option value="14:30:00">14:30 às 15:00</option>
-                <option value="15:00:00">15:00 às 15:30</option>
-                <option value="15:30:00">15:30 às 16:00</option>
-                <option value="16:00:00">16:00 às 16:30</option>
-                <option value="16:30:00">16:30 às 17:00</option>
-                <option value="17:00:00">17:00 às 17:30</option>
-                <option value="17:30:00">17:30 às 18:00</option>
-                <option value="18:00:00">18:00 às 18:30</option>
-            </select><br><br>
-    
-            <button type="submit" class="btn2">Verificar Disponibilidade</button>
-        </form>
     </div>
 </div>
+
 
 
 
