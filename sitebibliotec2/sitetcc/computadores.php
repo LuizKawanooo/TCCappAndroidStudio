@@ -243,8 +243,7 @@ echo '<div style="background-color: #d3d3d3; width: 1600px; height: 700px; borde
                         height: 650px;
                         justify-items: center;
                         position: relative;
-                        top: 5%
-                        left: 25%;
+                        top: -6%;
                     }
 
 
