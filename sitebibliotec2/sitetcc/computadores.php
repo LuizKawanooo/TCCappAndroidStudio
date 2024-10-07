@@ -233,20 +233,23 @@ echo '<div style="background-color: #d3d3d3; width: 1600px; height: 700px; borde
                         cursor: pointer;
                     }
 
-                    .table{
-                        
-                        justify-content: center;
+                    .table {
+                        display: flex; /* Utiliza Flexbox para o alinhamento */
+                        flex-direction: column; /* Alinha os itens na coluna */
+                        align-items: center; /* Centraliza os itens horizontalmente */
+                        justify-content: center; /* Centraliza os itens verticalmente */
                         border-radius: 10px;
                         background-color: #D9D9D9;
-                        margin: 20% auto; /* Centralizar verticalmente e deixar uma margem de 25% em cima e em baixo */
+                        margin: 20% auto; /* Centraliza verticalmente e deixa uma margem de 20% em cima e em baixo */
                         padding: 20px;
                         width: 32%; /* Largura do pop-up */
                         height: 650px;
                         position: relative;
-                        left: 50%;
-                        top: 50%;
+                        left: 0;
+                        top: 0;
                         transform: translate(-50%, -50%);
                     }
+
 
                     .table close{
                         padding-left: 100px;
