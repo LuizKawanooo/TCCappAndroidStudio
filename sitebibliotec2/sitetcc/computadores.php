@@ -558,6 +558,21 @@ $mensagem = '';
 $horariosIndisponiveis = [];
 $computadoresReservados = [];
 
+// Consulta inicial para carregar todas as reservas
+$queryReservas = "SELECT computador_id, horario, aluno_nome, DATE(data_reserva) AS data_reserva FROM reservas_computadores";
+$resultadoReservas = $conn->query($queryReservas);
+
+if ($resultadoReservas) {
+    while ($reserva = $resultadoReservas->fetch_assoc()) {
+        $computadoresReservados[] = [
+            'computador_id' => $reserva['computador_id'],
+            'horario' => $reserva['horario'],
+            'aluno_nome' => $reserva['aluno_nome'],
+            'data_reserva' => $reserva['data_reserva']
+        ];
+    }
+}
+
 // Verificar reservas ao enviar o formulário
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $numero = $_POST['numero'];
@@ -591,31 +606,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $mensagem = "Erro na preparação da consulta: " . $conn->error;
     }
 
-    // Consulta para obter todos os horários reservados para o computador na data selecionada
-    $queryReservas = "SELECT horario FROM reservas_computadores 
-                      WHERE computador_id = ? 
-                      AND DATE(data_reserva) = ?"; // Supondo que a coluna da data de reserva se chama `data_reserva`
-
-    $stmtReservas = $conn->prepare($queryReservas);
-    if ($stmtReservas) {
-        $stmtReservas->bind_param("is", $numero, $data);
-        $stmtReservas->execute();
-        $resultadoReservas = $stmtReservas->get_result();
-
-        while ($reserva = $resultadoReservas->fetch_assoc()) {
-            $computadoresReservados[] = $reserva['horario'];
-        }
-
-        $stmtReservas->close();
-    } else {
-        $mensagem = "Erro na preparação da consulta: " . $conn->error;
-    }
+    $stmtReservas->close();
 }
 
 $conn->close();
 ?>
 
-<div id="popup" class="popup" style="<?php echo ($_SERVER["REQUEST_METHOD"] == "POST" ? 'display: block;' : 'display: none;'); ?>">
+<div id="popup" class="popup" style="display: block;">
     <div class="table">
         <span class="close" onclick="closePopup()">&times;</span>
         <br>
@@ -640,8 +637,10 @@ $conn->close();
         <?php if (!empty($computadoresReservados)): ?>
             <p><strong>Todos os Horários Reservados:</strong></p>
             <ul>
-                <?php foreach ($computadoresReservados as $horarioReservado): ?>
-                    <li><?php echo $horarioReservado; ?></li>
+                <?php foreach ($computadoresReservados as $reserva): ?>
+                    <li>
+                        Computador <?php echo $reserva['computador_id']; ?> reservado por <?php echo $reserva['aluno_nome']; ?> no horário <?php echo $reserva['horario']; ?>.
+                    </li>
                 <?php endforeach; ?>
             </ul>
         <?php endif; ?>
