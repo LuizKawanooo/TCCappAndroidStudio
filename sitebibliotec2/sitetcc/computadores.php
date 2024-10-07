@@ -282,7 +282,7 @@ echo '<div style="background-color: #d3d3d3; width: 1600px; height: 700px; borde
                     }
 
                     /* Estilo para o select */
-                    select#pcs {
+                    select.numero {
                         width: 200px; /* largura desejada */
                         padding: 10px; /* espaçamento interno */
                         font-size: 16px; /* tamanho da fonte */
@@ -293,7 +293,7 @@ echo '<div style="background-color: #d3d3d3; width: 1600px; height: 700px; borde
                         position: relative; /* necessário para posicionar as opções */
                         cursor: pointer; /* cursor ao passar */
                     }
-                    select#horarios{
+                    select.horarios{
                         width: 200px; /* largura desejada */
                         padding: 10px; /* espaçamento interno */
                         font-size: 16px; /* tamanho da fonte */
@@ -306,14 +306,14 @@ echo '<div style="background-color: #d3d3d3; width: 1600px; height: 700px; borde
                     }
 
                     /* Estilo para as opções */
-                    select#pcs option {
+                    select.numero option {
                         padding: 10px; /* espaçamento interno */
                         font-size: 14px; /* tamanho da fonte */
                         color: #333; /* cor do texto */
                         background-color: #fff; /* cor de fundo */
                         cursor: pointer; /* cursor ao passar */
                     }
-                    select#horarios option {
+                    select.horarios option {
                         padding: 10px; /* espaçamento interno */
                         font-size: 14px; /* tamanho da fonte */
                         color: #333; /* cor do texto */
@@ -323,12 +323,12 @@ echo '<div style="background-color: #d3d3d3; width: 1600px; height: 700px; borde
                     
 
                     /* Estilo para quando o select estiver focado */
-                    select#pcs:focus {
+                    select.numero:focus {
                         outline: none; /* remove o contorno ao focar */
                         border-color: #66afe9; /* borda azul ao focar */
                         box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* sombra ao focar */
                     }
-                    select#horarios:focus {
+                    select.horarios:focus {
                         outline: none; /* remove o contorno ao focar */
                         border-color: #66afe9; /* borda azul ao focar */
                         box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* sombra ao focar */
@@ -350,13 +350,13 @@ echo '<div style="background-color: #d3d3d3; width: 1600px; height: 700px; borde
                         box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
                         border-color: #66afe9; /* borda azul ao focar */
                     }
-                    #data:focus{
+                    .data:focus{
                         outline: none;
                         box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
                         border-color: #66afe9; /* borda azul ao focar */
                     }
 
-                    #data{
+                    .data{
                         width: 170px;
                         height: 40px;
                     }
@@ -556,7 +556,7 @@ function displayFileName() {
 
         <form id="bookingForm" action="" method="POST" onsubmit="return validateForm()">
             <label for="numero">Número do Computador:</label><br>
-            <select id="numero" name="numero" required>
+            <select class="numero" id="numero" name="numero" required>
                 <option value="0"></option>
                 <option value="1">Computador 1</option>
                 <option value="2">Computador 2</option>
@@ -570,7 +570,7 @@ function displayFileName() {
             <input type="date" id="data" name="data" required><br><br>
 
             <label for="horario">Horário:</label><br>
-            <select id="horario" name="horario" required>
+            <select class="horarios" id="horario" name="horario" required>
                 <option value="0"></option>
                 <option value="07:30 às 08:00">07:30 às 08:00</option>
                 <option value="08:00 às 08:30">08:00 às 08:30</option>
