@@ -559,7 +559,7 @@ $horariosIndisponiveis = [];
 $computadoresReservados = [];
 
 // Consulta inicial para carregar todas as reservas
-$queryReservas = "SELECT computador_id, horario, aluno_nome, DATE(data_reserva) AS data_reserva FROM reservas_computadores";
+$queryReservas = "SELECT computador_id, horario, aluno_nome FROM reservas_computadores";
 $resultadoReservas = $conn->query($queryReservas);
 
 if ($resultadoReservas) {
@@ -567,8 +567,7 @@ if ($resultadoReservas) {
         $computadoresReservados[] = [
             'computador_id' => $reserva['computador_id'],
             'horario' => $reserva['horario'],
-            'aluno_nome' => $reserva['aluno_nome'],
-            'data_reserva' => $reserva['data_reserva']
+            'aluno_nome' => $reserva['aluno_nome']
         ];
     }
 }
@@ -601,12 +600,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mensagem = "Computador disponível!";
         }
 
-        $stmt->close();
+        $stmt->close(); // Fecha o statement se foi preparado corretamente
     } else {
         $mensagem = "Erro na preparação da consulta: " . $conn->error;
     }
-
-    $stmtReservas->close();
 }
 
 $conn->close();
@@ -616,8 +613,6 @@ $conn->close();
     <div class="table">
         <span class="close" onclick="closePopup()">&times;</span>
         <br>
-
-        <p>Tetse</p>
 
         <?php if (!empty($mensagem)): ?>
             <p style="<?php echo strpos($mensagem, 'reservado') !== false ? 'color: red;' : ''; ?>">
@@ -691,6 +686,7 @@ $conn->close();
         </form>
     </div>
 </div>
+
 
 
 
