@@ -671,11 +671,16 @@ function validateForm() {
     const [startTime] = selectedTime.split(' às ');
     const [startHour, startMinute] = startTime.split(':');
     const selectedDateTime = new Date(selectedDate);
-    selectedDateTime.setHours(startHour, startMinute);
+    selectedDateTime.setHours(startHour, startMinute, 0, 0); // Reseta segundos e milissegundos
 
     const currentDateTime = new Date();
 
-    if (selectedDateTime < currentDateTime) {
+    // Ajuste de fuso horário se necessário
+    const timezoneOffset = currentDateTime.getTimezoneOffset() * 60000; // Offset em milissegundos
+    const localDateTime = new Date(currentDateTime.getTime() + timezoneOffset);
+
+    // Comparar os horários
+    if (selectedDateTime < localDateTime) {
         alert('O horário selecionado já passou. Por favor, selecione um horário válido.');
         return false; // Impede o envio do formulário
     }
@@ -683,6 +688,7 @@ function validateForm() {
     return true; // Permite o envio do formulário
 }
 </script>
+
 
 
 
