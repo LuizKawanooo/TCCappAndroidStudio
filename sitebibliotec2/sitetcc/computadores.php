@@ -599,6 +599,8 @@ $conn->close();
         <span class="close" onclick="closePopup()">&times;</span>
         <br>
 
+        <p>Tetse</p>
+
         <?php if (!empty($mensagem)): ?>
             <p style="<?php echo strpos($mensagem, 'reservado') !== false ? 'color: red;' : ''; ?>">
                 <?php echo $mensagem; ?>
