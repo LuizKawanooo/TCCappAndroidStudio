@@ -574,16 +574,29 @@ function displayFileName() {
             <label for="horario">Horário:</label><br>
             <select id="data" name="horario" required>
                 <option value="0"></option>
-                <option value="07:00 às 08:00">07:00 às 08:00</option>
-                <option value="08:00 às 09:00">08:00 às 09:00</option>
-                <option value="09:00 às 10:00">09:00 às 10:00</option>
-                <option value="10:00 às 11:00">10:00 às 11:00</option>
-                <option value="11:00 às 12:00">11:00 às 12:00</option>
-                <option value="12:00 às 13:00">12:00 às 13:00</option>
-                <option value="13:00 às 14:00">13:00 às 14:00</option>
-                <option value="14:00 às 15:00">14:00 às 15:00</option>
-                <option value="15:00 às 16:00">15:00 às 16:00</option>
-                <option value="16:00 às 17:00">16:00 às 17:00</option>
+                <option value="07:30 às 08:00">07:30 às 08:00</option>
+                <option value="08:00 às 08:30">08:00 às 08:30</option>
+                <option value="09:00 às 09:30">08:30 às 09:00</option>
+                <option value="09:00 às 09:30">09:00 às 09:30</option>
+                <option value="09:30 às 10:00">09:30 às 10:00</option>
+                <option value="10:00 às 10:30">10:00 às 10:30</option>
+                <option value="10:30 às 11:00">10:30 às 11:00</option>
+                <option value="11:00 às 11:30">11:00 às 11:30</option>
+                <option value="11:30 às 12:00">11:30 às 12:00</option>
+                <option value="12:00 às 12:30">12:00 às 12:30</option>
+                <option value="12:30 às 13:00">12:30 às 13:00</option>
+                <option value="13:00 às 13:30">13:00 às 13:30</option>
+                <option value="13:30 às 14:00">13:30 às 14:00</option>
+                <option value="14:00 às 14:30">14:00 às 14:30</option>
+                <option value="14:30 às 15:00">14:30 às 15:00</option>
+                <option value="15:00 às 15:30">15:00 às 15:30</option>
+                <option value="15:30 às 16:00">15:30 às 16:00</option>
+                <option value="16:00 às 16:30">16:00 às 16:30</option>
+                <option value="16:30 às 17:00">16:30 às 17:00</option>
+                <option value="17:00 às 17:30">17:00 às 17:30</option>
+                <option value="17:30 às 18:00">17:30 às 18:00</option>
+                <option value="18:00 às 18:30">18:00 às 18:30</option>
+
             </select><br><br><br><br>
     
             <button type="submit" class="btn2">Verificar Disponibilidade</button>
