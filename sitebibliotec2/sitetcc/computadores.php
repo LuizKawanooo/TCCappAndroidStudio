@@ -544,6 +544,47 @@ function displayFileName() {
     
     
     <button onclick="openPopup()" id="btn1">Horários</button>
+
+
+
+    <?php
+
+include "conexao.php";
+
+// Data atual
+$dataAtual = date('Y-m-d');
+
+// Verificar reservas ao enviar o formulário
+$mensagem = '';
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $numero = $_POST['numero'];
+    $data = $_POST['data'];
+    $horario = $_POST['horario'];
+
+    // Obter os horários de início e fim
+    list($inicio, $fim) = explode(' às ', $horario);
+
+    // Verifique se o computador está reservado
+    $query = "SELECT * FROM reservas_computadores WHERE numero = ? AND data = ? AND (horario BETWEEN ? AND ?)";
+    $stmt = $mysqli->prepare($query);
+    $stmt->bind_param("isss", $numero, $data, $inicio, $fim);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+
+    if ($resultado->num_rows > 0) {
+        $mensagem = "Computador reservado, disponível em 30 minutos.";
+    } else {
+        $mensagem = "Computador disponível!";
+    }
+
+    $stmt->close();
+}
+
+$mysqli->close();
+?>
+
+
+    
       
 <div id="popup" class="popup" style="<?php echo ($_SERVER["REQUEST_METHOD"] == "POST" ? 'display: block;' : 'display: none;'); ?>">
     <div class="table">
@@ -567,7 +608,7 @@ function displayFileName() {
             </select><br><br>
 
             <label for="data">Data:</label><br>
-            <input type="date" id="data" name="data" required><br><br>
+            <input type="date" id="data" name="data" value="<?php echo $dataAtual; ?>" readonly required><br><br>
 
             <label for="horario">Horário:</label><br>
             <select class="horarios" id="horario" name="horario" required>
@@ -610,7 +651,7 @@ function validateForm() {
         return true; // Se a data ou horário não estiverem selecionados, não faz a verificação
     }
 
-    const [startTime, endTime] = selectedTime.split(' às ');
+    const [startTime] = selectedTime.split(' às ');
     const [startHour, startMinute] = startTime.split(':');
     const selectedDateTime = new Date(selectedDate);
     selectedDateTime.setHours(startHour, startMinute);
