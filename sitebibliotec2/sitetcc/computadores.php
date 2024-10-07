@@ -565,19 +565,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Obter os horários de início e fim
     list($inicio, $fim) = explode(' às ', $horario);
 
+    // Criar data e hora completas
+    $dataHoraInicio = $data . ' ' . $inicio;
+    $dataHoraFim = $data . ' ' . $fim;
+
     // Montar a consulta SQL
     $query = "SELECT * FROM reservas_computadores 
               WHERE computador_id = ? 
               AND data_reserva = ? 
               AND (
                   (horario BETWEEN ? AND ?) OR 
-                  (horario + INTERVAL 30 MINUTE BETWEEN ? AND ?)
+                  (horario BETWEEN ADDTIME(?, '00:30:00') AND ADDTIME(?, '00:30:00'))
               )";
     
     $stmt = $conn->prepare($query);
     
     if ($stmt) {
-        $stmt->bind_param("isssss", $numero, $data, $inicio, $fim, $inicio, $fim);
+        $stmt->bind_param("issss", $numero, $data, $inicio, $fim, $inicio, $fim);
         $stmt->execute();
         $resultado = $stmt->get_result();
 
@@ -676,6 +680,7 @@ function validateForm() {
     return true; // Permite o envio do formulário
 }
 </script>
+
 
 
 
