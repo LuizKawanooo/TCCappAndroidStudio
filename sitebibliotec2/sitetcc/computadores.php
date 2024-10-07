@@ -242,7 +242,9 @@ echo '<div style="background-color: #d3d3d3; width: 1600px; height: 700px; borde
                         width: 32%; /* Largura do pop-up */
                         height: 650px;
                         justify-items: center;
-                        
+                        position: relative;
+                        top: 5%
+                        left: 25%;
                     }
 
 
