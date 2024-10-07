@@ -224,8 +224,11 @@ echo '<div style="background-color: #d3d3d3; width: 1600px; height: 700px; borde
                         height: 20px;
                         background: red;
                         position: absolute;
-                        left: 69%;
+                        left: 85%;
                         color: white;
+                        align-items: center;
+                        justify-content: center;
+                        align-content: center;
                     }
                     
                     .close:hover,
