@@ -659,7 +659,7 @@ $conn->close();
     </div>
 </div>
 
-<!-- <script>
+<script>
 function validateForm() {
     const selectedDate = document.getElementById('data').value;
     const selectedTime = document.getElementById('horario').value;
@@ -673,11 +673,17 @@ function validateForm() {
     const selectedDateTime = new Date(selectedDate);
     selectedDateTime.setHours(startHour, startMinute, 0, 0); // Reseta segundos e milissegundos
 
+    // Log para verificar o horário selecionado
+    console.log("Horário selecionado:", selectedDateTime);
+
     const currentDateTime = new Date();
 
     // Ajuste de fuso horário se necessário
     const timezoneOffset = currentDateTime.getTimezoneOffset() * 60000; // Offset em milissegundos
     const localDateTime = new Date(currentDateTime.getTime() + timezoneOffset);
+
+    // Log para verificar o horário atual
+    console.log("Horário atual:", localDateTime);
 
     // Comparar os horários
     if (selectedDateTime < localDateTime) {
@@ -687,7 +693,7 @@ function validateForm() {
 
     return true; // Permite o envio do formulário
 }
-</script> -->
+</script>
 
 
 
