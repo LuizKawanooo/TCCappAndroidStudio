@@ -545,7 +545,7 @@ function displayFileName() {
     
     <button onclick="openPopup()" id="btn1">Horários</button>
       
-    <div id="popup" class="popup" style="<?php echo ($_SERVER["REQUEST_METHOD"] == "POST" ? 'display: block;' : 'display: none;'); ?>">
+<div id="popup" class="popup" style="<?php echo ($_SERVER["REQUEST_METHOD"] == "POST" ? 'display: block;' : 'display: none;'); ?>">
     <div class="table">
         <span class="close" onclick="closePopup()">&times;</span>
         <br>
@@ -554,9 +554,9 @@ function displayFileName() {
             <p><?php echo $mensagem; ?></p>
         <?php endif; ?>
 
-        <form action="" method="POST">
+        <form id="bookingForm" action="" method="POST" onsubmit="return validateForm()">
             <label for="numero">Número do Computador:</label><br>
-            <select id="data" name="numero" required>
+            <select id="numero" name="numero" required>
                 <option value="0"></option>
                 <option value="1">Computador 1</option>
                 <option value="2">Computador 2</option>
@@ -564,18 +564,17 @@ function displayFileName() {
                 <option value="4">Computador 4</option>
                 <option value="5">Computador 5</option>
                 <option value="6">Computador 6</option>
-    
             </select><br><br>
 
             <label for="data">Data:</label><br>
             <input type="date" id="data" name="data" required><br><br>
 
             <label for="horario">Horário:</label><br>
-            <select id="data" name="horario" required>
+            <select id="horario" name="horario" required>
                 <option value="0"></option>
                 <option value="07:30 às 08:00">07:30 às 08:00</option>
                 <option value="08:00 às 08:30">08:00 às 08:30</option>
-                <option value="09:00 às 09:30">08:30 às 09:00</option>
+                <option value="08:30 às 09:00">08:30 às 09:00</option>
                 <option value="09:00 às 09:30">09:00 às 09:30</option>
                 <option value="09:30 às 10:00">09:30 às 10:00</option>
                 <option value="10:00 às 10:30">10:00 às 10:30</option>
@@ -595,13 +594,37 @@ function displayFileName() {
                 <option value="17:00 às 17:30">17:00 às 17:30</option>
                 <option value="17:30 às 18:00">17:30 às 18:00</option>
                 <option value="18:00 às 18:30">18:00 às 18:30</option>
-
             </select><br><br><br><br>
     
             <button type="submit" class="btn2">Verificar Disponibilidade</button>
         </form>
     </div>
 </div>
+
+<script>
+function validateForm() {
+    const selectedDate = document.getElementById('data').value;
+    const selectedTime = document.getElementById('horario').value;
+
+    if (!selectedDate || !selectedTime) {
+        return true; // Se a data ou horário não estiverem selecionados, não faz a verificação
+    }
+
+    const [startTime, endTime] = selectedTime.split(' às ');
+    const [startHour, startMinute] = startTime.split(':');
+    const selectedDateTime = new Date(selectedDate);
+    selectedDateTime.setHours(startHour, startMinute);
+
+    const currentDateTime = new Date();
+
+    if (selectedDateTime < currentDateTime) {
+        alert('O horário selecionado já passou. Por favor, selecione um horário válido.');
+        return false; // Impede o envio do formulário
+    }
+
+    return true; // Permite o envio do formulário
+}
+</script>
 
 
     
