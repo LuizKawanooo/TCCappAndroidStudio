@@ -560,7 +560,7 @@ $horariosIndisponiveis = [];
 // Verificar reservas ao enviar o formulário
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $numero = $_POST['numero'];
-    $data = $_POST['data']; // A data ainda é necessária para exibir, mas não será usada na consulta
+    $data = $_POST['data'];
     $horario = $_POST['horario'];
 
     // Montar a consulta SQL
@@ -600,7 +600,18 @@ $conn->close();
         <br>
 
         <?php if (!empty($mensagem)): ?>
-            <p><?php echo $mensagem; ?></p>
+            <p style="<?php echo strpos($mensagem, 'reservado') !== false ? 'color: red;' : ''; ?>">
+                <?php echo $mensagem; ?>
+            </p>
+        <?php endif; ?>
+
+        <?php if (!empty($horariosIndisponiveis)): ?>
+            <p><strong>Horários Reservados:</strong></p>
+            <ul>
+                <?php foreach ($horariosIndisponiveis as $horarioReservado): ?>
+                    <li><?php echo $horarioReservado; ?></li>
+                <?php endforeach; ?>
+            </ul>
         <?php endif; ?>
 
         <form id="bookingForm" action="" method="POST" onsubmit="return validateForm()">
@@ -650,7 +661,7 @@ $conn->close();
     </div>
 </div>
 
-<script>
+<!-- <script>
 function validateForm() {
     const selectedDate = document.getElementById('data').value;
     const selectedTime = document.getElementById('horario').value;
@@ -661,7 +672,7 @@ function validateForm() {
 
     return true; // Permite o envio do formulário
 }
-</script>
+</script> -->
 
 
 
