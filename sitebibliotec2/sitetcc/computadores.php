@@ -547,15 +547,16 @@ function displayFileName() {
 
 
 
-    <?php
-
+<?php
 include "conexao.php";
 
 // Data atual
 $dataAtual = date('Y-m-d');
 
-// Verificar reservas ao enviar o formulário
+// Mensagem de status
 $mensagem = '';
+
+// Verificar reservas ao enviar o formulário
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $numero = $_POST['numero'];
     $data = $_POST['data'];
@@ -564,28 +565,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Obter os horários de início e fim
     list($inicio, $fim) = explode(' às ', $horario);
 
-    // Verifique se o computador está reservado
-    $query = "SELECT * FROM reservas_computadores WHERE numero = ? AND data = ? AND (horario BETWEEN ? AND ?)";
-    $stmt = $mysqli->prepare($query);
-    $stmt->bind_param("isss", $numero, $data, $inicio, $fim);
-    $stmt->execute();
-    $resultado = $stmt->get_result();
+    // Montar a consulta SQL
+    $query = "SELECT * FROM reservas_computadores 
+              WHERE computador_id = ? 
+              AND data_reserva = ? 
+              AND (
+                  (horario BETWEEN ? AND ?) OR 
+                  (horario + INTERVAL 30 MINUTE BETWEEN ? AND ?)
+              )";
+    
+    $stmt = $conn->prepare($query);
+    
+    if ($stmt) {
+        $stmt->bind_param("isssss", $numero, $data, $inicio, $fim, $inicio, $fim);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
 
-    if ($resultado->num_rows > 0) {
-        $mensagem = "Computador reservado, disponível em 30 minutos.";
+        if ($resultado->num_rows > 0) {
+            $mensagem = "Computador reservado, disponível em 30 minutos.";
+        } else {
+            $mensagem = "Computador disponível!";
+        }
+
+        $stmt->close();
     } else {
-        $mensagem = "Computador disponível!";
+        $mensagem = "Erro na preparação da consulta: " . $conn->error;
     }
-
-    $stmt->close();
 }
 
-$mysqli->close();
+$conn->close();
 ?>
 
-
-    
-      
 <div id="popup" class="popup" style="<?php echo ($_SERVER["REQUEST_METHOD"] == "POST" ? 'display: block;' : 'display: none;'); ?>">
     <div class="table">
         <span class="close" onclick="closePopup()">&times;</span>
@@ -666,6 +676,7 @@ function validateForm() {
     return true; // Permite o envio do formulário
 }
 </script>
+
 
 
     
