@@ -574,6 +574,16 @@
     </form>
 </div>
 
+
+
+
+
+
+
+
+
+
+    
 <?php
 // Conexão com o banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
@@ -607,28 +617,12 @@ if ($result) {
         echo "<div class='container'>";
         while ($row = $result->fetch_assoc()) {
             echo "<div class='livro'>";
-            // if ($row["imagem"]) {
-            //     echo "<img src='image.php?id=" . $row["id"] . "' alt='imagem do livro' style='max-width: 130px; max-height: 150px;'>";
-            // }
-
-                // Consulta para buscar as imagens
-                $sql = "SELECT imagem FROM livros";
-                $result = $conn->query($sql);
-                
-                // Verifica se há resultados
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        // Exibe cada imagem em um div estilizado
-
-                        // Exibe cada imagem em um div estilizado
+            if ($row["imagem"]) {
+                // echo "<img src='image.php?id=" . $row["id"] . "' alt='imagem do livro' style='max-width: 130px; max-height: 150px;'>";
                         echo '<div>
                                 <img src="data:image/jpeg;base64,' . base64_encode($row['imagem']) . '" style="max-width: 130px; max-height: 150px; object-fit: contain;">
                               </div>';
-
-                    }
-                }
-
-            
+            }
             echo "<center><h1>" . $row["titulo"] . "</h1></center>";
 
             // Verifica o status do livro e exibe a mensagem apropriada
