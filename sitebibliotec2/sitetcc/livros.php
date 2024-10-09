@@ -722,6 +722,10 @@ $conn->close();
 
 
 
+
+
+    
+
 <?php
 // Conexão com o banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
@@ -795,6 +799,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
+
+
+
+
+
+
+
+
+
+    
 
 <?php
 // Conexão com o banco de dados
