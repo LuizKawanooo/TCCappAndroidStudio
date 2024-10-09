@@ -711,14 +711,25 @@ $conn->close();
             <br>
             <input type="submit" value="Salvar" class="btn2">
         </form>
-        <span class="closee" onclick="closePopupEditar()">&times;</span>
+        <span class="closee" id="closeModal" onclick="closePopupEditar()">&times;</span>
     </div>
 </div>
 
 
 
 
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const closeModalBtn = document.getElementById('closeModal');
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', () => {
+            document.getElementById('popup-editar').style.display = 'none';
+        });
+    } else {
+        console.error('Botão de fechar modal não encontrado.');
+    }
+});
+</script>
 
 
     
@@ -1076,5 +1087,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
 
+
+    
 </body>
 </html>
