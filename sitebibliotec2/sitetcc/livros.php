@@ -831,64 +831,66 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 <script>
-                  document.addEventListener('DOMContentLoaded', function() {
     const adicionarLivroBtn = document.getElementById('adicionar-livro-btn');
-    const editarLivroBtn = document.getElementById('editar-livro-btn');
-    const modal = document.getElementById('popup');
-    const modale = document.getElementById('popup-editar');
-    const closeModalBtn = document.querySelector('.close');
-    const closeModalBtne = document.querySelector('.closee');
-    const salvarLivroBtn = document.getElementById('pop');
-    const livrosContainer = document.getElementById('livros-container');
-    const meuBotao = document.getElementById('meuBotao');
+                    const editarLivroBtn = document.getElementById('editar-livro-btn');
+                    const modal = document.getElementById('popup');
+                    const modale = document.getElementById('popup-editar');
+                    const closeModalBtn = document.querySelector('.close');
+                    const closeModalBtne = document.querySelector('.closee');
+                    const salvarLivroBtn = document.getElementById('pop');
+                    const livrosContainer = document.getElementById('livros-container');
 
-    let livroEditando = null; // Variável para armazenar o livro que está sendo editado
+                    let contadorLivros = 0; // Contador de livros adicionados
+                    let livroEditando = null; // Variável para armazenar o livro que está sendo editado
 
-    adicionarLivroBtn.addEventListener('click', () => {
-        limparFormulario(); // Limpa o formulário antes de abrir o popup
-        modal.style.display = 'block';
-    });
+                    adicionarLivroBtn.addEventListener('click', () => {
+                    limparFormulario(); // Limpa o formulário antes de abrir o popup
+                    modal.style.display = 'block';
+                    });
 
-    editarLivroBtn.addEventListener('click', () => {
-        limparFormulario(); // Limpa o formulário antes de abrir o popup
-        modale.style.display = 'block'; // Abre o modal de edição
-    });
+                    editarLivroBtn.addEventListener('click', () => {
+                    limparFormulario(); // Limpa o formulário antes de abrir o popup
+                    modal.style.display = 'block';
+                    });
 
-    closeModalBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
 
-    closeModalBtne.addEventListener('click', () => {
-        modale.style.display = 'none';
-    });
+                    closeModalBtn.addEventListener('click', () => {
+                    modal.style.display = 'none';
+                    });
 
-    salvarLivroBtn.addEventListener('click', (event) => {
-        event.preventDefault(); // Evita que o formulário seja enviado
-        const nome = document.getElementById('livro-nome').value;
-        const autor = document.getElementById('livro-autor').value;
-        const imagemFile = document.getElementById('livro-imagem').files[0];
+                    closeModalBtne.addEventListener('click', () => {
+                    modale.style.display = 'none';
+                    });
 
-        // Aqui você pode adicionar a lógica para salvar o livro
-        console.log('Nome:', nome);
-        console.log('Autor:', autor);
-        // Implementar o upload da imagem e a requisição para adicionar o livro
-    });
+                    salvarLivroBtn.addEventListener('submit', (event) => {
+                    event.preventDefault(); // Evita que o formulário seja enviado
+                    const nome = document.getElementById('livro-nome').value;
+                    const autor = document.getElementById('livro-autor').value;
+                    const imagemFile = document.getElementById('livro-imagem').files[0]; // Nova linha para obter o arquivo de imagem
 
-    function limparFormulario() {
-        // Limpa todos os campos do formulário
-        document.getElementById('livro-nome').value = '';
-        document.getElementById('livro-autor').value = ''; // Limpa também o autor
-        document.getElementById('livro-imagem').value = ''; // Limpa o campo de imagem
-    }
+                    });
 
-    // Adiciona um event listener para o evento de clique no botão
-    if (meuBotao) {
-        meuBotao.addEventListener('click', function() {
-            // Adiciona a classe 'vermelho' ao botão
-            meuBotao.classList.add('vermelho');
-        });
-    }
 
+                    function limparFormulario() {
+                    // Limpa todos os campos do formulário
+                    document.getElementById('livro-nome').value = '';
+                    document.getElementById('livro-imagem').value = '';
+                    }
+                    
+
+                    const meuBotao = document.getElementById('meuBotao');
+
+                    // Adiciona um event listener para o evento de clique
+                    meuBotao.addEventListener('click', function() {
+                        // Adiciona a classe 'vermelho' ao botão
+                        meuBotao.classList.add('vermelho');
+                    });
+
+
+
+
+
+                    document.addEventListener('DOMContentLoaded', function() {
     const botoesEmprestar = document.querySelectorAll('.btn4');
 
     botoesEmprestar.forEach(botao => {
@@ -904,20 +906,16 @@ document.addEventListener('DOMContentLoaded', function() {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        id: livroId,
-                        novoStatus: 'Alugado'
+                        livroId: livroId,
+                        novoStatus: 'alugado'
                     })
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.success) {
-                        // Atualizar o botão e exibir a cor vermelha
-                        botao.style.backgroundColor = 'red';
-                        botao.textContent = 'Alugado';
-                        botao.setAttribute('data-status-atual', 'alugado');
-                    } else {
-                        console.error('Erro ao alterar o status:', data.error);
-                    }
+                    // Atualizar o botão e exibir a cor vermelha
+                    botao.style.backgroundColor = 'red';
+                    botao.textContent = 'Alugado';
+                    botao.setAttribute('data-status-atual', 'alugado');
                 })
                 .catch(error => {
                     console.error('Erro ao alterar o status:', error);
