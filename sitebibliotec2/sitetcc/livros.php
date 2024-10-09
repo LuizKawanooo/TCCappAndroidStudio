@@ -1,3 +1,8 @@
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -278,14 +283,11 @@
                 outline: none;
             }
             
-
-
-
+            
             .popup {
+                padding-top: 600px;
                 display: none; /* Por padrão, o pop-up estará oculto */
-                position: fixed; /* Mantém o pop-up fixo na tela */
-
-                
+                position: fixed; /* Posicionamento fixo para que o pop-up fique no mesmo lugar ao rolar a página */
                 top: 10%;
                 left: 50%;
                 transform: translate(-50%,-50%);
@@ -293,15 +295,10 @@
                 height: 280%; /* Preencher toda a altura */
                 background-color: rgba(0,0,0,0.5); /* Fundo escuro semi-transparente */
                 background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 95%, rgba(0,0,0,0) 100%);
-
+                 z-index: 500;
                 
-                display: flex; /* Usar flexbox para centralizar o conteúdo */
-                justify-content: center; /* Centraliza horizontalmente */
-                align-items: center; /* Centraliza verticalmente */
-                z-index: 999; /* Aumentar o z-index para garantir que o popup apareça acima de tudo */
+                
             }
-
-           
             .popupe {
                 margin-top: 70px;
                 padding-top: 500px;
@@ -372,16 +369,11 @@
                 width: 17%; /* Largura do pop-up */
                 
             }
-
-            
-
-
-
             .tablee{
                 display: grid;
                 justify-content: center;
                 border-radius: 10px;
-                z-index: 1000;
+                z-index: 500;
                 position: absolute;
                 top: -7%;
                 left: 34%;
@@ -592,11 +584,6 @@
 
 
 
-
-
-
-
-    
 <?php
 // Conexão com o banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
@@ -663,13 +650,12 @@ if ($result) {
 $conn->close();
 ?>
 
-    
-//============================================================================================================================================================================================//
+
 
 <div id="popup" class="popup">
     <div class="table">
         <h1>Adicionar livro</h1>
-        <form action="upload_livros.php" method="post" enctype="multipart/form-data"> <!-- Atualizado para enviar para upload.php -->
+        <form action="livros.php" method="post" enctype="multipart/form-data"> <!-- Adicionado enctype para envio de arquivos -->
             <label for="titulo">Título:</label><br>
             <input type="text" id="livro-nome" name="titulo" class="inp" required><br>
             <label for="autor">Autor:</label><br>
@@ -689,7 +675,7 @@ $conn->close();
             <label for="isbn">ISBN:</label><br>
             <input type="text" id="isbn" name="isbn" class="inp" required><br>
             <br>
-            <input type="file" id="livro-imagem" name="imagem" accept="image/*" required>
+            <input type="file" id="livro-imagem" name="imagem" accept="image/*" required> <!-- Adiciona input para selecionar a imagem -->
             <br>
             <input type="submit" value="Enviar" class="btn2">
         </form>
@@ -699,14 +685,11 @@ $conn->close();
 
 
 
-
-
-
-
-   <div id="popup-editar" class="popup">
+<div id="popup-editar" class="popup">
     <div class="tablee">
         <h1>Editar livro</h1>
         <form id="editar-form" action="editar_livro.php" method="post" enctype="multipart/form-data">
+            <!-- Campos do formulário -->
             <input type="hidden" id="editar-id" name="id">
             <label for="editar-titulo">Título:</label><br>
             <input type="text" id="editar-titulo" name="titulo" class="inp"><br>
@@ -726,94 +709,20 @@ $conn->close();
             <input type="number" id="editar-n_paginas" name="n_paginas" min="1" class="inp"><br>
             <label for="editar-isbn">ISBN:</label><br>
             <input type="text" id="editar-isbn" name="isbn" class="inp"><br>
+            <br>
             <input type="file" id="livro-imagem" name="imagem" accept="image/*">
+    
             <br>
             <input type="submit" value="Salvar" class="btn2">
         </form>
-        <span class="closee" onclick="closePopupEditar()">&times;</span>
+        <span class="closee" onclick="closePopupEditar  ()">&times;</span>
     </div>
 </div>
 
 
 
-    <?php
-// Conexão com o banco de dados
-$servername = "tccappionic-bd.mysql.uhserver.com";
-$username = "ionic_perfil_bd";
-$password = "{[UOLluiz2019";
-$dbname = "tccappionic_bd";
 
-// Cria a conexão
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Verifica a conexão
-if ($conn->connect_error) {
-    die("Erro na conexão: " . $conn->connect_error);
-}
-
-// Verifica se o formulário foi enviado
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Prepara os dados para inserção no banco de dados
-    $titulo = $_POST['titulo'];
-    $autor = $_POST['autor'];
-    $genero = $_POST['genero'];
-    $editora = $_POST['editora'];
-    $tombo = $_POST['tombo'];
-    $ano = $_POST['ano'];
-    $classificacao = $_POST['classificacao'];
-    $n_paginas = $_POST['n_paginas'];
-    $isbn = $_POST['isbn'];
-
-    // Processa o upload da imagem
-    $imagem = NULL;
-    if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
-        $tmp_name = $_FILES['imagem']['tmp_name'];
-        $imageData = file_get_contents($tmp_name);
-
-        // Verifica se o arquivo é uma imagem válida
-        $fileType = mime_content_type($tmp_name);
-        $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
-
-        if (in_array($fileType, $allowedTypes)) {
-            $imagem = $imageData;
-        } else {
-            echo "Arquivo não é uma imagem válida. Formatos aceitos: JPEG, PNG, GIF.";
-            exit;
-        }
-    }
-
-    // Prepara a consulta SQL para inserção
-    $sql = "INSERT INTO livros (titulo, genero, autor, editora, tombo, ano, classificacao, n_paginas, isbn, imagem) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-    if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param(
-            "sssssssssb",
-            $titulo, $genero, $autor, $editora, $tombo, $ano, $classificacao, $n_paginas, $isbn, $imagem
-        );
-
-        // Executa a consulta
-        if ($stmt->execute()) {
-            echo "<script>window.location.href = 'livros.php';</script>";
-        } else {
-            echo "Erro ao inserir registro: " . $stmt->error;
-        }
-
-        // Fecha a consulta
-        $stmt->close();
-    } else {
-        // Exibe a mensagem de erro se a preparação da consulta falhar
-        echo "Erro na preparação da consulta: " . $conn->error;
-    }
-
-    // Fecha a conexão com o banco de dados
-    $conn->close();
-}
-?>
-
-
-
-<!-- <?php
+<?php
 // Conexão com o banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
 $username = "ionic_perfil_bd";
@@ -884,9 +793,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Fecha a conexão com o banco de dados
     $conn->close();
 }
-?> -->
-
-//============================================================================================================================================================================================//
+?>
 
 
 <?php
@@ -1131,7 +1038,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                 });
             </script>
-<!--             <script>
+            <script>
                 // Adiciona um event listener para cada gênero
                 document.querySelectorAll('.generos').forEach(genreElement => {
                     genreElement.addEventListener('click', () => {
@@ -1176,43 +1083,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Código existente
             </script>
- -->
-
-
-
-<script>
-document.querySelectorAll('.btn3').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const livroId = this.getAttribute('data-id');
-
-        fetch(`get_livro.php?id=${livroId}`)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('editar-id').value = data.id;
-                document.getElementById('editar-titulo').value = data.titulo;
-                document.getElementById('editar-autor').value = data.autor;
-                document.getElementById('editar-editora').value = data.editora;
-                document.getElementById('editar-genero').value = data.genero;
-                document.getElementById('editar-tombo').value = data.tombo;
-                document.getElementById('editar-ano').value = data.ano;
-                document.getElementById('editar-classificacao').value = data.classificacao;
-                document.getElementById('editar-n_paginas').value = data.n_paginas;
-                document.getElementById('editar-isbn').value = data.isbn;
-                document.getElementById('popup-editar').style.display = 'flex'; // Exibe o popup
-            })
-            .catch(error => console.error('Erro ao carregar dados do livro:', error));
-    });
-});
-
-function closePopupEditar() {
-    document.getElementById('popup-editar').style.display = 'none'; // Oculta o popup
-}
-
-</script>
-
-
-
-
 
 </body>
 </html>
