@@ -930,9 +930,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     // Adiciona um event listener para o evento de clique
                     meuBotao.addEventListener('click', function() {
-                        // Adiciona a classe 'vermelho' ao botão
+                        
                         meuBotao.classList.add('vermelho');
                     });
+
 
 
 
