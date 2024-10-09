@@ -796,54 +796,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 
-<?php
-// Conexão com o banco de dados
-$servername = "tccappionic-bd.mysql.uhserver.com";
-
-$username = "ionic_perfil_bd";
-
-$password = "{[UOLluiz2019";
-
-$dbname = "tccappionic_bd";
- 
-// Cria a conexão
-
-$conn = new mysqli($servername, $username, $password, $dbname);
- 
-
-// Verifica a conexão
-if ($conn->connect_error) {
-    die("Erro na conexão: " . $conn->connect_error);
-}
-
-// Recebe a solicitação do cliente
-$input = json_decode(file_get_contents('php://input'), true);
-
-if (isset($input['id']) && isset($input['novoStatus'])) {
-    $id = $conn->real_escape_string($input['id']);
-    $novoStatus = $conn->real_escape_string($input['novoStatus']);
-
-    // Verifica se o novoStatus é um valor válido
-    $validStatuses = ['Disponível', 'Alugado'];
-    if (in_array($novoStatus, $validStatuses)) {
-        // Prepara a consulta SQL para atualizar o status
-        $sql = "UPDATE livros SET status='$novoStatus' WHERE id='$id'";
-
-        if ($conn->query($sql) === TRUE) {
-            echo "";
-        } else {
-            echo "";
-        }
-    } else {
-        echo "";
-    }
-} else {
-    echo "";
-}
-
-// Fecha a conexão com o banco de dados
-$conn->close();
-?>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
