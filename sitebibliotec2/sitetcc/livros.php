@@ -632,8 +632,15 @@ if ($result) {
                 echo "<h2 style='color: red;'>Livro alugado</h2>";
             }
 
+            // echo "<div class='botoes'>";
+            // // echo "<div class='btn3' data-id='" . $row["id"] . "'>Editar</div>";
+            // echo "<div class='btn3' data-id='" . $row['id'] . "'>Editar</div>";
+            // echo "<div class='btn-excluir' data-id='" . $row["id"] . "'>Excluir</div>";
+            // echo "</div>";
+            // echo "</div>";
+
+                        echo "<center><h1>" . $row["titulo"] . "</h1></center>";
             echo "<div class='botoes'>";
-            // echo "<div class='btn3' data-id='" . $row["id"] . "'>Editar</div>";
             echo "<div class='btn3' data-id='" . $row['id'] . "'>Editar</div>";
             echo "<div class='btn-excluir' data-id='" . $row["id"] . "'>Excluir</div>";
             echo "</div>";
@@ -1167,17 +1174,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-
-    <script>
-    // Adiciona um event listener para cada gênero
-    document.querySelectorAll('.generos').forEach(genreElement => {
-        genreElement.addEventListener('click', () => {
-            const genero = genreElement.getAttribute('data-genero');
-            // Redireciona para a página de livros com o gênero como parâmetro
-            window.location.href = `livros.php?search=${encodeURIComponent(genero)}`;
-        });
-    });
-
+<script>
     // Lida com o clique do botão "Editar"
     document.querySelectorAll('.btn3').forEach(btn => {
         btn.addEventListener('click', function() {
@@ -1219,11 +1216,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function closePopupEditar() {
         document.getElementById('popup-editar').style.display = 'none';
     }
-    
-    function closePopup() {
-        document.getElementById('popup').style.display = 'none';
-    }
 </script>
+
 
 
 
