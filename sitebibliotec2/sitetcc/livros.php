@@ -715,23 +715,6 @@ $conn->close();
     </div>
 </div>
 
-
-
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const closeModalBtn = document.getElementById('closeModal');
-    if (closeModalBtn) {
-        closeModalBtn.addEventListener('click', () => {
-            document.getElementById('popup-editar').style.display = 'none';
-        });
-    } else {
-        console.error('Botão de fechar modal não encontrado.');
-    }
-});
-</script>
-
-
     
 
 
