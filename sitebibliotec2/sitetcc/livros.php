@@ -577,7 +577,7 @@
 
 
 
-
+<div class="btn3" data-id="<?php echo $row['id']; ?>">Editar</div>
 
 
 
