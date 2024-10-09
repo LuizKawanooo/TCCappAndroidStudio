@@ -689,23 +689,23 @@ $conn->close();
         <form id="editar-form" action="editar_livro.php" method="post" enctype="multipart/form-data">
             <input type="hidden" id="editar-id" name="id"> <!-- ID do livro -->
             <label for="editar-titulo">Título:</label><br>
-            <input type="text" id="editar-titulo" name="titulo" class="inp" ><br>
+            <input type="text" id="editar-titulo" name="titulo" class="inp"><br>
             <label for="editar-autor">Autor:</label><br>
-            <input type="text" id="editar-autor" name="autor" class="inp" ><br>
+            <input type="text" id="editar-autor" name="autor" class="inp"><br>
             <label for="editar-editora">Editora:</label><br>
-            <input type="text" id="editar-editora" name="editora" class="inp" ><br>
+            <input type="text" id="editar-editora" name="editora" class="inp"><br>
             <label for="editar-genero">Gênero:</label><br>
-            <input type="text" id="editar-genero" name="genero" class="inp" ><br>
+            <input type="text" id="editar-genero" name="genero" class="inp"><br>
             <label for="editar-tombo">Tombo:</label><br>
-            <input type="text" id="editar-tombo" name="tombo" class="inp" ><br>
+            <input type="text" id="editar-tombo" name="tombo" class="inp"><br>
             <label for="editar-ano">Ano:</label><br>
-            <input type="date" id="editar-ano" name="ano" class="inpd" ><br>
+            <input type="date" id="editar-ano" name="ano" class="inpd"><br>
             <label for="editar-classificacao">Classificação:</label><br>
-            <input type="text" id="editar-classificacao" name="classificacao" class="inp" ><br>
+            <input type="text" id="editar-classificacao" name="classificacao" class="inp"><br>
             <label for="editar-n_paginas">Número de Páginas:</label><br>
-            <input type="number" id="editar-n_paginas" name="n_paginas" min="1" class="inp" ><br>
+            <input type="number" id="editar-n_paginas" name="n_paginas" min="1" class="inp"><br>
             <label for="editar-isbn">ISBN:</label><br>
-            <input type="text" id="editar-isbn" name="isbn" class="inp" ><br>
+            <input type="text" id="editar-isbn" name="isbn" class="inp"><br>
             <br>
             <input type="file" id="livro-imagem" name="imagem" accept="image/*">
             <br>
@@ -1087,6 +1087,80 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const botoesEditar = document.querySelectorAll('.btn3'); // Altere '.btn3' para o seletor correto
+    const modalEditar = document.getElementById('popup-editar');
+
+    // Função para carregar os dados do livro
+    botoesEditar.forEach(botao => {
+        botao.addEventListener('click', function() {
+            const livroId = this.getAttribute('data-id');
+            fetch(`get_livro.php?id=${livroId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+
+                    // Preencher o formulário com os dados do livro
+                    document.getElementById('editar-id').value = data.id;
+                    document.getElementById('editar-titulo').value = data.titulo;
+                    document.getElementById('editar-autor').value = data.autor;
+                    document.getElementById('editar-editora').value = data.editora;
+                    document.getElementById('editar-genero').value = data.genero;
+                    document.getElementById('editar-tombo').value = data.tombo;
+                    document.getElementById('editar-ano').value = data.ano;
+                    document.getElementById('editar-classificacao').value = data.classificacao;
+                    document.getElementById('editar-n_paginas').value = data.n_paginas;
+                    document.getElementById('editar-isbn').value = data.isbn;
+
+                    // Exibe o modal de edição
+                    modalEditar.style.display = 'flex';
+                })
+                .catch(error => console.error('Erro ao carregar dados do livro:', error));
+        });
+    });
+
+    // Fecha o modal
+    document.querySelectorAll('.closee').forEach(closeBtn => {
+        closeBtn.addEventListener('click', closePopupEditar);
+    });
+});
+
+// Função para fechar o popup de edição
+function closePopupEditar() {
+    document.getElementById('popup-editar').style.display = 'none';
+}
+</script>
+
 
 
     
