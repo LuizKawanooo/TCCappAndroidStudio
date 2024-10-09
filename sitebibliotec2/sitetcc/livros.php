@@ -577,7 +577,7 @@
 
 
 
-<div class="btn3" data-id="<?php echo $row['id']; ?>">Editar</div>
+
 
 
 
@@ -633,7 +633,8 @@ if ($result) {
             }
 
             echo "<div class='botoes'>";
-            echo "<div class='btn3' data-id='" . $row["id"] . "'>Editar</div>";
+            // echo "<div class='btn3' data-id='" . $row["id"] . "'>Editar</div>";
+            echo "<div class='btn3' data-id='" . $row['id'] . "'>Editar</div>";
             echo "<div class='btn-excluir' data-id='" . $row["id"] . "'>Excluir</div>";
             echo "</div>";
             echo "</div>";
