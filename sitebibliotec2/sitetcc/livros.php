@@ -785,32 +785,48 @@ $conn->close();
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.btn-excluir').forEach(button => {
-        button.addEventListener('click', function() {
-            const livroId = this.getAttribute('data-id');
-            
-            if (confirm('Tem certeza de que deseja excluir este livro?')) {
-                fetch('excluir_livro.php', {
+    const botoesEmprestar = document.querySelectorAll('.btn4');
+
+    botoesEmprestar.forEach(botao => {
+        botao.addEventListener('click', function() {
+            const livroId = this.getAttribute('data-livro-id');
+            const statusAtual = this.getAttribute('data-status-atual');
+
+            if (statusAtual === 'disponivel') {
+                const novoStatus = 'Alugado'; // Atualiza o status para 'Alugado'
+
+                // Enviar requisição para alterar o status do livro para 'alugado'
+                fetch('alterar_status.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ id: livroId })
+                    body: JSON.stringify({
+                        id: livroId,
+                        novoStatus: novoStatus
+                    })
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.success) {
-                        // Recarrega a página após a exclusão
-                        window.location.reload();
+                    if (data.error) {
+                        console.error(data.error);
                     } else {
-                        alert('Erro ao excluir o livro: ' + (data.error || 'Desconhecido'));
+                        // Atualizar o botão e exibir a cor vermelha
+                        botao.style.backgroundColor = 'red';
+                        botao.textContent = 'Alugado';
+                        botao.setAttribute('data-status-atual', 'alugado');
                     }
                 })
-                .catch(error => console.error('Erro ao excluir o livro:', error));
+                .catch(error => {
+                    console.error('Erro ao alterar o status:', error);
+                });
+            } else {
+                console.log('Livro já está alugado.');
             }
         });
     });
 });
+
 
 
 </script>
