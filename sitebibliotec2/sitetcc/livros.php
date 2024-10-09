@@ -278,11 +278,14 @@
                 outline: none;
             }
             
-            
+
+
+
             .popup {
-                padding-top: 600px;
                 display: none; /* Por padrão, o pop-up estará oculto */
-                position: fixed; /* Posicionamento fixo para que o pop-up fique no mesmo lugar ao rolar a página */
+                position: fixed; /* Mantém o pop-up fixo na tela */
+
+                
                 top: 10%;
                 left: 50%;
                 transform: translate(-50%,-50%);
@@ -290,9 +293,12 @@
                 height: 280%; /* Preencher toda a altura */
                 background-color: rgba(0,0,0,0.5); /* Fundo escuro semi-transparente */
                 background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 95%, rgba(0,0,0,0) 100%);
-                 z-index: 500;
+
                 
-                
+                display: flex; /* Usar flexbox para centralizar o conteúdo */
+                justify-content: center; /* Centraliza horizontalmente */
+                align-items: center; /* Centraliza verticalmente */
+                z-index: 999; /* Aumentar o z-index para garantir que o popup apareça acima de tudo */
             }
 
            
@@ -366,12 +372,19 @@
                 width: 17%; /* Largura do pop-up */
                 
             }
-            .tablee{
+
+            
+
+
+
+            .tablee {
                 display: grid;
                 justify-content: center;
                 border-radius: 10px;
-                z-index: 1000;
-                position: absolute;
+                z-index: 1000; /* Aumentar z-index para garantir que esteja acima de outros elementos */
+
+                
+                position: relative; /* Alterar para relative para o posicionamento correto dentro do popup */
                 top: -7%;
                 left: 34%;
                 background-color: #D9D9D9;
@@ -379,7 +392,6 @@
                 padding: 20px;  
                 width: 17%; /* Largura do pop-up */
             }
-
             
             .table close{
                 padding-left: 100px;
