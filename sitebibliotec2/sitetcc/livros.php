@@ -793,6 +793,8 @@ if (isset($input['id']) && isset($input['novoStatus'])) {
     echo "";
 }
 
+// Fecha a conexão com o banco de dados
+$conn->close();
 
 ?>
 
