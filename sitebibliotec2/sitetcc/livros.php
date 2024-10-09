@@ -694,7 +694,7 @@ $conn->close();
 
 
 
-<div id="popup-editar" class="popup">
+<!-- <div id="popup-editar" class="popup">
     <div class="tablee">
         <h1>Editar livro</h1>
         <form id="editar-form" action="editar_livro.php" method="post" enctype="multipart/form-data">
@@ -727,7 +727,39 @@ $conn->close();
         <span class="closee" onclick="closePopupEditar  ()">&times;</span>
     </div>
 </div>
+ -->
 
+
+    <div id="popup-editar" class="popup" style="display:none;">
+    <div class="tablee">
+        <h1>Editar livro</h1>
+        <form id="editar-form" action="editar_livro.php" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="editar-id" name="id">
+            <label for="editar-titulo">Título:</label><br>
+            <input type="text" id="editar-titulo" name="titulo" class="inp"><br>
+            <label for="editar-autor">Autor:</label><br>
+            <input type="text" id="editar-autor" name="autor" class="inp"><br>
+            <label for="editar-editora">Edição:</label><br>
+            <input type="text" id="editar-editora" name="editora" class="inp"><br>
+            <label for="editar-genero">Gênero:</label><br>
+            <input type="text" id="editar-genero" name="genero" class="inp"><br>
+            <label for="editar-tombo">Tombo:</label><br>
+            <input type="text" id="editar-tombo" name="tombo" class="inp"><br>
+            <label for="editar-ano">Data:</label><br>
+            <input type="date" id="editar-ano" name="ano" class="inpd"><br>
+            <label for="editar-classificacao">Classificação:</label><br>
+            <input type="text" id="editar-classificacao" name="classificacao" class="inp"><br>
+            <label for="editar-n_paginas">Número de Páginas:</label><br>
+            <input type="number" id="editar-n_paginas" name="n_paginas" min="1" class="inp"><br>
+            <label for="editar-isbn">ISBN:</label><br>
+            <input type="text" id="editar-isbn" name="isbn" class="inp"><br>
+            <input type="file" id="livro-imagem" name="imagem" accept="image/*">
+            <br>
+            <input type="submit" value="Salvar" class="btn2">
+        </form>
+        <span class="closee" onclick="closePopupEditar()">&times;</span>
+    </div>
+</div>
 
 
     <?php
@@ -1175,7 +1207,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 <script>
-    // Lida com o clique do botão "Editar"
     document.querySelectorAll('.btn3').forEach(btn => {
         btn.addEventListener('click', function() {
             const livroId = this.getAttribute('data-id');
@@ -1200,8 +1231,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         document.getElementById('editar-n_paginas').value = data.n_paginas;
                         document.getElementById('editar-isbn').value = data.isbn;
 
-                        // Exibe o popup
-                        document.getElementById('popup-editar').style.display = 'flex';
+                        document.getElementById('popup-editar').style.display = 'flex'; // Exibe o popup
                     } else {
                         console.error('Nenhum dado encontrado para o livro.');
                     }
@@ -1212,11 +1242,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Função para fechar o popup
     function closePopupEditar() {
-        document.getElementById('popup-editar').style.display = 'none';
+        document.getElementById('popup-editar').style.display = 'none'; // Oculta o popup
     }
 </script>
+
 
 
 
