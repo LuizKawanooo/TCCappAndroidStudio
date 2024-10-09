@@ -650,6 +650,16 @@ $conn->close();
 ?>
 
 
+     <script>
+        document.querySelectorAll('.btn3').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const livroId = this.getAttribute('data-id');
+                window.location.href = `get_livros.php?id=${livroId}`; // Redireciona para a página de edição
+            });
+        });
+    </script>
+
+
 <div id="popup" class="popup">
     <div class="table">
         <h1>Adicionar livro</h1>
