@@ -990,7 +990,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-            <script>
+<!--             <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     // Seleciona todos os elementos com a classe 'generos'
                     const generoElements = document.querySelectorAll('.generos');
@@ -1010,7 +1010,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         });
                     });
                 });
-            </script>
+            </script> -->
 
 
 
