@@ -642,7 +642,7 @@ $conn->close();
 <div id="popup" class="popup">
     <div class="table">
         <h1>Adicionar livro</h1>
-        <form action="livros.php" method="post" enctype="multipart/form-data"> <!-- Adicionado enctype para envio de arquivos -->
+        <form action="upload.php" method="post" enctype="multipart/form-data"> <!-- Atualizado para enviar para upload.php -->
             <label for="titulo">Título:</label><br>
             <input type="text" id="livro-nome" name="titulo" class="inp" required><br>
             <label for="autor">Autor:</label><br>
@@ -662,13 +662,14 @@ $conn->close();
             <label for="isbn">ISBN:</label><br>
             <input type="text" id="isbn" name="isbn" class="inp" required><br>
             <br>
-            <input type="file" id="livro-imagem" name="imagem" accept="image/*" required> <!-- Adiciona input para selecionar a imagem -->
+            <input type="file" id="livro-imagem" name="imagem" accept="image/*" required>
             <br>
             <input type="submit" value="Enviar" class="btn2">
         </form>
         <span class="close" onclick="closePopup()">&times;</span>
     </div>
 </div>
+
 
 
 
