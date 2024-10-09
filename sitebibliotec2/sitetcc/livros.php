@@ -687,35 +687,34 @@ $conn->close();
     <div class="tablee">
         <h1>Editar livro</h1>
         <form id="editar-form" action="editar_livro.php" method="post" enctype="multipart/form-data">
-            <!-- Campos do formulário -->
-            <input type="hidden" id="editar-id" name="id">
+            <input type="hidden" id="editar-id" name="id"> <!-- ID do livro -->
             <label for="editar-titulo">Título:</label><br>
-            <input type="text" id="editar-titulo" name="titulo" class="inp"><br>
+            <input type="text" id="editar-titulo" name="titulo" class="inp" ><br>
             <label for="editar-autor">Autor:</label><br>
-            <input type="text" id="editar-autor" name="autor" class="inp"><br>
-            <label for="editar-editora">Edição:</label><br>
-            <input type="text" id="editar-editora" name="editora" class="inp"><br>
+            <input type="text" id="editar-autor" name="autor" class="inp" ><br>
+            <label for="editar-editora">Editora:</label><br>
+            <input type="text" id="editar-editora" name="editora" class="inp" ><br>
             <label for="editar-genero">Gênero:</label><br>
-            <input type="text" id="editar-genero" name="genero" class="inp"><br>
+            <input type="text" id="editar-genero" name="genero" class="inp" ><br>
             <label for="editar-tombo">Tombo:</label><br>
-            <input type="text" id="editar-tombo" name="tombo" class="inp"><br>
-            <label for="editar-ano">Data:</label><br>
-            <input type="date" id="editar-ano" name="ano" class="inpd"><br>
+            <input type="text" id="editar-tombo" name="tombo" class="inp" ><br>
+            <label for="editar-ano">Ano:</label><br>
+            <input type="date" id="editar-ano" name="ano" class="inpd" ><br>
             <label for="editar-classificacao">Classificação:</label><br>
-            <input type="text" id="editar-classificacao" name="classificacao" class="inp"><br>
+            <input type="text" id="editar-classificacao" name="classificacao" class="inp" ><br>
             <label for="editar-n_paginas">Número de Páginas:</label><br>
-            <input type="number" id="editar-n_paginas" name="n_paginas" min="1" class="inp"><br>
+            <input type="number" id="editar-n_paginas" name="n_paginas" min="1" class="inp" ><br>
             <label for="editar-isbn">ISBN:</label><br>
-            <input type="text" id="editar-isbn" name="isbn" class="inp"><br>
+            <input type="text" id="editar-isbn" name="isbn" class="inp" ><br>
             <br>
             <input type="file" id="livro-imagem" name="imagem" accept="image/*">
-    
             <br>
             <input type="submit" value="Salvar" class="btn2">
         </form>
-        <span class="closee" onclick="closePopupEditar  ()">&times;</span>
+        <span class="closee" onclick="closePopupEditar()">&times;</span>
     </div>
 </div>
+
 
 
 
@@ -1005,54 +1004,45 @@ document.addEventListener('DOMContentLoaded', function() {
 
     
             <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Evento para abrir o popup de edição ao clicar no botão de editar
-    document.querySelectorAll('.btn3').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const livroId = this.getAttribute('data-id');
-            console.log('ID do livro:', livroId); // Verifique se o ID correto está sendo capturado
-
-            fetch(`get_livro.php?id=${livroId}`)
-                .then(response => response.json())
-                .then(data => {
-                    // Preenche os campos do formulário com os dados do livro
-                    document.getElementById('editar-id').value = data.id;
-                    document.getElementById('editar-titulo').value = data.titulo;
-                    document.getElementById('editar-autor').value = data.autor;
-                    document.getElementById('editar-editora').value = data.editora;
-                    document.getElementById('editar-genero').value = data.genero;
-                    document.getElementById('editar-tombo').value = data.tombo;
-                    document.getElementById('editar-ano').value = data.ano;
-                    document.getElementById('editar-classificacao').value = data.classificacao;
-                    document.getElementById('editar-n_paginas').value = data.n_paginas;
-                    document.getElementById('editar-isbn').value = data.isbn;
-
-                    // Exibe o popup de edição
-                    document.getElementById('popup-editar').style.display = 'flex';
-                })
-                .catch(error => console.error('Erro ao carregar dados do livro:', error));
-        });
-    });
-
-    // Função para fechar o popup de edição
-    document.querySelectorAll('.closee').forEach(closeBtn => {
-        closeBtn.addEventListener('click', closePopupEditar);
-    });
-
-    // Função para fechar o popup de adicionar livro
-    document.querySelectorAll('.close').forEach(closeBtn => {
-        closeBtn.addEventListener('click', closePopup);
-    });
-});
-
-// Funções para fechar os popups
-function closePopupEditar() {
-    document.getElementById('popup-editar').style.display = 'none';
-}
-
-function closePopup() {
-    document.getElementById('popup').style.display = 'none';
-}
+                document.addEventListener('DOMContentLoaded', function() {
+                    document.querySelectorAll('.btn3').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const livroId = this.getAttribute('data-id');
+                            console.log('ID do livro:', livroId);
+                
+                            fetch(`get_livro.php?id=${livroId}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.id) { // Verifica se os dados foram encontrados
+                                        document.getElementById('editar-id').value = data.id;
+                                        document.getElementById('editar-titulo').value = data.titulo;
+                                        document.getElementById('editar-autor').value = data.autor;
+                                        document.getElementById('editar-editora').value = data.editora;
+                                        document.getElementById('editar-genero').value = data.genero;
+                                        document.getElementById('editar-tombo').value = data.tombo;
+                                        document.getElementById('editar-ano').value = data.ano;
+                                        document.getElementById('editar-classificacao').value = data.classificacao;
+                                        document.getElementById('editar-n_paginas').value = data.n_paginas;
+                                        document.getElementById('editar-isbn').value = data.isbn;
+                
+                                        // Exibe o popup de edição
+                                        document.getElementById('popup-editar').style.display = 'flex';
+                                    } else {
+                                        alert('Livro não encontrado.');
+                                    }
+                                })
+                                .catch(error => console.error('Erro ao carregar dados do livro:', error));
+                        });
+                    });
+                
+                    document.querySelectorAll('.closee').forEach(closeBtn => {
+                        closeBtn.addEventListener('click', closePopupEditar);
+                    });
+                });
+                
+                function closePopupEditar() {
+                    document.getElementById('popup-editar').style.display = 'none';
+                }
 
 </script>
 
