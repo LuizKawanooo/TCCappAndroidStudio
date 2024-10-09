@@ -1,8 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 
@@ -11,26 +7,20 @@ $username = "ionic_perfil_bd";
 $password = "{[UOLluiz2019";
 $dbname = "tccappionic_bd";
 
-// Cria a conexão
 $conn = new mysqli($servername, $username, $password, $dbname);
-
-// Verifica a conexão
 if ($conn->connect_error) {
     echo json_encode(['error' => 'Erro na conexão: ' . $conn->connect_error]);
     exit;
 }
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
-
 if ($id === null) {
     echo json_encode(['error' => 'ID não fornecido.']);
     exit;
 }
 
-// Prepara a consulta para selecionar todos os dados do livro (sem a imagem)
-$sql = "SELECT id, titulo, autor, editora, genero, tombo, ano, classificacao, n_paginas, isbn FROM livros WHERE id = ?";
+$sql = "SELECT titulo, autor, editora, genero, tombo, ano, classificacao, n_paginas, isbn FROM livros WHERE id = ?";
 $stmt = $conn->prepare($sql);
-
 if (!$stmt) {
     echo json_encode(['error' => 'Erro na preparação da consulta: ' . $conn->error]);
     exit;
