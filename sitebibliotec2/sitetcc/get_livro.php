@@ -1,5 +1,7 @@
 <?php
 header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *'); // Permite todas as origens
+
 
 $servername = "tccappionic-bd.mysql.uhserver.com";
 $username = "ionic_perfil_bd";
@@ -22,6 +24,7 @@ if ($id === null) {
     exit;
 }
 
+// Prepara a consulta para selecionar todos os dados do livro
 $sql = "SELECT * FROM livros WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $id);
@@ -32,8 +35,10 @@ if ($result->num_rows > 0) {
     $livro = $result->fetch_assoc();
     
     // Se a imagem estiver presente, converta para base64
-    if ($livro['imagem']) {
+    if (isset($livro['imagem']) && !empty($livro['imagem'])) {
         $livro['imagem'] = 'data:image/jpeg;base64,' . base64_encode($livro['imagem']);
+    } else {
+        $livro['imagem'] = null; // ou uma string padrão se a imagem não existir
     }
 
     echo json_encode($livro);
