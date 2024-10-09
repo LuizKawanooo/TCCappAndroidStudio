@@ -1118,7 +1118,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                 });
             </script>
-            <script>
+<!--             <script>
                 // Adiciona um event listener para cada gênero
                 document.querySelectorAll('.generos').forEach(genreElement => {
                     genreElement.addEventListener('click', () => {
@@ -1163,48 +1163,68 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Código existente
             </script>
-
-
-
-
-
-
+ -->
 
 
 
 
     <script>
-document.querySelectorAll('.btn3').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const livroId = this.getAttribute('data-id');
-
-        // Carregar dados do livro
-        fetch(`get_livro.php?id=${livroId}`)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('editar-id').value = data.id;
-                document.getElementById('editar-titulo').value = data.titulo;
-                document.getElementById('editar-autor').value = data.autor;
-                document.getElementById('editar-editora').value = data.editora;
-                document.getElementById('editar-genero').value = data.genero;
-                document.getElementById('editar-tombo').value = data.tombo;
-                document.getElementById('editar-ano').value = data.ano;
-                document.getElementById('editar-classificacao').value = data.classificacao;
-                document.getElementById('editar-n_paginas').value = data.n_paginas;
-                document.getElementById('editar-isbn').value = data.isbn;
-
-                // Mostrar o popup
-                document.getElementById('popup-editar').style.display = 'flex'; 
-            })
-            .catch(error => console.error('Erro ao carregar dados do livro:', error));
+    // Adiciona um event listener para cada gênero
+    document.querySelectorAll('.generos').forEach(genreElement => {
+        genreElement.addEventListener('click', () => {
+            const genero = genreElement.getAttribute('data-genero');
+            // Redireciona para a página de livros com o gênero como parâmetro
+            window.location.href = `livros.php?search=${encodeURIComponent(genero)}`;
+        });
     });
-});
 
-// Função para fechar o popup
-function closePopupEditar() {
-    document.getElementById('popup-editar').style.display = 'none'; 
-}
+    // Lida com o clique do botão "Editar"
+    document.querySelectorAll('.btn3').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const livroId = this.getAttribute('data-id');
+
+            fetch(`get_livro.php?id=${livroId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && Object.keys(data).length > 0) {
+                        document.getElementById('editar-id').value = data.id;
+                        document.getElementById('editar-titulo').value = data.titulo;
+                        document.getElementById('editar-autor').value = data.autor;
+                        document.getElementById('editar-editora').value = data.editora;
+                        document.getElementById('editar-genero').value = data.genero;
+                        document.getElementById('editar-tombo').value = data.tombo;
+                        document.getElementById('editar-ano').value = data.ano;
+                        document.getElementById('editar-classificacao').value = data.classificacao;
+                        document.getElementById('editar-n_paginas').value = data.n_paginas;
+                        document.getElementById('editar-isbn').value = data.isbn;
+
+                        // Exibe o popup
+                        document.getElementById('popup-editar').style.display = 'flex';
+                    } else {
+                        console.error('Nenhum dado encontrado para o livro.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar dados do livro:', error);
+                });
+        });
+    });
+
+    // Função para fechar o popup
+    function closePopupEditar() {
+        document.getElementById('popup-editar').style.display = 'none';
+    }
+    
+    function closePopup() {
+        document.getElementById('popup').style.display = 'none';
+    }
 </script>
+
 
 
 </body>
