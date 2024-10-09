@@ -101,56 +101,71 @@
 
 
 
-
-
-
 <?php
 // editar_livro.php
-header('Content-Type: application/json');
-
 $servername = "tccappionic-bd.mysql.uhserver.com";
 $username = "ionic_perfil_bd";
 $password = "{[UOLluiz2019";
 $dbname = "tccappionic_bd";
 
-// Cria a conexão
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Verifica a conexão
 if ($conn->connect_error) {
-    die("Erro na conexão: " . $conn->connect_error);
+    die(json_encode(['error' => 'Erro na conexão: ' . $conn->connect_error]));
 }
 
-// Coleta os dados do formulário
-$id = $_POST['id'];
-$titulo = $_POST['titulo'];
-$autor = $_POST['autor'];
-$editora = $_POST['editora'];
-$genero = $_POST['genero'];
-$tombo = $_POST['tombo'];
-$ano = $_POST['ano'];
-$classificacao = $_POST['classificacao'];
-$n_paginas = $_POST['n_paginas'];
-$isbn = $_POST['isbn'];
-$imagem = null;
+// Recebe os dados do formulário
+$id = $conn->real_escape_string($_POST['id']);
+$titulo = $conn->real_escape_string($_POST['titulo']);
+$autor = $conn->real_escape_string($_POST['autor']);
+$editora = $conn->real_escape_string($_POST['editora']);
+$genero = $conn->real_escape_string($_POST['genero']);
+$tombo = $conn->real_escape_string($_POST['tombo']);
+$ano = $conn->real_escape_string($_POST['ano']);
+$classificacao = $conn->real_escape_string($_POST['classificacao']);
+$n_paginas = $conn->real_escape_string($_POST['n_paginas']);
+$isbn = $conn->real_escape_string($_POST['isbn']);
 
-// Verifica se uma nova imagem foi enviada
-if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
-    $imagem = file_get_contents($_FILES['imagem']['tmp_name']);
+// Inicializa a variável de imagem
+$imagemPath = null;
+
+// Lógica para lidar com a imagem
+if (!empty($_FILES['imagem']['name'])) {
+    $imagem = $_FILES['imagem'];
+    $imagemNome = time() . '_' . basename($imagem['name']); // Renomeia o arquivo para evitar conflitos
+    $destino = 'caminho/do/diretorio/' . $imagemNome; // Substitua pelo caminho correto
+
+    // Move o arquivo para o diretório desejado
+    if (move_uploaded_file($imagem['tmp_name'], $destino)) {
+        $imagemPath = $conn->real_escape_string($destino); // Atualiza o caminho da imagem
+    } else {
+        die(json_encode(['error' => 'Erro ao mover o arquivo da imagem.']));
+    }
 }
 
-// Prepara a consulta SQL para atualização
-$sql = "UPDATE livros SET titulo=?, autor=?, editora=?, genero=?, tombo=?, ano=?, classificacao=?, n_paginas=?, isbn=?, imagem=? WHERE id=?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("sssssisssi", $titulo, $autor, $editora, $genero, $tombo, $ano, $classificacao, $n_paginas, $isbn, $imagem, $id);
+// Prepara a consulta SQL para atualizar o livro
+$sql = "UPDATE livros SET 
+            titulo='$titulo', 
+            autor='$autor', 
+            editora='$editora', 
+            genero='$genero', 
+            tombo='$tombo', 
+            ano='$ano', 
+            classificacao='$classificacao', 
+            n_paginas='$n_paginas', 
+            isbn='$isbn'";
 
-// Tenta executar a atualização
-if ($stmt->execute()) {
-    echo json_encode(['status' => 'success', 'message' => 'Livro atualizado com sucesso!']);
+if ($imagemPath) {
+    $sql .= ", imagem='$imagemPath'"; // Atualiza o campo da imagem, se necessário
+}
+
+$sql .= " WHERE id='$id'";
+
+if ($conn->query($sql) === TRUE) {
+    echo json_encode(['success' => true]);
 } else {
-    echo json_encode(['status' => 'error', 'message' => 'Erro ao atualizar o livro.']);
+    echo json_encode(['error' => 'Erro ao atualizar livro: ' . $conn->error]);
 }
 
-$stmt->close();
 $conn->close();
 ?>
