@@ -23,8 +23,8 @@ if ($id === null) {
     exit;
 }
 
-// Prepara a consulta para selecionar todos os dados do livro
-$sql = "SELECT * FROM livros WHERE id = ?";
+// Prepara a consulta para selecionar todos os dados do livro (sem a imagem)
+$sql = "SELECT id, titulo, autor, editora, genero, tombo, ano, classificacao, n_paginas, isbn FROM livros WHERE id = ?";
 $stmt = $conn->prepare($sql);
 
 if (!$stmt) {
@@ -38,16 +38,6 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $livro = $result->fetch_assoc();
-    
-    // Se a imagem estiver presente, converte para base64
-    if (isset($livro['imagem']) && !empty($livro['imagem'])) {
-        // Garante que a imagem é do tipo blob e converte
-        $livro['imagem'] = 'data:image/jpeg;base64,' . base64_encode($livro['imagem']);
-    } else {
-        $livro['imagem'] = null; // ou uma string padrão se a imagem não existir
-    }
-
-    // Retorna todas as informações do livro, incluindo a imagem
     echo json_encode($livro);
 } else {
     echo json_encode(['error' => 'Livro não encontrado.']);
