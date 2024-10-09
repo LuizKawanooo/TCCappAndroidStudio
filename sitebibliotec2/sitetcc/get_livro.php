@@ -33,23 +33,25 @@
 // ?>
 
 
-
 <?php
+// Conexão com o banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
 $username = "ionic_perfil_bd";
 $password = "{[UOLluiz2019";
 $dbname = "tccappionic_bd";
 
+// Cria a conexão
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+// Verifica a conexão
 if ($conn->connect_error) {
     die("Erro na conexão: " . $conn->connect_error);
 }
 
+// Verifica se o ID do livro foi passado
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
     $sql = "SELECT * FROM livros WHERE id = ?";
-    
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id);
     $stmt->execute();
@@ -60,6 +62,8 @@ if (isset($_GET['id'])) {
     } else {
         echo json_encode([]);
     }
+} else {
+    echo json_encode([]);
 }
 
 $conn->close();
