@@ -377,14 +377,12 @@
 
 
 
-            .tablee {
+            .tablee{
                 display: grid;
                 justify-content: center;
                 border-radius: 10px;
-                z-index: 1000; /* Aumentar z-index para garantir que esteja acima de outros elementos */
-
-                
-                position: relative; /* Alterar para relative para o posicionamento correto dentro do popup */
+                z-index: 1000;
+                position: absolute;
                 top: -7%;
                 left: 34%;
                 background-color: #D9D9D9;
