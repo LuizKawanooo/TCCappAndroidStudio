@@ -929,82 +929,72 @@ document.addEventListener('DOMContentLoaded', function() {
 
             </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Seleciona todos os elementos com a classe 'generos'
-        const generoElements = document.querySelectorAll('.generos');
-        const searchInput = document.querySelector('input[name="search"]');
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Seleciona todos os elementos com a classe 'generos'
+                    const generoElements = document.querySelectorAll('.generos');
+                    const searchInput = document.querySelector('input[name="search"]');
 
-        // Adiciona um listener de evento de clique para cada elemento
-        generoElements.forEach(function(element) {
-            element.addEventListener('click', function() {
-                // Obtém o valor do atributo 'data-genero'
-                const genero = this.getAttribute('data-genero');
-                
-                // Define o valor do campo de pesquisa
-                searchInput.value = genero;
+                    // Adiciona um listener de evento de clique para cada elemento
+                    generoElements.forEach(function(element) {
+                        element.addEventListener('click', function() {
+                            // Obtém o valor do atributo 'data-genero'
+                            const genero = this.getAttribute('data-genero');
+                            
+                            // Define o valor do campo de pesquisa
+                            searchInput.value = genero;
 
-                // Submete o formulário de pesquisa
-                this.closest('form').submit();
+                            // Submete o formulário de pesquisa
+                            this.closest('form').submit();
+                        });
+                    });
+                });
+            </script>
+            <script>
+                // Adiciona um event listener para cada gênero
+                document.querySelectorAll('.generos').forEach(genreElement => {
+                    genreElement.addEventListener('click', () => {
+                        const genero = genreElement.getAttribute('data-genero');
+                        // Redireciona para a página de livros com o gênero como parâmetro
+                        window.location.href = `livros.php?search=${encodeURIComponent(genero)}`;
+                    });
+                });
+
+                // Se você deseja adicionar mais lógica ou eventos, adicione aqui
+
+                document.querySelectorAll('.btn3').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const livroId = this.getAttribute('data-id');
+
+                    fetch(`get_livro.php?id=${livroId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById('editar-id').value = data.id;
+                            document.getElementById('editar-titulo').value = data.titulo;
+                            document.getElementById('editar-autor').value = data.autor;
+                            document.getElementById('editar-editora').value = data.editora;
+                            document.getElementById('editar-genero').value = data.genero;
+                            document.getElementById('editar-tombo').value = data.tombo;
+                            document.getElementById('editar-ano').value = data.ano;
+                            document.getElementById('editar-classificacao').value = data.classificacao;
+                            document.getElementById('editar-n_paginas').value = data.n_paginas;
+                            document.getElementById('editar-isbn').value = data.isbn;
+                            document.getElementById('popup-editar').style.display = 'flex'; // Exibe a popup
+                        })
+                        .catch(error => console.error('Erro ao carregar dados do livro:', error));
+                });
             });
-        });
 
-        // Adiciona um event listener para cada gênero
-        generoElements.forEach(genreElement => {
-            genreElement.addEventListener('click', () => {
-                const genero = genreElement.getAttribute('data-genero');
-                // Redireciona para a página de livros com o gênero como parâmetro
-                window.location.href = `livros.php?search=${encodeURIComponent(genero)}`;
-            });
-        });
-    });
+            function closePopupEditar() {
+                document.getElementById('popup-editar').style.display = 'none'; // Oculta a popup
+            }
+            function closePopup() {
+                document.getElementById('popup').style.display = 'none'; // Oculta a popup
+            }
 
-    function carregarDadosLivro(livroId) {
-        fetch(`get_livro.php?id=${livroId}`)
-            .then(response => {
-                // Verifica se a resposta foi bem-sucedida
-                if (!response.ok) {
-                    throw new Error('Erro na resposta do servidor: ' + response.status);
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Verifica se houve erro no retorno do JSON
-                if (data.error) {
-                    alert(data.error); // Exibe erro se houver
-                    return;
-                }
 
-                // Preenche o formulário com os dados do livro
-                document.getElementById('editar-id').value = data.id;
-                document.getElementById('editar-titulo').value = data.titulo;
-                document.getElementById('editar-autor').value = data.autor;
-                document.getElementById('editar-editora').value = data.editora;
-                document.getElementById('editar-genero').value = data.genero;
-                document.getElementById('editar-tombo').value = data.tombo;
-                document.getElementById('editar-ano').value = data.ano;
-                document.getElementById('editar-classificacao').value = data.classificacao;
-                document.getElementById('editar-n_paginas').value = data.n_paginas;
-                document.getElementById('editar-isbn').value = data.isbn;
-
-                // Exibe a popup
-                document.getElementById('popup-editar').style.display = 'flex';
-            })
-            .catch(error => {
-                console.error('Erro ao carregar dados do livro:', error);
-                alert('Ocorreu um erro ao carregar os dados do livro.'); // Mensagem de erro para o usuário
-            });
-    }
-
-    function closePopupEditar() {
-        document.getElementById('popup-editar').style.display = 'none'; // Oculta a popup
-    }
-
-    function closePopup() {
-        document.getElementById('popup').style.display = 'none'; // Oculta a popup
-    }
-</script>
-
+                // Código existente
+            </script>
 
 </body>
 </html>
