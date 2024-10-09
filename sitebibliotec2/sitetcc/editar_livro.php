@@ -104,53 +104,53 @@
 
 
 
-
-
 <?php
-// Configurações do banco de dados
-$host = 'tccappionic-bd.mysql.uhserver.com';
-$db   = 'tccappionic_bd';
-$user = 'ionic_perfil_bd';
-$pass = '{[UOLluiz2019';
-$charset = 'utf8mb4';
+// editar_livro.php
+header('Content-Type: application/json');
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+$servername = "tccappionic-bd.mysql.uhserver.com";
+$username = "ionic_perfil_bd";
+$password = "{[UOLluiz2019";
+$dbname = "tccappionic_bd";
 
-try {
-    $pdo = new PDO($dsn, $user, $pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die('Erro na conexão: ' . $e->getMessage());
+// Cria a conexão
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Verifica a conexão
+if ($conn->connect_error) {
+    die("Erro na conexão: " . $conn->connect_error);
 }
 
-// Verifica se o formulário foi enviado
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Coleta os dados do formulário
-    $id = $_POST['id'];
-    $titulo = $_POST['titulo'];
-    $autor = $_POST['autor'];
-    $genero = $_POST['genero'];
-    $editora = $_POST['editora'];
-    $tombo = $_POST['tombo'];
-    $ano = $_POST['ano'];
-    $classificacao = $_POST['classificacao'];
-    $n_paginas = $_POST['n_paginas'];
-    $isbn = $_POST['isbn'];
+// Coleta os dados do formulário
+$id = $_POST['id'];
+$titulo = $_POST['titulo'];
+$autor = $_POST['autor'];
+$editora = $_POST['editora'];
+$genero = $_POST['genero'];
+$tombo = $_POST['tombo'];
+$ano = $_POST['ano'];
+$classificacao = $_POST['classificacao'];
+$n_paginas = $_POST['n_paginas'];
+$isbn = $_POST['isbn'];
+$imagem = null;
 
-    // Verifica se a imagem foi enviada
-    if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
-        // Lê a imagem e armazena em uma variável
-        $imagem = file_get_contents($_FILES['imagem']['tmp_name']);
-        $sqlUpdate = "UPDATE livros SET titulo=?, autor=?, genero=?, editora=?, tombo=?, ano=?, classificacao=?, n_paginas=?, isbn=?, imagem=? WHERE id=?";
-        $stmtUpdate = $pdo->prepare($sqlUpdate);
-        $stmtUpdate->execute([$titulo, $autor, $genero, $editora, $tombo, $ano, $classificacao, $n_paginas, $isbn, $imagem, $id]);
-    } else {
-        $sqlUpdate = "UPDATE livros SET titulo=?, autor=?, genero=?, editora=?, tombo=?, ano=?, classificacao=?, n_paginas=?, isbn=? WHERE id=?";
-        $stmtUpdate = $pdo->prepare($sqlUpdate);
-        $stmtUpdate->execute([$titulo, $autor, $genero, $editora, $tombo, $ano, $classificacao, $n_paginas, $isbn, $id]);
-    }
-
-    header("Location: livros.php?message=Livro editado com sucesso!");
-    exit;
+// Verifica se uma nova imagem foi enviada
+if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
+    $imagem = file_get_contents($_FILES['imagem']['tmp_name']);
 }
+
+// Prepara a consulta SQL para atualização
+$sql = "UPDATE livros SET titulo=?, autor=?, editora=?, genero=?, tombo=?, ano=?, classificacao=?, n_paginas=?, isbn=?, imagem=? WHERE id=?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("sssssisssi", $titulo, $autor, $editora, $genero, $tombo, $ano, $classificacao, $n_paginas, $isbn, $imagem, $id);
+
+// Tenta executar a atualização
+if ($stmt->execute()) {
+    echo json_encode(['status' => 'success', 'message' => 'Livro atualizado com sucesso!']);
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'Erro ao atualizar o livro.']);
+}
+
+$stmt->close();
+$conn->close();
 ?>
