@@ -623,7 +623,7 @@ if ($result) {
                         <img src="data:image/jpeg;base64,' . base64_encode($row['imagem']) . '" style="max-width: 130px; max-height: 150px; object-fit: contain;">
                       </div>';
             }
-            echo "<center><h1>" . htmlspecialchars($row["titulo"]) . "</h1></center>";
+            echo "<center><h1>" . $row["titulo"] . "</h1></center>";
 
             // Verifica o status do livro e exibe a mensagem apropriada
             if ($row["status_livros"] == 0) {
