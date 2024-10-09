@@ -612,7 +612,7 @@ if ($search) {
 $result = $conn->query($sql);
 
 
-// Verifica se a consulta retornou algum resultado
+// Código para listar livros
 if ($result) {
     if ($result->num_rows > 0) {
         echo "<div class='container'>";
@@ -640,11 +640,12 @@ if ($result) {
         }
         echo "</div>"; // Fecha div container
     } else {
-        echo "<p style='color:#fff; font-size:40px; position: absolute; top: 51%; left: 60%; transform:translate(-50%, -50%);'>Nenhum Livro Encontrado</p>";
+        echo "<p style='color:#fff; font-size:40px; position: absolute; top: 51%; left: 60%; transform:translate(-50%, -50%);'>Nenhum Livro Encontrado</p>";   
     }
 } else {
     echo "Erro na consulta: " . $conn->error;
 }
+
 
 // Fecha a conexão
 $conn->close();
@@ -862,7 +863,26 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 </script>
-<script>
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <script>
                     const adicionarLivroBtn = document.getElementById('adicionar-livro-btn');
                     const editarLivroBtn = document.getElementById('editar-livro-btn');
                     const modal = document.getElementById('popup');
@@ -982,51 +1002,63 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                 });
             </script>
+
+
+
+
+    
             <script>
-                // Adiciona um event listener para cada gênero
-                document.querySelectorAll('.generos').forEach(genreElement => {
-                    genreElement.addEventListener('click', () => {
-                        const genero = genreElement.getAttribute('data-genero');
-                        // Redireciona para a página de livros com o gênero como parâmetro
-                        window.location.href = `livros.php?search=${encodeURIComponent(genero)}`;
-                    });
-                });
-
-                // Se você deseja adicionar mais lógica ou eventos, adicione aqui
-
-                document.querySelectorAll('.btn3').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const livroId = this.getAttribute('data-id');
-
-                    fetch(`get_livro.php?id=${livroId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            document.getElementById('editar-id').value = data.id;
-                            document.getElementById('editar-titulo').value = data.titulo;
-                            document.getElementById('editar-autor').value = data.autor;
-                            document.getElementById('editar-editora').value = data.editora;
-                            document.getElementById('editar-genero').value = data.genero;
-                            document.getElementById('editar-tombo').value = data.tombo;
-                            document.getElementById('editar-ano').value = data.ano;
-                            document.getElementById('editar-classificacao').value = data.classificacao;
-                            document.getElementById('editar-n_paginas').value = data.n_paginas;
-                            document.getElementById('editar-isbn').value = data.isbn;
-                            document.getElementById('popup-editar').style.display = 'flex'; // Exibe a popup
-                        })
-                        .catch(error => console.error('Erro ao carregar dados do livro:', error));
-                });
+    document.addEventListener('DOMContentLoaded', function() {
+        // Redireciona para a página de livros com o gênero como parâmetro
+        document.querySelectorAll('.generos').forEach(genreElement => {
+            genreElement.addEventListener('click', () => {
+                const genero = genreElement.getAttribute('data-genero');
+                window.location.href = `livros.php?search=${encodeURIComponent(genero)}`;
             });
+        });
 
-            function closePopupEditar() {
-                document.getElementById('popup-editar').style.display = 'none'; // Oculta a popup
-            }
-            function closePopup() {
-                document.getElementById('popup').style.display = 'none'; // Oculta a popup
-            }
+        // Evento para abrir o popup de edição ao clicar no botão de editar
+        document.querySelectorAll('.btn3').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const livroId = this.getAttribute('data-id');
 
+                fetch(`get_livro.php?id=${livroId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Preenche os campos do formulário com os dados do livro
+                        document.getElementById('editar-id').value = data.id;
+                        document.getElementById('editar-titulo').value = data.titulo;
+                        document.getElementById('editar-autor').value = data.autor;
+                        document.getElementById('editar-editora').value = data.editora;
+                        document.getElementById('editar-genero').value = data.genero;
+                        document.getElementById('editar-tombo').value = data.tombo;
+                        document.getElementById('editar-ano').value = data.ano;
+                        document.getElementById('editar-classificacao').value = data.classificacao;
+                        document.getElementById('editar-n_paginas').value = data.n_paginas;
+                        document.getElementById('editar-isbn').value = data.isbn;
 
-                // Código existente
-            </script>
+                        // Exibe o popup de edição
+                        document.getElementById('popup-editar').style.display = 'flex';
+                    })
+                    .catch(error => console.error('Erro ao carregar dados do livro:', error));
+            });
+        });
+
+        // Função para fechar o popup de edição
+        document.querySelector('.closee').addEventListener('click', closePopupEditar);
+        
+        // Função para fechar o popup de adicionar livro
+        document.querySelector('.close').addEventListener('click', closePopup);
+    });
+
+    function closePopupEditar() {
+        document.getElementById('popup-editar').style.display = 'none'; // Oculta o popup
+    }
+
+    function closePopup() {
+        document.getElementById('popup').style.display = 'none'; // Oculta o popup
+    }
+</script>
 
 </body>
 </html>
