@@ -654,7 +654,7 @@ $conn->close();
         document.querySelectorAll('.btn3').forEach(btn => {
             btn.addEventListener('click', function() {
                 const livroId = this.getAttribute('data-id');
-                window.location.href = `get_livros.php?id=${livroId}`; // Redireciona para a página de edição
+                window.location.href = `get_livro.php?id=${livroId}`; // Redireciona para a página de edição
             });
         });
     </script>
