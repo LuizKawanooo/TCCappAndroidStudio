@@ -1011,27 +1011,35 @@ document.addEventListener('DOMContentLoaded', function() {
                             console.log('ID do livro:', livroId);
                 
                             fetch(`get_livro.php?id=${livroId}`)
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.id) { // Verifica se os dados foram encontrados
-                                        document.getElementById('editar-id').value = data.id;
-                                        document.getElementById('editar-titulo').value = data.titulo;
-                                        document.getElementById('editar-autor').value = data.autor;
-                                        document.getElementById('editar-editora').value = data.editora;
-                                        document.getElementById('editar-genero').value = data.genero;
-                                        document.getElementById('editar-tombo').value = data.tombo;
-                                        document.getElementById('editar-ano').value = data.ano;
-                                        document.getElementById('editar-classificacao').value = data.classificacao;
-                                        document.getElementById('editar-n_paginas').value = data.n_paginas;
-                                        document.getElementById('editar-isbn').value = data.isbn;
-                
-                                        // Exibe o popup de edição
-                                        document.getElementById('popup-editar').style.display = 'flex';
-                                    } else {
-                                        alert('Livro não encontrado.');
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Erro na resposta do servidor');
                                     }
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    if (data.error) {
+                                        alert(data.error); // Exibe um erro se houver
+                                        return;
+                                    }
+                            
+                                    // Preenche os campos do formulário com os dados do livro
+                                    document.getElementById('editar-id').value = data.id;
+                                    document.getElementById('editar-titulo').value = data.titulo;
+                                    document.getElementById('editar-autor').value = data.autor;
+                                    document.getElementById('editar-editora').value = data.editora;
+                                    document.getElementById('editar-genero').value = data.genero;
+                                    document.getElementById('editar-tombo').value = data.tombo;
+                                    document.getElementById('editar-ano').value = data.ano;
+                                    document.getElementById('editar-classificacao').value = data.classificacao;
+                                    document.getElementById('editar-n_paginas').value = data.n_paginas;
+                                    document.getElementById('editar-isbn').value = data.isbn;
+                            
+                                    // Exibe o popup de edição
+                                    document.getElementById('popup-editar').style.display = 'flex';
                                 })
                                 .catch(error => console.error('Erro ao carregar dados do livro:', error));
+
                         });
                     });
                 
@@ -1043,6 +1051,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 function closePopupEditar() {
                     document.getElementById('popup-editar').style.display = 'none';
                 }
+
+                function limparFormulario() {
+                    document.getElementById('editar-id').value = '';
+                    document.getElementById('editar-titulo').value = '';
+                    document.getElementById('editar-autor').value = '';
+                    document.getElementById('editar-editora').value = '';
+                    document.getElementById('editar-genero').value = '';
+                    document.getElementById('editar-tombo').value = '';
+                    document.getElementById('editar-ano').value = '';
+                    document.getElementById('editar-classificacao').value = '';
+                    document.getElementById('editar-n_paginas').value = '';
+                    document.getElementById('editar-isbn').value = '';
+                }
+
 
 </script>
 
