@@ -642,7 +642,7 @@ $conn->close();
 <div id="popup" class="popup">
     <div class="table">
         <h1>Adicionar livro</h1>
-        <form action="upload.php" method="post" enctype="multipart/form-data"> <!-- Atualizado para enviar para upload.php -->
+        <form action="upload_livros.php" method="post" enctype="multipart/form-data"> <!-- Atualizado para enviar para upload.php -->
             <label for="titulo">Título:</label><br>
             <input type="text" id="livro-nome" name="titulo" class="inp" required><br>
             <label for="autor">Autor:</label><br>
