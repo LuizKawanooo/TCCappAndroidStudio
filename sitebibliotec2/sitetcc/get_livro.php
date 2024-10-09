@@ -1,29 +1,29 @@
 <?php
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
+header('Content-Type: text/html; charset=utf-8'); // Define o tipo de conteúdo
 
 $servername = "tccappionic-bd.mysql.uhserver.com";
 $username = "ionic_perfil_bd";
 $password = "{[UOLluiz2019";
 $dbname = "tccappionic_bd";
 
+// Cria a conexão
 $conn = new mysqli($servername, $username, $password, $dbname);
+
+// Verifica a conexão
 if ($conn->connect_error) {
-    echo json_encode(['error' => 'Erro na conexão: ' . $conn->connect_error]);
-    exit;
+    die("Erro na conexão: " . $conn->connect_error);
 }
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 if ($id === null) {
-    echo json_encode(['error' => 'ID não fornecido.']);
-    exit;
+    die("ID não fornecido.");
 }
 
-$sql = "SELECT titulo, autor, editora, genero, tombo, ano, classificacao, n_paginas, isbn FROM livros WHERE id = ?";
+// Prepara a consulta para selecionar os dados do livro
+$sql = "SELECT * FROM livros WHERE id = ?";
 $stmt = $conn->prepare($sql);
 if (!$stmt) {
-    echo json_encode(['error' => 'Erro na preparação da consulta: ' . $conn->error]);
-    exit;
+    die("Erro na preparação da consulta: " . $conn->error);
 }
 
 $stmt->bind_param("i", $id);
@@ -32,9 +32,19 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $livro = $result->fetch_assoc();
-    echo json_encode($livro);
+    echo "<h1>Detalhes do Livro</h1>";
+    echo "<p><strong>ID:</strong> " . htmlspecialchars($livro['id']) . "</p>";
+    echo "<p><strong>Título:</strong> " . htmlspecialchars($livro['titulo']) . "</p>";
+    echo "<p><strong>Autor:</strong> " . htmlspecialchars($livro['autor']) . "</p>";
+    echo "<p><strong>Editora:</strong> " . htmlspecialchars($livro['editora']) . "</p>";
+    echo "<p><strong>Gênero:</strong> " . htmlspecialchars($livro['genero']) . "</p>";
+    echo "<p><strong>Tombo:</strong> " . htmlspecialchars($livro['tombo']) . "</p>";
+    echo "<p><strong>Ano:</strong> " . htmlspecialchars($livro['ano']) . "</p>";
+    echo "<p><strong>Classificação:</strong> " . htmlspecialchars($livro['classificacao']) . "</p>";
+    echo "<p><strong>Número de Páginas:</strong> " . htmlspecialchars($livro['n_paginas']) . "</p>";
+    echo "<p><strong>ISBN:</strong> " . htmlspecialchars($livro['isbn']) . "</p>";
 } else {
-    echo json_encode(['error' => 'Livro não encontrado.']);
+    echo "<p>Livro não encontrado.</p>";
 }
 
 $stmt->close();
