@@ -797,7 +797,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Enviar requisição para alterar o status do livro para 'alugado'
                 fetch('alterar_status.php', {
-                    method: 'POST',
+                    method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
                     },
