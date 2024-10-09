@@ -685,23 +685,23 @@ $conn->close();
 
 
 
-
-    <div class="popup" id="popup-editar" style="display:none;">
+<div id="popup-editar" class="popup">
     <div class="tablee">
-        <h1>Editar Livro</h1>
-        <form id="editar-form">
-            <input type="hidden" id="editar-id" name="id"> <!-- ID do livro -->
+        <h1>Editar livro</h1>
+        <form id="editar-form" action="editar_livro.php" method="post" enctype="multipart/form-data">
+            <!-- Campos do formulário -->
+            <input type="hidden" id="editar-id" name="id">
             <label for="editar-titulo">Título:</label><br>
             <input type="text" id="editar-titulo" name="titulo" class="inp"><br>
             <label for="editar-autor">Autor:</label><br>
             <input type="text" id="editar-autor" name="autor" class="inp"><br>
-            <label for="editar-editora">Editora:</label><br>
+            <label for="editar-editora">Edição:</label><br>
             <input type="text" id="editar-editora" name="editora" class="inp"><br>
             <label for="editar-genero">Gênero:</label><br>
             <input type="text" id="editar-genero" name="genero" class="inp"><br>
             <label for="editar-tombo">Tombo:</label><br>
             <input type="text" id="editar-tombo" name="tombo" class="inp"><br>
-            <label for="editar-ano">Ano:</label><br>
+            <label for="editar-ano">Data:</label><br>
             <input type="date" id="editar-ano" name="ano" class="inpd"><br>
             <label for="editar-classificacao">Classificação:</label><br>
             <input type="text" id="editar-classificacao" name="classificacao" class="inp"><br>
@@ -711,25 +711,16 @@ $conn->close();
             <input type="text" id="editar-isbn" name="isbn" class="inp"><br>
             <br>
             <input type="file" id="livro-imagem" name="imagem" accept="image/*">
+    
             <br>
-            <button type="button" id="salvar-edicao" class="btn2">Salvar</button>
+            <input type="submit" value="Salvar" class="btn2">
         </form>
-        <span class="closee" id="closeModal" onclick="closePopupEditar()">&times;</span>
+        <span class="closee" onclick="closePopupEditar  ()">&times;</span>
     </div>
 </div>
 
 
 
-
-
-
-
-
-
-
-
-
-    
 
 <?php
 // Conexão com o banco de dados
@@ -743,9 +734,86 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Verifica a conexão
 if ($conn->connect_error) {
-    http_response_code(500);
-    echo json_encode(['error' => 'Erro na conexão: ' . $conn->connect_error]);
-    exit;
+    die("Erro na conexão: " . $conn->connect_error);
+}
+
+// Verifica se o formulário foi enviado
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Prepara os dados para inserção no banco de dados
+    $titulo = $_POST['titulo'];
+    $autor = $_POST['autor'];
+    $genero = $_POST['genero'];
+    $editora = $_POST['editora'];
+    $tombo = $_POST['tombo'];
+    $ano = $_POST['ano'];
+    $classificacao = $_POST['classificacao'];
+    $n_paginas = $_POST['n_paginas'];
+    $isbn = $_POST['isbn'];
+
+    // Processa o upload da imagem
+    $imagem = NULL;
+    if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
+        $tmp_name = $_FILES['imagem']['tmp_name'];
+        $imageData = file_get_contents($tmp_name);
+
+        // Verifica se o arquivo é uma imagem JPEG
+        $fileType = mime_content_type($tmp_name);
+        if ($fileType == 'image/jpeg') {
+            $imagem = $imageData;
+        } else {
+            echo "Arquivo não é uma imagem JPEG.";
+            exit;
+        }
+    }
+
+    // Prepara a consulta SQL para inserção
+    $sql = "INSERT INTO livros (titulo, genero, autor, editora, tombo, ano, classificacao, n_paginas, isbn, imagem) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param(
+            "sssssssssb",
+            $titulo, $genero, $autor, $editora, $tombo, $ano, $classificacao, $n_paginas, $isbn, $imagem
+        );
+
+        // Executa a consulta
+        if ($stmt->execute()) {
+            echo "<script>window.location.href = 'livros.php';</script>";
+        } else {
+            echo "Erro ao inserir registro: " . $stmt->error;
+        }
+
+        // Fecha a consulta
+        $stmt->close();
+    } else {
+        // Exibe a mensagem de erro se a preparação da consulta falhar
+        echo "Erro na preparação da consulta: " . $conn->error;
+    }
+
+    // Fecha a conexão com o banco de dados
+    $conn->close();
+}
+?>
+
+
+<?php
+// Conexão com o banco de dados
+$servername = "tccappionic-bd.mysql.uhserver.com";
+
+$username = "ionic_perfil_bd";
+
+$password = "{[UOLluiz2019";
+
+$dbname = "tccappionic_bd";
+ 
+// Cria a conexão
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+ 
+
+// Verifica a conexão
+if ($conn->connect_error) {
+    die("Erro na conexão: " . $conn->connect_error);
 }
 
 // Recebe a solicitação do cliente
@@ -762,163 +830,164 @@ if (isset($input['id']) && isset($input['novoStatus'])) {
         $sql = "UPDATE livros SET status='$novoStatus' WHERE id='$id'";
 
         if ($conn->query($sql) === TRUE) {
-            echo json_encode(['success' => 'Status atualizado com sucesso.']);
+            echo "";
         } else {
-            http_response_code(500);
-            echo json_encode(['error' => 'Erro ao atualizar o status: ' . $conn->error]);
+            echo "";
         }
     } else {
-        http_response_code(400);
-        echo json_encode(['error' => 'Status inválido.']);
+        echo "";
     }
 } else {
-    http_response_code(400);
-    echo json_encode(['error' => 'ID ou novoStatus não fornecidos.']);
+    echo "";
 }
 
 // Fecha a conexão com o banco de dados
 $conn->close();
 ?>
 
-
-    
-
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const adicionarLivroBtn = document.getElementById('adicionar-livro-btn');
-    const editarLivroBtn = document.getElementById('editar-livro-btn');
-    const modal = document.getElementById('popup');
-    const modalEditar = document.getElementById('popup-editar');
-    const closeModalBtn = document.querySelector('.close');
-    const closeModalEditarBtn = document.querySelector('.closee');
-    const salvarLivroBtn = document.getElementById('pop');
-    const salvarEdicaoBtn = document.getElementById('salvar-edicao');
-    const livrosContainer = document.getElementById('livros-container');
-
-    // Função para limpar o formulário
-    function limparFormulario() {
-        document.getElementById('livro-nome').value = '';
-        document.getElementById('livro-autor').value = '';
-        document.getElementById('livro-imagem').value = '';
-        document.getElementById('editar-id').value = '';
-        document.getElementById('editar-titulo').value = '';
-        document.getElementById('editar-autor').value = '';
-        document.getElementById('editar-editora').value = '';
-        document.getElementById('editar-genero').value = '';
-        document.getElementById('editar-tombo').value = '';
-        document.getElementById('editar-ano').value = '';
-        document.getElementById('editar-classificacao').value = '';
-        document.getElementById('editar-n_paginas').value = '';
-        document.getElementById('editar-isbn').value = '';
-    }
-
-    // Adiciona evento para abrir o modal de adicionar livro
-    adicionarLivroBtn.addEventListener('click', () => {
-        limparFormulario();
-        modal.style.display = 'block';
-    });
-
-    // Adiciona evento para abrir o modal de edição
-    editarLivroBtn.addEventListener('click', () => {
-        limparFormulario();
-        modalEditar.style.display = 'block';
-    });
-
-    // Fecha o modal de adicionar livro
-    closeModalBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
-
-    // Fecha o modal de edição
-    closeModalEditarBtn.addEventListener('click', () => {
-        modalEditar.style.display = 'none';
-    });
-
-    // Salva o novo livro
-    salvarLivroBtn.addEventListener('click', (event) => {
-        event.preventDefault();
-        const formData = new FormData(document.getElementById('adicionar-form'));
-        
-        fetch('adicionar_livro.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Livro adicionado com sucesso!');
-                closeModalBtn.click(); // Fecha o modal
-                location.reload(); // Recarrega a página
-            } else {
-                alert('Erro ao adicionar livro: ' + data.error);
-            }
-        })
-        .catch(error => console.error('Erro ao adicionar livro:', error));
-    });
-
-    // Função para carregar os dados do livro para edição
-    function carregarDadosLivro(livroId) {
-        fetch(`get_livro.php?id=${livroId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert(data.error);
-                    return;
-                }
-                // Preencher os campos do formulário com os dados do livro
-                document.getElementById('editar-id').value = data.id;
-                document.getElementById('editar-titulo').value = data.titulo;
-                document.getElementById('editar-autor').value = data.autor;
-                document.getElementById('editar-editora').value = data.editora;
-                document.getElementById('editar-genero').value = data.genero;
-                document.getElementById('editar-tombo').value = data.tombo;
-                document.getElementById('editar-ano').value = data.ano;
-                document.getElementById('editar-classificacao').value = data.classificacao;
-                document.getElementById('editar-n_paginas').value = data.n_paginas;
-                document.getElementById('editar-isbn').value = data.isbn;
-
-                // Exibe o modal de edição
-                modalEditar.style.display = 'flex';
-            })
-            .catch(error => console.error('Erro ao carregar dados do livro:', error));
-    }
-
-    // Botões para editar livro
-    document.querySelectorAll('.btn3').forEach(botao => {
-        botao.addEventListener('click', function() {
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.btn-excluir').forEach(button => {
+        button.addEventListener('click', function() {
             const livroId = this.getAttribute('data-id');
-            carregarDadosLivro(livroId);
+            
+            if (confirm('Tem certeza de que deseja excluir este livro?')) {
+                fetch('excluir_livro.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id: livroId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Recarrega a página após a exclusão
+                        window.location.reload();
+                    } else {
+                        alert('Erro ao excluir o livro: ' + (data.error || 'Desconhecido'));
+                    }
+                })
+                .catch(error => console.error('Erro ao excluir o livro:', error));
+            }
         });
     });
+});
 
-    // Salva as edições do livro
-    salvarEdicaoBtn.addEventListener('click', () => {
-        const formData = new FormData(document.getElementById('editar-form'));
 
-        fetch('editar_livro.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Livro atualizado com sucesso!');
-                closePopupEditar(); // Fecha o modal
-                location.reload(); // Recarrega a página
-            } else {
-                alert('Erro ao atualizar o livro: ' + data.error);
-            }
-        })
-        .catch(error => console.error('Erro ao atualizar livro:', error));
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const botoesAlterarStatus = document.querySelectorAll('.btn-alterar-status');
+
+    botoesAlterarStatus.forEach(botao => {
+        botao.addEventListener('click', function() {
+            const livroId = this.getAttribute('data-id');
+            const statusAtual = this.getAttribute('data-status');
+            const novoStatus = statusAtual === 'disponível' ? 'alugado' : 'disponível';
+
+            // Enviar requisição para alterar o status do livro
+            fetch('alterar_status.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    livroId: livroId,
+                    novoStatus: novoStatus
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    botao.textContent = novoStatus === 'disponível' ? 'Emprestar' : 'Devolver';
+                    botao.setAttribute('data-status', novoStatus);
+                    // Atualize o texto do status na página
+                    const statusElement = botao.previousElementSibling;
+                    statusElement.textContent = 'Status: ' + novoStatus;
+                } else {
+                    console.error('Erro ao alterar o status:', data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao alterar o status:', error);
+            });
+        });
     });
+});
 
-    // Alterar status do livro
-    document.querySelectorAll('.btn4').forEach(botao => {
+</script>
+<script>
+                    const adicionarLivroBtn = document.getElementById('adicionar-livro-btn');
+                    const editarLivroBtn = document.getElementById('editar-livro-btn');
+                    const modal = document.getElementById('popup');
+                    const modale = document.getElementById('popup-editar');
+                    const closeModalBtn = document.querySelector('.close');
+                    const closeModalBtne = document.querySelector('.closee');
+                    const salvarLivroBtn = document.getElementById('pop');
+                    const livrosContainer = document.getElementById('livros-container');
+
+                    let contadorLivros = 0; // Contador de livros adicionados
+                    let livroEditando = null; // Variável para armazenar o livro que está sendo editado
+
+                    adicionarLivroBtn.addEventListener('click', () => {
+                    limparFormulario(); // Limpa o formulário antes de abrir o popup
+                    modal.style.display = 'block';
+                    });
+
+                    editarLivroBtn.addEventListener('click', () => {
+                    limparFormulario(); // Limpa o formulário antes de abrir o popup
+                    modal.style.display = 'block';
+                    });
+
+
+                    closeModalBtn.addEventListener('click', () => {
+                    modal.style.display = 'none';
+                    });
+
+                    closeModalBtne.addEventListener('click', () => {
+                    modale.style.display = 'none';
+                    });
+
+                    salvarLivroBtn.addEventListener('submit', (event) => {
+                    event.preventDefault(); // Evita que o formulário seja enviado
+                    const nome = document.getElementById('livro-nome').value;
+                    const autor = document.getElementById('livro-autor').value;
+                    const imagemFile = document.getElementById('livro-imagem').files[0]; // Nova linha para obter o arquivo de imagem
+
+                    });
+
+
+                    function limparFormulario() {
+                    // Limpa todos os campos do formulário
+                    document.getElementById('livro-nome').value = '';
+                    document.getElementById('livro-imagem').value = '';
+                    }
+                    
+
+                    const meuBotao = document.getElementById('meuBotao');
+
+                    // Adiciona um event listener para o evento de clique
+                    meuBotao.addEventListener('click', function() {
+                        // Adiciona a classe 'vermelho' ao botão
+                        meuBotao.classList.add('vermelho');
+                    });
+
+
+
+
+
+                    document.addEventListener('DOMContentLoaded', function() {
+    const botoesEmprestar = document.querySelectorAll('.btn4');
+
+    botoesEmprestar.forEach(botao => {
         botao.addEventListener('click', function() {
             const livroId = this.getAttribute('data-livro-id');
             const statusAtual = this.getAttribute('data-status-atual');
 
             if (statusAtual === 'disponivel') {
+                // Enviar requisição para alterar o status do livro para 'alugado'
                 fetch('alterar_status.php', {
                     method: 'POST',
                     headers: {
@@ -931,26 +1000,89 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.success) {
-                        botao.style.backgroundColor = 'red';
-                        botao.textContent = 'Alugado';
-                        botao.setAttribute('data-status-atual', 'alugado');
-                    } else {
-                        console.error('Erro ao alterar o status:', data.error);
-                    }
+                    // Atualizar o botão e exibir a cor vermelha
+                    botao.style.backgroundColor = 'red';
+                    botao.textContent = 'Alugado';
+                    botao.setAttribute('data-status-atual', 'alugado');
                 })
-                .catch(error => console.error('Erro ao alterar o status:', error));
+                .catch(error => {
+                    console.error('Erro ao alterar o status:', error);
+                });
             } else {
                 console.log('Livro já está alugado.');
             }
         });
     });
 });
-</script>
+
+            </script>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Seleciona todos os elementos com a classe 'generos'
+                    const generoElements = document.querySelectorAll('.generos');
+                    const searchInput = document.querySelector('input[name="search"]');
+
+                    // Adiciona um listener de evento de clique para cada elemento
+                    generoElements.forEach(function(element) {
+                        element.addEventListener('click', function() {
+                            // Obtém o valor do atributo 'data-genero'
+                            const genero = this.getAttribute('data-genero');
+                            
+                            // Define o valor do campo de pesquisa
+                            searchInput.value = genero;
+
+                            // Submete o formulário de pesquisa
+                            this.closest('form').submit();
+                        });
+                    });
+                });
+            </script>
+            <script>
+                // Adiciona um event listener para cada gênero
+                document.querySelectorAll('.generos').forEach(genreElement => {
+                    genreElement.addEventListener('click', () => {
+                        const genero = genreElement.getAttribute('data-genero');
+                        // Redireciona para a página de livros com o gênero como parâmetro
+                        window.location.href = `livros.php?search=${encodeURIComponent(genero)}`;
+                    });
+                });
+
+                // Se você deseja adicionar mais lógica ou eventos, adicione aqui
+
+                document.querySelectorAll('.btn3').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const livroId = this.getAttribute('data-id');
+
+                    fetch(`get_livro.php?id=${livroId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById('editar-id').value = data.id;
+                            document.getElementById('editar-titulo').value = data.titulo;
+                            document.getElementById('editar-autor').value = data.autor;
+                            document.getElementById('editar-editora').value = data.editora;
+                            document.getElementById('editar-genero').value = data.genero;
+                            document.getElementById('editar-tombo').value = data.tombo;
+                            document.getElementById('editar-ano').value = data.ano;
+                            document.getElementById('editar-classificacao').value = data.classificacao;
+                            document.getElementById('editar-n_paginas').value = data.n_paginas;
+                            document.getElementById('editar-isbn').value = data.isbn;
+                            document.getElementById('popup-editar').style.display = 'flex'; // Exibe a popup
+                        })
+                        .catch(error => console.error('Erro ao carregar dados do livro:', error));
+                });
+            });
+
+            function closePopupEditar() {
+                document.getElementById('popup-editar').style.display = 'none'; // Oculta a popup
+            }
+            function closePopup() {
+                document.getElementById('popup').style.display = 'none'; // Oculta a popup
+            }
 
 
+                // Código existente
+            </script>
 
-
-    
 </body>
 </html>
