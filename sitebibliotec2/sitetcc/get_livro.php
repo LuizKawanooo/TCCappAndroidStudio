@@ -66,8 +66,6 @@ $conn->close();
     </style>
 </head>
 <body>
-    <button id="editar-livro-btn" onclick="openPopup()">Editar Livro</button>
-
     <div id="overlay" onclick="closePopup()"></div>
 
     <div id="popup-editar">
@@ -116,6 +114,9 @@ $conn->close();
     </div>
 
     <script>
+        // Chama a função para abrir o popup assim que a página carregar
+        openPopup();
+
         function openPopup() {
             document.getElementById('overlay').style.display = 'block';
             document.getElementById('popup-editar').style.display = 'block';
