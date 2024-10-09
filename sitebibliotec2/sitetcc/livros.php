@@ -516,42 +516,6 @@
         </style>
 
 
-        <style>
-
-        #popup-editar {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: 1px solid #ccc;
-            padding: 20px;
-            background: white;
-            z-index: 1000;
-        }
-        #overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 500;
-        }
-    </style>
-
-
-
-
-
-
-
-
-
-    
-
-
     
 
 <div class="footer">
@@ -721,156 +685,40 @@ $conn->close();
 
 
 
-
-
-    <?php
-// Conectar ao banco de dados e buscar todos os livros
-$servername = "tccappionic-bd.mysql.uhserver.com";
-$username = "ionic_perfil_bd";
-$password = "{[UOLluiz2019";
-$dbname = "tccappionic_bd";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Erro na conexão: " . $conn->connect_error);
-}
-
-$sql = "SELECT * FROM livros";
-$result = $conn->query($sql);
-?>
-
-
-
-
+<div id="popup-editar" class="popup">
+    <div class="tablee">
+        <h1>Editar livro</h1>
+        <form id="editar-form" action="editar_livro.php" method="post" enctype="multipart/form-data">
+            <!-- Campos do formulário -->
+            <input type="hidden" id="editar-id" name="id">
+            <label for="editar-titulo">Título:</label><br>
+            <input type="text" id="editar-titulo" name="titulo" class="inp"><br>
+            <label for="editar-autor">Autor:</label><br>
+            <input type="text" id="editar-autor" name="autor" class="inp"><br>
+            <label for="editar-editora">Edição:</label><br>
+            <input type="text" id="editar-editora" name="editora" class="inp"><br>
+            <label for="editar-genero">Gênero:</label><br>
+            <input type="text" id="editar-genero" name="genero" class="inp"><br>
+            <label for="editar-tombo">Tombo:</label><br>
+            <input type="text" id="editar-tombo" name="tombo" class="inp"><br>
+            <label for="editar-ano">Data:</label><br>
+            <input type="date" id="editar-ano" name="ano" class="inpd"><br>
+            <label for="editar-classificacao">Classificação:</label><br>
+            <input type="text" id="editar-classificacao" name="classificacao" class="inp"><br>
+            <label for="editar-n_paginas">Número de Páginas:</label><br>
+            <input type="number" id="editar-n_paginas" name="n_paginas" min="1" class="inp"><br>
+            <label for="editar-isbn">ISBN:</label><br>
+            <input type="text" id="editar-isbn" name="isbn" class="inp"><br>
+            <br>
+            <input type="file" id="livro-imagem" name="imagem" accept="image/*">
     
-
-<table>
-        <tr>
-            <th>Título</th>
-            <th>Autor</th>
-            <th>Ações</th>
-        </tr>
-        <?php if ($result->num_rows > 0): ?>
-            <?php while($livro = $result->fetch_assoc()): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($livro['titulo']); ?></td>
-                    <td><?php echo htmlspecialchars($livro['autor']); ?></td>
-                    <td>
-                        <button class="editar-livro" data-id="<?php echo $livro['id']; ?>">Editar</button>
-                    </td>
-                </tr>
-            <?php endwhile; ?>
-        <?php else: ?>
-            <tr><td colspan="3">Nenhum livro encontrado.</td></tr>
-        <?php endif; ?>
-    </table>
-
-    <div id="overlay" onclick="closePopup()"></div>
-
-    <div id="popup-editar">
-        <h2>Editar Livro</h2>
-        <form action="atualizar_livro.php" method="POST" id="form-editar">
-            <input type="hidden" id="editar-id" name="id" value="">
-            <p>
-                <label for="editar-titulo">Título:</label>
-                <input type="text" id="editar-titulo" name="titulo" required>
-            </p>
-            <p>
-                <label for="editar-autor">Autor:</label>
-                <input type="text" id="editar-autor" name="autor" required>
-            </p>
-            <p>
-                <label for="editar-editora">Editora:</label>
-                <input type="text" id="editar-editora" name="editora" required>
-            </p>
-            <p>
-                <label for="editar-genero">Gênero:</label>
-                <input type="text" id="editar-genero" name="genero" required>
-            </p>
-            <p>
-                <label for="editar-tombo">Tombo:</label>
-                <input type="text" id="editar-tombo" name="tombo" required>
-            </p>
-            <p>
-                <label for="editar-ano">Ano:</label>
-                <input type="number" id="editar-ano" name="ano" required>
-            </p>
-            <p>
-                <label for="editar-classificacao">Classificação:</label>
-                <input type="text" id="editar-classificacao" name="classificacao" required>
-            </p>
-            <p>
-                <label for="editar-n_paginas">Número de Páginas:</label>
-                <input type="number" id="editar-n_paginas" name="n_paginas" required>
-            </p>
-            <p>
-                <label for="editar-isbn">ISBN:</label>
-                <input type="text" id="editar-isbn" name="isbn" required>
-            </p>
-            <button type="submit">Salvar</button>
-            <button type="button" onclick="closePopup()">Fechar</button>
+            <br>
+            <input type="submit" value="Salvar" class="btn2">
         </form>
+        <span class="closee" onclick="closePopupEditar  ()">&times;</span>
     </div>
+</div>
 
-
-     <script>
-        document.querySelectorAll('.editar-livro').forEach(button => {
-            button.addEventListener('click', function() {
-                const livroId = this.getAttribute('data-id');
-                // Chama a função para abrir o popup e carregar os dados do livro
-                openPopup(livroId);
-            });
-        });
-
-        function openPopup(id) {
-            // Faz uma requisição para buscar os dados do livro
-            fetch(`get_livro.php?id=${id}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        alert(data.error);
-                        return;
-                    }
-                    // Preenche o formulário com os dados do livro
-                    document.getElementById('editar-id').value = data.id;
-                    document.getElementById('editar-titulo').value = data.titulo;
-                    document.getElementById('editar-autor').value = data.autor;
-                    document.getElementById('editar-editora').value = data.editora;
-                    document.getElementById('editar-genero').value = data.genero;
-                    document.getElementById('editar-tombo').value = data.tombo;
-                    document.getElementById('editar-ano').value = data.ano;
-                    document.getElementById('editar-classificacao').value = data.classificacao;
-                    document.getElementById('editar-n_paginas').value = data.n_paginas;
-                    document.getElementById('editar-isbn').value = data.isbn;
-
-                    // Exibe o popup
-                    document.getElementById('overlay').style.display = 'block';
-                    document.getElementById('popup-editar').style.display = 'block';
-                })
-                .catch(error => {
-                    console.error('Erro ao carregar dados do livro:', error);
-                });
-        }
-
-        function closePopup() {
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('popup-editar').style.display = 'none';
-        }
-    </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
 
 
 
