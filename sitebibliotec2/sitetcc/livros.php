@@ -683,7 +683,7 @@ $conn->close();
 
 
 
-<div id="popup-editar" class="popup">
+<div class="popup" id="popup-editar" style="display:none;">
     <div class="tablee">
         <h1>Editar livro</h1>
         <form id="editar-form" action="editar_livro.php" method="post" enctype="multipart/form-data">
@@ -894,16 +894,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
         editarLivroBtn.addEventListener('click', () => {
             limparFormulario(); // Limpa o formulário antes de abrir o popup
-            modale.style.display = 'block'; // Corrigido para abrir o modal de edição
+            if (modale) {
+                modale.style.display = 'block'; // Abre o modal de edição
+            } else {
+                console.warn('Elemento popup-editar não encontrado.');
+            }
         });
 
         closeModalBtn.addEventListener('click', () => {
             modal.style.display = 'none';
         });
 
-        closeModalBtne.addEventListener('click', () => {
-            modale.style.display = 'none';
-        });
+        if (closeModalBtne) {
+            closeModalBtne.addEventListener('click', () => {
+                modale.style.display = 'none';
+            });
+        }
 
         salvarLivroBtn.addEventListener('click', (event) => {
             event.preventDefault(); // Evita que o formulário seja enviado
@@ -963,6 +969,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 </script>
+
 
 
             <script>
