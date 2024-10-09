@@ -690,40 +690,7 @@ $conn->close();
 
 
 
-<!-- <div id="popup-editar" class="popup">
-    <div class="tablee">
-        <h1>Editar livro</h1>
-        <form id="editar-form" action="editar_livro.php" method="post" enctype="multipart/form-data">
-            <!-- Campos do formulário -->
-            <input type="hidden" id="editar-id" name="id">
-            <label for="editar-titulo">Título:</label><br>
-            <input type="text" id="editar-titulo" name="titulo" class="inp"><br>
-            <label for="editar-autor">Autor:</label><br>
-            <input type="text" id="editar-autor" name="autor" class="inp"><br>
-            <label for="editar-editora">Edição:</label><br>
-            <input type="text" id="editar-editora" name="editora" class="inp"><br>
-            <label for="editar-genero">Gênero:</label><br>
-            <input type="text" id="editar-genero" name="genero" class="inp"><br>
-            <label for="editar-tombo">Tombo:</label><br>
-            <input type="text" id="editar-tombo" name="tombo" class="inp"><br>
-            <label for="editar-ano">Data:</label><br>
-            <input type="date" id="editar-ano" name="ano" class="inpd"><br>
-            <label for="editar-classificacao">Classificação:</label><br>
-            <input type="text" id="editar-classificacao" name="classificacao" class="inp"><br>
-            <label for="editar-n_paginas">Número de Páginas:</label><br>
-            <input type="number" id="editar-n_paginas" name="n_paginas" min="1" class="inp"><br>
-            <label for="editar-isbn">ISBN:</label><br>
-            <input type="text" id="editar-isbn" name="isbn" class="inp"><br>
-            <br>
-            <input type="file" id="livro-imagem" name="imagem" accept="image/*">
-    
-            <br>
-            <input type="submit" value="Salvar" class="btn2">
-        </form>
-        <span class="closee" onclick="closePopupEditar  ()">&times;</span>
-    </div>
-</div>
- -->
+
 
 
     <div id="popup-editar" class="popup" style="display:none;">
