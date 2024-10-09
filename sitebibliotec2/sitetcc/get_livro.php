@@ -33,20 +33,10 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $livro = $result->fetch_assoc();
     
-    // Se a imagem estiver presente e não estiver vazia, converta para base64
+    // Se a imagem estiver presente e não estiver vazia
     if (isset($livro['imagem']) && !empty($livro['imagem'])) {
-        $imagemPath = $livro['imagem'];
-        
-        // Debug: exibe o caminho da imagem
-        error_log("Caminho da imagem: " . $imagemPath);
-
-        // Verifica se o arquivo de imagem existe
-        if (file_exists($imagemPath)) {
-            $imagemData = file_get_contents($imagemPath);
-            $livro['imagem'] = 'data:image/jpeg;base64,' . base64_encode($imagemData);
-        } else {
-            $livro['imagem'] = null; // ou uma string padrão se a imagem não existir
-        }
+        // Assumindo que a coluna 'imagem' é do tipo BLOB
+        $livro['imagem'] = 'data:image/jpeg;base64,' . base64_encode($livro['imagem']);
     } else {
         $livro['imagem'] = null; // ou uma string padrão se a imagem não existir
     }
