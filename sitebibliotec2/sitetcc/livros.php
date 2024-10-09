@@ -646,10 +646,10 @@ if ($result) {
             }
 
             echo "<div class='botoes'>";
-            echo "<div class='btn3' data-id='" . htmlspecialchars($row['id']) . "'>Editar</div>";
-            echo "<div class='btn-excluir' data-id='" . htmlspecialchars($row["id"]) . "'>Excluir</div>";
+            echo "<div class='btn3' data-id='" . $row['id'] . "'>Editar</div>";
+            echo "<div class='btn-excluir' data-id='" . $row["id"] . "'>Excluir</div>";
             echo "</div>";
-            echo "</div>"; // Fecha div livro
+            echo "</div>";
         }
         echo "</div>"; // Fecha div container
     } else {
@@ -703,7 +703,7 @@ $conn->close();
 
 
 
-    <div id="popup-editar" class="popup" style="display:none;">
+   <div id="popup-editar" class="popup">
     <div class="tablee">
         <h1>Editar livro</h1>
         <form id="editar-form" action="editar_livro.php" method="post" enctype="multipart/form-data">
@@ -733,6 +733,7 @@ $conn->close();
         <span class="closee" onclick="closePopupEditar()">&times;</span>
     </div>
 </div>
+
 
 
     <?php
@@ -1180,44 +1181,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 <script>
-    document.querySelectorAll('.btn3').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const livroId = this.getAttribute('data-id');
+document.querySelectorAll('.btn3').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const livroId = this.getAttribute('data-id');
 
-            fetch(`get_livro.php?id=${livroId}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data && Object.keys(data).length > 0) {
-                        document.getElementById('editar-id').value = data.id;
-                        document.getElementById('editar-titulo').value = data.titulo;
-                        document.getElementById('editar-autor').value = data.autor;
-                        document.getElementById('editar-editora').value = data.editora;
-                        document.getElementById('editar-genero').value = data.genero;
-                        document.getElementById('editar-tombo').value = data.tombo;
-                        document.getElementById('editar-ano').value = data.ano;
-                        document.getElementById('editar-classificacao').value = data.classificacao;
-                        document.getElementById('editar-n_paginas').value = data.n_paginas;
-                        document.getElementById('editar-isbn').value = data.isbn;
-
-                        document.getElementById('popup-editar').style.display = 'flex'; // Exibe o popup
-                    } else {
-                        console.error('Nenhum dado encontrado para o livro.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro ao carregar dados do livro:', error);
-                });
-        });
+        fetch(`get_livro.php?id=${livroId}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('editar-id').value = data.id;
+                document.getElementById('editar-titulo').value = data.titulo;
+                document.getElementById('editar-autor').value = data.autor;
+                document.getElementById('editar-editora').value = data.editora;
+                document.getElementById('editar-genero').value = data.genero;
+                document.getElementById('editar-tombo').value = data.tombo;
+                document.getElementById('editar-ano').value = data.ano;
+                document.getElementById('editar-classificacao').value = data.classificacao;
+                document.getElementById('editar-n_paginas').value = data.n_paginas;
+                document.getElementById('editar-isbn').value = data.isbn;
+                document.getElementById('popup-editar').style.display = 'flex'; // Exibe o popup
+            })
+            .catch(error => console.error('Erro ao carregar dados do livro:', error));
     });
+});
 
-    function closePopupEditar() {
-        document.getElementById('popup-editar').style.display = 'none'; // Oculta o popup
-    }
+function closePopupEditar() {
+    document.getElementById('popup-editar').style.display = 'none'; // Oculta o popup
+}
+
 </script>
 
 
