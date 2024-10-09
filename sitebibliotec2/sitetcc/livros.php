@@ -683,10 +683,13 @@ $conn->close();
 
 
 
-<div class="popup" id="popup-editar" style="display:none;">
+
+
+
+    <div class="popup" id="popup-editar" style="display:none;">
     <div class="tablee">
-        <h1>Editar livro</h1>
-        <form id="editar-form" action="editar_livro.php" method="post" enctype="multipart/form-data">
+        <h1>Editar Livro</h1>
+        <form id="editar-form">
             <input type="hidden" id="editar-id" name="id"> <!-- ID do livro -->
             <label for="editar-titulo">Título:</label><br>
             <input type="text" id="editar-titulo" name="titulo" class="inp"><br>
@@ -709,14 +712,11 @@ $conn->close();
             <br>
             <input type="file" id="livro-imagem" name="imagem" accept="image/*">
             <br>
-            <input type="submit" value="Salvar" class="btn2">
+            <button type="button" id="salvar-edicao" class="btn2">Salvar</button>
         </form>
         <span class="closee" id="closeModal" onclick="closePopupEditar()">&times;</span>
     </div>
 </div>
-
-    
-
 
 
 
@@ -1113,9 +1113,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-    <script>
+<script>
 document.addEventListener('DOMContentLoaded', () => {
-    const botoesEditar = document.querySelectorAll('.btn3'); // Altere '.btn3' para o seletor correto
+    const botoesEditar = document.querySelectorAll('.btn3'); // Botões para abrir o modal
     const modalEditar = document.getElementById('popup-editar');
 
     // Função para carregar os dados do livro
@@ -1149,9 +1149,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Fecha o modal
-    document.querySelectorAll('.closee').forEach(closeBtn => {
-        closeBtn.addEventListener('click', closePopupEditar);
+    // Botão para salvar as alterações
+    document.getElementById('salvar-edicao').addEventListener('click', () => {
+        const formData = new FormData(document.getElementById('editar-form'));
+        
+        fetch('editar_livro.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Livro atualizado com sucesso!');
+                closePopupEditar(); // Fecha o modal
+                location.reload(); // Recarrega a página para ver as alterações
+            } else {
+                alert('Erro ao atualizar o livro: ' + data.error);
+            }
+        })
+        .catch(error => console.error('Erro ao atualizar livro:', error));
     });
 });
 
@@ -1160,6 +1176,7 @@ function closePopupEditar() {
     document.getElementById('popup-editar').style.display = 'none';
 }
 </script>
+
 
 
 
