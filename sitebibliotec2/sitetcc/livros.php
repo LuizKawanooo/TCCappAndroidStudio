@@ -279,7 +279,7 @@
             }
             
             
-/*             .popup {
+            .popup {
                 padding-top: 600px;
                 display: none; /* Por padrão, o pop-up estará oculto */
                 position: fixed; /* Posicionamento fixo para que o pop-up fique no mesmo lugar ao rolar a página */
@@ -293,21 +293,9 @@
                  z-index: 500;
                 
                 
-            } */
-
-            .popup {
-                display: none; /* Por padrão, o pop-up estará oculto */
-                position: fixed; /* Mantém o pop-up fixo na tela */
-                top: 0; /* Alinha o topo do popup ao topo da tela */
-                left: 0; /* Alinha o lado esquerdo do popup ao lado esquerdo da tela */
-                width: 100%; /* Ocupa toda a largura da tela */
-                height: 100%; /* Ocupa toda a altura da tela */
-                background-color: rgba(0, 0, 0, 0.7); /* Fundo escuro semi-transparente */
-                display: flex; /* Usar flexbox para centralizar o conteúdo */
-                justify-content: center; /* Centraliza horizontalmente */
-                align-items: center; /* Centraliza verticalmente */
-                z-index: 999; /* Aumentar o z-index para garantir que o popup apareça acima de tudo */
             }
+
+           
             .popupe {
                 margin-top: 70px;
                 padding-top: 500px;
@@ -378,11 +366,11 @@
                 width: 17%; /* Largura do pop-up */
                 
             }
-/*             .tablee{
+            .tablee{
                 display: grid;
                 justify-content: center;
                 border-radius: 10px;
-                z-index: 500;
+                z-index: 1000;
                 position: absolute;
                 top: -7%;
                 left: 34%;
@@ -390,19 +378,8 @@
                 margin: 20% auto; /* Centralizar verticalmente e deixar uma margem de 25% em cima e em baixo */
                 padding: 20px;  
                 width: 17%; /* Largura do pop-up */
-            } */
+            }
 
-            .tablee {
-    display: grid;
-    justify-content: center;
-    border-radius: 10px;
-    z-index: 1000; /* Aumentar z-index para garantir que esteja acima de outros elementos */
-    position: relative; /* Alterar para relative para o posicionamento correto dentro do popup */
-    background-color: #D9D9D9;
-    padding: 20px;
-    width: 400px; /* Ajustar a largura do pop-up conforme necessário */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Adicionar sombra para melhor visibilidade */
-}
             
             .table close{
                 padding-left: 100px;
