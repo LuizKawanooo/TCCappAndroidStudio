@@ -572,6 +572,8 @@
         <input type="text" name="search" placeholder="Pesquisar...">
         <button type="submit">Pesquisar</button>
     </form>
+    <p>Teste 1</p>
+
 </div>
 
 
@@ -646,7 +648,6 @@ if ($result) {
 $conn->close();
 ?>
 
-<p>Teste 1</p>
 
 <div id="popup" class="popup">
     <div class="table">
