@@ -31,7 +31,7 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $livro = $result->fetch_assoc();
     
-    // Se a imagem for armazenada em base64, converta aqui
+    // Se a imagem estiver presente, converta para base64
     if ($livro['imagem']) {
         $livro['imagem'] = 'data:image/jpeg;base64,' . base64_encode($livro['imagem']);
     }
