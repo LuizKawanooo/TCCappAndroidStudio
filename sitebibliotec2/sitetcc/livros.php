@@ -355,8 +355,8 @@
                 justify-content: center;
                 border-radius: 10px;
                 position: absolute;
-                top: -7%;
-                left: 34%;
+                top: 25%;
+                left: 40%;
                 z-index: 500;
                 background-color: #D9D9D9;
                 margin: 20% auto; /* Centralizar verticalmente e deixar uma margem de 25% em cima e em baixo */
