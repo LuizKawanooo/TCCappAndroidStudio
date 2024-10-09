@@ -726,24 +726,29 @@ $conn->close();
 
     
 
-<?php
-// Conexão com o banco de dados
-$servername = "tccappionic-bd.mysql.uhserver.com";
-$username = "ionic_perfil_bd";
-$password = "{[UOLluiz2019";
-$dbname = "tccappionic_bd";
 
-// Cria a conexão
-$conn = new mysqli($servername, $username, $password, $dbname);
 
-// Verifica a conexão
-if ($conn->connect_error) {
-    die("Erro na conexão: " . $conn->connect_error);
+
+    <?php
+// Configurações do banco de dados
+$host = 'tccappionic-bd.mysql.uhserver.com';
+$db   = 'tccappionic_bd';
+$user = 'ionic_perfil_bd';
+$pass = '{[UOLluiz2019';
+$charset = 'utf8mb4';
+
+$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+
+try {
+    $pdo = new PDO($dsn, $user, $pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die('Erro na conexão: ' . $e->getMessage());
 }
 
 // Verifica se o formulário foi enviado
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Prepara os dados para inserção no banco de dados
+    // Coleta os dados do formulário
     $titulo = $_POST['titulo'];
     $autor = $_POST['autor'];
     $genero = $_POST['genero'];
@@ -754,48 +759,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $n_paginas = $_POST['n_paginas'];
     $isbn = $_POST['isbn'];
 
-    // Processa o upload da imagem
-    $imagem = NULL;
+    // Verifica se a imagem foi enviada
     if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
-        $tmp_name = $_FILES['imagem']['tmp_name'];
-        $imageData = file_get_contents($tmp_name);
+        // Lê a imagem e armazena em uma variável
+        $imagem = file_get_contents($_FILES['imagem']['tmp_name']);
 
-        // Verifica se o arquivo é uma imagem JPEG
-        $fileType = mime_content_type($tmp_name);
-        if ($fileType == 'image/jpeg') {
-            $imagem = $imageData;
-        } else {
-            echo "Arquivo não é uma imagem JPEG.";
+        // Verifica se o arquivo é uma imagem válida
+        $imageFileType = strtolower(pathinfo($_FILES['imagem']['name'], PATHINFO_EXTENSION));
+        if (!in_array($imageFileType, ['jpg', 'jpeg', 'png', 'gif'])) {
+            header("Location: livros.php?message=Formato de imagem inválido!");
             exit;
         }
-    }
 
-    // Prepara a consulta SQL para inserção
-    $sql = "INSERT INTO livros (titulo, genero, autor, editora, tombo, ano, classificacao, n_paginas, isbn, imagem) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-    if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param(
-            "sssssssssb",
-            $titulo, $genero, $autor, $editora, $tombo, $ano, $classificacao, $n_paginas, $isbn, $imagem
-        );
-
-        // Executa a consulta
-        if ($stmt->execute()) {
-            echo "<script>window.location.href = 'livros.php';</script>";
+        // Prepara a consulta SQL para inserção
+        $sqlInsert = "INSERT INTO livros (titulo, autor, genero, editora, tombo, ano, classificacao, n_paginas, isbn, imagem) 
+                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmtInsert = $pdo->prepare($sqlInsert);
+        
+        // Tenta executar a inserção
+        if ($stmtInsert->execute([$titulo, $autor, $genero, $editora, $tombo, $ano, $classificacao, $n_paginas, $isbn, $imagem])) {
+            header("Location: livros.php?message=Livro adicionado com sucesso!");
+            exit;
         } else {
-            echo "Erro ao inserir registro: " . $stmt->error;
+            header("Location: livros.php?message=Erro ao armazenar no banco de dados.");
+            exit;
         }
-
-        // Fecha a consulta
-        $stmt->close();
     } else {
-        // Exibe a mensagem de erro se a preparação da consulta falhar
-        echo "Erro na preparação da consulta: " . $conn->error;
+        header("Location: livros.php?message=Erro no upload da imagem.");
+        exit;
     }
-
-    // Fecha a conexão com o banco de dados
-    $conn->close();
 }
 ?>
 
