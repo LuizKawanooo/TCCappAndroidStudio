@@ -11,7 +11,8 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Verifica a conexão
 if ($conn->connect_error) {
-    die("Erro na conexão: " . $conn->connect_error);
+    echo json_encode(['error' => 'Erro na conexão: ' . $conn->connect_error]);
+    exit;
 }
 
 $id = $_GET['id'];
@@ -25,7 +26,7 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     echo json_encode($result->fetch_assoc());
 } else {
-    echo json_encode([]);
+    echo json_encode(['error' => 'Livro não encontrado.']);
 }
 
 $stmt->close();
