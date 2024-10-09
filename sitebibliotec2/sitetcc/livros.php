@@ -1,8 +1,3 @@
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -651,7 +646,7 @@ if ($result) {
 $conn->close();
 ?>
 
-
+<p>Teste 1</p>
 
 <div id="popup" class="popup">
     <div class="table">
