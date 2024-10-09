@@ -734,21 +734,18 @@ $conn->close();
 <?php
 // Conexão com o banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
-
 $username = "ionic_perfil_bd";
-
 $password = "{[UOLluiz2019";
-
 $dbname = "tccappionic_bd";
- 
-// Cria a conexão
 
+// Cria a conexão
 $conn = new mysqli($servername, $username, $password, $dbname);
- 
 
 // Verifica a conexão
 if ($conn->connect_error) {
-    die("Erro na conexão: " . $conn->connect_error);
+    http_response_code(500);
+    echo json_encode(['error' => 'Erro na conexão: ' . $conn->connect_error]);
+    exit;
 }
 
 // Recebe a solicitação do cliente
@@ -765,21 +762,26 @@ if (isset($input['id']) && isset($input['novoStatus'])) {
         $sql = "UPDATE livros SET status='$novoStatus' WHERE id='$id'";
 
         if ($conn->query($sql) === TRUE) {
-            echo "";
+            echo json_encode(['success' => 'Status atualizado com sucesso.']);
         } else {
-            echo "";
+            http_response_code(500);
+            echo json_encode(['error' => 'Erro ao atualizar o status: ' . $conn->error]);
         }
     } else {
-        echo "";
+        http_response_code(400);
+        echo json_encode(['error' => 'Status inválido.']);
     }
 } else {
-    echo "";
+    http_response_code(400);
+    echo json_encode(['error' => 'ID ou novoStatus não fornecidos.']);
 }
 
 // Fecha a conexão com o banco de dados
 $conn->close();
-
 ?>
+
+
+    
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
