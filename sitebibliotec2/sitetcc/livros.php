@@ -628,12 +628,13 @@ if ($result) {
             } elseif ($row["status_livros"] == 1) {
                 echo "<h2 style='color: red;'>Livro alugado</h2>";
             }
-
-            echo "<div class='botoes'>";
-            echo "<div class='btn3' data-id='" . $row['id'] . "'>Editar</div>";
-            echo "<div class='btn-excluir' data-id='" . $row["id"] . "'>Excluir</div>";
-            echo "</div>";
-            echo "</div>";
+    
+                // Botões de ação
+                echo "<div class='botoes'>";
+                echo "<div class='btn3' data-id='" . $row['id'] . "'>Editar</div>"; // Aqui está a configuração do ID
+                echo "<div class='btn-excluir' data-id='" . $row["id"] . "'>Excluir</div>";
+                echo "</div>";
+                echo "</div>";
         }
         echo "</div>"; // Fecha div container
     } else {
@@ -1005,18 +1006,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
             <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Redireciona para a página de livros com o gênero como parâmetro
-    document.querySelectorAll('.generos').forEach(genreElement => {
-        genreElement.addEventListener('click', () => {
-            const genero = genreElement.getAttribute('data-genero');
-            window.location.href = `livros.php?search=${encodeURIComponent(genero)}`;
-        });
-    });
-
     // Evento para abrir o popup de edição ao clicar no botão de editar
     document.querySelectorAll('.btn3').forEach(btn => {
         btn.addEventListener('click', function() {
             const livroId = this.getAttribute('data-id');
+            console.log('ID do livro:', livroId); // Verifique se o ID correto está sendo capturado
 
             fetch(`get_livro.php?id=${livroId}`)
                 .then(response => response.json())
@@ -1051,14 +1045,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Função para fechar o popup de edição
+// Funções para fechar os popups
 function closePopupEditar() {
-    document.getElementById('popup-editar').style.display = 'none'; // Oculta o popup
+    document.getElementById('popup-editar').style.display = 'none';
 }
 
-// Função para fechar o popup de adicionar livro
 function closePopup() {
-    document.getElementById('popup').style.display = 'none'; // Oculta o popup
+    document.getElementById('popup').style.display = 'none';
 }
 
 </script>
