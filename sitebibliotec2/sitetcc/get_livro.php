@@ -41,17 +41,13 @@ if ($result->num_rows > 0) {
     
     // Se a imagem estiver presente, converte para base64
     if (isset($livro['imagem']) && !empty($livro['imagem'])) {
-        // Verifica se a imagem está em um formato que pode ser convertido
-        if (is_string($livro['imagem'])) {
-            $livro['imagem'] = 'data:image/jpeg;base64,' . base64_encode($livro['imagem']);
-        } else {
-            // Se a imagem não for uma string, retorne um erro ou tratamento adequado
-            $livro['imagem'] = null; // ou uma string padrão se a imagem não existir
-        }
+        // Garante que a imagem é do tipo blob e converte
+        $livro['imagem'] = 'data:image/jpeg;base64,' . base64_encode($livro['imagem']);
     } else {
         $livro['imagem'] = null; // ou uma string padrão se a imagem não existir
     }
 
+    // Retorna todas as informações do livro, incluindo a imagem
     echo json_encode($livro);
 } else {
     echo json_encode(['error' => 'Livro não encontrado.']);
