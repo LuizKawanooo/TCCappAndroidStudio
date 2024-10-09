@@ -1013,7 +1013,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             fetch(`get_livro.php?id=${livroId}`)
                                 .then(response => {
                                     if (!response.ok) {
-                                        throw new Error('Erro na resposta do servidor');
+                                        throw new Error('Erro na resposta do servidor: ' + response.status);
                                     }
                                     return response.json();
                                 })
@@ -1034,6 +1034,13 @@ document.addEventListener('DOMContentLoaded', function() {
                                     document.getElementById('editar-classificacao').value = data.classificacao;
                                     document.getElementById('editar-n_paginas').value = data.n_paginas;
                                     document.getElementById('editar-isbn').value = data.isbn;
+                            
+                                    // Exibe a imagem se disponível
+                                    const imgElement = document.createElement('img');
+                                    imgElement.src = data.imagem || ''; // Se imagem estiver vazia, não faz nada
+                                    imgElement.style.maxWidth = '130px';
+                                    imgElement.style.maxHeight = '150px';
+                                    document.getElementById('popup-editar').appendChild(imgElement); // Ou adicione a um contêiner existente
                             
                                     // Exibe o popup de edição
                                     document.getElementById('popup-editar').style.display = 'flex';
