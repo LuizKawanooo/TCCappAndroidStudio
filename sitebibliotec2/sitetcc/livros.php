@@ -611,6 +611,7 @@ if ($search) {
 
 $result = $conn->query($sql);
 
+
 // Verifica se a consulta retornou algum resultado
 if ($result) {
     if ($result->num_rows > 0) {
@@ -618,12 +619,11 @@ if ($result) {
         while ($row = $result->fetch_assoc()) {
             echo "<div class='livro'>";
             if ($row["imagem"]) {
-                // echo "<img src='image.php?id=" . $row["id"] . "' alt='imagem do livro' style='max-width: 130px; max-height: 150px;'>";
-                        echo '<div>
-                                <img src="data:image/jpeg;base64,' . base64_encode($row['imagem']) . '" style="max-width: 130px; max-height: 150px; object-fit: contain;">
-                              </div>';
+                echo '<div>
+                        <img src="data:image/jpeg;base64,' . base64_encode($row['imagem']) . '" style="max-width: 130px; max-height: 150px; object-fit: contain;">
+                      </div>';
             }
-            echo "<center><h1>" . $row["titulo"] . "</h1></center>";
+            echo "<center><h1>" . htmlspecialchars($row["titulo"]) . "</h1></center>";
 
             // Verifica o status do livro e exibe a mensagem apropriada
             if ($row["status_livros"] == 0) {
@@ -632,20 +632,13 @@ if ($result) {
                 echo "<h2 style='color: red;'>Livro alugado</h2>";
             }
 
-            // echo "<div class='botoes'>";
-            // // echo "<div class='btn3' data-id='" . $row["id"] . "'>Editar</div>";
-            // echo "<div class='btn3' data-id='" . $row['id'] . "'>Editar</div>";
-            // echo "<div class='btn-excluir' data-id='" . $row["id"] . "'>Excluir</div>";
-            // echo "</div>";
-            // echo "</div>";
-
-                        echo "<center><h1>" . $row["titulo"] . "</h1></center>";
             echo "<div class='botoes'>";
-            echo "<div class='btn3' data-id='" . $row['id'] . "'>Editar</div>";
-            echo "<div class='btn-excluir' data-id='" . $row["id"] . "'>Excluir</div>";
+            echo "<div class='btn3' data-id='" . htmlspecialchars($row['id']) . "'>Editar</div>";
+            echo "<div class='btn-excluir' data-id='" . htmlspecialchars($row["id"]) . "'>Excluir</div>";
             echo "</div>";
-            echo "</div>";
+            echo "</div>"; // Fecha div livro
         }
+        echo "</div>"; // Fecha div container
     } else {
         echo "<p style='color:#fff; font-size:40px; position: absolute; top: 51%; left: 60%; transform:translate(-50%, -50%);'>Nenhum Livro Encontrado</p>";
     }
@@ -653,9 +646,9 @@ if ($result) {
     echo "Erro na consulta: " . $conn->error;
 }
 
+// Fecha a conexão
 $conn->close();
 ?>
-
 
     
 //============================================================================================================================================================================================//
