@@ -355,13 +355,13 @@
                 justify-content: center;
                 border-radius: 10px;
                 position: absolute;
-                top: 25%;
-                left: 40%;
+                top: 22%;
+                left: 44%;
                 z-index: 500;
                 background-color: #D9D9D9;
                 margin: 20% auto; /* Centralizar verticalmente e deixar uma margem de 25% em cima e em baixo */
                 padding: 20px;  
-                width: 17%; /* Largura do pop-up */
+                width: 13%; /* Largura do pop-up */
                 
             }
             .tablee{
