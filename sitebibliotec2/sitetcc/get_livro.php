@@ -59,7 +59,7 @@ $conn->close();
             padding: 20px;  
             width: 16%; /* Largura do pop-up */
             padding-top: 6px;
-            
+            min-width: 312px;
         }
         body{
             background-color:blue;
@@ -99,7 +99,7 @@ $conn->close();
                 padding-left: 5px;
                 margin-bottom: -4px;
                 border: 1px solid #ccc;
-                border-radius: 5px;
+                border-radius: 7px;
             }
             .inpd{
                 height: 30px;
@@ -108,6 +108,7 @@ $conn->close();
                 padding-left: 5px;
                 border: 1px solid #ccc;
                 border-radius: 5px;
+                border-radius: 7px;
             }
     </style>
 </head>
@@ -171,7 +172,9 @@ $conn->close();
         function closePopup() {
             document.getElementById('overlay').style.display = 'none';
             document.getElementById('popup-editar').style.display = 'none';
+            window.location.href = "https://endologic.com.br/tcc/sitebibliotec2/sitetcc/livros.php";
         }
+
     </script>
 </body>
 </html>
