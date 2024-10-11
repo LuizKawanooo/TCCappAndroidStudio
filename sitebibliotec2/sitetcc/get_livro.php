@@ -43,8 +43,7 @@ $conn->close();
     <style>
  @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
         * {
-            margin: 0 auto;
-            padding: 0;
+            
             box-sizing: border-box;
             font-family: 'Open Sans', sans-serif;
         }
