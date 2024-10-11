@@ -135,7 +135,7 @@ $conn->close();
                 <input type="text" class="inp" id="editar-tombo" name="tombo" value="<?php echo htmlspecialchars($livro['tombo']); ?>" required>
             </p>
             <p>
-                <label for="editar-ano">Ano:</label>
+                <label for="editar-ano">Ano:</label><br>
                 <input type="date" class="inpd" id="editar-ano" name="ano" value="<?php echo htmlspecialchars($livro['ano']); ?>" required>
             </p>
             <p>
