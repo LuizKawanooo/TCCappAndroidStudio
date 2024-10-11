@@ -43,8 +43,6 @@ $conn->close();
     <style>
  @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
         * {
-            
-            box-sizing: border-box;
             font-family: 'Open Sans', sans-serif;
         }
         #popup-editar {
