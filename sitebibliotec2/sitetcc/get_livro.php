@@ -97,6 +97,7 @@ $conn->close();
                 width: 300px;
                 flex: 1;
                 padding-left: 5px;
+                margin-bottom: -4px;
                 border: 1px solid #ccc;
                 border-radius: 5px;
             }
