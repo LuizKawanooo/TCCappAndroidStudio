@@ -111,7 +111,7 @@ $conn->close();
     <div id="overlay" onclick="closePopup()"></div>
 
     <div id="popup-editar">
-        <h2>Editar Livro</h2>
+        <center><h2>Editar Livro</h2></center>
         <form action="atualizar_livro.php" method="POST">
             <input type="hidden" id="editar-id" name="id" value="<?php echo htmlspecialchars($livro['id']); ?>">
             <p>
