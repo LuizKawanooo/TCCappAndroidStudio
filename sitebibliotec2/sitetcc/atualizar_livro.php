@@ -95,7 +95,7 @@ if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
 // Atualiza os dados no banco de dados
 $sql = "UPDATE livros SET titulo=?, autor=?, editora=?, genero=?, tombo=?, ano=?, classificacao=?, n_paginas=?, isbn=?, imagem=? WHERE id=?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ssssiissiib", $titulo, $autor, $editora, $genero, $tombo, $ano, $classificacao, $n_paginas, $isbn, $imagem, $id);
+$stmt->bind_param("ssssiissibi", $titulo, $autor, $editora, $genero, $tombo, $ano, $classificacao, $n_paginas, $isbn, $imagem, $id);
 $stmt->execute();
 
 $stmt->close();
