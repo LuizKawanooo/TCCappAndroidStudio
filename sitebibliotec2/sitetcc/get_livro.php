@@ -41,6 +41,12 @@ $conn->close();
     <meta charset="UTF-8">
     <title>Editar Livro</title>
     <style>
+        * {
+            margin: 0 auto;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Open Sans', sans-serif;
+        }
         #popup-editar {
             display: grid;
             justify-content: center;
