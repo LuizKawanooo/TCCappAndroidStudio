@@ -64,6 +64,23 @@ $conn->close();
             background: rgba(0, 0, 0, 0.5);
             z-index: 500;
         } 
+
+        .inp{
+                height: 30px;
+                width: 300px;
+                flex: 1;
+                padding-left: 5px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+            .inpd{
+                height: 30px;
+                width: 150px;
+                flex: 1;
+                padding-left: 5px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
     </style>
 </head>
 <body>
@@ -75,39 +92,39 @@ $conn->close();
             <input type="hidden" id="editar-id" name="id" value="<?php echo htmlspecialchars($livro['id']); ?>">
             <p>
                 <label for="editar-titulo">Título:</label>
-                <input type="text" id="editar-titulo" name="titulo" value="<?php echo htmlspecialchars($livro['titulo']); ?>" required>
+                <input type="text" class="inp" id="editar-titulo" name="titulo" value="<?php echo htmlspecialchars($livro['titulo']); ?>" required>
             </p>
             <p>
                 <label for="editar-autor">Autor:</label>
-                <input type="text" id="editar-autor" name="autor" value="<?php echo htmlspecialchars($livro['autor']); ?>" required>
+                <input type="text" class="inp" id="editar-autor" name="autor" value="<?php echo htmlspecialchars($livro['autor']); ?>" required>
             </p>
             <p>
                 <label for="editar-editora">Editora:</label>
-                <input type="text" id="editar-editora" name="editora" value="<?php echo htmlspecialchars($livro['editora']); ?>" required>
+                <input type="text" class="inp" id="editar-editora" name="editora" value="<?php echo htmlspecialchars($livro['editora']); ?>" required>
             </p>
             <p>
                 <label for="editar-genero">Gênero:</label>
-                <input type="text" id="editar-genero" name="genero" value="<?php echo htmlspecialchars($livro['genero']); ?>" required>
+                <input type="text" class="inp" id="editar-genero" name="genero" value="<?php echo htmlspecialchars($livro['genero']); ?>" required>
             </p>
             <p>
                 <label for="editar-tombo">Tombo:</label>
-                <input type="text" id="editar-tombo" name="tombo" value="<?php echo htmlspecialchars($livro['tombo']); ?>" required>
+                <input type="text" class="inp" id="editar-tombo" name="tombo" value="<?php echo htmlspecialchars($livro['tombo']); ?>" required>
             </p>
             <p>
                 <label for="editar-ano">Ano:</label>
-                <input type="number" id="editar-ano" name="ano" value="<?php echo htmlspecialchars($livro['ano']); ?>" required>
+                <input type="number" class="inpd" id="editar-ano" name="ano" value="<?php echo htmlspecialchars($livro['ano']); ?>" required>
             </p>
             <p>
                 <label for="editar-classificacao">Classificação:</label>
-                <input type="text" id="editar-classificacao" name="classificacao" value="<?php echo htmlspecialchars($livro['classificacao']); ?>" required>
+                <input type="text" class="inp" id="editar-classificacao" name="classificacao" value="<?php echo htmlspecialchars($livro['classificacao']); ?>" required>
             </p>
             <p>
                 <label for="editar-n_paginas">Número de Páginas:</label>
-                <input type="number" id="editar-n_paginas" name="n_paginas" value="<?php echo htmlspecialchars($livro['n_paginas']); ?>" required>
+                <input type="number" class="inp" id="editar-n_paginas" name="n_paginas" value="<?php echo htmlspecialchars($livro['n_paginas']); ?>" required>
             </p>
             <p>
                 <label for="editar-isbn">ISBN:</label>
-                <input type="text" id="editar-isbn" name="isbn" value="<?php echo htmlspecialchars($livro['isbn']); ?>" required>
+                <input type="text" class="inp" id="editar-isbn" name="isbn" value="<?php echo htmlspecialchars($livro['isbn']); ?>" required>
             </p>
             <button type="submit">Salvar</button>
             <button type="button" onclick="closePopup()">Fechar</button>
