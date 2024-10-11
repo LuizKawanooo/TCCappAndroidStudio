@@ -19,11 +19,12 @@ $ano = $_POST['ano'];
 $classificacao = $_POST['classificacao'];
 $n_paginas = $_POST['n_paginas'];
 $isbn = $_POST['isbn'];
+$imagem = $_POST['imagem'];
 
-$sql = "UPDATE livros SET titulo=?, autor=?, editora=?, genero=?, tombo=?, ano=?, classificacao=?, n_paginas=?, isbn=? WHERE id=?";
+$sql = "UPDATE livros SET titulo=?, autor=?, editora=?, genero=?, tombo=?, ano=?, classificacao=?, n_paginas=?, isbn=?, imagem=? WHERE id=?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ssssiissii", $titulo, $autor, $editora, $genero, $tombo, $ano, $classificacao, $n_paginas, $isbn, $id);
-$stmt->execute();
+$stmt->bind_param("ssssiissiib", $titulo, $autor, $editora, $genero, $tombo, $ano, $classificacao, $n_paginas, $isbn, imagem, $id);
+$stmt->execute(); 
 
 $stmt->close();
 $conn->close();
