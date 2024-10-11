@@ -155,6 +155,10 @@ $conn->close();
                 <label for="editar-isbn">ISBN:</label>
                 <input type="text" class="inp" id="editar-isbn" name="isbn" value="<?php echo htmlspecialchars($livro['isbn']); ?>" required>
             </p>
+            <p>
+                <label for="editar-imagem">ISBN:</label>
+                <input type="file" class="inp" id="editar-imagem" name="imagem" value="<?php echo htmlspecialchars($livro['imagem']); ?>" required>
+            </p>
             <center><button type="submit" class="btn2">Salvar</button></center>
             <button type="button" onclick="closePopup()">Fechar</button>
         </form>
