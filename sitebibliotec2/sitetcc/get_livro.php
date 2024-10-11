@@ -50,9 +50,10 @@ $conn->close();
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 500;
+            align-itens:center;
             background-color: #D9D9D9;
             padding: 20px;  
-            width: 13%; /* Largura do pop-up */
+            width: 18%; /* Largura do pop-up */
         }
         #overlay {
             display: none;
