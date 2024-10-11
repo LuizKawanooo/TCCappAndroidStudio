@@ -41,7 +41,6 @@ $conn->close();
     <meta charset="UTF-8">
     <title>Editar Livro</title>
     <style>
-        /* Estilo simples para o popup */
         #popup-editar {
             display: grid;
             justify-content: center;
@@ -52,7 +51,6 @@ $conn->close();
             transform: translate(-50%, -50%);
             z-index: 500;
             background-color: #D9D9D9;
-            margin: 20% auto; /* Centralizar verticalmente e deixar uma margem de 25% em cima e em baixo */
             padding: 20px;  
             width: 13%; /* Largura do pop-up */
         }
