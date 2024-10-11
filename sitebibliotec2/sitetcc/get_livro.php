@@ -136,7 +136,7 @@ $conn->close();
             </p>
             <p>
                 <label for="editar-ano">Ano:</label>
-                <input type="number" class="inpd" id="editar-ano" name="ano" value="<?php echo htmlspecialchars($livro['ano']); ?>" required>
+                <input type="date" class="inpd" id="editar-ano" name="ano" value="<?php echo htmlspecialchars($livro['ano']); ?>" required>
             </p>
             <p>
                 <label for="editar-classificacao">Classificação:</label>
