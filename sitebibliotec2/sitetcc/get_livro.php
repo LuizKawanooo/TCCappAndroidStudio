@@ -57,7 +57,9 @@ $conn->close();
             align-itens:center;
             background-color: #D9D9D9;
             padding: 20px;  
-            width: 18%; /* Largura do pop-up */
+            width: 16%; /* Largura do pop-up */
+            padding-top: 6px;
+            
         }
         #overlay {
             display: none;
@@ -131,7 +133,7 @@ $conn->close();
                 <label for="editar-isbn">ISBN:</label>
                 <input type="text" class="inp" id="editar-isbn" name="isbn" value="<?php echo htmlspecialchars($livro['isbn']); ?>" required>
             </p>
-            <button type="submit">Salvar</button>
+            <center><button type="submit">Salvar</button></center>
             <button type="button" onclick="closePopup()">Fechar</button>
         </form>
     </div>
