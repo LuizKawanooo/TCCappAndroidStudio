@@ -89,7 +89,6 @@ $conn->close();
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
             z-index: 500;
         } 
 
@@ -112,7 +111,7 @@ $conn->close();
     </style>
 </head>
 <body>
-    <div id="overlay" onclick="closePopup()"></div>
+    <div id="overlay"></div>
 
     <div id="popup-editar">
         <center><h2>Editar Livro</h2></center>
