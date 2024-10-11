@@ -41,6 +41,7 @@ $conn->close();
     <meta charset="UTF-8">
     <title>Editar Livro</title>
     <style>
+ @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
         * {
             margin: 0 auto;
             padding: 0;
