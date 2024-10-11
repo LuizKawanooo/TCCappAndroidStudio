@@ -61,6 +61,23 @@ $conn->close();
             padding-top: 6px;
             
         }
+        .btn2{
+                font-family: Roboto, sans-serif;
+                color: #fff;
+                background-color: #005aeb;
+                padding: 10px 30px;
+                border: none;
+                -webkit-box-shadow: 2px 11px 31px -10px rgba(0,0,0,0.6);
+                -moz-box-shadow: 2px 11px 31px -10px rgba(0,0,0,0.6);
+                box-shadow: 2px 11px 31px -10px rgba(0,0,0,0.6);
+                border-radius: 50px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                cursor: pointer;
+                margin-top: 30px;
+                top: 79%;
+        }
         #overlay {
             display: none;
             position: fixed;
@@ -133,7 +150,7 @@ $conn->close();
                 <label for="editar-isbn">ISBN:</label>
                 <input type="text" class="inp" id="editar-isbn" name="isbn" value="<?php echo htmlspecialchars($livro['isbn']); ?>" required>
             </p>
-            <center><button type="submit">Salvar</button></center>
+            <center><button type="submit" class="btn2">Salvar</button></center>
             <button type="button" onclick="closePopup()">Fechar</button>
         </form>
     </div>
