@@ -61,6 +61,10 @@ $conn->close();
             padding-top: 6px;
             
         }
+        body{
+            background-color:blue;
+        }
+        
         .btn2{
                 font-family: Roboto, sans-serif;
                 color: #fff;
