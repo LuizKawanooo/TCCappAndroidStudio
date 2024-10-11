@@ -156,8 +156,17 @@ $conn->close();
                 <input type="text" class="inp" id="editar-isbn" name="isbn" value="<?php echo htmlspecialchars($livro['isbn']); ?>" required>
             </p>
             <p>
-                <label for="editar-imagem">ISBN:</label>
-                <input type="file" class="inp" id="editar-imagem" name="imagem" value="<?php echo htmlspecialchars($livro['imagem']); ?>" required>
+            <label>Imagem Atual:</label><br>
+                <?php if (!empty($livro['imagem'])): ?>
+                    <img src="<?php echo htmlspecialchars($livro['imagem']); ?>" alt="Imagem do Livro" style="max-width: 100px; max-height: 100px;"><br>
+                <?php else: ?>
+                    <span>Nenhuma imagem disponível.</span><br>
+                <?php endif; ?>
+            </p>
+            <p>
+                <label for="imagem">Nova Imagem:</label>
+                <input type="file" name="imagem" id="imagem">
+                <small>Deixe em branco se não deseja alterar a imagem.</small>
             </p>
             <center><button type="submit" class="btn2">Salvar</button></center>
             <button type="button" onclick="closePopup()">Fechar</button>
