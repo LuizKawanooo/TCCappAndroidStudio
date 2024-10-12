@@ -45,6 +45,21 @@ $conn->close();
         * {
             font-family: 'Open Sans', sans-serif;
         }
+
+        .table {
+                display: grid;
+                justify-content: center;
+                border-radius: 10px;
+                position: absolute;
+                top: 22%;
+                left: 44%;
+                z-index: 500;
+                background-color: #D9D9D9;
+                margin: 20% auto; /* Centralizar verticalmente e deixar uma margem de 25% em cima e em baixo */
+                padding: 20px;  
+                width: 13%; /* Largura do pop-up */
+                
+        }
         /* Estilos omitidos para brevidade */
     </style>
 </head>
