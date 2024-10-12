@@ -1,14 +1,8 @@
 <?php
 // Permitir qualquer origem
 header("Access-Control-Allow-Origin: *");
-
-// Opcional: Permitir métodos específicos (GET, POST, etc.)
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-
-// Opcional: Permitir cabeçalhos específicos
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
-
-// Defina o tipo de conteúdo como JSON
 header('Content-Type: application/json');
 
 // Configurações de conexão ao banco de dados
@@ -17,7 +11,7 @@ $username = "ionic_perfil_bd"; // Usuário do MySQL
 $password = "{[UOLluiz2019"; // Senha do MySQL
 $dbname = "tccappionic_bd"; // Nome do banco de dados
 
-// Crie a conexão
+// Crie a conexão com o banco de dados
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Verifique a conexão
@@ -30,7 +24,7 @@ if ($conn->connect_error) {
 function atualizarPontosUsuario($rmUsuario) {
     global $conn;
 
-    // Verifique se o RM do usuário foi fornecido
+    // Verificar se o RM foi fornecido
     if (!$rmUsuario) {
         return ['success' => false, 'message' => 'RM do usuário não foi fornecido.'];
     }
@@ -38,22 +32,22 @@ function atualizarPontosUsuario($rmUsuario) {
     // Consultar o valor atual de pontos do usuário
     $sqlGetPontos = "SELECT pontos FROM registrar_usuarios WHERE rm = ?";
     $stmtGet = $conn->prepare($sqlGetPontos);
-    $stmtGet->bind_param("s", $rmUsuario); // Vincula o parâmetro RM
+    $stmtGet->bind_param("s", $rmUsuario);
     $stmtGet->execute();
     $result = $stmtGet->get_result();
 
-    // Verificar se o usuário existe no banco de dados
+    // Verificar se o usuário existe
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         $pontosAtuais = $row['pontos'];
 
-        // Adicionar 100 pontos aos pontos atuais
+        // Adicionar 100 pontos
         $novosPontos = $pontosAtuais + 100;
 
-        // Atualizar o valor dos pontos no banco de dados
+        // Atualizar o valor dos pontos
         $sqlUpdatePontos = "UPDATE registrar_usuarios SET pontos = ? WHERE rm = ?";
         $stmtUpdate = $conn->prepare($sqlUpdatePontos);
-        $stmtUpdate->bind_param("is", $novosPontos, $rmUsuario); // Vincula novos pontos e RM
+        $stmtUpdate->bind_param("is", $novosPontos, $rmUsuario);
 
         if ($stmtUpdate->execute()) {
             return ['success' => true, 'message' => "Pontos atualizados com sucesso! Novo total: $novosPontos pontos."];
@@ -65,14 +59,14 @@ function atualizarPontosUsuario($rmUsuario) {
     }
 }
 
-// Captura dados da requisição
+// Captura os dados da requisição
 $data = json_decode(file_get_contents("php://input"), true);
-$rmUsuario = isset($data['rm']) ? $data['rm'] : null; // Alteração para versões mais antigas do PHP
+$rmUsuario = isset($data['rm']) ? $data['rm'] : null;
 $resultado = atualizarPontosUsuario($rmUsuario);
 
 // Retorna o resultado como JSON
 echo json_encode($resultado);
 
-// Fechar a conexão
+// Fechar a conexão com o banco de dados
 $conn->close();
 ?>
