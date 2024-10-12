@@ -1,6 +1,12 @@
 <?php
 header("Content-Type: application/json");
 
+// Permitir CORS (Cross-Origin Resource Sharing)
+header("Access-Control-Allow-Origin: *"); // Permite todas as origens
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS"); // Métodos permitidos
+header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Cabeçalhos permitidos
+
+
 // Conexão com o banco de dados
 $host = "tccappionic-bd.mysql.uhserver.com"; // URL do seu banco de dados
 $dbname = "tccappionic_bd"; // Nome do banco de dados
