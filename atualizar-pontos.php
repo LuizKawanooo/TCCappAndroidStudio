@@ -54,6 +54,7 @@ function atualizarPontosUsuario($rmUsuario) {
         $sqlUpdatePontos = "UPDATE registrar_usuarios SET pontos = ? WHERE rm = ?";
         $stmtUpdate = $conn->prepare($sqlUpdatePontos);
         $stmtUpdate->bind_param("is", $novosPontos, $rmUsuario); // Vincula novos pontos e RM
+
         if ($stmtUpdate->execute()) {
             return ['success' => true, 'message' => "Pontos atualizados com sucesso! Novo total: $novosPontos pontos."];
         } else {
@@ -64,8 +65,8 @@ function atualizarPontosUsuario($rmUsuario) {
     }
 }
 
-// Exemplo de uso da função, substitua "12345" pelo RM real do usuário
-$data = json_decode(file_get_contents("php://input"), true); // Captura dados da requisição
+// Captura dados da requisição
+$data = json_decode(file_get_contents("php://input"), true);
 $rmUsuario = $data['rm'] ?? null; // Obtém RM do corpo da requisição
 $resultado = atualizarPontosUsuario($rmUsuario);
 
