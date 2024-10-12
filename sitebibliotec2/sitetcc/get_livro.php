@@ -98,6 +98,16 @@ $conn->close();
             top: 2.3%;
             left: 89%;
         }
+         .footer {
+                    width: 101vw;
+                    height:50vh;
+                    position: absolute;
+                    bottom: -10%;
+                    left: 0;
+                    fill: #ffffff;
+                    position: fixed;
+                    }
+
     </style>
 </head>
 <body>
