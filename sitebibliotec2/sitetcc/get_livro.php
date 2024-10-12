@@ -77,6 +77,27 @@ $conn->close();
                 border: 1px solid #ccc;
                 border-radius: 5px;
         }
+        .btn2 {
+                width: 100px;
+                height: 30px;
+                border-radius: 7px;
+                border: none;
+                background: #56dd63;
+                color: #000000;
+                font-weight: bold;
+        }
+        .btnfechar {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            border: none;
+            background: #ff0000;
+            color: #ffffff;
+            font-weight: bold;
+            position: absolute;
+            top: 2.3%;
+            left: 89%;
+        }
     </style>
 </head>
 <body>
@@ -87,39 +108,39 @@ $conn->close();
         <form action="atualizar_livro.php" method="POST" enctype="multipart/form-data">
             <input type="hidden" id="editar-id" name="id" value="<?php echo htmlspecialchars($livro['id']); ?>">
             <p>
-                <label for="editar-titulo">Título:</label>
+                <label for="editar-titulo">Título:</label><br>
                 <input type="text" class="inp" id="editar-titulo" name="titulo" value="<?php echo htmlspecialchars($livro['titulo']); ?>" required>
             </p>
             <p>
-                <label for="editar-autor">Autor:</label>
+                <label for="editar-autor">Autor:</label><br>
                 <input type="text" class="inp" id="editar-autor" name="autor" value="<?php echo htmlspecialchars($livro['autor']); ?>" required>
             </p>
             <p>
-                <label for="editar-editora">Editora:</label>
+                <label for="editar-editora">Editora:</label><br>
                 <input type="text" class="inp" id="editar-editora" name="editora" value="<?php echo htmlspecialchars($livro['editora']); ?>" required>
             </p>
             <p>
-                <label for="editar-genero">Gênero:</label>
+                <label for="editar-genero">Gênero:</label><br>
                 <input type="text" class="inp" id="editar-genero" name="genero" value="<?php echo htmlspecialchars($livro['genero']); ?>" required>
             </p>
             <p>
-                <label for="editar-tombo">Tombo:</label>
+                <label for="editar-tombo">Tombo:</label><br>
                 <input type="text" class="inp" id="editar-tombo" name="tombo" value="<?php echo htmlspecialchars($livro['tombo']); ?>" required>
             </p>
             <p>
-                <label for="editar-ano">Ano:</label>
+                <label for="editar-ano">Ano:</label><br>
                 <input type="date" class="inpd" id="editar-ano" name="ano" value="<?php echo htmlspecialchars($livro['ano']); ?>" required>
             </p>
             <p>
-                <label for="editar-classificacao">Classificação:</label>
+                <label for="editar-classificacao">Classificação:</label><br>
                 <input type="text" class="inp" id="editar-classificacao" name="classificacao" value="<?php echo htmlspecialchars($livro['classificacao']); ?>" required>
             </p>
             <p>
-                <label for="editar-n_paginas">Número de Páginas:</label>
+                <label for="editar-n_paginas">Número de Páginas:</label><br>
                 <input type="number" class="inp" id="editar-n_paginas" name="n_paginas" value="<?php echo htmlspecialchars($livro['n_paginas']); ?>" required>
             </p>
             <p>
-                <label for="editar-isbn">ISBN:</label>
+                <label for="editar-isbn">ISBN:</label><br>
                 <input type="text" class="inp" id="editar-isbn" name="isbn" value="<?php echo htmlspecialchars($livro['isbn']); ?>" required>
             </p>
             <p>
@@ -136,7 +157,7 @@ $conn->close();
                 <small>Deixe em branco se não deseja alterar a imagem.</small>
             </p>
             <center><button type="submit" class="btn2">Salvar</button></center>
-            <button type="button" onclick="closePopup()">Fechar</button>
+            <button class="btnfechar" type="button" onclick="closePopup()">Fechar</button>
         </form>
     </div>
 
