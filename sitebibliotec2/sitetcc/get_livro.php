@@ -45,6 +45,12 @@ $conn->close();
         * {
             font-family: 'Open Sans', sans-serif;
         }
+            body{
+            background-image: linear-gradient(to right, #30cfd0 0%, #330867 100%);
+            overflow-y: scroll;
+            overflow-x: hidden;
+
+            }
 
         .table {
             display: grid;
