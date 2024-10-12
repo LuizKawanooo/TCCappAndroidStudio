@@ -66,7 +66,7 @@ $conn->close();
 <body>
     <div id="overlay"></div>
 
-    <div id="popup-editar">
+    <div class="table" id="popup-editar">
         <center><h2>Editar Livro</h2></center>
         <form action="atualizar_livro.php" method="POST" enctype="multipart/form-data">
             <input type="hidden" id="editar-id" name="id" value="<?php echo htmlspecialchars($livro['id']); ?>">
