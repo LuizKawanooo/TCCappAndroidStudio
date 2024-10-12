@@ -8,8 +8,10 @@ header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 // Opcional: Permitir cabeçalhos específicos
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
+// Defina o tipo de conteúdo como JSON
+header('Content-Type: application/json');
 
-
+// Configurações de conexão ao banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com"; // Nome do servidor
 $username = "ionic_perfil_bd"; // Usuário do MySQL
 $password = "{[UOLluiz2019"; // Senha do MySQL
@@ -20,7 +22,8 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Verifique a conexão
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    echo json_encode(['success' => false, 'message' => 'Conexão falhou: ' . $conn->connect_error]);
+    exit;
 }
 
 // Função para atualizar os pontos do usuário
@@ -29,7 +32,7 @@ function atualizarPontosUsuario($rmUsuario) {
 
     // Verifique se o RM do usuário foi fornecido
     if (!$rmUsuario) {
-        return "RM do usuário não foi fornecido.";
+        return ['success' => false, 'message' => 'RM do usuário não foi fornecido.'];
     }
 
     // Consultar o valor atual de pontos do usuário
@@ -52,22 +55,23 @@ function atualizarPontosUsuario($rmUsuario) {
         $stmtUpdate = $conn->prepare($sqlUpdatePontos);
         $stmtUpdate->bind_param("is", $novosPontos, $rmUsuario); // Vincula novos pontos e RM
         if ($stmtUpdate->execute()) {
-            return "Pontos atualizados com sucesso! Novo total: $novosPontos pontos.";
+            return ['success' => true, 'message' => "Pontos atualizados com sucesso! Novo total: $novosPontos pontos."];
         } else {
-            return "Erro ao atualizar pontos: " . $stmtUpdate->error;
+            return ['success' => false, 'message' => 'Erro ao atualizar pontos: ' . $stmtUpdate->error];
         }
     } else {
-        return "Usuário com RM $rmUsuario não encontrado.";
+        return ['success' => false, 'message' => "Usuário com RM $rmUsuario não encontrado."];
     }
 }
 
 // Exemplo de uso da função, substitua "12345" pelo RM real do usuário
-$rmUsuario = $_POST['rm']; // Ou de onde você está recebendo o RM do usuário
+$data = json_decode(file_get_contents("php://input"), true); // Captura dados da requisição
+$rmUsuario = $data['rm'] ?? null; // Obtém RM do corpo da requisição
 $resultado = atualizarPontosUsuario($rmUsuario);
-echo $resultado;
+
+// Retorna o resultado como JSON
+echo json_encode($resultado);
 
 // Fechar a conexão
 $conn->close();
 ?>
-
-
