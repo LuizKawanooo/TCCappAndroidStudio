@@ -48,59 +48,67 @@
 
 
 <?php
-$servername = "tccappionic-bd.mysql.uhserver.com";
-$username = "ionic_perfil_bd";
-$password = "{[UOLluiz2019";
-$dbname = "tccappionic_bd";
+// Configurações do banco de dados
+$host = 'tccappionic-bd.mysql.uhserver.com';
+$db   = 'tccappionic_bd';
+$user = 'ionic_perfil_bd';
+$pass = '{[UOLluiz2019';
+$charset = 'utf8mb4';
 
-// Cria a conexão
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Erro na conexão: " . $conn->connect_error);
+// Configuração do DSN (Data Source Name)
+$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+
+try {
+    // Conexão com o banco de dados usando PDO
+    $pdo = new PDO($dsn, $user, $pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die('Erro na conexão: ' . $e->getMessage());
 }
 
-// Obtém os dados do formulário
-$id = isset($_POST['id']) ? intval($_POST['id']) : null;
-$titulo = $_POST['titulo'];
-$autor = $_POST['autor'];
-$editora = $_POST['editora'];
-$genero = $_POST['genero'];
-$tombo = $_POST['tombo'];
-$ano = $_POST['ano'];
-$classificacao = $_POST['classificacao'];
-$n_paginas = $_POST['n_paginas'];
-$isbn = $_POST['isbn'];
+// Verifica se o formulário foi enviado
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Coleta os dados do formulário
+    $id = $_POST['id'];
+    $titulo = $_POST['titulo'];
+    $autor = $_POST['autor'];
+    $editora = $_POST['editora'];
+    $genero = $_POST['genero'];
+    $tombo = $_POST['tombo'];
+    $ano = $_POST['ano'];
+    $classificacao = $_POST['classificacao'];
+    $n_paginas = $_POST['n_paginas'];
+    $isbn = $_POST['isbn'];
 
-// Inicializa a variável da imagem
-$imagem = null;
+    // Inicializa a variável imagem com a imagem atual
+    $imagem = null;
 
-// Verifica se uma nova imagem foi enviada
-if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
-    $imagem = 'uploads/' . basename($_FILES['imagem']['name']);
-    // Move o arquivo enviado para a pasta 'uploads'
-    if (!move_uploaded_file($_FILES['imagem']['tmp_name'], $imagem)) {
-        die("Erro ao fazer upload da imagem.");
+    // Verifica se uma nova imagem foi enviada
+    if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == UPLOAD_ERR_OK) {
+        // Lê a imagem e armazena em uma variável
+        $imagem = file_get_contents($_FILES['imagem']['tmp_name']);
+    } else {
+        // Se não houver nova imagem, busca a imagem atual no banco de dados
+        $sql = "SELECT imagem FROM livros WHERE id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id]);
+        $livroAtual = $stmt->fetch(PDO::FETCH_ASSOC);
+        $imagem = $livroAtual['imagem']; // Manter a imagem atual
     }
-} else {
-    // Se não houve upload, busca a imagem atual no banco de dados
-    $sql = "SELECT imagem FROM livros WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $stmt->bind_result($imagem);
-    $stmt->fetch();
-    $stmt->close();
+
+    // Prepara a consulta SQL para atualização
+    $sqlUpdate = "UPDATE livros SET titulo=?, autor=?, genero=?, editora=?, tombo=?, ano=?, classificacao=?, n_paginas=?, isbn=?, imagem=? WHERE id=?";
+    $stmtUpdate = $pdo->prepare($sqlUpdate);
+
+    // Tenta executar a atualização
+    if ($stmtUpdate->execute([$titulo, $autor, $genero, $editora, $tombo, $ano, $classificacao, $n_paginas, $isbn, $imagem, $id])) {
+        // Redireciona de volta com uma mensagem de sucesso
+        header("Location: livros.php?message=Livro atualizado com sucesso!");
+        exit;
+    } else {
+        // Redireciona de volta com uma mensagem de erro
+        header("Location: livros.php?message=Erro ao atualizar no banco de dados.");
+        exit;
+    }
 }
-
-// Atualiza os dados no banco de dados
-$sql = "UPDATE livros SET titulo=?, autor=?, editora=?, genero=?, tombo=?, ano=?, classificacao=?, n_paginas=?, isbn=?, imagem=? WHERE id=?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ssssiissibi", $titulo, $autor, $editora, $genero, $tombo, $ano, $classificacao, $n_paginas, $isbn, $imagem, $id);
-$stmt->execute();
-
-$stmt->close();
-$conn->close();
-
-header("Location: livros.php"); // Redireciona de volta para a lista de livros
-exit();
 ?>
