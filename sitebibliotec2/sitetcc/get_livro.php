@@ -157,7 +157,7 @@ $conn->close();
                 <small>Deixe em branco se não deseja alterar a imagem.</small>
             </p>
             <center><button type="submit" class="btn2">Salvar</button></center>
-            <button class="btnfechar" type="button" onclick="closePopup()">Fechar</button>
+            <button class="btnfechar" type="button" onclick="closePopup()">X</button>
         </form>
     </div>
 
