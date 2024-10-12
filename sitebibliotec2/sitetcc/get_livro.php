@@ -61,7 +61,22 @@ $conn->close();
             text-align: left;
             transform: translate(-50%, -50%);
         }
-        /* Estilos omitidos para brevidade */
+        .inp{
+                height: 30px;
+                width: 300px;
+                flex: 1;
+                padding-left: 5px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+        .inpd {
+                height: 30px;
+                width: 300px;
+                flex: 1;
+                padding-left: 5px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+        }
     </style>
 </head>
 <body>
