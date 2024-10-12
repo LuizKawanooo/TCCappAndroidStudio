@@ -67,7 +67,7 @@ function atualizarPontosUsuario($rmUsuario) {
 
 // Captura dados da requisição
 $data = json_decode(file_get_contents("php://input"), true);
-$rmUsuario = $data['rm'] ?? null; // Obtém RM do corpo da requisição
+$rmUsuario = isset($data['rm']) ? $data['rm'] : null; // Alteração para versões mais antigas do PHP
 $resultado = atualizarPontosUsuario($rmUsuario);
 
 // Retorna o resultado como JSON
