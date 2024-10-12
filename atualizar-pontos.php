@@ -1,4 +1,15 @@
 <?php
+// Permitir qualquer origem
+header("Access-Control-Allow-Origin: *");
+
+// Opcional: Permitir métodos específicos (GET, POST, etc.)
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+
+// Opcional: Permitir cabeçalhos específicos
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+
+
 $servername = "tccappionic-bd.mysql.uhserver.com"; // Nome do servidor
 $username = "ionic_perfil_bd"; // Usuário do MySQL
 $password = "{[UOLluiz2019"; // Senha do MySQL
