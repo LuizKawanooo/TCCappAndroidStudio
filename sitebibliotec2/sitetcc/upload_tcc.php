@@ -25,7 +25,7 @@
 // if ($arquivo) {
 //     $sql = "UPDATE artigos SET titulo='$titulo', autor='$autor', ano='$ano', arquivo='$arquivo' WHERE id=$id";
 // } else {
-//     $sql = "UPDATE artigos SET titulo='$titulo', autor='$autor', ano='$ano' WHERE id=$id";
+//     $sql = "INSERT INTO artigos SET titulo='$titulo', autor='$autor', ano='$ano' WHERE id=$id";
 // }
 
 // if ($conn->query($sql) === TRUE) {
@@ -87,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
     // Atualiza os dados no banco
     if ($arquivo !== NULL) {
         // Atualiza também o arquivo
-        $stmt = $conn->prepare("INSERT INTO artigos SET titulo = ?, autor = ?, ano = ?, arquivo = ? WHERE id = ?");
+        $stmt = $conn->prepare("UPDATE artigos SET titulo = ?, autor = ?, ano = ?, arquivo = ? WHERE id = ?");
         $stmt->bind_param("ssssi", $titulo, $autor, $ano, $arquivo, $id);
     } else {
         // Se não há novo arquivo, atualiza apenas os outros campos
@@ -106,3 +106,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
 
 $conn->close();
 ?>
+
