@@ -471,7 +471,7 @@
 
 
 <div class="container" id="artigos-container">
-    <!-- Livros serão adicionados aqui -->
+    <!-- TCCs serão adicionados aqui -->
 </div>
 
 <div class="title">
@@ -482,7 +482,6 @@
     Adicionar
 </div>
 
-
 <?php
 // Conexão com o banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
@@ -493,110 +492,13 @@ $dbname = "tccappionic_bd";
 // Cria a conexão
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Verifique a conexão
+// Verifica a conexão
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
 // Verifica se o formulário foi enviado
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Seu código para inserir um novo artigo no banco de dados
-}
-
-// Consulta SQL para recuperar os artigos cadastrados
-$sql = "SELECT * FROM artigos";
-$result = $conn->query($sql);
-
-// Verifica se a consulta retornou algum resultado
-if ($result) {
-    // Verifica se há pelo menos um artigo cadastrado
-    if ($result->num_rows > 0) {
-        // Saída de dados de cada linha
-        echo "<div class='container'>";
-        while($row = $result->fetch_assoc()) {
-            // Crie uma div com as informações do artigo
-            echo "<div class='artigo'>";
-            echo "<center><h1>Título: <br>" . $row["titulo"]. "</h1></center>";
-            // Adiciona o botão de edição
-            echo "<div class='botoes'>";
-            echo "<button class='btn3' data-id='" . $row["id"] . "'>Editar</button>";
-            echo "<a href='" . $row["arquivo"] . "' download class='btn-download'>Download</a>";
-            echo "</div>";
-            echo "</div>";
-        }
-        echo "</div>";
-    } else {
-        echo "";
-    }
-} else {
-    echo "Erro na consulta: " . $conn->error;
-}
-
-// Fecha a conexão com o banco de dados
-$conn->close();
-?>
-
-<div id="popup" class="popup">
-    <div class="table">
-        <h1>Adicionar TCC</h1>
-        <form action="tcc.php" method="post" enctype="multipart/form-data"> <!-- Adicionado enctype para envio de arquivos -->
-            <label for="titulo">Título:</label><br>
-            <input type="text" id="artigo-nome" name="titulo" class="inp"><br>
-            <label for="autor">Autor:</label><br>
-            <input type="text" id="artigo-autor" name="autor" class="inp"><br>
-            <label for="ano">Ano:</label><br>
-            <input type="date" id="artigo-ano" name="ano" class="inp"><br>
-            <br>
-            <input type="file" id="artigo-capa" name="capa" accept="image/*"> <!-- Adiciona input para selecionar a capa -->
-            <br>
-            <input type="submit" value="Enviar" class="btn2">
-        </form>
-        <span class="close" onclick="closePopup()">&times;</span>
-    </div>
-</div>
-
-
-
-<div id="popup-editar" class="popup">
-    <div class="tablee">
-        <h1>Editar TCC</h1>
-        <form id="editar-form" action="editar_artigo.php" method="post">
-            <!-- Campos do formulário -->
-            <input type="hidden" id="editar-id" name="id">
-            <label for="editar-titulo">Título:</label><br>
-            <input type="text" id="editar-titulo" name="titulo" class="inp"><br>
-            <label for="editar-autor">Autor:</label><br>
-            <input type="text" id="editar-autor" name="autor" class="inp"><br>
-            <label for="editar-ano">Ano:</label><br>
-            <input type="date" id="editar-ano" name="ano" class="inp"><br>
-            <br>
-            <label for="artigo-arquivo">Arquivo:</label><br>
-            <input type="file" id="artigo-arquivo" name="arquivo" accept=".pdf,.doc,.docx"><br> <!-- Permitir upload de documentos -->
-            <input type="submit" value="Salvar" class="btn2">
-        </form>
-        <span class="closee" onclick="closePopupEditar  ()">&times;</span>
-    </div>
-</div>
-
-
-
-
-<?php
-// Conexão com o banco de dados
-$servername = "tccappionic-bd.mysql.uhserver.com";
-$username = "ionic_perfil_bd";
-$password = "{[UOLluiz2019";
-$dbname = "tccappionic_bd";
-
-// Cria a conexão
-$conn = new mysqli($servername, $username, $password, $dbname);
-// Verifica a conexão
-if ($conn->connect_error) {
-    die("Erro na conexão: " . $conn->connect_error);
-}
-
-// Verifica se o formulário foi enviado
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['arquivo'])) {
     // Prepara os dados para inserção no banco de dados
     $titulo = $_POST['titulo'];
     $autor = $_POST['autor'];
@@ -605,6 +507,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Processa o upload do arquivo
     $arquivo = NULL;
     if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == UPLOAD_ERR_OK) {
+        // Verifica se o arquivo é PDF
+        if (pathinfo($_FILES['arquivo']['name'], PATHINFO_EXTENSION) !== 'pdf') {
+            echo "Apenas arquivos PDF são permitidos.";
+            exit();
+        }
+
         $tmp_name = $_FILES['arquivo']['tmp_name'];
         $name = basename($_FILES['arquivo']['name']);
         $upload_dir = 'uploads/';
@@ -618,7 +526,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Move o arquivo para o diretório de uploads
         if (move_uploaded_file($tmp_name, $upload_file)) {
             $arquivo = $upload_file;
-            
         } else {
             echo "Erro ao fazer upload do arquivo.";
             exit();
@@ -638,22 +545,109 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Fecha a conexão com o banco de dados
     $stmt->close();
-    $conn->close();
 }
+
+// Consulta SQL para recuperar os artigos cadastrados
+$sql = "SELECT * FROM artigos";
+$result = $conn->query($sql);
+
+// Verifica se a consulta retornou algum resultado
+if ($result) {
+    // Verifica se há pelo menos um artigo cadastrado
+    if ($result->num_rows > 0) {
+        // Saída de dados de cada linha
+        echo "<div class='container'>";
+        while ($row = $result->fetch_assoc()) {
+            // Crie uma div com as informações do artigo
+            echo "<div class='artigo'>";
+            echo "<center><h1>Título: <br>" . $row["titulo"] . "</h1></center>";
+            // Adiciona o botão de edição
+            echo "<div class='botoes'>";
+            echo "<button class='btn3' data-id='" . $row["id"] . "' onclick='abrirPopupEditar(" . $row["id"] . ", \"" . addslashes($row["titulo"]) . "\", \"" . addslashes($row["autor"]) . "\", \"" . $row["ano"] . "\", \"" . $row["arquivo"] . "\")'>Editar</button>";
+            echo "<a href='" . $row["arquivo"] . "' download class='btn-download'>Download</a>";
+            echo "</div>";
+            echo "</div>";
+        }
+        echo "</div>";
+    } else {
+        echo "<p>Nenhum artigo encontrado.</p>";
+    }
+} else {
+    echo "Erro na consulta: " . $conn->error;
+}
+
+// Fecha a conexão com o banco de dados
+$conn->close();
 ?>
 
+<div id="popup" class="popup">
+    <div class="table">
+        <h1>Adicionar TCC</h1>
+        <form action="tcc.php" method="post" enctype="multipart/form-data">
+            <label for="titulo">Título:</label><br>
+            <input type="text" id="artigo-nome" name="titulo" class="inp"><br>
+            <label for="autor">Autor:</label><br>
+            <input type="text" id="artigo-autor" name="autor" class="inp"><br>
+            <label for="ano">Ano:</label><br>
+            <input type="date" id="artigo-ano" name="ano" class="inp"><br>
+            <br>
+            <label for="artigo-arquivo">Arquivo (PDF):</label><br>
+            <input type="file" id="artigo-arquivo" name="arquivo" accept=".pdf"><br> <!-- Permitir apenas PDF -->
+            <input type="submit" value="Enviar" class="btn2">
+        </form>
+        <span class="close" onclick="closePopup()">&times;</span>
+    </div>
+</div>
 
-
-
-
-
-
-
-
-
-
+<div id="popup-editar" class="popup">
+    <div class="tablee">
+        <h1>Editar TCC</h1>
+        <form id="editar-form" action="editar_artigo.php" method="post" enctype="multipart/form-data">
+            <!-- Campos do formulário -->
+            <input type="hidden" id="editar-id" name="id">
+            <label for="editar-titulo">Título:</label><br>
+            <input type="text" id="editar-titulo" name="titulo" class="inp"><br>
+            <label for="editar-autor">Autor:</label><br>
+            <input type="text" id="editar-autor" name="autor" class="inp"><br>
+            <label for="editar-ano">Ano:</label><br>
+            <input type="date" id="editar-ano" name="ano" class="inp"><br>
+            <br>
+            <label for="artigo-arquivo">Arquivo (PDF):</label><br>
+            <input type="file" id="artigo-arquivo" name="arquivo" accept=".pdf"><br> <!-- Permitir upload de documentos -->
+            <input type="submit" value="Salvar" class="btn2">
+        </form>
+        <span class="closee" onclick="closePopupEditar()">&times;</span>
+    </div>
+</div>
 
 <script>
+function abrirPopupEditar(id, titulo, autor, ano, arquivo) {
+    document.getElementById('editar-id').value = id;
+    document.getElementById('editar-titulo').value = titulo;
+    document.getElementById('editar-autor').value = autor;
+    document.getElementById('editar-ano').value = ano;
+    // Aqui você pode definir o arquivo atual, mas normalmente não pode preencher um input file diretamente.
+    document.getElementById('popup-editar').style.display = 'block'; // Exibe o popup de edição
+}
+
+function closePopupEditar() {
+    document.getElementById('popup-editar').style.display = 'none'; // Oculta o popup de edição
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <script>
                     const adicionarArtigoBtn = document.getElementById('adicionar-artigo-btn');
                     const editarArtigoBtn = document.getElementById('editar-artigo-btn');
                     const modal = document.getElementById('popup');
@@ -734,6 +728,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 // Código existente
             </script>
-
+ -->
 </body>
 </html>
