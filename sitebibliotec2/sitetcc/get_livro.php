@@ -71,7 +71,7 @@ $conn->close();
         }
         .inp{
                 height: 30px;
-                width: 300px;
+                width: 97%;
                 flex: 1;
                 padding-left: 5px;
                 border: 1px solid #ccc;
@@ -79,7 +79,6 @@ $conn->close();
             }
         .inpd {
                 height: 30px;
-                width: 300px;
                 flex: 1;
                 padding-left: 5px;
                 border: 1px solid #ccc;
