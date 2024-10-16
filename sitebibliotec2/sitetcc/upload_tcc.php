@@ -10,13 +10,14 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Verifica se o formulário foi enviado para adicionar um artigo
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Verifica se o formulário foi enviado para editar um artigo
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
+    $id = $_POST['id'];
     $titulo = $_POST['titulo'];
     $autor = $_POST['autor'];
     $ano = $_POST['ano'];
 
-    // Processa o upload do arquivo
+    // Processa o upload do arquivo, se um novo arquivo foi enviado
     $arquivo = NULL;
     if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == UPLOAD_ERR_OK) {
         if (pathinfo($_FILES['arquivo']['name'], PATHINFO_EXTENSION) !== 'pdf') {
@@ -24,23 +25,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
         $arquivo = file_get_contents($_FILES['arquivo']['tmp_name']);
-    } else {
-        echo "Erro no upload do arquivo.";
-        exit();
     }
 
-    // Prepara a consulta SQL para inserção
-    $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano, arquivo) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("sssb", $titulo, $autor, $ano, $arquivo); // "b" para BLOB
+    // Atualiza os dados no banco
+    if ($arquivo !== NULL) {
+        // Atualiza também o arquivo
+        // $stmt = $conn->prepare("INSERT INTO artigos(titulo, autor, ano, arquivo) values titulo = ?, autor = ?, ano = ?, arquivo = ? WHERE id = ?");
+           $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano, arquivo) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssssi", $titulo, $autor, $ano, $arquivo, $id);
+    } else {
+        // Se não há novo arquivo, atualiza apenas os outros campos
+           $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano, arquivo) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("sssi", $titulo, $autor, $ano, $id);
+    }
 
-    // Executa a consulta
     if ($stmt->execute()) {
-        header("Location: tcc.php"); // Redireciona após o sucesso
+        header("Location: tcc.php");
         exit();
     } else {
-        echo "Erro ao inserir registro: " . $conn->error;
+        echo "Erro ao atualizar registro: " . $conn->error;
     }
-
     $stmt->close();
 }
 
