@@ -502,17 +502,13 @@ $username = "ionic_perfil_bd";
 $password = "{[UOLluiz2019";
 $dbname = "tccappionic_bd";
 
-// Cria a conexão
 $conn = new mysqli($servername, $username, $password, $dbname);
-
-// Verifica a conexão
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Verifica se o formulário foi enviado
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Prepara os dados para inserção no banco de dados
+// Verifica se o formulário foi enviado para adicionar um novo artigo
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == 'add') {
     $titulo = $_POST['titulo'];
     $autor = $_POST['autor'];
     $ano = $_POST['ano'];
@@ -520,31 +516,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Processa o upload do arquivo
     $arquivo = NULL;
     if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == UPLOAD_ERR_OK) {
-        // Verifica se o arquivo é PDF
         if (pathinfo($_FILES['arquivo']['name'], PATHINFO_EXTENSION) !== 'pdf') {
             echo "Apenas arquivos PDF são permitidos.";
             exit();
         }
-
-        // Lê o conteúdo do arquivo
         $arquivo = file_get_contents($_FILES['arquivo']['tmp_name']);
     } else {
         echo "Erro no upload do arquivo.";
         exit();
     }
 
-    // Prepara a consulta SQL para inserção
     $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano, arquivo) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("sssb", $titulo, $autor, $ano, $arquivo); // Observe que o tipo do arquivo é "b" para BLOB
+    $stmt->bind_param("sssb", $titulo, $autor, $ano, $arquivo);
 
-    // Executa a consulta
     if ($stmt->execute()) {
         echo "<script>window.location.href = 'tcc.php';</script>";
     } else {
         echo "Erro ao inserir registro: " . $conn->error;
     }
+    $stmt->close();
+}
 
-    // Fecha a conexão com o banco de dados
+// Verifica se o formulário foi enviado para excluir um artigo
+if (isset($_POST['action']) && $_POST['action'] == 'delete' && isset($_POST['id'])) {
+    $id = $_POST['id'];
+    $stmt = $conn->prepare("DELETE FROM artigos WHERE id = ?");
+    $stmt->bind_param("i", $id);
+    if ($stmt->execute()) {
+        echo "<script>window.location.href = 'tcc.php';</script>";
+    } else {
+        echo "Erro ao excluir registro: " . $conn->error;
+    }
     $stmt->close();
 }
 
@@ -552,7 +554,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $sql = "SELECT * FROM artigos";
 $result = $conn->query($sql);
 
-// Verifica se a consulta retornou algum resultado
 if ($result) {
     if ($result->num_rows > 0) {
         echo "<div class='container'>";
@@ -562,6 +563,11 @@ if ($result) {
             echo "<div class='botoes'>";
             echo "<button class='btn3' data-id='" . $row["id"] . "' onclick='abrirPopupEditar(" . $row["id"] . ", \"" . addslashes($row["titulo"]) . "\", \"" . addslashes($row["autor"]) . "\", \"" . $row["ano"] . "\")'>Editar</button>";
             echo "<a href='download.php?id=" . $row["id"] . "' class='btn-download'>Download</a>"; // Link para download
+            echo "<form action='tcc.php' method='post' style='display:inline;'>";
+            echo "<input type='hidden' name='id' value='" . $row["id"] . "'>";
+            echo "<input type='hidden' name='action' value='delete'>";
+            echo "<input type='submit' value='Excluir' class='btn-delete' onclick='return confirm(\"Tem certeza que deseja excluir este artigo?\");'>";
+            echo "</form>";
             echo "</div>";
             echo "</div>";
         }
@@ -580,6 +586,7 @@ $conn->close();
     <div class="table">
         <h1>Adicionar TCC</h1>
         <form action="tcc.php" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="add">
             <label for="titulo">Título:</label><br>
             <input type="text" id="artigo-nome" name="titulo" class="inp" required><br>
             <label for="autor">Autor:</label><br>
