@@ -542,7 +542,7 @@
 <div id="popup" class="popup" style="display: none;">
     <div class="table">
         <h1>Adicionar TCC</h1>
-        <form action="editar_tcc.php" method="post" enctype="multipart/form-data">
+        <form action="editar_tcc2.php" method="post" enctype="multipart/form-data">
             <input type="hidden" name="action" value="add">
             <label for="titulo">Título:</label><br>
             <input type="text" id="artigo-nome" name="titulo" class="inp" required><br>
@@ -564,7 +564,7 @@
     <div id="popup-editar" class="popup" style="display: none;">
         <div class="tablee">
             <h1>Editar TCC</h1>
-            <form id="editar-form" action="editar_artigo.php" method="post" enctype="multipart/form-data">
+            <form id="editar-form" action="editar_tcc.php" method="post" enctype="multipart/form-data">
                 <input type="hidden" id="editar-id" name="id">
                 <label for="editar-titulo">Título:</label><br>
                 <input type="text" id="editar-titulo" name="titulo" class="inp" ><br>
