@@ -1,3 +1,72 @@
+// <?php
+// // Conexão com o banco de dados
+// $servername = "tccappionic-bd.mysql.uhserver.com";
+// $username = "ionic_perfil_bd";
+// $password = "{[UOLluiz2019";
+// $dbname = "tccappionic_bd";
+
+// $conn = new mysqli($servername, $username, $password, $dbname);
+// if ($conn->connect_error) {
+//     die("Connection failed: " . $conn->connect_error);
+// }
+
+// // Verifica se o formulário foi enviado para inserir um artigo
+// if ($_SERVER["REQUEST_METHOD"] == "POST") {
+//     $titulo = $_POST['titulo'];
+//     $autor = $_POST['autor'];
+//     $ano = $_POST['ano'];
+
+//     // Processa o upload do arquivo, se um novo arquivo foi enviado
+//     $arquivo = NULL;
+//     if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == UPLOAD_ERR_OK) {
+//         if (pathinfo($_FILES['arquivo']['name'], PATHINFO_EXTENSION) !== 'pdf') {
+//             echo "Apenas arquivos PDF são permitidos.";
+//             exit();
+//         }
+//         // Lê o conteúdo do arquivo
+//         $arquivo = file_get_contents($_FILES['arquivo']['tmp_name']);
+//     }
+
+//     // Insere os dados no banco
+//     if ($arquivo !== NULL) {
+//         // Insere também o arquivo
+//         $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano, arquivo) VALUES (?, ?, ?, ?)");
+//         $stmt->bind_param("sssb", $titulo, $autor, $ano, $arquivo);
+//     } else {
+//         // Se não há novo arquivo, insere apenas os outros campos
+//         $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano) VALUES (?, ?, ?)");
+//         $stmt->bind_param("sss", $titulo, $autor, $ano);
+//     }
+
+//     // Executa a inserção e verifica se ocorreu um erro
+//     if ($stmt->execute()) {
+//         header("Location: tcc.php");
+//         exit();
+//     } else {
+//         echo "Erro ao inserir registro: " . $stmt->error;
+//     }
+//     $stmt->close();
+// }
+
+// $conn->close();
+// ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <?php
 // Conexão com o banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
@@ -11,42 +80,39 @@ if ($conn->connect_error) {
 }
 
 // Verifica se o formulário foi enviado para inserir um artigo
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] === 'add') {
     $titulo = $_POST['titulo'];
     $autor = $_POST['autor'];
     $ano = $_POST['ano'];
 
-    // Processa o upload do arquivo, se um novo arquivo foi enviado
+    // Processa o upload do arquivo
     $arquivo = NULL;
     if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == UPLOAD_ERR_OK) {
         if (pathinfo($_FILES['arquivo']['name'], PATHINFO_EXTENSION) !== 'pdf') {
             echo "Apenas arquivos PDF são permitidos.";
             exit();
         }
-        // Lê o conteúdo do arquivo
         $arquivo = file_get_contents($_FILES['arquivo']['tmp_name']);
     }
 
     // Insere os dados no banco
-    if ($arquivo !== NULL) {
-        // Insere também o arquivo
-        $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano, arquivo) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("sssb", $titulo, $autor, $ano, $arquivo);
-    } else {
-        // Se não há novo arquivo, insere apenas os outros campos
-        $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $titulo, $autor, $ano);
-    }
+    $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano, arquivo) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("sssb", $titulo, $autor, $ano, $arquivo);
 
-    // Executa a inserção e verifica se ocorreu um erro
     if ($stmt->execute()) {
-        header("Location: tcc.php");
-        exit();
+        $id_artigo = $stmt->insert_id; // Captura o ID do novo registro
+        $stmt->close();
+        $conn->close();
+
+        // Exibir o popup de edição usando JavaScript
+        echo "<script>
+                window.onload = function() {
+                    alert('TCC adicionado com sucesso! Agora você pode editar.');
+                    openEditPopup($id_artigo);
+                };
+              </script>";
     } else {
         echo "Erro ao inserir registro: " . $stmt->error;
     }
-    $stmt->close();
 }
-
-$conn->close();
 ?>
