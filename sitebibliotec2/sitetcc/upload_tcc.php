@@ -23,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Apenas arquivos PDF são permitidos.";
             exit();
         }
+        // Lê o conteúdo do arquivo
         $arquivo = file_get_contents($_FILES['arquivo']['tmp_name']);
     }
 
@@ -37,6 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("sss", $titulo, $autor, $ano);
     }
 
+    // Executa a inserção e verifica se ocorreu um erro
     if ($stmt->execute()) {
         header("Location: tcc.php");
         exit();
