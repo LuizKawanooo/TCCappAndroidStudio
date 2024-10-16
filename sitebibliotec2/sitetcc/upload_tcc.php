@@ -32,11 +32,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
         // Atualiza também o arquivo
         // $stmt = $conn->prepare("INSERT INTO artigos(titulo, autor, ano, arquivo) values titulo = ?, autor = ?, ano = ?, arquivo = ? WHERE id = ?");
            $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano, arquivo) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssssi", $titulo, $autor, $ano, $arquivo, $id);
+        $stmt->bind_param("sssb", $titulo, $autor, $ano, $arquivo);
     } else {
         // Se não há novo arquivo, atualiza apenas os outros campos
-           $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano, arquivo) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("sssi", $titulo, $autor, $ano, $id);
+           $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano) VALUES (?, ?, ?)");
+        $stmt->bind_param("sssb", $titulo, $autor, $ano);
     }
 
     if ($stmt->execute()) {
