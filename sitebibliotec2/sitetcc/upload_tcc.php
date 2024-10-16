@@ -67,7 +67,7 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['action'] == 'add') {
     // Conexão com o banco de dados
-    $conn = new mysqli('tccappionic-bd.mysql.uhserver.com', 'ionic_perfil_bd', '{[UOLluiz2019', 'tccappionic_bd');
+    $conn = new mysqli('localhost', 'username', 'password', 'database');
 
     // Verifica a conexão
     if ($conn->connect_error) {
@@ -79,20 +79,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['action'] == 'add') {
     $autor = $_POST['autor'];
     $ano = $_POST['ano'];
 
-    // Obtém o arquivo
-    $arquivo = $_FILES['arquivo']['tmp_name'];
-    $blob = file_get_contents($arquivo);
+    // Verifica se o arquivo foi enviado
+    if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
+        $arquivo = $_FILES['arquivo']['tmp_name'];
+        $blob = file_get_contents($arquivo);
 
-    // Prepara a consulta SQL
-    $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano, arquivo) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("sssb", $titulo, $autor, $ano, $blob);
+        // Prepara a consulta SQL
+        $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano, arquivo) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("sssb", $titulo, $autor, $ano, $blob);
 
-    // Executa a consulta
-    if ($stmt->execute()) {
-        echo "TCC adicionado com sucesso!";
-        header('Location: tcc.php');
+        // Executa a consulta
+        if ($stmt->execute()) {
+            echo "TCC adicionado com sucesso!";
+        } else {
+            echo "Erro ao adicionar TCC: " . $stmt->error;
+        }
     } else {
-        echo "Erro ao adicionar TCC: " . $stmt->error;
+        echo "Erro ao enviar o arquivo.";
+        if (isset($_FILES['arquivo'])) {
+            echo " Código de erro: " . $_FILES['arquivo']['error'];
+        }
     }
 
     // Fecha a conexão
