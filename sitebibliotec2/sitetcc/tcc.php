@@ -566,11 +566,11 @@
             <form id="editar-form" action="editar_artigo.php" method="post" enctype="multipart/form-data">
                 <input type="hidden" id="editar-id" name="id">
                 <label for="editar-titulo">Título:</label><br>
-                <input type="text" id="editar-titulo" name="titulo" class="inp" required><br>
+                <input type="text" id="editar-titulo" name="titulo" class="inp" ><br>
                 <label for="editar-autor">Autor:</label><br>
-                <input type="text" id="editar-autor" name="autor" class="inp" required><br>
+                <input type="text" id="editar-autor" name="autor" class="inp" ><br>
                 <label for="editar-ano">Ano:</label><br>
-                <input type="date" id="editar-ano" name="ano" class="inp" required><br>
+                <input type="date" id="editar-ano" name="ano" class="inp" ><br>
                 <br>
                 <label for="artigo-arquivo">Arquivo (PDF):</label><br>
                 <input type="file" id="artigo-arquivo" name="arquivo" accept=".pdf"><br>
