@@ -31,6 +31,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Insere também o arquivo
         $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano, arquivo) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("sssb", $titulo, $autor, $ano, $arquivo);
+    } else {
+        // Se não há novo arquivo, insere apenas os outros campos
+        $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano) VALUES (?, ?, ?)");
+        $stmt->bind_param("sss", $titulo, $autor, $ano);
     }
 
     if ($stmt->execute()) {
