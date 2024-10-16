@@ -67,7 +67,7 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['action'] == 'add') {
     // Conexão com o banco de dados
-    $conn = new mysqli('localhost', 'username', 'password', 'database');
+    $conn = new mysqli('tccappionic-bd.mysql.uhserver.com', 'ionic_perfil_bd', '{[UOLluiz2019', 'tccappionic_bd');
 
     // Verifica a conexão
     if ($conn->connect_error) {
