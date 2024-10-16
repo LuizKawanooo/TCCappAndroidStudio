@@ -539,25 +539,26 @@
     $conn->close();
     ?>
     
-    <div id="popup" class="popup" style="display: none;">
-        <div class="table">
-            <h1>Adicionar TCC</h1>
-            <form action="upload_tcc.php" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="action" value="add">
-                <label for="titulo">Título:</label><br>
-                <input type="text" id="artigo-nome" name="titulo" class="inp" required><br>
-                <label for="autor">Autor:</label><br>
-                <input type="text" id="artigo-autor" name="autor" class="inp" required><br>
-                <label for="ano">Ano:</label><br>
-                <input type="date" id="artigo-ano" name="ano" class="inp" required><br>
-                <br>
-                <label for="artigo-arquivo">Arquivo (PDF):</label><br>
-                <input type="file" id="artigo-arquivo" name="arquivo" accept=".pdf" required><br>
-                <input type="submit" value="Enviar" class="btn2">
-            </form>
-            <span class="close" onclick="closePopup()">&times;</span>
-        </div>
+<div id="popup" class="popup" style="display: none;">
+    <div class="table">
+        <h1>Adicionar TCC</h1>
+        <form action="editar_tcc.php" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="add">
+            <label for="titulo">Título:</label><br>
+            <input type="text" id="artigo-nome" name="titulo" class="inp" required><br>
+            <label for="autor">Autor:</label><br>
+            <input type="text" id="artigo-autor" name="autor" class="inp" required><br>
+            <label for="ano">Ano:</label><br>
+            <input type="date" id="artigo-ano" name="ano" class="inp" required><br>
+            <br>
+            <label for="artigo-arquivo">Arquivo (PDF):</label><br>
+            <input type="file" id="artigo-arquivo" name="arquivo" accept=".pdf" required><br>
+            <input type="submit" value="Enviar" class="btn2">
+        </form>
+        <span class="close" onclick="closePopup()">&times;</span>
     </div>
+</div>
+
 
 
     <div id="popup-editar" class="popup" style="display: none;">
