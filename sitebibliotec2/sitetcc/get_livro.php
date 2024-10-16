@@ -66,6 +66,8 @@ $conn->close();
             max-width: 400px;
             text-align: left;
             transform: translate(-50%, -50%);
+            zoom: 0.9;
+
         }
         .inp{
                 height: 30px;
