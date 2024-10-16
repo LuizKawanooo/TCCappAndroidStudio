@@ -40,7 +40,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <title>Editar Livro</title>
-    <style>
+<!--     <style>
         @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
         * {
             font-family: 'Open Sans', sans-serif;
@@ -114,7 +114,113 @@ $conn->close();
                     position: fixed;
                     }
 
-    </style>
+    </style> -->
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+    * {
+        font-family: 'Open Sans', sans-serif;
+        box-sizing: border-box; /* Adiciona box-sizing para melhor controle de largura/padding */
+    }
+
+    body {
+        background-image: linear-gradient(to right, #30cfd0 0%, #330867 100%);
+        overflow-y: auto; /* Altera para auto */
+        overflow-x: hidden;
+        margin: 0; /* Remove margem padrão */
+        padding: 20px; /* Adiciona algum padding ao redor */
+    }
+
+    .table {
+        display: grid;
+        justify-content: center;
+        border-radius: 10px;
+        background-color: #D9D9D9;
+        padding: 20px;
+        width: 100%; /* Ajusta a largura para 100% */
+        max-width: 400px; /* Largura máxima */
+        text-align: left;
+        margin: auto; /* Centraliza a tabela */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Adiciona sombra */
+    }
+
+    .inp, .inpd {
+        height: 35px; /* Aumenta a altura para melhor usabilidade */
+        width: 100%; /* Ajusta para 100% da largura disponível */
+        padding-left: 8px; /* Aumenta o padding */
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 10px; /* Adiciona espaço entre os campos */
+    }
+
+    .btn2 {
+        width: 100%; /* Botão ocupa toda a largura */
+        height: 35px; /* Aumenta a altura */
+        border-radius: 7px;
+        border: none;
+        background: #56dd63;
+        color: #000000;
+        font-weight: bold;
+        cursor: pointer; /* Adiciona cursor pointer */
+        transition: background 0.3s; /* Transição suave */
+    }
+
+    .btn2:hover {
+        background: #48c152; /* Cor ao passar o mouse */
+    }
+
+    .btnfechar {
+        width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        border: none;
+        background: #ff0000;
+        color: #ffffff;
+        font-weight: bold;
+        position: absolute;
+        top: 5px; /* Ajusta a posição */
+        right: 5px; /* Ajusta a posição */
+    }
+
+    .footer {
+        width: 100%; /* Ajusta a largura para 100% */
+        height: 50vh; /* Manter altura como desejado */
+        position: relative; /* Alterado de fixed para relative */
+        background: #ffffff; /* Adiciona um fundo */
+    }
+
+    @media (max-width: 480px) {
+        .table {
+            padding: 15px; /* Reduz padding em telas menores */
+        }
+
+        .inp, .inpd, .btn2 {
+            font-size: 14px; /* Ajusta tamanho da fonte */
+        }
+    }
+</style>
+
+
+    
+
+
+
+
+
+
+    
+    
 </head>
 <body>
     <div id="overlay"></div>
