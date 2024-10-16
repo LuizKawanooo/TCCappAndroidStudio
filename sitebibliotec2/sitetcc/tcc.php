@@ -491,160 +491,115 @@
 
 
 
-<div class="adicionar-artigo-btn" id="adicionar-artigo-btn" onclick="openPopup()">
-    Adicionar
-</div>
-
-<?php
-// Conexão com o banco de dados
-$servername = "tccappionic-bd.mysql.uhserver.com";
-$username = "ionic_perfil_bd";
-$password = "{[UOLluiz2019";
-$dbname = "tccappionic_bd";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Verifica se o formulário foi enviado para adicionar um novo artigo
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == 'add') {
-    $titulo = $_POST['titulo'];
-    $autor = $_POST['autor'];
-    $ano = $_POST['ano'];
-
-    // Processa o upload do arquivo
-    $arquivo = NULL;
-    if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == UPLOAD_ERR_OK) {
-        if (pathinfo($_FILES['arquivo']['name'], PATHINFO_EXTENSION) !== 'pdf') {
-            echo "Apenas arquivos PDF são permitidos.";
-            exit();
-        }
-        $arquivo = file_get_contents($_FILES['arquivo']['tmp_name']);
-    } else {
-        echo "Erro no upload do arquivo.";
-        exit();
-    }
-
-    // Prepara a consulta SQL para inserção
-    $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano, arquivo) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("sssb", $titulo, $autor, $ano, $arquivo); // b para BLOB
-
-    if ($stmt->execute()) {
-        echo "<script>window.location.href = 'tcc.php';</script>";
-    } else {
-        echo "Erro ao inserir registro: " . $conn->error;
-    }
-    $stmt->close();
-}
-
-// Verifica se o formulário foi enviado para excluir um artigo
-if (isset($_POST['action']) && $_POST['action'] == 'delete' && isset($_POST['id'])) {
-    $id = $_POST['id'];
-    $stmt = $conn->prepare("DELETE FROM artigos WHERE id = ?");
-    $stmt->bind_param("i", $id);
-    if ($stmt->execute()) {
-        echo "<script>window.location.href = 'tcc.php';</script>";
-    } else {
-        echo "Erro ao excluir registro: " . $conn->error;
-    }
-    $stmt->close();
-}
-
-// Consulta SQL para recuperar os artigos cadastrados
-$sql = "SELECT * FROM artigos";
-$result = $conn->query($sql);
-
-if ($result) {
-    if ($result->num_rows > 0) {
-        echo "<div class='container'>";
-        while ($row = $result->fetch_assoc()) {
-            echo "<div class='artigo'>";
-            echo "<center><h1>Título: <br>" . $row["titulo"] . "</h1></center>";
-            echo "<div class='botoes'>";
-            echo "<button class='btn3' data-id='" . $row["id"] . "' onclick='abrirPopupEditar(" . $row["id"] . ", \"" . addslashes($row["titulo"]) . "\", \"" . addslashes($row["autor"]) . "\", \"" . $row["ano"] . "\")'>Editar</button>";
-            echo "<a href='download.php?id=" . $row["id"] . "' class='btn-download'>Download</a>"; // Link para download
-            echo "<form action='tcc.php' method='post' style='display:inline;'>";
-            echo "<input type='hidden' name='id' value='" . $row["id"] . "'>";
-            echo "<input type='hidden' name='action' value='delete'>";
-            echo "<input type='submit' value='Excluir' class='btn-delete' onclick='return confirm(\"Tem certeza que deseja excluir este artigo?\");'>";
-            echo "</form>";
-            echo "</div>";
-            echo "</div>";
-        }
-        echo "</div>";
-    } else {
-        echo "<p>Nenhum artigo encontrado.</p>";
-    }
-} else {
-    echo "Erro na consulta: " . $conn->error;
-}
-
-$conn->close();
-?>
-
-<div id="popup" class="popup" style="display: none;">
-    <div class="table">
-        <h1>Adicionar TCC</h1>
-        <form action="tcc.php" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="action" value="add">
-            <label for="titulo">Título:</label><br>
-            <input type="text" id="artigo-nome" name="titulo" class="inp" required><br>
-            <label for="autor">Autor:</label><br>
-            <input type="text" id="artigo-autor" name="autor" class="inp" required><br>
-            <label for="ano">Ano:</label><br>
-            <input type="date" id="artigo-ano" name="ano" class="inp" required><br>
-            <br>
-            <label for="artigo-arquivo">Arquivo (PDF):</label><br>
-            <input type="file" id="artigo-arquivo" name="arquivo" accept=".pdf" required><br>
-            <input type="submit" value="Enviar" class="btn2">
-        </form>
-        <span class="close" onclick="closePopup()">&times;</span>
+  <div class="adicionar-artigo-btn" id="adicionar-artigo-btn" onclick="openPopup()">
+        Adicionar
     </div>
-</div>
 
-<div id="popup-editar" class="popup" style="display: none;">
-    <div class="tablee">
-        <h1>Editar TCC</h1>
-        <form id="editar-form" action="editar_artigo.php" method="post" enctype="multipart/form-data">
-            <input type="hidden" id="editar-id" name="id">
-            <label for="editar-titulo">Título:</label><br>
-            <input type="text" id="editar-titulo" name="titulo" class="inp" required><br>
-            <label for="editar-autor">Autor:</label><br>
-            <input type="text" id="editar-autor" name="autor" class="inp" required><br>
-            <label for="editar-ano">Ano:</label><br>
-            <input type="date" id="editar-ano" name="ano" class="inp" required><br>
-            <br>
-            <label for="artigo-arquivo">Arquivo (PDF):</label><br>
-            <input type="file" id="artigo-arquivo" name="arquivo" accept=".pdf"><br>
-            <input type="submit" value="Salvar" class="btn2">
-        </form>
-        <span class="closee" onclick="closePopupEditar()">&times;</span>
+    <?php
+    // Conexão com o banco de dados
+    $servername = "tccappionic-bd.mysql.uhserver.com";
+    $username = "ionic_perfil_bd";
+    $password = "{[UOLluiz2019";
+    $dbname = "tccappionic_bd";
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Consulta SQL para recuperar os artigos cadastrados
+    $sql = "SELECT * FROM artigos";
+    $result = $conn->query($sql);
+
+    if ($result) {
+        if ($result->num_rows > 0) {
+            echo "<div class='container'>";
+            while ($row = $result->fetch_assoc()) {
+                echo "<div class='artigo'>";
+                echo "<center><h1>Título: <br>" . $row["titulo"] . "</h1></center>";
+                echo "<div class='botoes'>";
+                echo "<button class='btn3' data-id='" . $row["id"] . "' onclick='abrirPopupEditar(" . $row["id"] . ", \"" . addslashes($row["titulo"]) . "\", \"" . addslashes($row["autor"]) . "\", \"" . $row["ano"] . "\")'>Editar</button>";
+                echo "<a href='download.php?id=" . $row["id"] . "' class='btn-download'>Download</a>"; // Link para download
+                echo "<form action='tcc.php' method='post' style='display:inline;'>";
+                echo "<input type='hidden' name='id' value='" . $row["id"] . "'>";
+                echo "<input type='hidden' name='action' value='delete'>";
+                echo "<input type='submit' value='Excluir' class='btn-delete' onclick='return confirm(\"Tem certeza que deseja excluir este artigo?\");'>";
+                echo "</form>";
+                echo "</div>";
+                echo "</div>";
+            }
+            echo "</div>";
+        } else {
+            echo "<p>Nenhum artigo encontrado.</p>";
+        }
+    } else {
+        echo "Erro na consulta: " . $conn->error;
+    }
+
+    $conn->close();
+    ?>
+
+    <div id="popup" class="popup" style="display: none;">
+        <div class="table">
+            <h1>Adicionar TCC</h1>
+            <form action="upload_tcc.php" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="action" value="add">
+                <label for="titulo">Título:</label><br>
+                <input type="text" id="artigo-nome" name="titulo" class="inp" required><br>
+                <label for="autor">Autor:</label><br>
+                <input type="text" id="artigo-autor" name="autor" class="inp" required><br>
+                <label for="ano">Ano:</label><br>
+                <input type="date" id="artigo-ano" name="ano" class="inp" required><br>
+                <br>
+                <label for="artigo-arquivo">Arquivo (PDF):</label><br>
+                <input type="file" id="artigo-arquivo" name="arquivo" accept=".pdf" required><br>
+                <input type="submit" value="Enviar" class="btn2">
+            </form>
+            <span class="close" onclick="closePopup()">&times;</span>
+        </div>
     </div>
-</div>
 
-<script>
-function openPopup() {
-    document.getElementById('popup').style.display = 'block'; // Exibe o popup de adicionar
-}
+    <div id="popup-editar" class="popup" style="display: none;">
+        <div class="tablee">
+            <h1>Editar TCC</h1>
+            <form id="editar-form" action="editar_artigo.php" method="post" enctype="multipart/form-data">
+                <input type="hidden" id="editar-id" name="id">
+                <label for="editar-titulo">Título:</label><br>
+                <input type="text" id="editar-titulo" name="titulo" class="inp" required><br>
+                <label for="editar-autor">Autor:</label><br>
+                <input type="text" id="editar-autor" name="autor" class="inp" required><br>
+                <label for="editar-ano">Ano:</label><br>
+                <input type="date" id="editar-ano" name="ano" class="inp" required><br>
+                <br>
+                <label for="artigo-arquivo">Arquivo (PDF):</label><br>
+                <input type="file" id="artigo-arquivo" name="arquivo" accept=".pdf"><br>
+                <input type="submit" value="Salvar" class="btn2">
+            </form>
+            <span class="closee" onclick="closePopupEditar()">&times;</span>
+        </div>
+    </div>
 
-function closePopup() {
-    document.getElementById('popup').style.display = 'none'; // Oculta o popup de adicionar
-}
+    <script>
+    function openPopup() {
+        document.getElementById('popup').style.display = 'block'; // Exibe o popup de adicionar
+    }
 
-function abrirPopupEditar(id, titulo, autor, ano) {
-    document.getElementById('editar-id').value = id;
-    document.getElementById('editar-titulo').value = titulo;
-    document.getElementById('editar-autor').value = autor;
-    document.getElementById('editar-ano').value = ano;
-    document.getElementById('popup-editar').style.display = 'block'; // Exibe o popup de edição
-}
+    function closePopup() {
+        document.getElementById('popup').style.display = 'none'; // Oculta o popup de adicionar
+    }
 
-function closePopupEditar() {
-    document.getElementById('popup-editar').style.display = 'none'; // Oculta o popup de edição
-}
-</script>
+    function abrirPopupEditar(id, titulo, autor, ano) {
+        document.getElementById('editar-id').value = id;
+        document.getElementById('editar-titulo').value = titulo;
+        document.getElementById('editar-autor').value = autor;
+        document.getElementById('editar-ano').value = ano;
+        document.getElementById('popup-editar').style.display = 'block'; // Exibe o popup de edição
+    }
 
+    function closePopupEditar() {
+        document.getElementById('popup-editar').style.display = 'none'; // Oculta o popup de edição
+    }
+    </script>
 
 
 
