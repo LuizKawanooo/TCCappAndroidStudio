@@ -10,9 +10,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Verifica se o formulário foi enviado para editar um artigo
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
-    $id = $_POST['id'];
+// Verifica se o formulário foi enviado para inserir um artigo
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $titulo = $_POST['titulo'];
     $autor = $_POST['autor'];
     $ano = $_POST['ano'];
@@ -27,23 +26,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
         $arquivo = file_get_contents($_FILES['arquivo']['tmp_name']);
     }
 
-    // Atualiza os dados no banco
+    // Insere os dados no banco
     if ($arquivo !== NULL) {
-        // Atualiza também o arquivo
-        // $stmt = $conn->prepare("INSERT INTO artigos(titulo, autor, ano, arquivo) values titulo = ?, autor = ?, ano = ?, arquivo = ? WHERE id = ?");
-           $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano, arquivo) VALUES (?, ?, ?, ?)");
+        // Insere também o arquivo
+        $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano, arquivo) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("sssb", $titulo, $autor, $ano, $arquivo);
     } else {
-        // Se não há novo arquivo, atualiza apenas os outros campos
-           $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano) VALUES (?, ?, ?)");
-        $stmt->bind_param("sssb", $titulo, $autor, $ano);
+        // Se não há novo arquivo, insere apenas os outros campos
+        $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano) VALUES (?, ?, ?)");
+        $stmt->bind_param("sss", $titulo, $autor, $ano);
     }
 
     if ($stmt->execute()) {
         header("Location: tcc.php");
         exit();
     } else {
-        echo "Erro ao atualizar registro: " . $conn->error;
+        echo "Erro ao inserir registro: " . $stmt->error;
     }
     $stmt->close();
 }
