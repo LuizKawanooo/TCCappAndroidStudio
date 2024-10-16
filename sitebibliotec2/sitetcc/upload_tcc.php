@@ -65,26 +65,32 @@
 
 
 <?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['action'] == 'add') {
-    // Conexão com o banco de dados
-    $conn = new mysqli('localhost', 'username', 'password', 'database');
+// Conexão com o banco de dados
+$servername = "tccappionic-bd.mysql.uhserver.com";
+$username = "ionic_perfil_bd";
+$password = "{[UOLluiz2019";
+$dbname = "tccappionic_bd";
 
-    // Verifica a conexão
-    if ($conn->connect_error) {
-        die("Conexão falhou: " . $conn->connect_error);
-    }
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-    // Obtém os dados do formulário
+// Verifica a conexão
+if ($conn->connect_error) {
+    die("Conexão falhou: " . $conn->connect_error);
+}
+
+// Verifica se a ação é adicionar
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] == 'add') {
     $titulo = $_POST['titulo'];
     $autor = $_POST['autor'];
     $ano = $_POST['ano'];
 
     // Verifica se o arquivo foi enviado
     if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
+        // Obtém o arquivo
         $arquivo = $_FILES['arquivo']['tmp_name'];
         $blob = file_get_contents($arquivo);
 
-        // Prepara a consulta SQL
+        // Prepara a consulta SQL para inserir
         $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano, arquivo) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("sssb", $titulo, $autor, $ano, $blob);
 
@@ -94,17 +100,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['action'] == 'add') {
         } else {
             echo "Erro ao adicionar TCC: " . $stmt->error;
         }
+
+        // Fecha a declaração
+        $stmt->close();
     } else {
         echo "Erro ao enviar o arquivo.";
         if (isset($_FILES['arquivo'])) {
             echo " Código de erro: " . $_FILES['arquivo']['error'];
         }
     }
-
-    // Fecha a conexão
-    $stmt->close();
-    $conn->close();
-} else {
-    echo "Método não permitido.";
 }
+
+// Fecha a conexão com o banco de dados
+$conn->close();
 ?>
