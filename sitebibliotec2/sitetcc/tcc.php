@@ -479,10 +479,24 @@
         <h1>TRABALHOS DE CONCLUSÃO DE CURSO</h1>
 </div>
 
-<div class="adicionar-artigo-btn" id="adicionar-artigo-btn">
+<!-- <div class="adicionar-artigo-btn" id="adicionar-artigo-btn">
+    Adicionar
+</div> -->
+
+
+
+
+
+
+
+
+
+<div class="adicionar-artigo-btn" id="adicionar-artigo-btn" onclick="openPopup()">
     Adicionar
 </div>
 
+
+    
 <?php
 // Conexão com o banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
@@ -507,7 +521,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['arquivo'])) {
 
     // Processa o upload do arquivo
     $arquivo = NULL;
-    if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == UPLOAD_ERR_OK) {
+    if ($_FILES['arquivo']['error'] == UPLOAD_ERR_OK) {
         // Verifica se o arquivo é PDF
         if (pathinfo($_FILES['arquivo']['name'], PATHINFO_EXTENSION) !== 'pdf') {
             echo "Apenas arquivos PDF são permitidos.";
@@ -531,6 +545,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['arquivo'])) {
             echo "Erro ao fazer upload do arquivo.";
             exit();
         }
+    } else {
+        echo "Erro no upload do arquivo.";
+        exit();
     }
 
     // Prepara a consulta SQL para inserção
@@ -554,15 +571,11 @@ $result = $conn->query($sql);
 
 // Verifica se a consulta retornou algum resultado
 if ($result) {
-    // Verifica se há pelo menos um artigo cadastrado
     if ($result->num_rows > 0) {
-        // Saída de dados de cada linha
         echo "<div class='container'>";
         while ($row = $result->fetch_assoc()) {
-            // Crie uma div com as informações do artigo
             echo "<div class='artigo'>";
             echo "<center><h1>Título: <br>" . $row["titulo"] . "</h1></center>";
-            // Adiciona o botão de edição
             echo "<div class='botoes'>";
             echo "<button class='btn3' data-id='" . $row["id"] . "' onclick='abrirPopupEditar(" . $row["id"] . ", \"" . addslashes($row["titulo"]) . "\", \"" . addslashes($row["autor"]) . "\", \"" . $row["ano"] . "\", \"" . $row["arquivo"] . "\")'>Editar</button>";
             echo "<a href='" . $row["arquivo"] . "' download class='btn-download'>Download</a>";
@@ -577,44 +590,42 @@ if ($result) {
     echo "Erro na consulta: " . $conn->error;
 }
 
-// Fecha a conexão com o banco de dados
 $conn->close();
 ?>
 
-<div id="popup" class="popup">
+<div id="popup" class="popup" style="display: none;">
     <div class="table">
         <h1>Adicionar TCC</h1>
         <form action="tcc.php" method="post" enctype="multipart/form-data">
             <label for="titulo">Título:</label><br>
-            <input type="text" id="artigo-nome" name="titulo" class="inp"><br>
+            <input type="text" id="artigo-nome" name="titulo" class="inp" required><br>
             <label for="autor">Autor:</label><br>
-            <input type="text" id="artigo-autor" name="autor" class="inp"><br>
+            <input type="text" id="artigo-autor" name="autor" class="inp" required><br>
             <label for="ano">Ano:</label><br>
-            <input type="date" id="artigo-ano" name="ano" class="inp"><br>
+            <input type="date" id="artigo-ano" name="ano" class="inp" required><br>
             <br>
             <label for="artigo-arquivo">Arquivo (PDF):</label><br>
-            <input type="file" id="artigo-arquivo" name="arquivo" accept=".pdf"><br> <!-- Permitir apenas PDF -->
+            <input type="file" id="artigo-arquivo" name="arquivo" accept=".pdf" required><br>
             <input type="submit" value="Enviar" class="btn2">
         </form>
         <span class="close" onclick="closePopup()">&times;</span>
     </div>
 </div>
 
-<div id="popup-editar" class="popup">
+<div id="popup-editar" class="popup" style="display: none;">
     <div class="tablee">
         <h1>Editar TCC</h1>
         <form id="editar-form" action="editar_artigo.php" method="post" enctype="multipart/form-data">
-            <!-- Campos do formulário -->
             <input type="hidden" id="editar-id" name="id">
             <label for="editar-titulo">Título:</label><br>
-            <input type="text" id="editar-titulo" name="titulo" class="inp"><br>
+            <input type="text" id="editar-titulo" name="titulo" class="inp" required><br>
             <label for="editar-autor">Autor:</label><br>
-            <input type="text" id="editar-autor" name="autor" class="inp"><br>
+            <input type="text" id="editar-autor" name="autor" class="inp" required><br>
             <label for="editar-ano">Ano:</label><br>
-            <input type="date" id="editar-ano" name="ano" class="inp"><br>
+            <input type="date" id="editar-ano" name="ano" class="inp" required><br>
             <br>
             <label for="artigo-arquivo">Arquivo (PDF):</label><br>
-            <input type="file" id="artigo-arquivo" name="arquivo" accept=".pdf"><br> <!-- Permitir upload de documentos -->
+            <input type="file" id="artigo-arquivo" name="arquivo" accept=".pdf"><br>
             <input type="submit" value="Salvar" class="btn2">
         </form>
         <span class="closee" onclick="closePopupEditar()">&times;</span>
@@ -622,12 +633,19 @@ $conn->close();
 </div>
 
 <script>
+function openPopup() {
+    document.getElementById('popup').style.display = 'block'; // Exibe o popup de adicionar
+}
+
+function closePopup() {
+    document.getElementById('popup').style.display = 'none'; // Oculta o popup de adicionar
+}
+
 function abrirPopupEditar(id, titulo, autor, ano, arquivo) {
     document.getElementById('editar-id').value = id;
     document.getElementById('editar-titulo').value = titulo;
     document.getElementById('editar-autor').value = autor;
     document.getElementById('editar-ano').value = ano;
-    // Aqui você pode definir o arquivo atual, mas normalmente não pode preencher um input file diretamente.
     document.getElementById('popup-editar').style.display = 'block'; // Exibe o popup de edição
 }
 
@@ -635,7 +653,6 @@ function closePopupEditar() {
     document.getElementById('popup-editar').style.display = 'none'; // Oculta o popup de edição
 }
 </script>
-
 
 
 
