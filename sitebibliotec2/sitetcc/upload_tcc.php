@@ -10,14 +10,13 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Verifica se o formulário foi enviado para editar um artigo
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
-    $id = $_POST['id'];
+// Verifica se o formulário foi enviado para adicionar um artigo
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $titulo = $_POST['titulo'];
     $autor = $_POST['autor'];
     $ano = $_POST['ano'];
 
-    // Processa o upload do arquivo, se um novo arquivo foi enviado
+    // Processa o upload do arquivo
     $arquivo = NULL;
     if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == UPLOAD_ERR_OK) {
         if (pathinfo($_FILES['arquivo']['name'], PATHINFO_EXTENSION) !== 'pdf') {
@@ -25,25 +24,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
             exit();
         }
         $arquivo = file_get_contents($_FILES['arquivo']['tmp_name']);
-    }
-
-    // Atualiza os dados no banco
-    if ($arquivo !== NULL) {
-        // Atualiza também o arquivo
-        $stmt = $conn->prepare("UPDATE artigos SET titulo = ?, autor = ?, ano = ?, arquivo = ? WHERE id = ?");
-        $stmt->bind_param("ssssi", $titulo, $autor, $ano, $arquivo, $id);
     } else {
-        // Se não há novo arquivo, atualiza apenas os outros campos
-        $stmt = $conn->prepare("UPDATE artigos SET titulo = ?, autor = ?, ano = ? WHERE id = ?");
-        $stmt->bind_param("sssi", $titulo, $autor, $ano, $id);
+        echo "Erro no upload do arquivo.";
+        exit();
     }
 
+    // Prepara a consulta SQL para inserção
+    $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano, arquivo) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("sssb", $titulo, $autor, $ano, $arquivo); // "b" para BLOB
+
+    // Executa a consulta
     if ($stmt->execute()) {
-        header("Location: tcc.php");
+        header("Location: tcc.php"); // Redireciona após o sucesso
         exit();
     } else {
-        echo "Erro ao atualizar registro: " . $conn->error;
+        echo "Erro ao inserir registro: " . $conn->error;
     }
+
     $stmt->close();
 }
 
