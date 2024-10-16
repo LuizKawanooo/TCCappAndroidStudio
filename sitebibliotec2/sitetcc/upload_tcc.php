@@ -64,55 +64,41 @@
 
 
 
-
-
-
 <?php
-// Conexão com o banco de dados
-$servername = "tccappionic-bd.mysql.uhserver.com";
-$username = "ionic_perfil_bd";
-$password = "{[UOLluiz2019";
-$dbname = "tccappionic_bd";
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['action'] == 'add') {
+    // Conexão com o banco de dados
+    $conn = new mysqli('localhost', 'username', 'password', 'database');
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+    // Verifica a conexão
+    if ($conn->connect_error) {
+        die("Conexão falhou: " . $conn->connect_error);
+    }
 
-// Verifica se o formulário foi enviado para inserir um artigo
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] === 'add') {
+    // Obtém os dados do formulário
     $titulo = $_POST['titulo'];
     $autor = $_POST['autor'];
     $ano = $_POST['ano'];
 
-    // Processa o upload do arquivo
-    $arquivo = NULL;
-    if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == UPLOAD_ERR_OK) {
-        if (pathinfo($_FILES['arquivo']['name'], PATHINFO_EXTENSION) !== 'pdf') {
-            echo "Apenas arquivos PDF são permitidos.";
-            exit();
-        }
-        $arquivo = file_get_contents($_FILES['arquivo']['tmp_name']);
-    }
+    // Obtém o arquivo
+    $arquivo = $_FILES['arquivo']['tmp_name'];
+    $blob = file_get_contents($arquivo);
 
-    // Insere os dados no banco
+    // Prepara a consulta SQL
     $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano, arquivo) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("sssb", $titulo, $autor, $ano, $arquivo);
+    $stmt->bind_param("sssb", $titulo, $autor, $ano, $blob);
 
+    // Executa a consulta
     if ($stmt->execute()) {
-        $id_artigo = $stmt->insert_id; // Captura o ID do novo registro
-        $stmt->close();
-        $conn->close();
-
-        // Exibir o popup de edição usando JavaScript
-        echo "<script>
-                window.onload = function() {
-                    alert('TCC adicionado com sucesso! Agora você pode editar.');
-                    openEditPopup($id_artigo);
-                };
-              </script>";
+        echo "TCC adicionado com sucesso!";
+        header('Location: tcc.php');
     } else {
-        echo "Erro ao inserir registro: " . $stmt->error;
+        echo "Erro ao adicionar TCC: " . $stmt->error;
     }
+
+    // Fecha a conexão
+    $stmt->close();
+    $conn->close();
+} else {
+    echo "Método não permitido.";
 }
 ?>
