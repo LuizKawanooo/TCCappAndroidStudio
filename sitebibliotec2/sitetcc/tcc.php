@@ -495,8 +495,6 @@
     Adicionar
 </div>
 
-
-    
 <?php
 // Conexão com o banco de dados
 $servername = "tccappionic-bd.mysql.uhserver.com";
@@ -513,7 +511,7 @@ if ($conn->connect_error) {
 }
 
 // Verifica se o formulário foi enviado
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['arquivo'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Prepara os dados para inserção no banco de dados
     $titulo = $_POST['titulo'];
     $autor = $_POST['autor'];
@@ -521,30 +519,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['arquivo'])) {
 
     // Processa o upload do arquivo
     $arquivo = NULL;
-    if ($_FILES['arquivo']['error'] == UPLOAD_ERR_OK) {
+    if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == UPLOAD_ERR_OK) {
         // Verifica se o arquivo é PDF
         if (pathinfo($_FILES['arquivo']['name'], PATHINFO_EXTENSION) !== 'pdf') {
             echo "Apenas arquivos PDF são permitidos.";
             exit();
         }
 
-        $tmp_name = $_FILES['arquivo']['tmp_name'];
-        $name = basename($_FILES['arquivo']['name']);
-        $upload_dir = 'uploads/';
-        $upload_file = $upload_dir . $name;
-
-        // Cria o diretório de uploads se não existir
-        if (!file_exists($upload_dir)) {
-            mkdir($upload_dir, 0777, true);
-        }
-
-        // Move o arquivo para o diretório de uploads
-        if (move_uploaded_file($tmp_name, $upload_file)) {
-            $arquivo = $upload_file;
-        } else {
-            echo "Erro ao fazer upload do arquivo.";
-            exit();
-        }
+        // Lê o conteúdo do arquivo
+        $arquivo = file_get_contents($_FILES['arquivo']['tmp_name']);
     } else {
         echo "Erro no upload do arquivo.";
         exit();
@@ -552,7 +535,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['arquivo'])) {
 
     // Prepara a consulta SQL para inserção
     $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano, arquivo) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("ssss", $titulo, $autor, $ano, $arquivo);
+    $stmt->bind_param("sssb", $titulo, $autor, $ano, $arquivo); // Observe que o tipo do arquivo é "b" para BLOB
 
     // Executa a consulta
     if ($stmt->execute()) {
@@ -577,8 +560,8 @@ if ($result) {
             echo "<div class='artigo'>";
             echo "<center><h1>Título: <br>" . $row["titulo"] . "</h1></center>";
             echo "<div class='botoes'>";
-            echo "<button class='btn3' data-id='" . $row["id"] . "' onclick='abrirPopupEditar(" . $row["id"] . ", \"" . addslashes($row["titulo"]) . "\", \"" . addslashes($row["autor"]) . "\", \"" . $row["ano"] . "\", \"" . $row["arquivo"] . "\")'>Editar</button>";
-            echo "<a href='" . $row["arquivo"] . "' download class='btn-download'>Download</a>";
+            echo "<button class='btn3' data-id='" . $row["id"] . "' onclick='abrirPopupEditar(" . $row["id"] . ", \"" . addslashes($row["titulo"]) . "\", \"" . addslashes($row["autor"]) . "\", \"" . $row["ano"] . "\")'>Editar</button>";
+            echo "<a href='download.php?id=" . $row["id"] . "' class='btn-download'>Download</a>"; // Link para download
             echo "</div>";
             echo "</div>";
         }
@@ -641,7 +624,7 @@ function closePopup() {
     document.getElementById('popup').style.display = 'none'; // Oculta o popup de adicionar
 }
 
-function abrirPopupEditar(id, titulo, autor, ano, arquivo) {
+function abrirPopupEditar(id, titulo, autor, ano) {
     document.getElementById('editar-id').value = id;
     document.getElementById('editar-titulo').value = titulo;
     document.getElementById('editar-autor').value = autor;
