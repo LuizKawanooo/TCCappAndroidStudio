@@ -526,8 +526,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['a
         exit();
     }
 
+    // Prepara a consulta SQL para inserção
     $stmt = $conn->prepare("INSERT INTO artigos (titulo, autor, ano, arquivo) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("sssb", $titulo, $autor, $ano, $arquivo);
+    $stmt->bind_param("sssb", $titulo, $autor, $ano, $arquivo); // b para BLOB
 
     if ($stmt->execute()) {
         echo "<script>window.location.href = 'tcc.php';</script>";
@@ -643,6 +644,7 @@ function closePopupEditar() {
     document.getElementById('popup-editar').style.display = 'none'; // Oculta o popup de edição
 }
 </script>
+
 
 
 
