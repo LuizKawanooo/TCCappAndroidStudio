@@ -526,7 +526,7 @@
 
     <div class="gen">
         <h1>GÊNEROS</h1>
-        
+        <a href="?search=" class="btn-todos"><div class="generos" data-genero="Infantil">Infantil</div></a>
         <div class="generos" data-genero="Infantil">Infantil</div>
         <div class="generos" data-genero="Ficção">Ficção</div>
         <div class="generos" data-genero="Romance">Romance</div>
