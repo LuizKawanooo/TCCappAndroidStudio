@@ -538,7 +538,7 @@
 
     $conn->close();
     ?>
-
+    
     <div id="popup" class="popup" style="display: none;">
         <div class="table">
             <h1>Adicionar TCC</h1>
@@ -558,6 +558,7 @@
             <span class="close" onclick="closePopup()">&times;</span>
         </div>
     </div>
+
 
     <div id="popup-editar" class="popup" style="display: none;">
         <div class="tablee">
