@@ -542,7 +542,7 @@
 <div id="popup" class="popup" style="display: none;">
     <div class="table">
         <h1>Adicionar TCC</h1>
-        <form id="addTccForm" action="upload_tcc.php" method="post" enctype="multipart/form-data">
+        <form id="addTccForm" action="upload_tcc.php" method="post" enctype="multipart/form-data" onsubmit="return abrirPopupAdicionarArquivo()">
             <input type="hidden" name="action" value="add">
             <label for="titulo">Título:</label><br>
             <input type="text" id="artigo-nome" name="titulo" class="inp" required><br>
@@ -550,25 +550,19 @@
             <input type="text" id="artigo-autor" name="autor" class="inp" required><br>
             <label for="ano">Ano:</label><br>
             <input type="date" id="artigo-ano" name="ano" class="inp" required><br>
-            <br>
-            <label for="proximo-popup">Ir para proxima página e adicionar arquivo (PDF)</label><br>
-            <input type="submit" value="Enviar" class="btn2" onclick="popupAdicionarArquivo()">
+            <input type="submit" value="Enviar" class="btn2">
         </form>
         <span class="close" onclick="closePopup()">&times;</span>
     </div>
 </div>
 
-
-
 <div id="popupAdicionarArquivo" class="popup" style="display: none;">
     <div class="table">
-        <h1>Adicionar TCC</h1>
-        <form id="addTccForm" action="editar_tcc.php" method="post" enctype="multipart/form-data">
+        <h1>Adicionar Arquivo ao TCC</h1>
+        <form id="addArquivoForm" action="editar_tcc.php" method="post" enctype="multipart/form-data">
             <input type="hidden" name="action" value="add">
-            
-            <label for="adicionar-arquivo">Ir para proxima página e adicionar Arquivo (PDF)</label><br>
+            <label for="adicionar-arquivo">Arquivo (PDF):</label><br>
             <input type="file" id="artigo-arquivo" name="arquivo" accept=".pdf" required><br>
-
             <input type="submit" value="Enviar" class="btn2">
         </form>
         <span class="close" onclick="fecharPopupAdicionarArquivo()">&times;</span>
@@ -619,12 +613,17 @@
     }
 
 
-    function popupAdicionarArquivo() {
-        document.getElementById('popupAdicionarArquivo').style.display = 'block'; // Oculta o popup de edição
-    }
-    function fecharPopupAdicionarArquivo() {
-        document.getElementById('popupAdicionarArquivo').style.display = 'none'; // Oculta o popup de edição
-    }
+function abrirPopupAdicionarArquivo() {
+    // Aqui você pode adicionar a lógica para capturar o ID do TCC recém-adicionado
+    // e então passar esse ID para o popup de adicionar arquivo, se necessário.
+    closePopup();
+    document.getElementById('popupAdicionarArquivo').style.display = 'block'; // Exibe o popup para adicionar arquivo
+    return false; // Impede o envio do formulário para que o popup apareça
+}
+
+function fecharPopupAdicionarArquivo() {
+    document.getElementById('popupAdicionarArquivo').style.display = 'none'; // Oculta o popup de adicionar arquivo
+}
 
 
 
