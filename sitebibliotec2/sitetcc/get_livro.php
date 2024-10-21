@@ -85,14 +85,42 @@ $conn->close();
                 border-radius: 5px;
         }
         .btn2 {
-                width: 100px;
-                height: 30px;
-                border-radius: 7px;
+                font-family: Roboto, sans-serif;
+                color: #fff;
+                background-color: #005aeb;
+                padding: 10px 30px;
                 border: none;
-                background: #56dd63;
-                color: #000000;
-                font-weight: bold;
+                -webkit-box-shadow: 2px 11px 31px -10px rgba(0, 0, 0, 0.6);
+                -moz-box-shadow: 2px 11px 31px -10px rgba(0, 0, 0, 0.6);
+                box-shadow: 2px 11px 31px -10px rgba(0, 0, 0, 0.6);
+                border-radius: 50px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                cursor: pointer;
+                margin-top: 30px;
+
         }
+
+        .btn:hover{
+
+                font-family: Roboto, sans-serif;
+                color: #fff;
+                background-color: #024bc2;
+                padding: 10px 30px;
+                border: none;
+                -webkit-box-shadow: 2px 11px 31px -10px rgba(0, 0, 0, 0.6);
+                -moz-box-shadow: 2px 11px 31px -10px rgba(0, 0, 0, 0.6);
+                box-shadow: 2px 11px 31px -10px rgba(0, 0, 0, 0.6);
+                border-radius: 50px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                cursor: pointer;
+                margin-top: 30px;
+        
+        }
+        
         .btnfechar {
             width: 30px;
             height: 30px;
