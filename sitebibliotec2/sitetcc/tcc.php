@@ -553,13 +553,29 @@
             <br>
             <label for="artigo-arquivo">Arquivo (PDF):</label><br>
             <input type="file" id="artigo-arquivo" name="arquivo" accept=".pdf" required><br>
-            <input type="submit" value="Enviar" class="btn2">
+            <input type="submit" value="Enviar" class="btn2" onclick="popupAdicionarArquivo()">
         </form>
         <span class="close" onclick="closePopup()">&times;</span>
     </div>
 </div>
 
 
+
+<div id="popupAdicionarArquivo" class="popup" style="display: none;">
+    <div class="table">
+        <h1>Adicionar TCC</h1>
+        <form id="addTccForm" action="editar_tcc.php" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="add">
+            
+            <label for="adicionar-arquivo">Ir para proxima página e adicionar Arquivo (PDF)</label><br>
+            <input type="file" id="artigo-arquivo" name="arquivo" accept=".pdf" required><br>
+
+            <input type="submit" value="Enviar" class="btn2">
+        </form>
+        <span class="close" onclick="fecharPopupAdicionarArquivo()">&times;</span>
+    </div>
+</div>
+            
 
 
     <div id="popup-editar" class="popup" style="display: none;">
@@ -602,6 +618,18 @@
     function closePopupEditar() {
         document.getElementById('popup-editar').style.display = 'none'; // Oculta o popup de edição
     }
+
+
+    function popupAdicionarArquivo() {
+        document.getElementById('popupAdicionarArquivo').style.display = 'block'; // Oculta o popup de edição
+    }
+    function fecharPopupAdicionarArquivo() {
+        document.getElementById('popupAdicionarArquivo').style.display = 'none'; // Oculta o popup de edição
+    }
+
+
+
+
     </script>
 
 
