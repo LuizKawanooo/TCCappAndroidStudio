@@ -551,8 +551,7 @@
             <label for="ano">Ano:</label><br>
             <input type="date" id="artigo-ano" name="ano" class="inp" required><br>
             <br>
-            <label for="artigo-arquivo">Arquivo (PDF):</label><br>
-            <input type="file" id="artigo-arquivo" name="arquivo" accept=".pdf" required><br>
+            <label for="proximo-popup">Ir para proxima página e adicionar arquivo (PDF)</label><br>
             <input type="submit" value="Enviar" class="btn2" onclick="popupAdicionarArquivo()">
         </form>
         <span class="close" onclick="closePopup()">&times;</span>
