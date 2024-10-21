@@ -542,7 +542,7 @@
 <div id="popup" class="popup" style="display: none;">
     <div class="table">
         <h1>Adicionar TCC</h1>
-        <form id="addTccForm" action="upload_tcc.php" method="post" enctype="multipart/form-data" onsubmit="return abrirPopupAdicionarArquivo()">
+        <form id="addTccForm" action="upload_tcc.php" method="post" enctype="multipart/form-data" onsubmit="return handleFormSubmit(event)">
             <input type="hidden" name="action" value="add">
             <label for="titulo">Título:</label><br>
             <input type="text" id="artigo-nome" name="titulo" class="inp" required><br>
@@ -550,6 +550,7 @@
             <input type="text" id="artigo-autor" name="autor" class="inp" required><br>
             <label for="ano">Ano:</label><br>
             <input type="date" id="artigo-ano" name="ano" class="inp" required><br>
+            <br>
             <input type="submit" value="Enviar" class="btn2">
         </form>
         <span class="close" onclick="closePopup()">&times;</span>
@@ -613,18 +614,36 @@
     }
 
 
-function abrirPopupAdicionarArquivo() {
-    // Aqui você pode adicionar a lógica para capturar o ID do TCC recém-adicionado
-    // e então passar esse ID para o popup de adicionar arquivo, se necessário.
-    closePopup();
-    document.getElementById('popupAdicionarArquivo').style.display = 'block'; // Exibe o popup para adicionar arquivo
-    return false; // Impede o envio do formulário para que o popup apareça
+
+
+        function handleFormSubmit(event) {
+    event.preventDefault(); // Impede o envio padrão do formulário
+
+    const form = event.target;
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        // Aqui você pode processar a resposta, se necessário
+        closePopup(); // Fecha o popup de adicionar
+        setTimeout(() => {
+            document.getElementById('popupAdicionarArquivo').style.display = 'block'; // Abre o popup para adicionar arquivo
+        }, 500); // Aguarda 500 ms antes de abrir o próximo popup
+    })
+    .catch(error => {
+        console.error('Erro ao enviar o formulário:', error);
+    });
+
+    return false; // Impede o envio do formulário
 }
 
 function fecharPopupAdicionarArquivo() {
     document.getElementById('popupAdicionarArquivo').style.display = 'none'; // Oculta o popup de adicionar arquivo
 }
-
 
 
 
