@@ -62,8 +62,8 @@ $conn->close();
             z-index: 500;
             background-color: #D9D9D9;
             padding: 20px;
-            min-width: 380px;
-            max-width: 550px
+            min-width: 500px;
+            max-width: 500px;
             text-align: left;
             transform: translate(-50%, -50%);
             zoom: 0.9;
