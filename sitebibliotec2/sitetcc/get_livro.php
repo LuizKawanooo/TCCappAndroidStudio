@@ -143,7 +143,7 @@ $conn->close();
                     position: fixed;
                     }
 
-        lable{
+        p{
             font-size: 20px;
             margin-bottom: -8px;
         }
