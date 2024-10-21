@@ -76,6 +76,7 @@ $conn->close();
                 padding-left: 5px;
                 border: 1px solid #ccc;
                 border-radius: 5px;
+                box-shadow: 14px 22px 20px -8px rgba(0,0,0,0.1);
             }
         .inpd {
                 height: 30px;
@@ -83,6 +84,7 @@ $conn->close();
                 padding-left: 5px;
                 border: 1px solid #ccc;
                 border-radius: 5px;
+                box-shadow: 14px 22px 20px -8px rgba(0,0,0,0.1);
         }
         .btn2 {
                 font-family: Roboto, sans-serif;
