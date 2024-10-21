@@ -67,6 +67,7 @@ $conn->close();
             text-align: left;
             transform: translate(-50%, -50%);
             zoom: 0.9;
+            box-shadow: 14px 22px 20px -8px rgba(0,0,0,0.1);
 
         }
         .inp{
