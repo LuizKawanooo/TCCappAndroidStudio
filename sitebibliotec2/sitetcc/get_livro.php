@@ -227,8 +227,6 @@ $conn->close();
         }
 
         function closePopup() {
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('popup-editar').style.display = 'none';
             window.location.href = "https://endologic.com.br/tcc/sitebibliotec2/sitetcc/livros.php";
         }
     </script>
