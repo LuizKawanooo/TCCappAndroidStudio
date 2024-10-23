@@ -560,13 +560,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $sql = "DELETE FROM artigos WHERE id = $id";
 
     if ($conn->query($sql) === TRUE) {
-        // Redireciona para a mesma página após a exclusão
-        header("Location: " . $_SERVER['PHP_SELF']);
+        // Redireciona para tcc.php após a exclusão
+        header("Location: tcc.php");
         exit();
     } else {
         echo "Erro ao excluir artigo: " . $conn->error;
     }
 }
+
 
 
 
