@@ -109,7 +109,7 @@
             @media (min-width: 1200px) {
                 .container {
                     width: 70vw;
-                    overflow: auto;
+                    overflow-y: scroll;
                 }
             }
             
