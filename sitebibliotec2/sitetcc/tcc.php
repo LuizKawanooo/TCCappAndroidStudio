@@ -581,12 +581,6 @@ $conn->close();
 
 
 
-// Fecha a conexão
-$conn->close();
-?>
-
-
-
     
     
 <div id="popup" class="popup" style="display: none;">
