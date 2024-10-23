@@ -490,6 +490,30 @@
 
 
 
+    <div id="loading" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); text-align: center; z-index: 1000;">
+    <h2>Carregando...</h2>
+    <div class="loader"></div>
+</div>
+
+<style>
+.loader {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #3498db;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+
+    
+
+
 
 
   <div class="adicionar-artigo-btn" id="adicionar-artigo-btn" onclick="openPopup()">
@@ -565,10 +589,8 @@
         $sql = "DELETE FROM artigos WHERE id = $id";
     
         if ($conn->query($sql) === TRUE) {
-            echo json_encode(['success' => true, 'redirect' => 'tcc.php']); // Adiciona a URL de redirecionamento
             exit();
         } else {
-            echo json_encode(['success' => false, 'error' => $conn->error]);
             exit();
         }
 
@@ -677,6 +699,43 @@ $conn->close();
 
         
 
+    </script>
+
+
+
+    <script>
+        function confirmDelete(id) {
+    if (confirm('Tem certeza que deseja excluir este artigo?')) {
+        // Exibe o loader
+        document.getElementById('loading').style.display = 'block';
+
+        fetch('tcc.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: id, action: 'delete' })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Aguarda 4 segundos antes de recarregar a página
+                setTimeout(() => {
+                    window.location.href = data.redirect; // Redireciona para tcc.php
+                }, 4000); // 4000 milissegundos = 4 segundos
+            } else {
+                alert('Erro ao excluir o artigo: ' + (data.error || 'Desconhecido'));
+                // Oculta o loader em caso de erro
+                document.getElementById('loading').style.display = 'none';
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao excluir artigo:', error);
+            // Oculta o loader em caso de erro
+            document.getElementById('loading').style.display = 'none';
+        });
+    }
+}
     </script>
 
 
