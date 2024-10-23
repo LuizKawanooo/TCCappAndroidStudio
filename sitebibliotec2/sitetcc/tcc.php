@@ -476,7 +476,7 @@
 </div>
 
 <div class="title">
-        <h1>TRABALHOS DE CONCLUSÃO DE CURSO</h1>
+        <h1>TRABALHOS DE CONCLUSÃO DE CRSO</h1>
 </div>
 
 <!-- <div class="adicionar-artigo-btn" id="adicionar-artigo-btn">
@@ -565,7 +565,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         header("Location: tcc.php");
         exit();
     } else {
-        header("Location: tcc.php");
+        
         exit();
     }
 }
@@ -654,9 +654,9 @@ $conn->close();
         body: formData
     })
     .then(response => response.text())
-        .then(data => {
-        location.reload(); // Recarrega a página após a exclusão
-    })
+    //     .then(data => {
+    //     location.reload(); // Recarrega a página após a exclusão
+    // })
     .catch(error => {
         console.error('Erro ao excluir artigo:', error);
     });
