@@ -16,9 +16,10 @@
  
             body{
             background-image: linear-gradient(to right, #30cfd0 0%, #330867 100%);
-            overflow: hidden;
+            overflow-y: scroll;
+            overflow-x: hidden;
 
-            }
+            } 
             * {
                 margin: 0 auto;
                 padding: 0;
