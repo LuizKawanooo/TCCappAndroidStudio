@@ -104,6 +104,13 @@
                 left: 50%;
                 transform: translate(-50%,-50%);
                 align-items: center;
+                overflow: auto; 
+            }
+            @media (min-width: 1200px) {
+                .container {
+                    width: 70vw;
+                    overflow: auto;
+                }
             }
             
             .artigo {
