@@ -605,12 +605,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     }
 }
 
-// Exibir mensagem de status
-$message = '';
-if (isset($_SESSION['message'])) {
-    $message = $_SESSION['message'];
-    unset($_SESSION['message']); // Limpa a mensagem após exibi-la
-}
 
 
 // Fecha a conexão
