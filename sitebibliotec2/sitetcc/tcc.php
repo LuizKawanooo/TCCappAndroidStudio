@@ -103,7 +103,7 @@
                     height: 50vh;
                     position: absolute;
                     top: 55%;
-                    left: 60%;
+                    left: 50%;
                     transform: translate(-50%, -50%);
                     align-items: center;
                     gap: 10px; /* Adiciona espaço entre os itens */
@@ -233,8 +233,8 @@
                 flex-direction: row;
                 align-items: center;
                 cursor: pointer;
-                position: fixed;
-                top: 89%;
+                position: absolute;
+                top: 27%;
                 left: 50%;
                 transform: translate(-50%,-50%);
             }
