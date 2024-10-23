@@ -497,7 +497,7 @@
 </div>
 
 <div class="title">
-        <h1>TRABALHOS DE CONCLUSÃO DE CRSO</h1>
+        <h1>TRABALHOS DE CONCLUSÃO DE CuuRSO</h1>
 </div>
 
 <!-- <div class="adicionar-artigo-btn" id="adicionar-artigo-btn">
