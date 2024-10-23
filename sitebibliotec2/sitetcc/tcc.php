@@ -595,19 +595,6 @@ $conn->close();
     </div>
 </div>
 
-<div id="popupAdicionarArquivo" class="popup" style="display: none;">
-    <div class="table">
-        <h1>Adicionar Arquivo ao TCC</h1>
-        <form id="addArquivoForm" action="editar_tcc.php" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="action" value="add">
-            <label for="adicionar-arquivo">Arquivo (PDF):</label><br>
-            <input type="file" id="artigo-arquivo" name="arquivo" accept=".pdf" required><br>
-            <input type="submit" value="Enviar" class="btn2">
-        </form>
-        <span class="close" onclick="fecharPopupAdicionarArquivo()">&times;</span>
-    </div>
-</div>
-            
 
 
     <div id="popup-editar" class="popup" style="display: none;">
@@ -673,34 +660,6 @@ $conn->close();
 
 
 
-        function handleFormSubmit(event) {
-    event.preventDefault(); // Impede o envio padrão do formulário
-
-    const form = event.target;
-    const formData = new FormData(form);
-
-    fetch(form.action, {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.text())
-    .then(data => {
-        // Aqui você pode processar a resposta, se necessário
-        closePopup(); // Fecha o popup de adicionar
-        setTimeout(() => {
-            document.getElementById('popupAdicionarArquivo').style.display = 'block'; // Abre o popup para adicionar arquivo
-        }, 500); // Aguarda 500 ms antes de abrir o próximo popup
-    })
-    .catch(error => {
-        console.error('Erro ao enviar o formulário:', error);
-    });
-
-    return false; // Impede o envio do formulário
-}
-
-function fecharPopupAdicionarArquivo() {
-    document.getElementById('popupAdicionarArquivo').style.display = 'none'; // Oculta o popup de adicionar arquivo
-}
 
 
 
