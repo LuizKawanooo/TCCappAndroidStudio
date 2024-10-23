@@ -512,29 +512,29 @@
     $result = $conn->query($sql);
 
     if ($result) {
-        if ($result->num_rows > 0) {
-            echo "<div class='container'>";
-            while ($row = $result->fetch_assoc()) {
-                echo "<div class='artigo'>";
-                echo "<center><h1>Título: <br>" . $row["titulo"] . "</h1></center>";
-                echo "<div class='botoes'>";
-                echo "<button class='btn3' data-id='" . $row["id"] . "' onclick='abrirPopupEditar(" . $row["id"] . ", \"" . addslashes($row["titulo"]) . "\", \"" . addslashes($row["autor"]) . "\", \"" . $row["ano"] . "\")'>Editar</button>";
-                echo "<a href='download.php?id=" . $row["id"] . "' class='btn-download'>Download</a>"; // Link para download
-                echo "<form action='tcc.php' method='post' style='display:inline;'>";
-                echo "<input type='hidden' name='id' value='" . $row["id"] . "'>";
-                echo "<input type='hidden' name='action' value='delete'>";
-                echo "<input type='submit' value='Excluir' class='btn-delete' onclick='return confirm('Tem certeza que deseja excluir este artigo?');'>";
-                echo "</form>";
-                echo "</div>";
-                echo "</div>";
-            }
+    if ($result->num_rows > 0) {
+        echo "<div class='container'>";
+        while ($row = $result->fetch_assoc()) {
+            echo "<div class='artigo' id='artigo-" . $row["id"] . "'>"; // Adicione um ID único
+            echo "<center><h1>Título: <br>" . htmlspecialchars($row["titulo"]) . "</h1></center>";
+            echo "<div class='botoes'>";
+            echo "<button class='btn3' data-id='" . $row["id"] . "' onclick='abrirPopupEditar(" . $row["id"] . ", \"" . addslashes($row["titulo"]) . "\", \"" . addslashes($row["autor"]) . "\", \"" . $row["ano"] . "\")'>Editar</button>";
+            echo "<a href='download.php?id=" . $row["id"] . "' class='btn-download'>Download</a>";
+            echo "<form action='tcc.php' method='post' style='display:inline;' onsubmit='handleDelete(event)'>"; // Modifique aqui
+            echo "<input type='hidden' name='id' value='" . $row["id"] . "'>";
+            echo "<input type='hidden' name='action' value='delete'>";
+            echo "<input type='button' value='Excluir' class='btn-delete' onclick='handleDelete(event)'>"; // Mude para input type='button'
+            echo "</form>";
             echo "</div>";
-        } else {
-            echo "<p style='position: absolute;color:#fff; font-size:20px; top: 50%; left: 50%; transform: translate(-50%, -50%);'>Nenhum artigo encontrado.</p>";
+            echo "</div>";
         }
+        echo "</div>";
     } else {
-        echo "Erro na consulta: " . $conn->error;
+        echo "<p style='position: absolute;color:#fff; font-size:20px; top: 50%; left: 50%; transform: translate(-50%, -50%);'>Nenhum artigo encontrado.</p>";
     }
+} else {
+    echo "Erro na consulta: " . $conn->error;
+}
 
     $conn->close();
     ?>
