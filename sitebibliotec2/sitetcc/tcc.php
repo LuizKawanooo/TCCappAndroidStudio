@@ -94,24 +94,35 @@
                 background-color: #f00;
             }
             
-            .container{
-                padding: 20px;
-                display: flex;
-                width: 70vw;
-                height: 50vh;
-                position: absolute;
-                top: 55%;
-                left: 50%;
-                transform: translate(-50%,-50%);
-                align-items: center;
-                overflow: auto; 
-            }
-            @media (min-width: 1200px) {
                 .container {
+                    padding: 20px;
+                    display: flex;
+                    flex-wrap: wrap; /* Permite que os itens quebrem para a linha seguinte */
                     width: 70vw;
-                    overflow-y: scroll;
+                    height: 50vh;
+                    position: absolute;
+                    top: 55%;
+                    left: 60%;
+                    transform: translate(-50%, -50%);
+                    align-items: center;
+                    gap: 10px; /* Adiciona espaço entre os itens */
+                    
                 }
-            }
+
+                            
+                    /* Estilo para telas de 900px ou menores */
+                @media (max-width: 900px) {
+                    .container {
+                        flex-direction: column; /* Alinha os itens verticalmente */
+                        width: 90vw; /* Ajusta a largura para se adaptar à tela menor */
+                        height: auto; /* Permite que a altura se ajuste ao conteúdo */
+                        top: 50%; /* Ajusta a posição vertical */
+                        left: 50%; /* Ajusta a posição horizontal */
+                        transform: translate(-50%, -50%); /* Mantém o alinhamento central */
+                        margin-bottom: 100px;
+                    }
+                    
+                }
             
             .artigo {
                 background-color: #fff;
