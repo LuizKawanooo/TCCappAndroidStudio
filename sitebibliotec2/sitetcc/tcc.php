@@ -645,73 +645,36 @@ $conn->close();
 
 
         
-         document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.btn-excluir').forEach(button => {
-            button.addEventListener('click', function() {
-                const artigoId = this.getAttribute('data-id');
+    //      document.addEventListener('DOMContentLoaded', function() {
+    //     document.querySelectorAll('.btn-excluir').forEach(button => {
+    //         button.addEventListener('click', function() {
+    //             const artigoId = this.getAttribute('data-id');
                 
-                if (confirm('Tem certeza de que deseja excluir este artigo?')) {
-                    fetch('tcc.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ id: artigoId, action: 'delete' })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Recarrega a página após a exclusão
-                            window.location.reload();
-                        } else {
-                            alert('Erro ao excluir o artigo: ' + (data.error || 'Desconhecido'));
-                        }
-                    })
-                    .catch(error => console.error('Erro ao excluir artigo:', error));
-                }
-            });
-        });
-    });
+    //             if (confirm('Tem certeza de que deseja excluir este artigo?')) {
+    //                 fetch('tcc.php', {
+    //                     method: 'POST',
+    //                     headers: {
+    //                         'Content-Type': 'application/json'
+    //                     },
+    //                     body: JSON.stringify({ id: artigoId, action: 'delete' })
+    //                 })
+    //                 .then(response => response.json())
+    //                 .then(data => {
+    //                     if (data.success) {
+    //                         // Recarrega a página após a exclusão
+    //                         window.location.reload();
+    //                     } else {
+    //                         alert('Erro ao excluir o artigo: ' + (data.error || 'Desconhecido'));
+    //                     }
+    //                 })
+    //                 .catch(error => console.error('Erro ao excluir artigo:', error));
+    //             }
+    //         });
+    //     });
+    // });
 
         
 
-    </script>
-
-
-
-    <script>
-        function confirmDelete(id) {
-    if (confirm('Tem certeza que deseja excluir este artigo?')) {
-        // Exibe o loader
-        document.getElementById('loading').style.display = 'block';
-
-        fetch('tcc.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ id: id, action: 'delete' })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Aguarda 4 segundos antes de recarregar a página
-                setTimeout(() => {
-                    window.location.href = data.redirect; // Redireciona para tcc.php
-                }, 4000); // 4000 milissegundos = 4 segundos
-            } else {
-                alert('Erro ao excluir o artigo: ' + (data.error || 'Desconhecido'));
-                // Oculta o loader em caso de erro
-                document.getElementById('loading').style.display = 'none';
-            }
-        })
-        .catch(error => {
-            console.error('Erro ao excluir artigo:', error);
-            // Oculta o loader em caso de erro
-            document.getElementById('loading').style.display = 'none';
-        });
-    }
-}
     </script>
 
 
