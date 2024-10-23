@@ -7,7 +7,7 @@
     <link rel="shortcut icon" href="img/logo.png">
     
 </head>
-    <p>Tetse 0011</p>
+   
 <body>
 
         <style>
@@ -560,11 +560,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $sql = "DELETE FROM artigos WHERE id = $id";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Artigo excluído com sucesso.";
+        // Redireciona para a mesma página após a exclusão
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit();
     } else {
         echo "Erro ao excluir artigo: " . $conn->error;
     }
 }
+
+
 
 // Fecha a conexão
 $conn->close();
