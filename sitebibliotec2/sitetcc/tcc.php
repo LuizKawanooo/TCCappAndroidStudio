@@ -530,6 +530,13 @@
             echo "<div class='container'>";
             while ($row = $result->fetch_assoc()) {
                 echo "<div class='artigo'>";
+
+                echo "<form action='tcc.php' method='post' style='display:inline;'>";
+                echo "<input type='hidden' name='id' value='" . $row["id"] . "'>";
+                echo "<input type='hidden' name='action' value='delete'>";
+                echo "<button class='btn-excluir' data-id='" . $row["id"] . "'>Excluir</button>";
+                echo "</form>";
+                
                 echo "<center><h1>Título: <br>" . $row["titulo"] . "</h1></center>";
 
 
@@ -537,11 +544,7 @@
                 echo "<div class='botoes'>";
                 echo "<button class='btn3' data-id='" . $row["id"] . "' onclick='abrirPopupEditar(" . $row["id"] . ", \"" . addslashes($row["titulo"]) . "\", \"" . addslashes($row["autor"]) . "\", \"" . $row["ano"] . "\")'>Editar</button>";
                 echo "<a href='download.php?id=" . $row["id"] . "' class='btn-download'>Download</a>"; // Link para download
-                echo "<form action='tcc.php' method='post' style='display:inline;'>";
-                echo "<input type='hidden' name='id' value='" . $row["id"] . "'>";
-                echo "<input type='hidden' name='action' value='delete'>";
-                echo "<button class='btn-excluir' data-id='" . $row["id"] . "'>Excluir</button>";
-                echo "</form>";
+                
                 echo "</div>";
                 echo "</div>";
             }
