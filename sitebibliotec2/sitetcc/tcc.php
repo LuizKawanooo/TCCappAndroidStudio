@@ -641,21 +641,57 @@ $conn->close();
         document.getElementById('popup-editar').style.display = 'none'; // Oculta o popup de edição
     }
 
+//         function handleDelete(event) {
+//     event.preventDefault(); // Impede o envio padrão do formulário
+
+//     const form = event.target;
+//     const formData = new FormData(form);
+
+//     fetch(form.action, {
+//         method: 'POST',
+//         body: formData
+//     })
+//     .then(response => response.text())
+//     .then(data => {
+//         location.reload(); // Recarrega a página após a exclusão
+//     })
+//     .catch(error => {
+//         console.error('Erro ao excluir artigo:', error);
+//     });
+// }
+
+
+
         function handleDelete(event) {
     event.preventDefault(); // Impede o envio padrão do formulário
 
     const form = event.target;
     const formData = new FormData(form);
 
+    // Faz a requisição de exclusão
     fetch(form.action, {
         method: 'POST',
         body: formData
     })
-    .then(response => response.text())
+    .then(response => {
+        if (response.ok) {
+            return response.text(); // Retorna a resposta se tudo estiver ok
+        } else {
+            throw new Error('Erro na exclusão');
+        }
+    })
     .then(data => {
-        location.reload(); // Recarrega a página após a exclusão
+        alert("Artigo excluído com sucesso!"); // Alerta de sucesso
+        
+        // Aqui você pode remover o artigo da interface do usuário
+        // Exemplo: se o artigo tiver um ID específico
+        const articleElement = document.getElementById(`article-${formData.get('id')}`);
+        if (articleElement) {
+            articleElement.remove(); // Remove o elemento do DOM
+        }
     })
     .catch(error => {
+        alert("Erro ao excluir artigo: " + error.message); // Alerta de erro
         console.error('Erro ao excluir artigo:', error);
     });
 }
