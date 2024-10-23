@@ -640,6 +640,26 @@ $conn->close();
         document.getElementById('popup-editar').style.display = 'none'; // Oculta o popup de edição
     }
 
+//         function handleDelete(event) {
+//     event.preventDefault(); // Impede o envio padrão do formulário
+
+//     const form = event.target;
+//     const formData = new FormData(form);
+
+//     fetch(form.action, {
+//         method: 'POST',
+//         body: formData
+//     })
+//     .then(response => response.text())
+//     // .then(data => {
+//     //     location.reload(); // Recarrega a página após a exclusão
+//     // })
+//     .catch(error => {
+//         console.error('Erro ao excluir artigo:', error);
+//     });
+// }
+
+
         function handleDelete(event) {
     event.preventDefault(); // Impede o envio padrão do formulário
 
@@ -650,14 +670,24 @@ $conn->close();
         method: 'POST',
         body: formData
     })
-    .then(response => response.text())
+    .then(response => {
+        if (response.ok) {
+            return response.text(); // Obtém a resposta como texto
+        } else {
+            throw new Error('Erro na exclusão do artigo');
+        }
+    })
     .then(data => {
-        location.reload(); // Recarrega a página após a exclusão
+        console.log('Artigo excluído com sucesso:', data);
+        setTimeout(() => {
+            location.reload(); // Recarrega a página após 1.5 segundos
+        }, 1250);
     })
     .catch(error => {
         console.error('Erro ao excluir artigo:', error);
     });
 }
+
 
 
 
