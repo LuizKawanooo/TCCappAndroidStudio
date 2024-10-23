@@ -523,7 +523,7 @@
                 echo "<form action='tcc.php' method='post' style='display:inline;'>";
                 echo "<input type='hidden' name='id' value='" . $row["id"] . "'>";
                 echo "<input type='hidden' name='action' value='delete'>";
-                echo "<input type='submit' value='Excluir' class='btn-delete' onclick='return confirm('Tem certeza que deseja excluir este artigo?');'>";
+                echo "<input type='button' value='Excluir' class='btn-excluir' data-id='" . $row["id"] . "' onclick='confirmDelete(" . $row["id"] . ")'>";
                 echo "</form>";
                 echo "</div>";
                 echo "</div>";
@@ -660,41 +660,43 @@ $conn->close();
 // }
 
 
-        function handleDelete(event) {
-    event.preventDefault(); // Impede o envio padrão do formulário
-
-    const form = event.target;
-    const formData = new FormData(form);
-
-    fetch(form.action, {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => {
-        if (response.ok) {
-            return response.text(); // Obtém a resposta como texto
-            location.reload(); // Recarrega a página após 1.5 segundos
-
-        } else {
-            throw new Error('Erro na exclusão do artigo');
-        }
-    })
-    .catch(error => {
-        console.error('Erro ao excluir artigo:', error);
-    });
-}
-
-
-
-
-
-
-
-
-
-
+        
 
     </script>
+
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.btn-excluir').forEach(button => {
+        button.addEventListener('click', function() {
+            const artigoId = this.getAttribute('data-id');
+            
+            if (confirm('Tem certeza de que deseja excluir este artigo?')) {
+                fetch('tcc.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id: artigoId, action: 'delete' })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Recarrega a página após a exclusão
+                        window.location.reload();
+                    } else {
+                        alert('Erro ao excluir o artigo: ' + (data.error || 'Desconhecido'));
+                    }
+                })
+                .catch(error => console.error('Erro ao excluir o artigo:', error));
+            }
+        });
+    });
+});
+</script>
 
 
 
