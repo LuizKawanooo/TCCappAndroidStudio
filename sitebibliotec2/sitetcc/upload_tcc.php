@@ -90,9 +90,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
 
     // Executa a consulta
     if ($stmt->execute()) {
-        echo "TCC adicionado com sucesso!";
+        header("Location: tcc.php");
+        exit();    
     } else {
-        echo "Erro ao adicionar TCC: " . $stmt->error;
+        header("Location: tcc.php?tccNaoAdicionado");
+        exit();   
     }
 
     // Fecha a declaração
