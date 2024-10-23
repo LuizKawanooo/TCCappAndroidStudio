@@ -443,6 +443,12 @@
                 font-size: 10px;
             }
 
+            .btn-excluir{
+                position: absolute;
+                top: 13%;
+                left: 13%;
+            }
+
   
         </style>
 
