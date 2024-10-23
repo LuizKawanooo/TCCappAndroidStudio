@@ -476,7 +476,7 @@
 </div>
 
 <div class="title">
-        <h1>TRABALHOS DE CONCLUSÃO DE CUSO</h1>
+        <h1>TRABALHOS DE CONCLUSÃO DE CURSO</h1>
 </div>
 
 <!-- <div class="adicionar-artigo-btn" id="adicionar-artigo-btn">
@@ -562,6 +562,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $sql = "DELETE FROM artigos WHERE id = $id";
 
     if ($conn->query($sql) === TRUE) {
+        header("Location: tcc.php");
         exit();
     } else {
         header("Location: tcc.php");
