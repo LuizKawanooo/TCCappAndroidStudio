@@ -640,24 +640,26 @@ $conn->close();
         document.getElementById('popup-editar').style.display = 'none'; // Oculta o popup de edição
     }
 
-//         function handleDelete(event) {
-//     event.preventDefault(); // Impede o envio padrão do formulário
 
-//     const form = event.target;
-//     const formData = new FormData(form);
+        
+        function handleDelete(event) {
+    event.preventDefault(); // Impede o envio padrão do formulário
 
-//     fetch(form.action, {
-//         method: 'POST',
-//         body: formData
-//     })
-//     .then(response => response.text())
-//     // .then(data => {
-//     //     location.reload(); // Recarrega a página após a exclusão
-//     // })
-//     .catch(error => {
-//         console.error('Erro ao excluir artigo:', error);
-//     });
-// }
+    const form = event.target;
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    // .then(data => {
+    //     location.reload(); // Recarrega a página após a exclusão
+    // })
+    .catch(error => {
+        console.error('Erro ao excluir artigo:', error);
+    });
+}
 
 
         
@@ -667,64 +669,6 @@ $conn->close();
 
 
 
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.btn-excluir').forEach(button => {
-        button.addEventListener('click', function() {
-            const artigoId = this.getAttribute('data-id');
-            
-            if (confirm('Tem certeza de que deseja excluir este artigo?')) {
-                fetch('tcc.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ id: artigoId, action: 'delete' })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Recarrega a página após a exclusão
-                        window.location.reload();
-                    } else {
-                        alert('Erro ao excluir o artigo: ' + (data.error || 'Desconhecido'));
-                    }
-                })
-                .catch(error => console.error('Erro ao excluir o artigo:', error));
-            }
-        });
-    });
-});
-</script>
-
-
-
-
-<script>
-function handleDelete(event) {
-    event.preventDefault(); // Impede o envio padrão do formulário
-
-    const form = event.target; // O formulário que disparou o evento
-    const formData = new FormData(form); // Cria um objeto FormData a partir do formulário
-
-    fetch(form.action, {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json()) // Espera a resposta em JSON
-    .then(data => {
-        if (data.success) {
-            location.reload(); // Recarrega a página após a exclusão
-        } else {
-            alert('Erro ao excluir artigo: ' + (data.error || 'Desconhecido'));
-        }
-    })
-    .catch(error => {
-        console.error('Erro ao excluir artigo:', error);
-    });
-}
-</script>
 
 
 
