@@ -476,7 +476,7 @@
 </div>
 
 <div class="title">
-        <h1>TRABALHOS DE CONCLUSÃO DE CURSO</h1>
+        <h1>TRABALHOS DE CONCLUSÃO DE CRSO</h1>
 </div>
 
 <!-- <div class="adicionar-artigo-btn" id="adicionar-artigo-btn">
@@ -694,94 +694,5 @@ $conn->close();
 
 
 
-
-
-
-
-
-
-
-<!-- <script>
-                    const adicionarArtigoBtn = document.getElementById('adicionar-artigo-btn');
-                    const editarArtigoBtn = document.getElementById('editar-artigo-btn');
-                    const modal = document.getElementById('popup');
-                    const modale = document.getElementById('popup-editar');
-                    const closeModalBtn = document.querySelector('.close');
-                    const closeModalBtne = document.querySelector('.closee');
-                    const salvarArtigoBtn = document.getElementById('pop');
-                    const ArtigosContainer = document.getElementById('artigos-container');
-
-                    let contadorArtigod = 0; // Contador de livros adicionados
-                    let artigoEditando = null; // Variável para armazenar o livro que está sendo editado
-
-                    adicionarArtigoBtn.addEventListener('click', () => {
-                    limparFormulario(); // Limpa o formulário antes de abrir o popup
-                    modal.style.display = 'block';
-                    });
-
-                    editarArtigoBtn.addEventListener('click', () => {
-                    limparFormulario(); // Limpa o formulário antes de abrir o popup
-                    modal.style.display = 'block';
-                    });
-
-
-                    closeModalBtn.addEventListener('click', () => {
-                    modal.style.display = 'none';
-                    });
-
-                    closeModalBtne.addEventListener('click', () => {
-                    modale.style.display = 'none';
-                    });
-
-                    salvarArtigoBtn.addEventListener('submit', (event) => {
-                    event.preventDefault(); // Evita que o formulário seja enviado
-                    const nome = document.getElementById('artigo-nome').value;
-                    const autor = document.getElementById('artigo-autor').value;
-                    const capaFile = document.getElementById('livro-capa').files[0]; // Nova linha para obter o arquivo de imagem
-
-                    });
-
-
-                    function limparFormulario() {
-                    // Limpa todos os campos do formulário
-                    document.getElementById('artigo-nome').value = '';
-                    document.getElementById('artigo-capa').value = '';
-                    }
-                    
-
-            </script>
-
-        
-            <script>
-                
-
-                document.querySelectorAll('.btn3').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const artigoId = this.getAttribute('data-id');
-
-                    fetch(`get_artigo.php?id=${artigoId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            document.getElementById('editar-id').value = data.id;
-                            document.getElementById('editar-titulo').value = data.titulo;
-                            document.getElementById('editar-autor').value = data.autor;
-                            document.getElementById('editar-ano').value = data.ano;
-                            document.getElementById('popup-editar').style.display = 'flex'; // Exibe a popup
-                        })
-                        .catch(error => console.error('Erro ao carregar dados do livro:', error));
-                });
-            });
-
-            function closePopupEditar() {
-                document.getElementById('popup-editar').style.display = 'none'; // Oculta a popup
-            }
-            function closePopup() {
-                document.getElementById('popup').style.display = 'none'; // Oculta a popup
-            }
-
-
-                // Código existente
-            </script>
- -->
 </body>
 </html>
