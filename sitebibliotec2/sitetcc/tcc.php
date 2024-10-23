@@ -476,7 +476,7 @@
 </div>
 
 <div class="title">
-        <h1>TRABALHOS DE CONCLUSÃO DE CURSO</h1>
+        <h1>TRABALHOS DE CONCLUSÃO DE CUSO</h1>
 </div>
 
 <!-- <div class="adicionar-artigo-btn" id="adicionar-artigo-btn">
