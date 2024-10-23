@@ -444,9 +444,18 @@
             }
 
             .btn-excluir{
-                position: absolute;
-                top: 13%;
-                left: 13%;
+                margin-left: 0px;
+                margin-top: -360px;
+                background: red;
+                border: none;
+                width: 70px;
+                height: 30px;
+                border-radius: 3px;
+                color: white;
+                font-weight: bold;
+                font-family: Arial, Helvetica, sans-serif;
+                box-shadow: 2px 11px 31px -10px rgba(0, 0, 0, 0.6);
+                cursor: pointer;
             }
 
   
