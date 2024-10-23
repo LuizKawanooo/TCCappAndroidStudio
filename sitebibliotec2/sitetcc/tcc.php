@@ -680,10 +680,6 @@ $conn->close();
         .then(data => {
         location.reload(); // Recarrega a página após a exclusão
     })
-        .then(response => response.text())
-        .then(data => {
-        location.reload(); // Recarrega a página após a exclusão
-    })
     .catch(error => {
         console.error('Erro ao excluir artigo:', error);
     });
