@@ -29,7 +29,7 @@
             .footer {
             width: 101vw;
             height:50vh;
-            position: absolute;
+            position: fixed;
             bottom: -10%;
             left: 0;
             fill: #ffffff;
