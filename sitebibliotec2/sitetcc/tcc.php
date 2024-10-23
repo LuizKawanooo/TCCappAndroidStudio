@@ -673,15 +673,11 @@ $conn->close();
     .then(response => {
         if (response.ok) {
             return response.text(); // Obtém a resposta como texto
+            location.reload(); // Recarrega a página após 1.5 segundos
+
         } else {
             throw new Error('Erro na exclusão do artigo');
         }
-    })
-    .then(data => {
-        console.log('Artigo excluído com sucesso:', data);
-        setTimeout(() => {
-            location.reload(); // Recarrega a página após 1.5 segundos
-        }, 1250);
     })
     .catch(error => {
         console.error('Erro ao excluir artigo:', error);
