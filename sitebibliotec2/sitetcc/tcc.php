@@ -530,7 +530,9 @@
             while ($row = $result->fetch_assoc()) {
                 echo "<div class='artigo'>";
                 echo "<center><h1>Título: <br>" . $row["titulo"] . "</h1></center>";
-                
+
+                echo "<input type='hidden' name='id' value='" . $row["id"] . "'>";
+                echo "<input type='hidden' name='action' value='delete'>";
                 echo "<button class='btn-excluir' data-id='" . $row["id"] . "'>Excluir</button>";
                 
                 echo "<div class='botoes'>";
