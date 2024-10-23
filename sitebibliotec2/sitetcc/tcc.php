@@ -9,7 +9,7 @@
 </head>
    
 <body>
-    <p>olaaaaaaaaaaaaa<p>
+
 
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
@@ -115,7 +115,6 @@
                 text-align: left;
                 align-items: center;
                 display: grid;
-                padding-top: 70px;
                 color: #252527;
                 -webkit-box-shadow: 2px 11px 31px -10px rgba(0,0,0,0.6);
                 -moz-box-shadow: 2px 11px 31px -10px rgba(0,0,0,0.6);
@@ -445,8 +444,6 @@
             }
 
             .btn-excluir{
-                margin-left: 0px;
-                margin-top: -360px;
                 background: red;
                 border: none;
                 width: 70px;
@@ -457,6 +454,8 @@
                 font-family: Arial, Helvetica, sans-serif;
                 box-shadow: 2px 11px 31px -10px rgba(0, 0, 0, 0.6);
                 cursor: pointer;
+                position: relative;
+                left: -110%;
             }
 
   
