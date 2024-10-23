@@ -564,7 +564,7 @@
                 echo "<script>
             setTimeout(function() {
                 window.location.href = 'tcc.php';
-            }, 3000);
+            }, 500);
           </script>";
         } else {
             exit();
