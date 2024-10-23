@@ -666,24 +666,28 @@ $conn->close();
 
 
         
-//         function handleDelete(event) {
-//     event.preventDefault(); // Impede o envio padrão do formulário
+        function handleDelete(event) {
+    event.preventDefault(); // Impede o envio padrão do formulário
 
-//     const form = event.target;
-//     const formData = new FormData(form);
+    const form = event.target;
+    const formData = new FormData(form);
 
-//     fetch(form.action, {
-//         method: 'POST',
-//         body: formData
-//     })
-//     .then(response => response.text())
-//         .then(data => {
-//         location.reload(); // Recarrega a página após a exclusão
-//     })
-//     .catch(error => {
-//         console.error('Erro ao excluir artigo:', error);
-//     });
-// }
+    fetch(form.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+        .then(data => {
+        location.reload(); // Recarrega a página após a exclusão
+    })
+        .then(response => response.text())
+        .then(data => {
+        location.reload(); // Recarrega a página após a exclusão
+    })
+    .catch(error => {
+        console.error('Erro ao excluir artigo:', error);
+    });
+}
 
 
         
