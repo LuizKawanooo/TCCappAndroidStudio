@@ -540,42 +540,7 @@
     ?>
 
 
-       <style>
-        .notification {
-            display: none; /* Inicialmente oculta */
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #4CAF50; /* Verde */
-            color: white;
-            padding: 15px;
-            border-radius: 5px;
-            z-index: 1000;
-            transition: opacity 0.5s ease;
-        }
-    </style>
-
-        <?php if ($message): ?>
-        <div class="notification" id="notification">
-            <?php echo $message; ?>
-        </div>
-    <?php endif; ?>
-
-    <script>
-        // Exibir a notificação se houver mensagem
-        window.onload = function() {
-            const notification = document.getElementById('notification');
-            if (notification) {
-                notification.style.display = 'block'; // Exibe a notificação
-                setTimeout(() => {
-                    notification.style.opacity = 0; // Inicia a transição para desaparecer
-                    setTimeout(() => {
-                        notification.style.display = 'none'; // Remove do DOM após a animação
-                    }, 500); // Aguarda meio segundo
-                }, 3000); // Aguarda 3 segundos antes de iniciar a remoção
-            }
-        };
-    </script>
+      
 
 
 
@@ -597,11 +562,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $sql = "DELETE FROM artigos WHERE id = $id";
 
     if ($conn->query($sql) === TRUE) {
-        $_SESSION['message'] = "Artigo excluído com sucesso!";
         header("Location: tcc.php");
         exit();
     } else {
-        $_SESSION['error'] = "Erro ao excluir artigo: " . $conn->error;
+        header("Location: tcc.php");
+        exit();
     }
 }
 
