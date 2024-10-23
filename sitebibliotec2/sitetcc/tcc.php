@@ -640,61 +640,27 @@ $conn->close();
         document.getElementById('popup-editar').style.display = 'none'; // Oculta o popup de edição
     }
 
-//         function handleDelete(event) {
-//     event.preventDefault(); // Impede o envio padrão do formulário
-
-//     const form = event.target;
-//     const formData = new FormData(form);
-
-//     fetch(form.action, {
-//         method: 'POST',
-//         body: formData
-//     })
-//     .then(response => response.text())
-//     .then(data => {
-//         location.reload(); // Recarrega a página após a exclusão
-//     })
-//     .catch(error => {
-//         console.error('Erro ao excluir artigo:', error);
-//     });
-// }
-
-
-
         function handleDelete(event) {
     event.preventDefault(); // Impede o envio padrão do formulário
 
     const form = event.target;
     const formData = new FormData(form);
 
-    // Faz a requisição de exclusão
     fetch(form.action, {
         method: 'POST',
         body: formData
     })
-    .then(response => {
-        if (response.ok) {
-            return response.text(); // Retorna a resposta se tudo estiver ok
-        } else {
-            throw new Error('Erro na exclusão');
-        }
-    })
+    .then(response => response.text())
     .then(data => {
-            alert("Artigo excluído com sucesso!"); // Alerta de sucesso
-            window.location.href = "tcc.php"; // Redireciona para tcc.php
-        
-        // Aqui pode remover o artigo da interface do usuário
-        // se o artigo tiver um ID específico
-        const articleElement = document.getElementById(`article-${formData.get('id')}`);
-        if (articleElement) {
-            articleElement.remove(); // Remove o elemento do DOM
-        }
+        location.reload(); // Recarrega a página após a exclusão
     })
     .catch(error => {
-        alert("Erro ao excluir artigo: " + error.message); // Alerta de erro
         console.error('Erro ao excluir artigo:', error);
     });
 }
+
+
+
 
 
 
