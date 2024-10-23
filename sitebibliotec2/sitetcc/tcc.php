@@ -5,6 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bibliotec - TCC</title>
     <link rel="shortcut icon" href="img/logo.png">
+
+
+    <script>
+        function confirmDelete(id) {
+            if (confirm('Tem certeza que deseja excluir este artigo?')) {
+                fetch('tcc.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id: id, action: 'delete' })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = data.redirect;
+                    } else {
+                        alert('Erro ao excluir o artigo: ' + (data.error || 'Desconhecido'));
+                    }
+                })
+                .catch(error => console.error('Erro ao excluir artigo:', error));
+            }
+        }
+    </script>
+
     
 </head>
    
@@ -524,7 +549,8 @@
                 echo "<form action='tcc.php' method='post' style='display:inline;'>";
                 echo "<input type='hidden' name='id' value='" . $row["id"] . "'>";
                 echo "<input type='hidden' name='action' value='delete'>";
-                echo "<button class='btn-excluir' data-id='" . $row["id"] . "'>Excluir</button>";
+                // echo "<button class='btn-excluir' data-id='" . $row["id"] . "'>Excluir</button>";
+                echo "<button class='btn-excluir' onclick='confirmDelete(" . $row["id"] . ")'>Excluir</button>";
                 echo "</form>";
                 echo "</div>";
                 echo "</div>";
@@ -547,33 +573,29 @@
 
 
 <?php
-    // Conexão com o banco de dados
-    $servername = "tccappionic-bd.mysql.uhserver.com";
-    $username = "ionic_perfil_bd";
-    $password = "{[UOLluiz2019";
-    $dbname = "tccappionic_bd";
-    
-    $conn = new mysqli($servername, $username, $password, $dbname);
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-    
-    // Verifica se a ação é de exclusão
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete') {
-        $id = intval($_POST['id']); // Sanitiza o ID
-        $sql = "DELETE FROM artigos WHERE id = $id";
-    
-        if ($conn->query($sql) === TRUE) {
-            echo json_encode(['success' => true, 'redirect' => 'tcc.php']); // Adiciona a URL de redirecionamento
-            exit();
-        } else {
-            echo json_encode(['success' => false, 'error' => $conn->error]);
-            exit();
-        }
+// Conexão com o banco de dados
+$servername = "tccappionic-bd.mysql.uhserver.com";
+$username = "ionic_perfil_bd";
+$password = "{[UOLluiz2019";
+$dbname = "tccappionic_bd";
 
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
+// Verifica se a ação é de exclusão
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete') {
+    $id = intval($_POST['id']); // Sanitiza o ID
+    $sql = "DELETE FROM artigos WHERE id = $id";
 
+    if ($conn->query($sql) === TRUE) {
+        echo json_encode(['success' => true, 'redirect' => 'tcc.php']);
+    } else {
+        echo json_encode(['success' => false, 'error' => $conn->error]);
+    }
+    exit();
+}
 
 // Fecha a conexão
 $conn->close();
