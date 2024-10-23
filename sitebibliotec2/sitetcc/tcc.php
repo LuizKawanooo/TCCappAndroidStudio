@@ -6,27 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bibliotec - TCC</title>
     <link rel="shortcut icon" href="img/logo.png">
-
-    <script>
-        let lastCount = 0;
-
-        function checkForChanges() {
-            fetch('check_changes.php')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.count != lastCount) {
-                        lastCount = data.count;
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 2000); // Recarrega após 2 segundos
-                    }
-                })
-                .catch(error => console.error('Erro ao verificar mudanças:', error));
-        }
-
-        // Chama a função a cada 5 segundos
-        setInterval(checkForChanges, 5000);
-    </script>
 </head>
    
 <body>
@@ -504,34 +483,7 @@
     Adicionar
 </div> -->
 
-
-
-
-
-
-
-    <div id="loading" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); text-align: center; z-index: 1000;">
-    <h2>Carregando...</h2>
-    <div class="loader"></div>
-</div>
-
-<style>
-.loader {
-    border: 16px solid #f3f3f3;
-    border-top: 16px solid #3498db;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-</style>
-
-    
+   
 
 
 
@@ -609,7 +561,11 @@
         $sql = "DELETE FROM artigos WHERE id = $id";
     
         if ($conn->query($sql) === TRUE) {
-            exit();
+                echo "<script>
+            setTimeout(function() {
+                window.location.href = 'tcc.php';
+            }, 3000);
+          </script>";
         } else {
             exit();
         }
