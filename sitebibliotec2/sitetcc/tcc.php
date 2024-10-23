@@ -530,7 +530,7 @@
             }
             echo "</div>";
         } else {
-            echo "<p>Nenhum artigo encontrado.</p>";
+            echo "<p style='position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);'>Nenhum artigo encontrado.</p>";
         }
     } else {
         echo "Erro na consulta: " . $conn->error;
