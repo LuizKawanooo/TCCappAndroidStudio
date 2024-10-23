@@ -560,9 +560,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $sql = "DELETE FROM artigos WHERE id = $id";
 
     if ($conn->query($sql) === TRUE) {
-        // Redireciona para tcc.php após a exclusão
-        header("Location: tcc.php");
-        exit();
+        echo "Artigo excluído com sucesso.";
     } else {
         echo "Erro ao excluir artigo: " . $conn->error;
     }
@@ -652,6 +650,25 @@ $conn->close();
     function closePopupEditar() {
         document.getElementById('popup-editar').style.display = 'none'; // Oculta o popup de edição
     }
+
+        function handleDelete(event) {
+    event.preventDefault(); // Impede o envio padrão do formulário
+
+    const form = event.target;
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        location.reload(); // Recarrega a página após a exclusão
+    })
+    .catch(error => {
+        console.error('Erro ao excluir artigo:', error);
+    });
+}
 
 
 
