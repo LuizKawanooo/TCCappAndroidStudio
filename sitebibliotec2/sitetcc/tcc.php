@@ -680,10 +680,11 @@ $conn->close();
         }
     })
     .then(data => {
-        alert("Artigo excluído com sucesso!"); // Alerta de sucesso
+            alert("Artigo excluído com sucesso!"); // Alerta de sucesso
+            window.location.href = "tcc.php"; // Redireciona para tcc.php
         
-        // Aqui você pode remover o artigo da interface do usuário
-        // Exemplo: se o artigo tiver um ID específico
+        // Aqui pode remover o artigo da interface do usuário
+        // se o artigo tiver um ID específico
         const articleElement = document.getElementById(`article-${formData.get('id')}`);
         if (articleElement) {
             articleElement.remove(); // Remove o elemento do DOM
