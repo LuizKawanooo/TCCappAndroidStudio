@@ -540,29 +540,29 @@
     ?>
 
 <script>
-function handleDelete(event) {
-    event.preventDefault(); // Impede o envio padrão do formulário
-
-    const form = event.target.closest('form'); // Encontra o formulário mais próximo
-    const artigoId = form.querySelector('input[name="id"]').value; // Obtém o ID do artigo
-    const formData = new FormData(form);
-
-    fetch(form.action, {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.text())
-    .then(data => {
-        // Se a exclusão for bem-sucedida, remova o artigo do DOM
-        const artigoElement = document.getElementById('artigo-' + artigoId);
-        if (artigoElement) {
-            artigoElement.remove(); // Remove o artigo do DOM
+        function handleDelete(event) {
+            event.preventDefault(); // Impede o envio padrão do formulário
+        
+            const form = event.target.closest('form'); // Encontra o formulário mais próximo
+            const artigoId = form.querySelector('input[name="id"]').value; // Obtém o ID do artigo
+            const formData = new FormData(form);
+        
+            fetch(form.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                // Se a exclusão for bem-sucedida, remova o artigo do DOM
+                const artigoElement = document.getElementById('artigo-' + artigoId);
+                if (artigoElement) {
+                    artigoElement.remove(); // Remove o artigo do DOM
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao excluir artigo:', error);
+            });
         }
-    })
-    .catch(error => {
-        console.error('Erro ao excluir artigo:', error);
-    });
-}
 </script>
       
 
@@ -666,24 +666,24 @@ $conn->close();
 
 
         
-        function handleDelete(event) {
-    event.preventDefault(); // Impede o envio padrão do formulário
+//         function handleDelete(event) {
+//     event.preventDefault(); // Impede o envio padrão do formulário
 
-    const form = event.target;
-    const formData = new FormData(form);
+//     const form = event.target;
+//     const formData = new FormData(form);
 
-    fetch(form.action, {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.text())
-        .then(data => {
-        location.reload(); // Recarrega a página após a exclusão
-    })
-    .catch(error => {
-        console.error('Erro ao excluir artigo:', error);
-    });
-}
+//     fetch(form.action, {
+//         method: 'POST',
+//         body: formData
+//     })
+//     .then(response => response.text())
+//         .then(data => {
+//         location.reload(); // Recarrega a página após a exclusão
+//     })
+//     .catch(error => {
+//         console.error('Erro ao excluir artigo:', error);
+//     });
+// }
 
 
         
