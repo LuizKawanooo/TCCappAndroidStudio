@@ -523,7 +523,7 @@
                 echo "<form action='tcc.php' method='post' style='display:inline;'>";
                 echo "<input type='hidden' name='id' value='" . $row["id"] . "'>";
                 echo "<input type='hidden' name='action' value='delete'>";
-                echo "<input type='button' value='Excluir' class='btn-excluir' data-id='" . $row["id"] . "' onclick='handleDelete(event)'>";
+                echo "<input type='submit' value='Excluir' class='btn-delete' onclick='return confirm('Tem certeza que deseja excluir este artigo?');'>";
                 echo "</form>";
                 echo "</div>";
                 echo "</div>";
