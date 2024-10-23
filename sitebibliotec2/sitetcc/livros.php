@@ -224,26 +224,24 @@
                 top: 15%;
             }
             .adicionar-livro-btn{
-                width: 120px;
                 font-family: Roboto, sans-serif;
                 font-size: 14px;
                 color: #fff;
-                background-color: #10B007;
+                background-color: #005aeb;
                 padding: 10px 30px;
                 border: none;
-                -webkit-box-shadow: 2px 11px 31px -10px rgba(0,0,0,0.6);
-                -moz-box-shadow: 2px 11px 31px -10px rgba(0,0,0,0.6);
-                box-shadow: 2px 11px 31px -10px rgba(0,0,0,0.6);
+                -webkit-box-shadow: 2px 11px 31px -10px rgba(0, 0, 0, 0.6);
+                -moz-box-shadow: 2px 11px 31px -10px rgba(0, 0, 0, 0.6);
+                box-shadow: 2px 11px 31px -10px rgba(0, 0, 0, 0.6);
                 border-radius: 50px;
                 display: flex;
                 flex-direction: row;
                 align-items: center;
                 cursor: pointer;
-                position: relative;
-                top: 160px;
-                left: 13%;
-                transform: translate(-50%,-50%);
-                z-index: 0;
+                position: absolute;
+                top: 27%;
+                left: 50%;
+                transform: translate(-50%, -50%);
             }
             
             .barra-de-pesquisa {
