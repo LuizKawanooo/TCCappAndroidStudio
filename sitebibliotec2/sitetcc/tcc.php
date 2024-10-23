@@ -564,12 +564,13 @@
         $sql = "DELETE FROM artigos WHERE id = $id";
     
         if ($conn->query($sql) === TRUE) {
-            echo json_encode(['success' => true]); // Resposta em JSON
+            echo json_encode(['success' => true, 'redirect' => 'tcc.php']); // Adiciona a URL de redirecionamento
             exit();
         } else {
-            echo json_encode(['success' => false, 'error' => $conn->error]); // Resposta em JSON
+            echo json_encode(['success' => false, 'error' => $conn->error]);
             exit();
         }
+
 }
 
 
