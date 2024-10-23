@@ -701,7 +701,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+<script>
+function handleDelete(event) {
+    event.preventDefault(); // Impede o envio padrão do formulário
 
+    const form = event.target; // O formulário que disparou o evento
+    const formData = new FormData(form); // Cria um objeto FormData a partir do formulário
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json()) // Espera a resposta em JSON
+    .then(data => {
+        if (data.success) {
+            location.reload(); // Recarrega a página após a exclusão
+        } else {
+            alert('Erro ao excluir artigo: ' + (data.error || 'Desconhecido'));
+        }
+    })
+    .catch(error => {
+        console.error('Erro ao excluir artigo:', error);
+    });
+}
+</script>
 
 
 
