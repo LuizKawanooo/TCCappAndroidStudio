@@ -6,7 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bibliotec - TCC</title>
     <link rel="shortcut icon" href="img/logo.png">
-    
+
+    <script>
+        let lastCount = 0;
+
+        function checkForChanges() {
+            fetch('check_changes.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.count != lastCount) {
+                        lastCount = data.count;
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2000); // Recarrega após 2 segundos
+                    }
+                })
+                .catch(error => console.error('Erro ao verificar mudanças:', error));
+        }
+
+        // Chama a função a cada 5 segundos
+        setInterval(checkForChanges, 5000);
+    </script>
 </head>
    
 <body>
