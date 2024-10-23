@@ -523,7 +523,7 @@
                 echo "<form action='tcc.php' method='post' style='display:inline;'>";
                 echo "<input type='hidden' name='id' value='" . $row["id"] . "'>";
                 echo "<input type='hidden' name='action' value='delete'>";
-                echo "<input type='submit' value='Excluir' class='btn-delete' onclick='return confirm(\"Tem certeza que deseja excluir este artigo?\");'>";
+                echo "<input type="submit" value="Excluir" class="btn-delete" onclick="return confirm('Tem certeza que deseja excluir este artigo?');">";
                 echo "</form>";
                 echo "</div>";
                 echo "</div>";
@@ -538,6 +538,41 @@
 
     $conn->close();
     ?>
+
+
+
+
+    <?php
+// Conexão com o banco de dados
+$servername = "tccappionic-bd.mysql.uhserver.com";
+$username = "ionic_perfil_bd";
+$password = "{[UOLluiz2019";
+$dbname = "tccappionic_bd";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Verifica se a ação é de exclusão
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete') {
+    $id = intval($_POST['id']); // Sanitiza o ID
+    $sql = "DELETE FROM artigos WHERE id = $id";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "Artigo excluído com sucesso.";
+    } else {
+        echo "Erro ao excluir artigo: " . $conn->error;
+    }
+}
+
+// Fecha a conexão
+$conn->close();
+?>
+
+
+
+    
     
 <div id="popup" class="popup" style="display: none;">
     <div class="table">
