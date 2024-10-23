@@ -508,20 +508,6 @@
         die("Connection failed: " . $conn->connect_error);
     }
 
-    // Verifica se a ação é de exclusão
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete') {
-        $id = intval($_POST['id']); // Sanitiza o ID
-        $sql = "DELETE FROM artigos WHERE id = $id";
-
-        if ($conn->query($sql) === TRUE) {
-            echo json_encode(['success' => true]); // Resposta em JSON
-            exit();
-        } else {
-            echo json_encode(['success' => false, 'error' => $conn->error]); // Resposta em JSON
-            exit();
-        }
-    }
-
     // Consulta SQL para recuperar os artigos cadastrados
     $sql = "SELECT * FROM artigos";
     $result = $conn->query($sql);
@@ -530,18 +516,22 @@
         if ($result->num_rows > 0) {
             echo "<div class='container'>";
             while ($row = $result->fetch_assoc()) {
-                echo "<div class='artigo' id='artigo-" . $row["id"] . "'>";
-                echo "<center><h1>Título: <br>" . htmlspecialchars($row["titulo"]) . "</h1></center>";
+                echo "<div class='artigo'>";
+                echo "<center><h1>Título: <br>" . $row["titulo"] . "</h1></center>";
                 echo "<div class='botoes'>";
                 echo "<button class='btn3' data-id='" . $row["id"] . "' onclick='abrirPopupEditar(" . $row["id"] . ", \"" . addslashes($row["titulo"]) . "\", \"" . addslashes($row["autor"]) . "\", \"" . $row["ano"] . "\")'>Editar</button>";
-                echo "<a href='download.php?id=" . $row["id"] . "' class='btn-download'>Download</a>";
-                echo "<button class='btn-excluir' data-id='" . $row["id"] . "'>Excluir</button>"; // Mudei para botão
+                echo "<a href='download.php?id=" . $row["id"] . "' class='btn-download'>Download</a>"; // Link para download
+                echo "<form action='tcc.php' method='post' style='display:inline;'>";
+                echo "<input type='hidden' name='id' value='" . $row["id"] . "'>";
+                echo "<input type='hidden' name='action' value='delete'>";
+                echo "<button class='btn-excluir' data-id='" . $row["id"] . "'>Excluir</button>";
+                echo "</form>";
                 echo "</div>";
                 echo "</div>";
             }
             echo "</div>";
         } else {
-            echo "<p style='color:#fff; font-size:20px;'>Nenhum artigo encontrado.</p>";
+            echo "<p style='position: absolute;color:#fff; font-size:20px; top: 50%; left: 50%; transform: translate(-50%, -50%);'>Nenhum artigo encontrado.</p>";
         }
     } else {
         echo "Erro na consulta: " . $conn->error;
@@ -550,35 +540,43 @@
     $conn->close();
     ?>
 
+    
+
       
 
 
 
-    <?php
-// Conexão com o banco de dados
-$servername = "tccappionic-bd.mysql.uhserver.com";
-$username = "ionic_perfil_bd";
-$password = "{[UOLluiz2019";
-$dbname = "tccappionic_bd";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Verifica se a ação é de exclusão
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete') {
-    $id = intval($_POST['id']); // Sanitiza o ID
-    $sql = "DELETE FROM artigos WHERE id = $id";
-
-    if ($conn->query($sql) === TRUE) {
-        
-        exit();
-    } else {
-        header("Location: tcc.php");
-        exit();
+<?php
+    // Conexão com o banco de dados
+    $servername = "tccappionic-bd.mysql.uhserver.com";
+    $username = "ionic_perfil_bd";
+    $password = "{[UOLluiz2019";
+    $dbname = "tccappionic_bd";
+    
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
     }
+    
+    // Verifica se a ação é de exclusão
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete') {
+        $id = intval($_POST['id']); // Sanitiza o ID
+        $sql = "DELETE FROM artigos WHERE id = $id";
+    
+        if ($conn->query($sql) === TRUE) {
+            echo json_encode(['success' => true]); // Resposta em JSON
+            exit();
+        } else {
+            echo json_encode(['success' => false, 'error' => $conn->error]); // Resposta em JSON
+            exit();
+        }
 }
+
+
+
+// Fecha a conexão
+$conn->close();
+?>
 
 
 
