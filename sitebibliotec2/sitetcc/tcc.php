@@ -495,6 +495,7 @@
         Adicionar
     </div>
 
+   
     <?php
     // Conexão com o banco de dados
     $servername = "tccappionic-bd.mysql.uhserver.com";
@@ -507,6 +508,20 @@
         die("Connection failed: " . $conn->connect_error);
     }
 
+    // Verifica se a ação é de exclusão
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete') {
+        $id = intval($_POST['id']); // Sanitiza o ID
+        $sql = "DELETE FROM artigos WHERE id = $id";
+
+        if ($conn->query($sql) === TRUE) {
+            echo json_encode(['success' => true]); // Resposta em JSON
+            exit();
+        } else {
+            echo json_encode(['success' => false, 'error' => $conn->error]); // Resposta em JSON
+            exit();
+        }
+    }
+
     // Consulta SQL para recuperar os artigos cadastrados
     $sql = "SELECT * FROM artigos";
     $result = $conn->query($sql);
@@ -515,22 +530,18 @@
         if ($result->num_rows > 0) {
             echo "<div class='container'>";
             while ($row = $result->fetch_assoc()) {
-                echo "<div class='artigo'>";
-                echo "<center><h1>Título: <br>" . $row["titulo"] . "</h1></center>";
+                echo "<div class='artigo' id='artigo-" . $row["id"] . "'>";
+                echo "<center><h1>Título: <br>" . htmlspecialchars($row["titulo"]) . "</h1></center>";
                 echo "<div class='botoes'>";
                 echo "<button class='btn3' data-id='" . $row["id"] . "' onclick='abrirPopupEditar(" . $row["id"] . ", \"" . addslashes($row["titulo"]) . "\", \"" . addslashes($row["autor"]) . "\", \"" . $row["ano"] . "\")'>Editar</button>";
-                echo "<a href='download.php?id=" . $row["id"] . "' class='btn-download'>Download</a>"; // Link para download
-                echo "<form action='tcc.php' method='post' style='display:inline;'>";
-                echo "<input type='hidden' name='id' value='" . $row["id"] . "'>";
-                echo "<input type='hidden' name='action' value='delete'>";
-                echo "<input type='submit' value='Excluir' class='btn-delete' onclick='return confirm('Tem certeza que deseja excluir este artigo?');'>";
-                echo "</form>";
+                echo "<a href='download.php?id=" . $row["id"] . "' class='btn-download'>Download</a>";
+                echo "<button class='btn-excluir' data-id='" . $row["id"] . "'>Excluir</button>"; // Mudei para botão
                 echo "</div>";
                 echo "</div>";
             }
             echo "</div>";
         } else {
-            echo "<p style='position: absolute;color:#fff; font-size:20px; top: 50%; left: 50%; transform: translate(-50%, -50%);'>Nenhum artigo encontrado.</p>";
+            echo "<p style='color:#fff; font-size:20px;'>Nenhum artigo encontrado.</p>";
         }
     } else {
         echo "Erro na consulta: " . $conn->error;
@@ -538,7 +549,6 @@
 
     $conn->close();
     ?>
-
 
       
 
@@ -643,25 +653,33 @@ $conn->close();
 
 
         
-        function handleDelete(event) {
-    event.preventDefault(); // Impede o envio padrão do formulário
-
-    const form = event.target;
-    const formData = new FormData(form);
-
-    fetch(form.action, {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.text())
-    //     .then(data => {
-    //     location.reload(); // Recarrega a página após a exclusão
-    // })
-    .catch(error => {
-        console.error('Erro ao excluir artigo:', error);
+         document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.btn-excluir').forEach(button => {
+            button.addEventListener('click', function() {
+                const artigoId = this.getAttribute('data-id');
+                
+                if (confirm('Tem certeza de que deseja excluir este artigo?')) {
+                    fetch('tcc.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ id: artigoId, action: 'delete' })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Recarrega a página após a exclusão
+                            window.location.reload();
+                        } else {
+                            alert('Erro ao excluir o artigo: ' + (data.error || 'Desconhecido'));
+                        }
+                    })
+                    .catch(error => console.error('Erro ao excluir artigo:', error));
+                }
+            });
+        });
     });
-}
-
 
         
 
@@ -672,92 +690,5 @@ $conn->close();
 
 
 
-
-
-
-
-
-<!-- <script>
-                    const adicionarArtigoBtn = document.getElementById('adicionar-artigo-btn');
-                    const editarArtigoBtn = document.getElementById('editar-artigo-btn');
-                    const modal = document.getElementById('popup');
-                    const modale = document.getElementById('popup-editar');
-                    const closeModalBtn = document.querySelector('.close');
-                    const closeModalBtne = document.querySelector('.closee');
-                    const salvarArtigoBtn = document.getElementById('pop');
-                    const ArtigosContainer = document.getElementById('artigos-container');
-
-                    let contadorArtigod = 0; // Contador de livros adicionados
-                    let artigoEditando = null; // Variável para armazenar o livro que está sendo editado
-
-                    adicionarArtigoBtn.addEventListener('click', () => {
-                    limparFormulario(); // Limpa o formulário antes de abrir o popup
-                    modal.style.display = 'block';
-                    });
-
-                    editarArtigoBtn.addEventListener('click', () => {
-                    limparFormulario(); // Limpa o formulário antes de abrir o popup
-                    modal.style.display = 'block';
-                    });
-
-
-                    closeModalBtn.addEventListener('click', () => {
-                    modal.style.display = 'none';
-                    });
-
-                    closeModalBtne.addEventListener('click', () => {
-                    modale.style.display = 'none';
-                    });
-
-                    salvarArtigoBtn.addEventListener('submit', (event) => {
-                    event.preventDefault(); // Evita que o formulário seja enviado
-                    const nome = document.getElementById('artigo-nome').value;
-                    const autor = document.getElementById('artigo-autor').value;
-                    const capaFile = document.getElementById('livro-capa').files[0]; // Nova linha para obter o arquivo de imagem
-
-                    });
-
-
-                    function limparFormulario() {
-                    // Limpa todos os campos do formulário
-                    document.getElementById('artigo-nome').value = '';
-                    document.getElementById('artigo-capa').value = '';
-                    }
-                    
-
-            </script>
-
-        
-            <script>
-                
-
-                document.querySelectorAll('.btn3').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const artigoId = this.getAttribute('data-id');
-
-                    fetch(`get_artigo.php?id=${artigoId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            document.getElementById('editar-id').value = data.id;
-                            document.getElementById('editar-titulo').value = data.titulo;
-                            document.getElementById('editar-autor').value = data.autor;
-                            document.getElementById('editar-ano').value = data.ano;
-                            document.getElementById('popup-editar').style.display = 'flex'; // Exibe a popup
-                        })
-                        .catch(error => console.error('Erro ao carregar dados do livro:', error));
-                });
-            });
-
-            function closePopupEditar() {
-                document.getElementById('popup-editar').style.display = 'none'; // Oculta a popup
-            }
-            function closePopup() {
-                document.getElementById('popup').style.display = 'none'; // Oculta a popup
-            }
-
-
-                // Código existente
-            </script>
- -->
 </body>
 </html>
