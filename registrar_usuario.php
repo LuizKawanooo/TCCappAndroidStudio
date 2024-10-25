@@ -39,8 +39,10 @@ try {
 }
 
 // Insira o novo usuário no banco de dados
-$stmt = $pdo->prepare('INSERT INTO registrar_usuarios (cod_instituicao, email, rm, senha) VALUES (?, ?, ?, ?)');
-$success = $stmt->execute([$cod_instituicao, $email, $rm, $senha]);
+$pontos = 0; // Ou outro valor conforme sua lógica
+
+$stmt = $pdo->prepare('INSERT INTO registrar_usuarios (cod_instituicao, email, rm, senha, pontos) VALUES (?, ?, ?, ?, ?)');
+$success = $stmt->execute([$cod_instituicao, $email, $rm, $senha, $pontos]);
 
 if ($success) {
     echo json_encode(['success' => true, 'message' => 'Usuário registrado com sucesso!']);
