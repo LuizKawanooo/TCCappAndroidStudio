@@ -680,7 +680,7 @@ $conn->close();
             <label for="n_paginas">Número de Páginas:</label><br>
             <input type="number" id="n_paginas" name="n_paginas" min="1" class="inp" required><br>
             <label for="isbn">ISBN:</label><br>
-            <input type="text" id="isbn" name="isbn" class="inp" required><br>
+            <input type="number" id="isbn" name="isbn" class="inp" required><br>
             <br>
             <input type="file" id="livro-imagem" name="imagem" accept="image/*" required> <!-- Adiciona input para selecionar a imagem -->
             <br>
@@ -717,7 +717,7 @@ $conn->close();
             <label for="editar-n_paginas">Número de Páginas:</label><br>
             <input type="number" id="editar-n_paginas" name="n_paginas" min="1" class="inp"><br>
             <label for="editar-isbn">ISBN:</label><br>
-            <input type="text" id="editar-isbn" name="isbn" class="inp"><br>
+            <input type="number" id="editar-isbn" name="isbn" class="inp"><br>
             <br>
             <input type="file" id="livro-imagem" name="imagem" accept="image/*">
     
