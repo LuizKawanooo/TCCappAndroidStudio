@@ -11,12 +11,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 header('Content-Type: application/json');
 
+// Decodifica os dados da requisição
 $data = json_decode(file_get_contents('php://input'), true);
 
-$cod_instituicao = $data['cod_instituicao'];
-$email = $data['email'];
-$rm = $data['rm'];
-$senha = $data['senha'];
+// Extraindo os dados
+$cod_instituicao = $data['cod_instituicao'] ?? null;
+$email = $data['email'] ?? null;
+$rm = $data['rm'] ?? null;
+$senha = $data['senha'] ?? null;
 
 // Configurações do banco de dados
 $host = 'tccappionic-bd.mysql.uhserver.com';
@@ -35,29 +37,34 @@ $options = [
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (\PDOException $e) {
-    throw new \PDOException($e->getMessage(), (int)$e->getCode());
+    echo json_encode(['success' => false, 'message' => 'Erro de conexão com o banco de dados: ' . $e->getMessage()]);
+    exit();
 }
 
-// Verificar se o RM já está cadastrado
-$stmt = $pdo->prepare('SELECT * FROM registrar_usuarios WHERE rm = ?');
-$stmt->execute([$rm]);
-$existingUser = $stmt->fetch();
+try {
+    // Verificar se o RM já está cadastrado
+    $stmt = $pdo->prepare('SELECT * FROM registrar_usuarios WHERE rm = ?');
+    $stmt->execute([$rm]);
+    $existingUser = $stmt->fetch();
 
-if ($existingUser) {
-    // RM já existe, retorna uma mensagem de erro
-    echo json_encode(['success' => false, 'message' => 'RM já cadastrado.']);
-    exit(); // Para evitar que o restante do código seja executado
-}
+    if ($existingUser) {
+        // RM já existe, retorna uma mensagem de erro
+        echo json_encode(['success' => false, 'message' => 'RM já cadastrado.']);
+        exit();
+    }
 
-// Insira o novo usuário no banco de dados
-$pontos = 0; // Ou outro valor conforme sua lógica
+    // Insira o novo usuário no banco de dados
+    $pontos = 0; // Ou outro valor conforme sua lógica
 
-$stmt = $pdo->prepare('INSERT INTO registrar_usuarios (cod_instituicao, email, rm, senha, pontos) VALUES (?, ?, ?, ?, ?)');
-$success = $stmt->execute([$cod_instituicao, $email, $rm, $senha, $pontos]);
+    $stmt = $pdo->prepare('INSERT INTO registrar_usuarios (cod_instituicao, email, rm, senha, pontos) VALUES (?, ?, ?, ?, ?)');
+    $success = $stmt->execute([$cod_instituicao, $email, $rm, $senha, $pontos]);
 
-if ($success) {
-    echo json_encode(['success' => true, 'message' => 'Usuário registrado com sucesso!']);
-} else {
-    echo json_encode(['success' => false, 'message' => 'Falha ao registrar o usuário.']);
+    if ($success) {
+        echo json_encode(['success' => true, 'message' => 'Usuário registrado com sucesso!']);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Falha ao registrar o usuário.']);
+    }
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'message' => 'Erro ao registrar usuário: ' . $e->getMessage()]);
 }
 ?>
