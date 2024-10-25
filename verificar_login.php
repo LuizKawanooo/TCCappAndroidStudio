@@ -60,11 +60,11 @@
 
 
 
-
 <?php
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
+header('Content-Type: application/json');
 
 // Handle preflight requests
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -72,17 +72,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit();
 }
 
-header('Content-Type: application/json');
-
-// Read input data
+// Get the JSON input data
 $data = json_decode(file_get_contents('php://input'), true);
 
-// Validate input
-if (empty($data['rm']) || empty($data['senha'])) {
-    echo json_encode(['success' => false, 'message' => 'RM e senha são obrigatórios.']);
-    exit();
-}
-
+// Retrieve RM and senha
 $rm = $data['rm'];
 $senha = $data['senha'];
 
@@ -103,24 +96,23 @@ $options = [
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (\PDOException $e) {
-    echo json_encode(['success' => false, 'message' => 'Falha ao conectar ao banco de dados.']);
+    echo json_encode(['success' => false, 'message' => 'Database connection error.']);
     exit();
 }
 
-// Prepare statement to fetch user by RM
+// Prepare and execute the SQL statement
 $stmt = $pdo->prepare('SELECT * FROM registrar_usuarios WHERE rm = ?');
 $stmt->execute([$rm]);
 $usuario = $stmt->fetch();
 
+// Verify the password using password_verify if the user exists
 if ($usuario && password_verify($senha, $usuario['senha'])) {
-    // Password is correct, login successful
     echo json_encode([
         'success' => true,
         'message' => 'Login bem-sucedido',
-        'email' => $usuario['email'] // Return the user's email
+        'email' => $usuario['email'] // Return the user email
     ]);
 } else {
-    // RM or password is incorrect
     echo json_encode(['success' => false, 'message' => 'RM ou senha incorretos']);
 }
 ?>
