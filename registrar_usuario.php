@@ -11,10 +11,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 header('Content-Type: application/json');
 
-// Decodifica os dados da requisição
+// Decode the incoming request data
 $data = json_decode(file_get_contents('php://input'), true);
 
-// Extraindo os dados
+// Extracting the data
 $cod_instituicao = isset($data['cod_instituicao']) ? $data['cod_instituicao'] : null;
 $email = isset($data['email']) ? $data['email'] : null;
 $rm = isset($data['rm']) ? $data['rm'] : null;
@@ -26,9 +26,7 @@ if (empty($cod_instituicao) || empty($email) || empty($rm) || empty($senha)) {
     exit();
 }
 
-
-
-// Configurações do banco de dados
+// Database configurations
 $host = 'tccappionic-bd.mysql.uhserver.com';
 $db   = 'tccappionic_bd';
 $user = 'ionic_perfil_bd';
@@ -50,22 +48,34 @@ try {
 }
 
 try {
-    // Verificar se o RM já está cadastrado
+    // Check if the RM already exists
     $stmt = $pdo->prepare('SELECT * FROM registrar_usuarios WHERE rm = ?');
     $stmt->execute([$rm]);
-    $existingUser = $stmt->fetch();
+    $existingUserByRM = $stmt->fetch();
 
-    if ($existingUser) {
-        // RM já existe, retorna uma mensagem de erro
+    if ($existingUserByRM) {
         echo json_encode(['success' => false, 'message' => 'RM já cadastrado.']);
         exit();
     }
 
-    // Insira o novo usuário no banco de dados
-    $pontos = 0; // Ou outro valor conforme sua lógica
+    // Check if the email already exists
+    $stmt = $pdo->prepare('SELECT * FROM registrar_usuarios WHERE email = ?');
+    $stmt->execute([$email]);
+    $existingUserByEmail = $stmt->fetch();
+
+    if ($existingUserByEmail) {
+        echo json_encode(['success' => false, 'message' => 'Email já cadastrado.']);
+        exit();
+    }
+
+    // Hash the password before storing it
+    $hashedPassword = password_hash($senha, PASSWORD_DEFAULT);
+
+    // Insert the new user into the database
+    $pontos = 0; // Or another value as per your logic
 
     $stmt = $pdo->prepare('INSERT INTO registrar_usuarios (cod_instituicao, email, rm, senha, pontos) VALUES (?, ?, ?, ?, ?)');
-    $success = $stmt->execute([$cod_instituicao, $email, $rm, $senha, $pontos]);
+    $success = $stmt->execute([$cod_instituicao, $email, $rm, $hashedPassword, $pontos]);
 
     if ($success) {
         echo json_encode(['success' => true, 'message' => 'Usuário registrado com sucesso!']);
