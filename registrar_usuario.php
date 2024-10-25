@@ -15,10 +15,11 @@ header('Content-Type: application/json');
 $data = json_decode(file_get_contents('php://input'), true);
 
 // Extraindo os dados
-$cod_instituicao = $data['cod_instituicao'] ?? null;
-$email = $data['email'] ?? null;
-$rm = $data['rm'] ?? null;
-$senha = $data['senha'] ?? null;
+$cod_instituicao = isset($data['cod_instituicao']) ? $data['cod_instituicao'] : null;
+$email = isset($data['email']) ? $data['email'] : null;
+$rm = isset($data['rm']) ? $data['rm'] : null;
+$senha = isset($data['senha']) ? $data['senha'] : null;
+
 
 // Configurações do banco de dados
 $host = 'tccappionic-bd.mysql.uhserver.com';
