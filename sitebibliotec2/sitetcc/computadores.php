@@ -220,11 +220,12 @@ echo '<div style="background-color: #d3d3d3; width: 1600px; height: 700px; borde
                         font-size: 28px;
                         font-weight: bold;
                         display: flex;
-                        width: 20px;
-                        height: 20px;
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 4px;
                         background: red;
                         position: absolute;
-                        left: 85%;
+                        left: 90%;
                         color: white;
                         align-items: center;
                         justify-content: center;
