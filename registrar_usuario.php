@@ -38,6 +38,17 @@ try {
     throw new \PDOException($e->getMessage(), (int)$e->getCode());
 }
 
+// Verificar se o RM já está cadastrado
+$stmt = $pdo->prepare('SELECT * FROM registrar_usuarios WHERE rm = ?');
+$stmt->execute([$rm]);
+$existingUser = $stmt->fetch();
+
+if ($existingUser) {
+    // RM já existe, retorna uma mensagem de erro
+    echo json_encode(['success' => false, 'message' => 'RM já cadastrado.']);
+    exit(); // Para evitar que o restante do código seja executado
+}
+
 // Insira o novo usuário no banco de dados
 $pontos = 0; // Ou outro valor conforme sua lógica
 
