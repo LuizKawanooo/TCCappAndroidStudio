@@ -20,6 +20,13 @@ $email = isset($data['email']) ? $data['email'] : null;
 $rm = isset($data['rm']) ? $data['rm'] : null;
 $senha = isset($data['senha']) ? $data['senha'] : null;
 
+// Validate input data
+if (empty($cod_instituicao) || empty($email) || empty($rm) || empty($senha)) {
+    echo json_encode(['success' => false, 'message' => 'Todos os campos são obrigatórios.']);
+    exit();
+}
+
+
 
 // Configurações do banco de dados
 $host = 'tccappionic-bd.mysql.uhserver.com';
