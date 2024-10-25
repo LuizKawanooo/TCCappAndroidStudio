@@ -229,8 +229,8 @@ if ($result) {
                 die("Erro de conexão: " . $conn->connect_error);
             }
             
-            // Consulta para contar o número de linhas na tabela
-            $sql = "SELECT COUNT(*) AS quantidade_artigo FROM artigo;";
+            // Consulta para contar o número de linhas na tabela artigos
+            $sql = "SELECT COUNT(*) AS quantidade_artigo FROM artigos;";
             $result = $conn->query($sql);
             
             if ($result->num_rows > 0) {
