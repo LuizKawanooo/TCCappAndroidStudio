@@ -526,7 +526,7 @@ function displayFileName() {
         <label for="file-upload" class="custom-file-label">Selecionar Arquivo</label>
         <input id="file-upload" onchange="displayFileName()" class="fileinput" type="file" name="imagem" required style="display: none;">
         <!-- Texto do nome do arquivo -->
-        <span id="file-name" style="margin-left: 10px; color: white;">Adicione aqui sua planta</span>
+        <span id="file-name" style="margin-left: 10px; color: white;">Adicione aqui sua planta de computadores</span>
     </div>
 
     <!-- Botão de enviar -->
