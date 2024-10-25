@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="utf8_unicode_ci">
+    <meta charset="utf8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bibliotec - Livros</title>
     <link rel="shortcut icon" href="img/logo.png">
