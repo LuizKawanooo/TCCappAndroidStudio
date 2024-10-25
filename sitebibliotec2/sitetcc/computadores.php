@@ -512,7 +512,7 @@ function displayFileName() {
   if (input.files.length > 0) {
     fileNameSpan.textContent = input.files[0].name;
   } else {
-    fileNameSpan.textContent = "Adicione aqui sua planta";
+    fileNameSpan.textContent = "Adicione aqui sua planta de computadores";
   }
 }
 </script>
