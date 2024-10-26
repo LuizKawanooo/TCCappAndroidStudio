@@ -1,4 +1,16 @@
 <?php
+
+// Permitir qualquer origem
+header("Access-Control-Allow-Origin: *");
+
+// Permitir os métodos que você deseja
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+
+// Permitir cabeçalhos personalizados, caso você precise
+header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+
+
+
 include 'database_connection.php'; // Certifique-se de que a conexão está configurada corretamente
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
