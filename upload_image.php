@@ -1,21 +1,27 @@
 <?php
-include 'database_connection.php';
+include 'database_connection.php'; // Certifique-se de que a conexão está configurada corretamente
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $rm = $_POST['rm']; // RM do usuário
     $image = $_FILES['image'];
 
-    if (isset($image) && $image['error'] == 0) {
+    if (isset($image) && $image['error'] === UPLOAD_ERR_OK) {
         $imageData = addslashes(file_get_contents($image['tmp_name']));
-        $query = "UPDATE registrar_usuarios SET imagem_perfil = '$imageData' WHERE rm = '$rm'";
+        
+        // Aqui, você deve ter uma maneira de identificar o usuário, como um token de sessão ou ID
+        $userId = 1; // Mude isso para o ID do usuário logado conforme sua lógica
 
-        if ($connection->query($query) === TRUE) {
-            echo json_encode(['success' => true, 'message' => 'Imagem atualizada com sucesso.']);
+        // Atualiza a imagem de perfil do usuário
+        $sql = "UPDATE registrar_usuarios SET imagem_perfil = '$imageData' WHERE id = $userId";
+
+        if ($connection->query($sql) === TRUE) {
+            echo json_encode(['success' => true, 'message' => 'Imagem de perfil atualizada com sucesso.']);
         } else {
             echo json_encode(['success' => false, 'message' => 'Erro ao atualizar a imagem.']);
         }
     } else {
-        echo json_encode(['success' => false, 'message' => 'Nenhuma imagem foi enviada.']);
+        echo json_encode(['success' => false, 'message' => 'Erro no upload da imagem.']);
     }
+} else {
+    echo json_encode(['success' => false, 'message' => 'Método não permitido.']);
 }
 ?>
