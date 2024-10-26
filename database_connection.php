@@ -1,12 +1,15 @@
-// api/database_connection.php
 <?php
-$host = 'tccappionic-bd.mysql.uhserver.com'; // Endereço do seu servidor
-$user = 'ionic_perfil_bd'; // Usuário do banco de dados
-$password = '{[UOLluiz2019'; // Senha do banco de dados
-$dbname = 'tccappionic_bd'; // Nome do banco de dados
+$servername = "tccappionic-bd.mysql.uhserver.com"; // por exemplo, "localhost"
+$username = "ionic_perfil_bd";
+$password = "{[UOLluiz2019";
+$dbname = "tccappionic_bd";
 
-$connection = new mysqli($host, $user, $password, $dbname);
+// Criar conexão
+$connection = new mysqli($servername, $username, $password, $dbname);
+
+// Verificar a conexão
 if ($connection->connect_error) {
-    die("Connection failed: " . $connection->connect_error);
+    die("Erro na conexão: " . $connection->connect_error);
 }
 ?>
+
