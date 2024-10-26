@@ -17,10 +17,10 @@ if ($conn->connect_error) {
     die(json_encode(array("error" => "Falha na conexão com o banco de dados: " . $conn->connect_error)));
 }
 
-// Verificar se o parâmetro 'user_id' foi fornecido
-$userId = isset($_GET['user_id']) ? intval($_GET['user_id']) : 0;
+// Verificar se o parâmetro 'id' foi fornecido
+$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-if ($userId > 0) {
+if ($id > 0) {
     // Preparar a consulta SQL para obter a imagem de perfil do usuário
     $sql = "SELECT imagem_perfil FROM registrar_usuarios WHERE id = ?";
     $stmt = $conn->prepare($sql);
@@ -31,7 +31,7 @@ if ($userId > 0) {
     }
 
     // Vincular o parâmetro
-    $stmt->bind_param("i", $userId);
+    $stmt->bind_param("i", $id);
     $stmt->execute();
     $result = $stmt->get_result();
 
