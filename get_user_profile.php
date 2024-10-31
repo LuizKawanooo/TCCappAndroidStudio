@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 header('Content-Type: application/json');
 
 $data = json_decode(file_get_contents('php://input'), true);
-$rm = $data['rm'];
+$userId = $data['userId']; // Updated variable name to match the app function
 
 // Database configuration
 $host = 'tccappionic-bd.mysql.uhserver.com';
@@ -35,8 +35,9 @@ try {
     exit();
 }
 
-$stmt = $pdo->prepare('SELECT nome_exibicao, celular, imagem_perfil FROM registrar_usuarios WHERE rm = ?');
-$stmt->execute([$rm]);
+// Adjusted query to use userId
+$stmt = $pdo->prepare('SELECT nome_exibicao, celular, imagem_perfil FROM registrar_usuarios WHERE id = ?');
+$stmt->execute([$userId]);
 $perfil = $stmt->fetch();
 
 if ($perfil) {
