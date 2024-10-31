@@ -14,7 +14,7 @@ header('Content-Type: application/json');
 $data = json_decode(file_get_contents('php://input'), true);
 $rm = $data['rm'];
 
-// Configurações do banco de dados
+// Database configuration
 $host = 'tccappionic-bd.mysql.uhserver.com';
 $db   = 'tccappionic_bd';
 $user = 'ionic_perfil_bd';
@@ -31,7 +31,8 @@ $options = [
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (\PDOException $e) {
-    throw new \PDOException($e->getMessage(), (int)$e->getCode());
+    echo json_encode(['success' => false, 'message' => 'Database connection failed.']);
+    exit();
 }
 
 $stmt = $pdo->prepare('SELECT nome_exibicao, celular, imagem_perfil FROM registrar_usuarios WHERE rm = ?');
