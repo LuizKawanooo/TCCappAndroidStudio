@@ -11,8 +11,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 header('Content-Type: application/json');
 
-$data = json_decode(file_get_contents('php://input'), true);
-$userId = $data['userId']; // Updated variable name to match the app function
+// Retrieve userId from GET parameter or JSON input
+$userId = isset($_GET['id']) ? $_GET['id'] : json_decode(file_get_contents('php://input'), true)['userId'];
+
+// Check if userId was provided
+if (!$userId) {
+    echo json_encode(['success' => false, 'message' => 'User ID not provided.']);
+    exit();
+}
 
 // Database configuration
 $host = 'tccappionic-bd.mysql.uhserver.com';
