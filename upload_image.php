@@ -9,14 +9,17 @@ include 'database_connection.php'; // Certifique-se de que a conexão está conf
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $image = $_FILES['image'];
-    $userId = $_POST['user_id']; // Recebe o ID do usuário enviado no formulário
+    $rm = $_POST['rm']; // Recebe o RM enviado no formulário
 
-    if (isset($image) && $image['error'] === UPLOAD_ERR_OK && isset($userId)) {
-        // Lê o conteúdo da imagem e prepara para inserção no banco de dados
-        $imageData = addslashes(file_get_contents($image['tmp_name']));
+    if (isset($image) && $image['error'] === UPLOAD_ERR_OK && isset($rm)) {
+        // Lê o conteúdo da imagem
+        $imageData = file_get_contents($image['tmp_name']);
         
-        // Atualiza a imagem de perfil do usuário no banco
-        $sql = "UPDATE registrar_usuarios SET imagem_perfil = '$imageData' WHERE id = $userId";
+        // Escapa os dados da imagem para evitar injeção SQL
+        $imageData = mysqli_real_escape_string($connection, $imageData);
+
+        // Atualiza a imagem de perfil do usuário no banco usando o RM
+        $sql = "UPDATE registrar_usuarios SET imagem_perfil = '$imageData' WHERE rm = '$rm'";
         
         if ($connection->query($sql) === TRUE) {
             echo json_encode(['success' => true, 'message' => 'Imagem de perfil atualizada com sucesso.']);
@@ -24,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode(['success' => false, 'message' => 'Erro ao atualizar a imagem.']);
         }
     } else {
-        echo json_encode(['success' => false, 'message' => 'Erro no upload da imagem ou ID do usuário não fornecido.']);
+        echo json_encode(['success' => false, 'message' => 'Erro no upload da imagem ou RM não fornecido.']);
     }
 } else {
     echo json_encode(['success' => false, 'message' => 'Método não permitido.']);
