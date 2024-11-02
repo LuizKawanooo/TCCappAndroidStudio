@@ -12,28 +12,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verifica se o upload foi feito através de $_FILES
     if (isset($_FILES['image'])) {
         if ($_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            // Lógica de upload
+            // Lê o conteúdo do arquivo
+            $imageData = file_get_contents($_FILES['image']['tmp_name']);
+            $imageName = basename($_FILES['image']['name']);
+            
+            // Recebe o RM do usuário enviado no formulário
+            $rm = $_POST['rm']; // Certifique-se de que 'rm' é enviado no formulário
+
+            // Prepara a consulta para atualizar a imagem de perfil no banco de dados
+            $stmt = $connection->prepare("UPDATE registrar_usuarios SET imagem_perfil = ? WHERE rm = ?");
+            $stmt->bind_param('bs', $imageData, $rm); // 'b' para o LONGBLOB e 's' para string
+
+            if ($stmt->execute()) {
+                // Imagem salva com sucesso no banco de dados
+                echo json_encode(['success' => true, 'message' => 'Imagem de perfil atualizada com sucesso.']);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Falha ao atualizar a imagem de perfil no banco de dados.']);
+            }
+
+            // Fecha a declaração preparada
+            $stmt->close();
         } else {
-            // Mostre o erro correspondente
+            // Mensagens de erro
             switch ($_FILES['image']['error']) {
-                case UPLOAD_ERR_INI_SIZE:
-                case UPLOAD_ERR_FORM_SIZE:
-                    echo json_encode(['success' => false, 'message' => 'O arquivo é muito grande.']);
-                    break;
-                case UPLOAD_ERR_PARTIAL:
-                    echo json_encode(['success' => false, 'message' => 'O arquivo foi apenas parcialmente enviado.']);
-                    break;
                 case UPLOAD_ERR_NO_FILE:
                     echo json_encode(['success' => false, 'message' => 'Nenhum arquivo foi enviado.']);
                     break;
-                case UPLOAD_ERR_NO_TMP_DIR:
-                    echo json_encode(['success' => false, 'message' => 'Faltando diretório temporário.']);
+                case UPLOAD_ERR_INI_SIZE:
+                    echo json_encode(['success' => false, 'message' => 'Arquivo muito grande.']);
                     break;
-                case UPLOAD_ERR_CANT_WRITE:
-                    echo json_encode(['success' => false, 'message' => 'Falha ao escrever o arquivo no disco.']);
-                    break;
-                case UPLOAD_ERR_EXTENSION:
-                    echo json_encode(['success' => false, 'message' => 'Uma extensão do PHP interrompeu o upload.']);
+                case UPLOAD_ERR_PARTIAL:
+                    echo json_encode(['success' => false, 'message' => 'Arquivo enviado parcialmente.']);
                     break;
                 default:
                     echo json_encode(['success' => false, 'message' => 'Erro desconhecido no upload.']);
