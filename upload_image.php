@@ -9,49 +9,77 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-W
 include 'database_connection.php'; // Certifique-se de que a conexão está configurada corretamente
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Verifica se o RM e a imagem foram enviados
-    $rm = isset($_POST['rm']) ? $_POST['rm'] : null;
-    $base64Image = isset($_POST['image']) ? $_POST['image'] : null;
+    // Verifica se o upload foi feito através de $_FILES
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        // Recebe o RM enviado no formulário
+        $rm = $_POST['rm']; 
 
-    // Diagnóstico: verifica se o RM foi recebido
-    if (!$rm) {
-        echo json_encode(['success' => false, 'message' => 'RM não recebido pelo servidor.']);
-        exit;
-    }
+        if (isset($rm)) {
+            // Lê o conteúdo da imagem
+            $imageData = file_get_contents($_FILES['image']['tmp_name']);
+            // Escapa os dados da imagem para evitar injeção SQL
+            $imageData = mysqli_real_escape_string($connection, $imageData);
 
-    // Diagnóstico: verifica se a imagem foi recebida
-    if (!$base64Image) {
-        echo json_encode(['success' => false, 'message' => 'Imagem não recebida pelo servidor.']);
-        exit;
-    }
+            // Atualiza a imagem de perfil do usuário no banco usando o RM
+            $sql = "UPDATE registrar_usuarios SET imagem_perfil = '$imageData' WHERE rm = '$rm'";
 
-    // Remove o prefixo "data:image/*;base64," do Base64, se presente
-    $base64Image = preg_replace('#^data:image/\w+;base64,#i', '', $base64Image);
+            if ($connection->query($sql) === TRUE) {
+                echo json_encode(['success' => true, 'message' => 'Imagem de perfil atualizada com sucesso.']);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Erro ao atualizar a imagem.']);
+            }
+        } else {
+            echo json_encode(['success' => false, 'message' => 'RM não fornecido.']);
+        }
+    } elseif (isset($_POST['image'])) {
+        // Lógica para quando a imagem é enviada em formato Base64
+        $rm = isset($_POST['rm']) ? $_POST['rm'] : null;
+        $base64Image = isset($_POST['image']) ? $_POST['image'] : null;
 
-    // Decodifica a imagem de Base64 para binário
-    $imageData = base64_decode($base64Image);
+        // Diagnóstico: verifica se o RM foi recebido
+        if (!$rm) {
+            echo json_encode(['success' => false, 'message' => 'RM não recebido pelo servidor.']);
+            exit;
+        }
 
-    // Verifica se a decodificação foi bem-sucedida
-    if ($imageData === false) {
-        echo json_encode(['success' => false, 'message' => 'Erro ao decodificar a imagem.']);
-        exit;
-    }
+        // Diagnóstico: verifica se a imagem foi recebida
+        if (!$base64Image) {
+            echo json_encode(['success' => false, 'message' => 'Imagem não recebida pelo servidor.']);
+            exit;
+        }
 
-    // Prepara a declaração SQL para atualizar a imagem no banco de dados
-    $stmt = $connection->prepare("UPDATE registrar_usuarios SET imagem_perfil = ? WHERE rm = ?");
-    $stmt->bind_param('ss', $imageData, $rm);
+        // Remove o prefixo "data:image/*;base64," do Base64, se presente
+        $base64Image = preg_replace('#^data:image/\w+;base64,#i', '', $base64Image);
 
-    // Executa a declaração SQL e verifica o sucesso
-    if ($stmt->execute()) {
-        echo json_encode(['success' => true, 'message' => 'Imagem de perfil atualizada com sucesso.']);
+        // Decodifica a imagem de Base64 para binário
+        $imageData = base64_decode($base64Image);
+
+        // Verifica se a decodificação foi bem-sucedida
+        if ($imageData === false) {
+            echo json_encode(['success' => false, 'message' => 'Erro ao decodificar a imagem.']);
+            exit;
+        }
+
+        // Escapa os dados da imagem para evitar injeção SQL
+        $imageData = mysqli_real_escape_string($connection, $imageData);
+
+        // Atualiza a imagem de perfil do usuário no banco usando o RM
+        $stmt = $connection->prepare("UPDATE registrar_usuarios SET imagem_perfil = ? WHERE rm = ?");
+        $stmt->bind_param('ss', $imageData, $rm);
+
+        // Executa a declaração SQL e verifica o sucesso
+        if ($stmt->execute()) {
+            echo json_encode(['success' => true, 'message' => 'Imagem de perfil atualizada com sucesso.']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Erro ao atualizar a imagem.']);
+        }
+
+        // Fecha a declaração preparada
+        $stmt->close();
     } else {
-        echo json_encode(['success' => false, 'message' => 'Erro ao atualizar a imagem.']);
+        echo json_encode(['success' => false, 'message' => 'Erro no upload da imagem ou RM não fornecido.']);
     }
-
-    // Fecha a declaração preparada
-    $stmt->close();
 } else {
-    // Resposta se o método HTTP não for POST
     echo json_encode(['success' => false, 'message' => 'Método não permitido.']);
 }
 
