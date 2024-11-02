@@ -8,8 +8,8 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-W
 include 'database_connection.php'; // Certifique-se de que a conexão está configurada corretamente
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $rm = $_POST['rm'] ?? null;
-    $image = $_FILES['image'] ?? null;
+    $rm = isset($_POST['rm']) ? $_POST['rm'] : null;
+    $image = isset($_FILES['image']) ? $_FILES['image'] : null;
 
     // Verifica se a imagem e o RM foram enviados e se não houve erros no upload
     if ($image && $image['error'] === UPLOAD_ERR_OK && $rm) {
