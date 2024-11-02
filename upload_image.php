@@ -8,24 +8,32 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-W
 include 'database_connection.php'; // Certifique-se de que a conexão está configurada corretamente
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $image = $_FILES['image'];
-    $rm = $_POST['rm']; // Recebe o RM enviado no formulário
+    $rm = $_POST['rm'] ?? null;
+    $image = $_FILES['image'] ?? null;
 
-    if (isset($image) && $image['error'] === UPLOAD_ERR_OK && isset($rm)) {
-        // Lê o conteúdo da imagem
+    // Verifica se a imagem e o RM foram enviados e se não houve erros no upload
+    if ($image && $image['error'] === UPLOAD_ERR_OK && $rm) {
+        // Validação do tipo de arquivo (somente imagens)
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        if (!in_array($image['type'], $allowedTypes)) {
+            echo json_encode(['success' => false, 'message' => 'Formato de imagem não suportado.']);
+            exit;
+        }
+
+        // Lê e processa o conteúdo da imagem
         $imageData = file_get_contents($image['tmp_name']);
-        
-        // Escapa os dados da imagem para evitar injeção SQL
-        $imageData = mysqli_real_escape_string($connection, $imageData);
 
-        // Atualiza a imagem de perfil do usuário no banco usando o RM
-        $sql = "UPDATE registrar_usuarios SET imagem_perfil = '$imageData' WHERE rm = '$rm'";
-        
-        if ($connection->query($sql) === TRUE) {
+        // Prepared statement para segurança
+        $stmt = $connection->prepare("UPDATE registrar_usuarios SET imagem_perfil = ? WHERE rm = ?");
+        $stmt->bind_param('ss', $imageData, $rm);
+
+        if ($stmt->execute()) {
             echo json_encode(['success' => true, 'message' => 'Imagem de perfil atualizada com sucesso.']);
         } else {
             echo json_encode(['success' => false, 'message' => 'Erro ao atualizar a imagem.']);
         }
+        
+        $stmt->close();
     } else {
         echo json_encode(['success' => false, 'message' => 'Erro no upload da imagem ou RM não fornecido.']);
     }
@@ -33,4 +41,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo json_encode(['success' => false, 'message' => 'Método não permitido.']);
 }
 
+$connection->close();
 ?>
