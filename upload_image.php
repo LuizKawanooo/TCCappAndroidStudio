@@ -10,53 +10,38 @@ include 'database_connection.php'; // Certifique-se de que a conexão está conf
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verifica se o upload foi feito através de $_FILES
-    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        $rm = $_POST['rm']; // Recebe o RM enviado no formulário
-
-        if (isset($rm)) {
-            // Lê o conteúdo da imagem
-            $imageData = file_get_contents($_FILES['image']['tmp_name']);
-
-            // Verifica se a imagem foi lida corretamente
-            if ($imageData === false) {
-                echo json_encode(['success' => false, 'message' => 'Erro ao ler a imagem.']);
-                exit;
-            }
-
-            // Verifica se o tamanho da imagem é maior que zero
-            if (strlen($imageData) === 0) {
-                echo json_encode(['success' => false, 'message' => 'Imagem vazia.']);
-                exit;
-            }
-
-            // Verifica se a imagem é um tipo permitido
-            $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
-            $imageMimeType = mime_content_type($_FILES['image']['tmp_name']);
-            if (!in_array($imageMimeType, $allowedMimeTypes)) {
-                echo json_encode(['success' => false, 'message' => 'Tipo de imagem não suportado.']);
-                exit;
-            }
-
-            // Escapa os dados da imagem para evitar injeção SQL
-            $imageData = mysqli_real_escape_string($connection, $imageData);
-
-            // Atualiza a imagem de perfil do usuário no banco usando o RM
-            $stmt = $connection->prepare("UPDATE registrar_usuarios SET imagem_perfil = ? WHERE rm = ?");
-            $stmt->bind_param('ss', $imageData, $rm);
-
-            if ($stmt->execute()) {
-                echo json_encode(['success' => true, 'message' => 'Imagem de perfil atualizada com sucesso.']);
-            } else {
-                echo json_encode(['success' => false, 'message' => 'Erro ao atualizar a imagem.']);
-            }
-
-            // Fecha a declaração preparada
-            $stmt->close();
+    if (isset($_FILES['image'])) {
+        if ($_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            // Lógica de upload
         } else {
-            echo json_encode(['success' => false, 'message' => 'RM não fornecido.']);
+            // Mostre o erro correspondente
+            switch ($_FILES['image']['error']) {
+                case UPLOAD_ERR_INI_SIZE:
+                case UPLOAD_ERR_FORM_SIZE:
+                    echo json_encode(['success' => false, 'message' => 'O arquivo é muito grande.']);
+                    break;
+                case UPLOAD_ERR_PARTIAL:
+                    echo json_encode(['success' => false, 'message' => 'O arquivo foi apenas parcialmente enviado.']);
+                    break;
+                case UPLOAD_ERR_NO_FILE:
+                    echo json_encode(['success' => false, 'message' => 'Nenhum arquivo foi enviado.']);
+                    break;
+                case UPLOAD_ERR_NO_TMP_DIR:
+                    echo json_encode(['success' => false, 'message' => 'Faltando diretório temporário.']);
+                    break;
+                case UPLOAD_ERR_CANT_WRITE:
+                    echo json_encode(['success' => false, 'message' => 'Falha ao escrever o arquivo no disco.']);
+                    break;
+                case UPLOAD_ERR_EXTENSION:
+                    echo json_encode(['success' => false, 'message' => 'Uma extensão do PHP interrompeu o upload.']);
+                    break;
+                default:
+                    echo json_encode(['success' => false, 'message' => 'Erro desconhecido no upload.']);
+                    break;
+            }
         }
     } else {
-        echo json_encode(['success' => false, 'message' => 'Erro no upload da imagem.']);
+        echo json_encode(['success' => false, 'message' => 'Nenhum arquivo enviado.']);
     }
 } else {
     echo json_encode(['success' => false, 'message' => 'Método não permitido.']);
