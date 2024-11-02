@@ -11,12 +11,24 @@ include 'database_connection.php'; // Certifique-se de que a conexão está conf
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verifica se o upload foi feito através de $_FILES
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        // Recebe o RM enviado no formulário
-        $rm = $_POST['rm']; 
+        $rm = $_POST['rm']; // Recebe o RM enviado no formulário
 
         if (isset($rm)) {
             // Lê o conteúdo da imagem
             $imageData = file_get_contents($_FILES['image']['tmp_name']);
+
+            // Verifica se a imagem foi lida corretamente
+            if ($imageData === false) {
+                echo json_encode(['success' => false, 'message' => 'Erro ao ler a imagem.']);
+                exit;
+            }
+
+            // Verifica se o tamanho da imagem é maior que zero
+            if (strlen($imageData) === 0) {
+                echo json_encode(['success' => false, 'message' => 'Imagem vazia.']);
+                exit;
+            }
+
             // Escapa os dados da imagem para evitar injeção SQL
             $imageData = mysqli_real_escape_string($connection, $imageData);
 
@@ -55,8 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $imageData = base64_decode($base64Image);
 
         // Verifica se a decodificação foi bem-sucedida
-        if ($imageData === false) {
-            echo json_encode(['success' => false, 'message' => 'Erro ao decodificar a imagem.']);
+        if ($imageData === false || strlen($imageData) === 0) {
+            echo json_encode(['success' => false, 'message' => 'Erro ao decodificar a imagem ou imagem vazia.']);
             exit;
         }
 
