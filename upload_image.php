@@ -9,11 +9,11 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-W
 include 'database_connection.php'; // Certifique-se de que a conexão está configurada corretamente
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Verifica se o RM e a imagem foram enviados
-    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK && isset($_POST['rm'])) {
-        $rm = $_POST['rm']; // Recebe o RM enviado no formulário
-        $image = $_FILES['image'];
+    $rm = $_POST['rm']; // Recebe o RM enviado no formulário
+    $image = $_FILES['image']; // Recebe a imagem enviada
 
+    // Verifica se a imagem foi enviada e se não houve erro
+    if (isset($image) && $image['error'] === UPLOAD_ERR_OK && isset($rm)) {
         // Lê o conteúdo da imagem
         $imageData = file_get_contents($image['tmp_name']);
         
