@@ -1,4 +1,11 @@
 <?php
+// Permitir todas as origens (CORS)
+header("Access-Control-Allow-Origin: *");
+// Permitir métodos específicos, se necessário (GET, POST, OPTIONS, etc.)
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+// Permitir cabeçalhos específicos
+header("Access-Control-Allow-Headers: Content-Type");
+
 require 'database_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
