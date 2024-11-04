@@ -4,7 +4,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
-require 'database_connection.php'; // Certifique-se de que este arquivo está correto e acessível
+require 'database_connection.php'; // Verifique se este arquivo está correto e acessível
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Certifique-se de que as variáveis estão sendo recebidas corretamente
