@@ -43,5 +43,6 @@ if (isset($results['items']) && is_array($results['items'])) {
     echo 'Nenhum resultado encontrado ou ocorreu um erro na solicitação.';
 }
 
-echo '<a href="player.html'>Ir para o Player</a>';
+echo '<a href="player.html">Ir para o Player</a>';
+
 ?>
