@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Player de Músicas</title>
+    <script>
+        async function loadQueue() {
+            const response = await fetch('get_queue.php');
+            const queue = await response.json();
+            if (queue.length > 0) {
+                playVideo(queue[0].video_id);
+            } else {
+                document.getElementById('player').innerHTML = 'A fila está vazia.';
+            }
+        }
+
+        function playVideo(videoId) {
+            const playerDiv = document.getElementById('player');
+            playerDiv.innerHTML = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+        }
+
+        function nextVideo() {
+            fetch('remove_from_queue.php')
+                .then(() => loadQueue());
+        }
+
+        window.onload = loadQueue;
+    </script>
+</head>
+<body>
+    <h1>Player de Músicas</h1>
+    <div id="player"></div>
+    <button onclick="nextVideo()">Próxima Música</button>
+</body>
+</html>
