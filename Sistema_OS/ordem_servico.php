@@ -63,11 +63,13 @@
 
 
 
-<!-- Pop-up -->
+
+
+    <!-- Pop-up -->
 <div id="popup" class="popup-container">
     <div class="popup-content">
         <h2>Adicionar Ordem de Serviço</h2>
-        <form id="ordemServicoForm" method="POST" action="enviarFormulario()" onsubmit="return validarFormulario()">
+        <form id="ordemServicoForm">
             <label>Código do Cliente:</label>
             <input type="text" name="codigo_cliente" required>
 
@@ -110,24 +112,17 @@
             <label>Data de Entrega:</label>
             <input type="date" name="data_entrega" required> <!-- Tornado obrigatório -->
 
-            <button type="submit">OK Enviar</button>
+            <button type="button" onclick="enviarFormulario()">OK Enviar</button>
             <button type="button" onclick="fecharPopup()">Cancelar</button>
         </form>
     </div>
 </div>
 
-<script>
-function validarFormulario() {
-    var camposObrigatorios = document.querySelectorAll('input[required], textarea[required]');
-    for (var i = 0; i < camposObrigatorios.length; i++) {
-        if (camposObrigatorios[i].value === '') {
-            alert('Por favor, preencha todos os campos obrigatórios!');
-            return false; // Impede o envio do formulário
-        }
-    }
-    return true; // Permite o envio do formulário se todos os campos estiverem preenchidos
-}
 
+
+
+
+<script>
 function abrirPopup() {
     document.getElementById("popup").style.display = "flex";
 }
@@ -138,12 +133,26 @@ function fecharPopup() {
 
 function enviarFormulario() {
     let form = document.getElementById("ordemServicoForm");
+    let isValid = true;
 
-    // Verifique a validação do formulário antes de enviar
-    if (!validarFormulario()) {
-        return; // Se a validação falhar, não envie o formulário
+    // Verificar se todos os campos obrigatórios estão preenchidos
+    let inputs = form.querySelectorAll('input[required], textarea[required]'); 
+    inputs.forEach(input => {
+        if (input.value.trim() === "") {
+            isValid = false;
+            input.style.borderColor = "red"; // Destacar o campo vazio
+        } else {
+            input.style.borderColor = ""; // Remover o destaque se o campo estiver preenchido
+        }
+    });
+
+    // Se algum campo obrigatório não for preenchido, não envia o formulário
+    if (!isValid) {
+        alert("Por favor, preencha todos os campos obrigatórios.");
+        return;
     }
 
+    // Enviar o formulário se todos os campos obrigatórios forem preenchidos
     let formData = new FormData(form);
 
     fetch("salvar_ordem.php", {
@@ -159,8 +168,6 @@ function enviarFormulario() {
     .catch(error => console.error("Erro:", error));
 }
 </script>
-
-
 
 
 
