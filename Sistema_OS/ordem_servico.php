@@ -63,12 +63,11 @@
 
 
 
-
-    <!-- Pop-up -->
+<!-- Pop-up -->
 <div id="popup" class="popup-container">
     <div class="popup-content">
         <h2>Adicionar Ordem de Serviço</h2>
-        <form id="ordemServicoForm">
+        <form id="ordemServicoForm" method="POST" action="seu_script_php.php" onsubmit="return validarFormulario()">
             <label>Código do Cliente:</label>
             <input type="text" name="codigo_cliente" required>
 
@@ -85,44 +84,50 @@
             <input type="text" name="serie" required>
 
             <label>Acessórios:</label>
-            <input type="text" name="acessorios" required> <!-- Tornado obrigatório -->
+            <input type="text" name="acessorios">
 
             <label>Condições:</label>
-            <textarea name="condicoes" required></textarea> <!-- Tornado obrigatório -->
+            <textarea name="condicoes"></textarea>
 
             <label>Defeito Informado:</label>
-            <textarea name="defeito_informado" required></textarea> <!-- Tornado obrigatório -->
+            <textarea name="defeito_informado"></textarea>
 
             <label>Descrição do Serviço:</label>
-            <textarea name="descricao_servico" required></textarea> <!-- Tornado obrigatório -->
+            <textarea name="descricao_servico"></textarea>
 
             <label>Entrega:</label>
-            <input type="date" name="entrega" required> <!-- Tornado obrigatório -->
+            <input type="date" name="entrega">
 
             <label>Garantia:</label>
-            <input type="text" name="garantia" required> <!-- Tornado obrigatório -->
+            <input type="text" name="garantia">
 
             <label>Valor:</label>
             <input type="number" step="0.01" name="valor" required>
 
             <label>Condições de Pagamento:</label>
-            <input type="text" name="condicoes_pagamento" required> <!-- Tornado obrigatório -->
+            <input type="text" name="condicoes_pagamento">
 
             <label>Data de Entrega:</label>
-            <input type="date" name="data_entrega" required> <!-- Tornado obrigatório -->
+            <input type="date" name="data_entrega">
 
-            <button type="button" onclick="enviarFormulario()">OK Enviar</button>
+            <button type="submit">OK Enviar</button>
             <button type="button" onclick="fecharPopup()">Cancelar</button>
         </form>
     </div>
 </div>
 
+<script>
+function validarFormulario() {
+    var camposObrigatorios = document.querySelectorAll('input[required], textarea[required]');
+    for (var i = 0; i < camposObrigatorios.length; i++) {
+        if (camposObrigatorios[i].value === '') {
+            alert('Por favor, preencha todos os campos obrigatórios!');
+            return false; // Impede o envio do formulário
+        }
+    }
+    return true; // Permite o envio do formulário se todos os campos estiverem preenchidos
+}
 
-
-
-
-
-    <script>
 function abrirPopup() {
     document.getElementById("popup").style.display = "flex";
 }
@@ -133,6 +138,12 @@ function fecharPopup() {
 
 function enviarFormulario() {
     let form = document.getElementById("ordemServicoForm");
+
+    // Verifique a validação do formulário antes de enviar
+    if (!validarFormulario()) {
+        return; // Se a validação falhar, não envie o formulário
+    }
+
     let formData = new FormData(form);
 
     fetch("salvar_ordem.php", {
@@ -148,6 +159,7 @@ function enviarFormulario() {
     .catch(error => console.error("Erro:", error));
 }
 </script>
+
 
 
 
