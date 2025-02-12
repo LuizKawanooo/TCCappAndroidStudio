@@ -169,6 +169,7 @@
 
 
 
+/* Estilo do fundo do pop-up */
 .popup-container {
     display: none;
     position: fixed;
@@ -181,25 +182,87 @@
     align-items: center;
 }
 
+/* Caixa do pop-up */
 .popup-content {
-    background: white;
+    background: #f3f3f3;
     padding: 20px;
-    width: 400px;
-    border-radius: 10px;
-    text-align: center;
+    width: 800px; /* Aumentado para 800px */
+    border-radius: 5px;
+    border: 2px solid #ccc;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
+    text-align: left;
+    font-family: Arial, sans-serif;
+    position: relative;
 }
 
-.popup-content input, .popup-content textarea {
-    width: 100%;
+/* Título */
+.popup-content h2 {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 10px;
+    background: #d9d9d9;
+    padding: 8px;
+    border-bottom: 2px solid #ccc;
+}
+
+/* Labels */
+.popup-content label {
+    display: block;
+    font-weight: bold;
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+/* Inputs e Textareas com tamanho igual ao da imagem */
+.popup-content input, 
+.popup-content textarea {
+    width: calc(100% - 10px); /* Ajuste para ocupar toda a largura */
+    height: 30px; /* Altura maior para parecer com a imagem */
     margin: 5px 0;
     padding: 5px;
+    border: 1px solid #888;
+    border-radius: 3px;
+    background: white;
+    font-size: 14px;
 }
 
+/* Ajuste para os textareas */
+.popup-content textarea {
+    resize: none;
+    height: 50px; /* Mantendo padrão de altura */
+}
+
+/* Botões */
 .popup-content button {
-    padding: 10px;
-    margin: 5px;
-    font-size: 16px;
+    padding: 10px 15px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 3px;
+    font-size: 14px;
     cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Botão Enviar */
+.popup-content button:first-of-type {
+    background: blue;
+    color: white;
+    border: 1px solid #0056b3;
+}
+
+.popup-content button:first-of-type:hover {
+    background: darkblue;
+}
+
+/* Botão Cancelar */
+.popup-content button:last-of-type {
+    background: red;
+    color: white;
+    border: 1px solid darkred;
+}
+
+.popup-content button:last-of-type:hover {
+    background: darkred;
 }
 
 
