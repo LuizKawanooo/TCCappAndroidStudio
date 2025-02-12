@@ -20,7 +20,7 @@
     
 <hr style="width: 100%; background: rgb(164, 164, 164); height: 10px;" >
 
-    <section class="section_top" style="display: inline-flex;width: 100%; height: 150px; background: #A6CAF0; position: relative; left: 50%; transform: translate(-50%);">
+    <section class="section_middle" style="display: inline-flex;width: 100%; height: 150px; background: #A6CAF0; position: relative; left: 50%; transform: translate(-50%);">
         <div class="no_ordem" style="display: flex;">
             <label for="no_ordem" style="font-size: 23px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">No.ORDEM</label>
             <input type="number" id="no_ordem">
@@ -47,5 +47,10 @@
         </div>
 
     </section>
+
+
+        <section class="section_bottom" style="display: inline-flex;width: 100%; height: 150px; background: #A6CAF0; position: relative; left: 50%; transform: translate(-50%);">
+            
+        </section>
 </body>
 </html>
