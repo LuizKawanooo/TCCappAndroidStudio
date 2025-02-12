@@ -67,7 +67,7 @@
 <div id="popup" class="popup-container">
     <div class="popup-content">
         <h2>Adicionar Ordem de Serviço</h2>
-        <form id="ordemServicoForm" method="POST" action="seu_script_php.php" onsubmit="return validarFormulario()">
+        <form id="ordemServicoForm" method="POST" action="enviarFormulario()" onsubmit="return validarFormulario()">
             <label>Código do Cliente:</label>
             <input type="text" name="codigo_cliente" required>
 
@@ -84,31 +84,31 @@
             <input type="text" name="serie" required>
 
             <label>Acessórios:</label>
-            <input type="text" name="acessorios">
+            <input type="text" name="acessorios" required> <!-- Tornado obrigatório -->
 
             <label>Condições:</label>
-            <textarea name="condicoes"></textarea>
+            <textarea name="condicoes" required></textarea> <!-- Tornado obrigatório -->
 
             <label>Defeito Informado:</label>
-            <textarea name="defeito_informado"></textarea>
+            <textarea name="defeito_informado" required></textarea> <!-- Tornado obrigatório -->
 
             <label>Descrição do Serviço:</label>
-            <textarea name="descricao_servico"></textarea>
+            <textarea name="descricao_servico" required></textarea> <!-- Tornado obrigatório -->
 
             <label>Entrega:</label>
-            <input type="date" name="entrega">
+            <input type="date" name="entrega" required> <!-- Tornado obrigatório -->
 
             <label>Garantia:</label>
-            <input type="text" name="garantia">
+            <input type="text" name="garantia" required> <!-- Tornado obrigatório -->
 
             <label>Valor:</label>
             <input type="number" step="0.01" name="valor" required>
 
             <label>Condições de Pagamento:</label>
-            <input type="text" name="condicoes_pagamento">
+            <input type="text" name="condicoes_pagamento" required> <!-- Tornado obrigatório -->
 
             <label>Data de Entrega:</label>
-            <input type="date" name="data_entrega">
+            <input type="date" name="data_entrega" required> <!-- Tornado obrigatório -->
 
             <button type="submit">OK Enviar</button>
             <button type="button" onclick="fecharPopup()">Cancelar</button>
@@ -159,6 +159,7 @@ function enviarFormulario() {
     .catch(error => console.error("Erro:", error));
 }
 </script>
+
 
 
 
