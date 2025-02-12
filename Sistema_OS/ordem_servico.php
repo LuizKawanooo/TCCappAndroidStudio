@@ -118,5 +118,42 @@
     </div>
 </div>
 
+
+
+
+
+    <script>
+function abrirPopup() {
+    document.getElementById("popup").style.display = "flex";
+}
+
+function fecharPopup() {
+    document.getElementById("popup").style.display = "none";
+}
+
+function enviarFormulario() {
+    let form = document.getElementById("ordemServicoForm");
+    let formData = new FormData(form);
+
+    fetch("salvar_ordem.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert(data); // Exibe a mensagem de sucesso ou erro
+        fecharPopup(); // Fecha o pop-up
+        form.reset(); // Limpa o formulário
+    })
+    .catch(error => console.error("Erro:", error));
+}
+</script>
+
+
+
+
+
+    
+
 </body>
 </html>
