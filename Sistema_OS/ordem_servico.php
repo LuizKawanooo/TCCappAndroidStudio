@@ -9,7 +9,8 @@
 <body>
     <section class="section_top" style="display: inline-flex;width: 100%; background: #FFFBF0; position: relative; left: 50%; transform: translate(-50%);">
         <div class="incluir">
-            <div style="display: inline-block; align-items: center;text-align: center; margin: 15px;"><img src="img/adicionar_icon.png" alt="Adicionar OS" width="60px" style="position: relative; left: 50%; transform: translate(-50%);"><p style="position: relative;">Adicionar</p></div>
+            <div style="display: inline-block; align-items: center;text-align: center; margin: 15px;"><img src="img/adicionar_icon.png" alt="Adicionar OS" width="60px" style="position: relative; left: 50%; transform: translate(-50%);"></div>
+            <button onclick="abrirPopup()" style="padding: 10px 20px; font-size: 18px;">Adicionar</button>
         </div>
 
         <div class="incluir">
@@ -63,7 +64,7 @@
 
 
     <!-- Botão para abrir o pop-up -->
-<button onclick="abrirPopup()" style="padding: 10px 20px; font-size: 18px;">Adicionar</button>
+
 
 <!-- Pop-up -->
 <div id="popup" class="popup-container">
