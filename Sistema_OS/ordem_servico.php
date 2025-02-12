@@ -63,63 +63,6 @@
 
 
 
-    <!-- Botão para abrir o pop-up -->
-
-
-<!-- <!-- Pop-up -->
-<div id="popup" class="popup-container">
-    <div class="popup-content">
-        <h2>Adicionar Ordem de Serviço</h2>
-        <form id="ordemServicoForm">
-            <label>Código do Cliente:</label>
-            <input type="text" name="codigo_cliente" required>
-            
-            <label>Aparelho:</label>
-            <input type="text" name="aparelho" required>
-
-            <label>Marca:</label>
-            <input type="text" name="marca" required>
-
-            <label>Modelo:</label>
-            <input type="text" name="modelo" required>
-
-            <label>Número de Série:</label>
-            <input type="text" name="serie" required>
-
-            <label>Acessórios:</label>
-            <input type="text" name="acessorios">
-
-            <label>Condições:</label>
-            <textarea name="condicoes"></textarea>
-
-            <label>Defeito Informado:</label>
-            <textarea name="defeito_informado"></textarea>
-
-            <label>Descrição do Serviço:</label>
-            <textarea name="descricao_servico"></textarea>
-
-            <label>Entrega:</label>
-            <input type="date" name="entrega">
-
-            <label>Garantia:</label>
-            <input type="text" name="garantia">
-
-            <label>Valor:</label>
-            <input type="number" step="0.01" name="valor" required>
-
-            <label>Condições de Pagamento:</label>
-            <input type="text" name="condicoes_pagamento">
-
-            <label>Data de Entrega:</label>
-            <input type="date" name="data_entrega">
-
-            <button type="button" onclick="enviarFormulario()">OK Enviar</button>
-            <button type="button" onclick="fecharPopup()">Cancelar</button>
-        </form>
-    </div>
-</div> -->
-
-
 
     <!-- Pop-up -->
 <div id="popup" class="popup-container">
