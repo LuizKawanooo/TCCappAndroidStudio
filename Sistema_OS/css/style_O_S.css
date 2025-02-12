@@ -199,6 +199,7 @@
     text-align: left;
     font-family: Arial, sans-serif;
     position: relative;
+    transform: scale(0.93);
 }
 
 /* Título */
@@ -223,7 +224,7 @@
 .popup-content input, 
 .popup-content textarea {
     width: calc(100% - 10px); /* Ajuste para ocupar toda a largura */
-    height: 25px; /* Menor altura para caber melhor na tela */
+    height: 13px; /* Menor altura para caber melhor na tela */
     margin: 3px 0; /* Menor margem para mais compactação */
     padding: 5px;
     border: 1px solid #888;
