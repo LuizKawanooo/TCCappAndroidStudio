@@ -15,48 +15,55 @@ try {
 }
 
 // Pega os valores de pesquisa via GET
-$no_ordem = isset($_GET['no_ordem']) ? $_GET['no_ordem'] : '';
-$data_ordem = isset($_GET['data_ordem']) ? $_GET['data_ordem'] : '';
-$razao_ordem = isset($_GET['razao_ordem']) ? $_GET['razao_ordem'] : '';
-$serie_ordem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : '';
-$entregar_ordem = isset($_GET['entregar_ordem']) ? $_GET['entregar_ordem'] : '';
+$codigo_cliente = isset($_GET['codigo_cliente']) ? $_GET['codigo_cliente'] : '';
+$aparelho = isset($_GET['aparelho']) ? $_GET['aparelho'] : '';
+$marca = isset($_GET['marca']) ? $_GET['marca'] : '';
+$modelo = isset($_GET['modelo']) ? $_GET['modelo'] : '';
+$serie = isset($_GET['serie']) ? $_GET['serie'] : '';
+$entrega = isset($_GET['entrega']) ? $_GET['entrega'] : '';
 
 // Monta a query de busca com base nos parâmetros fornecidos
-$sql = "SELECT * FROM ordens WHERE 1=1"; // A cláusula WHERE 1=1 facilita a adição de outras condições
+$sql = "SELECT * FROM ordem_servico WHERE 1=1"; // A cláusula WHERE 1=1 facilita a adição de outras condições
 
-if (!empty($no_ordem)) {
-    $sql .= " AND no_ordem LIKE :no_ordem";
+if (!empty($codigo_cliente)) {
+    $sql .= " AND codigo_cliente LIKE :codigo_cliente";
 }
-if (!empty($data_ordem)) {
-    $sql .= " AND data_ordem LIKE :data_ordem";
+if (!empty($aparelho)) {
+    $sql .= " AND aparelho LIKE :aparelho";
 }
-if (!empty($razao_ordem)) {
-    $sql .= " AND razao_ordem LIKE :razao_ordem";
+if (!empty($marca)) {
+    $sql .= " AND marca LIKE :marca";
 }
-if (!empty($serie_ordem)) {
-    $sql .= " AND serie_ordem LIKE :serie_ordem";
+if (!empty($modelo)) {
+    $sql .= " AND modelo LIKE :modelo";
 }
-if (!empty($entregar_ordem)) {
-    $sql .= " AND entregar_ordem LIKE :entregar_ordem";
+if (!empty($serie)) {
+    $sql .= " AND serie LIKE :serie";
+}
+if (!empty($entrega)) {
+    $sql .= " AND entrega LIKE :entrega";
 }
 
 // Prepara e executa a consulta
 $stmt = $pdo->prepare($sql);
 
-if (!empty($no_ordem)) {
-    $stmt->bindValue(':no_ordem', '%' . $no_ordem . '%');
+if (!empty($codigo_cliente)) {
+    $stmt->bindValue(':codigo_cliente', '%' . $codigo_cliente . '%');
 }
-if (!empty($data_ordem)) {
-    $stmt->bindValue(':data_ordem', '%' . $data_ordem . '%');
+if (!empty($aparelho)) {
+    $stmt->bindValue(':aparelho', '%' . $aparelho . '%');
 }
-if (!empty($razao_ordem)) {
-    $stmt->bindValue(':razao_ordem', '%' . $razao_ordem . '%');
+if (!empty($marca)) {
+    $stmt->bindValue(':marca', '%' . $marca . '%');
 }
-if (!empty($serie_ordem)) {
-    $stmt->bindValue(':serie_ordem', '%' . $serie_ordem . '%');
+if (!empty($modelo)) {
+    $stmt->bindValue(':modelo', '%' . $modelo . '%');
 }
-if (!empty($entregar_ordem)) {
-    $stmt->bindValue(':entregar_ordem', '%' . $entregar_ordem . '%');
+if (!empty($serie)) {
+    $stmt->bindValue(':serie', '%' . $serie . '%');
+}
+if (!empty($entrega)) {
+    $stmt->bindValue(':entrega', '%' . $entrega . '%');
 }
 
 $stmt->execute();
@@ -64,9 +71,18 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Exibe os resultados da pesquisa
 if ($results) {
+    echo '<div class="search-results">';
     foreach ($results as $row) {
-        echo "<div>Ord. No: " . htmlspecialchars($row['no_ordem']) . " - " . htmlspecialchars($row['razao_ordem']) . " - " . htmlspecialchars($row['serie_ordem']) . "</div>";
+        echo "<div class='result-item'>";
+        echo "Código Cliente: " . htmlspecialchars($row['codigo_cliente']) . "<br>";
+        echo "Aparelho: " . htmlspecialchars($row['aparelho']) . "<br>";
+        echo "Marca: " . htmlspecialchars($row['marca']) . "<br>";
+        echo "Modelo: " . htmlspecialchars($row['modelo']) . "<br>";
+        echo "Série: " . htmlspecialchars($row['serie']) . "<br>";
+        echo "Entrega: " . htmlspecialchars($row['entrega']) . "<br>";
+        echo "</div>";
     }
+    echo '</div>';
 } else {
     echo "Nenhum resultado encontrado.";
 }
