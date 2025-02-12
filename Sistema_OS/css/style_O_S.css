@@ -169,6 +169,12 @@
 
 
 
+
+
+
+
+
+
 /* Estilo do fundo do pop-up */
 .popup-container {
     display: none;
@@ -185,7 +191,7 @@
 /* Caixa do pop-up */
 .popup-content {
     background: #f3f3f3;
-    padding: 20px;
+    padding: 10px; /* Reduzido para melhorar o espaçamento */
     width: 800px; /* Aumentado para 800px */
     border-radius: 5px;
     border: 2px solid #ccc;
@@ -198,10 +204,10 @@
 /* Título */
 .popup-content h2 {
     text-align: center;
-    font-size: 18px;
-    margin-bottom: 10px;
+    font-size: 16px; /* Reduzido para se ajustar melhor */
+    margin-bottom: 8px; /* Reduzido para menor espaçamento */
     background: #d9d9d9;
-    padding: 8px;
+    padding: 6px;
     border-bottom: 2px solid #ccc;
 }
 
@@ -209,36 +215,36 @@
 .popup-content label {
     display: block;
     font-weight: bold;
-    margin-top: 8px;
-    font-size: 14px;
+    margin-top: 6px; /* Ajustado para menor espaçamento */
+    font-size: 12px; /* Reduzido para ajustar */
 }
 
 /* Inputs e Textareas com tamanho igual ao da imagem */
 .popup-content input, 
 .popup-content textarea {
     width: calc(100% - 10px); /* Ajuste para ocupar toda a largura */
-    height: 30px; /* Altura maior para parecer com a imagem */
-    margin: 5px 0;
+    height: 25px; /* Menor altura para caber melhor na tela */
+    margin: 3px 0; /* Menor margem para mais compactação */
     padding: 5px;
     border: 1px solid #888;
     border-radius: 3px;
     background: white;
-    font-size: 14px;
+    font-size: 12px; /* Reduzido para se ajustar */
 }
 
 /* Ajuste para os textareas */
 .popup-content textarea {
     resize: none;
-    height: 50px; /* Mantendo padrão de altura */
+    height: 40px; /* Mantido altura reduzida */
 }
 
 /* Botões */
 .popup-content button {
-    padding: 10px 15px;
-    margin-top: 15px;
+    padding: 8px 12px; /* Reduzido o tamanho do padding */
+    margin-top: 12px; /* Menor margem para compactação */
     border: none;
     border-radius: 3px;
-    font-size: 14px;
+    font-size: 12px; /* Fontes menores para ajuste */
     cursor: pointer;
     transition: 0.3s;
 }
@@ -264,9 +270,3 @@
 .popup-content button:last-of-type:hover {
     background: darkred;
 }
-
-
-
-
-
-
