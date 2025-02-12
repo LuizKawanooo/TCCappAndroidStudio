@@ -21,34 +21,68 @@
     
 <hr style="width: 100%; background: rgb(164, 164, 164); height: 10px;" >
 
-    <section class="section_middle" style="display: inline-flex;width: 100%; height: 150px; background: #A6CAF0; position: relative; left: 50%; transform: translate(-50%);">
-        <div class="no_ordem" style="display: flex;">
-            <label for="no_ordem" style="font-size: 23px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">No.ORDEM</label>
-            <input type="number" id="no_ordem">
-        </div>
-        
-        <div class="data_ordem" style="display: flex; margin-left: 80px;">
-            <label for="data_ordem" style="font-size: 23px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">DATA DA ORDEM</label>
-            <input type="date" id="data_ordem">
-        </div>
+<section class="section_middle" style="display: inline-flex;width: 100%; height: 150px; background: #A6CAF0; position: relative; left: 50%; transform: translate(-50%);">
+    <div class="no_ordem" style="display: flex;">
+        <label for="no_ordem" style="font-size: 23px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">No.ORDEM</label>
+        <input type="number" id="no_ordem">
+    </div>
+    
+    <div class="data_ordem" style="display: flex; margin-left: 80px;">
+        <label for="data_ordem" style="font-size: 23px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">DATA DA ORDEM</label>
+        <input type="date" id="data_ordem">
+    </div>
 
-        <div class="razao_ordem" style="display: flex; margin-left: 5px;">
-            <label for="razao_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">LOCALIZAR PELA RAZAO SOCIAL DO CLIENTE</label>
-            <input type="text" id="razao_ordem">
-        </div>
+    <div class="razao_ordem" style="display: flex; margin-left: 5px;">
+        <label for="razao_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">LOCALIZAR PELA RAZAO SOCIAL DO CLIENTE</label>
+        <input type="text" id="razao_ordem" onkeyup="searchRazao()">
+        <!-- Exibir resultados da pesquisa -->
+        <div id="search-results"></div>
+    </div>
 
-        <div class="serie_ordem" style="display: flex; margin-left: 5px;">
-            <label for="serie_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">NUMERO DE SÉRIE</label>
-            <input type="number" id="serie_ordem">
-        </div>
+    <div class="serie_ordem" style="display: flex; margin-left: 5px;">
+        <label for="serie_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">NUMERO DE SÉRIE</label>
+        <input type="number" id="serie_ordem">
+    </div>
 
-        <div class="entregar_ordem" style="display: flex; margin-left: 30px;">
-            <label for="entregar_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">ENTREGAR NO DIA</label>
-            <input type="date" id="entregar_ordem">
-        </div>
+    <div class="entregar_ordem" style="display: flex; margin-left: 30px;">
+        <label for="entregar_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">ENTREGAR NO DIA</label>
+        <input type="date" id="entregar_ordem">
+    </div>
+</section>
 
-    </section>
 
+
+
+
+    <script>
+function searchRazao() {
+    // Pega o valor digitado no campo de pesquisa
+    var searchValue = document.getElementById("razao_ordem").value;
+
+    // Se o campo estiver vazio, não faz a pesquisa
+    if (searchValue.length == 0) {
+        document.getElementById("search-results").innerHTML = "";
+        return;
+    }
+
+    // Realiza a requisição AJAX
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "search.php?q=" + searchValue, true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            // Exibe os resultados da pesquisa
+            document.getElementById("search-results").innerHTML = xhr.responseText;
+        }
+    };
+    xhr.send();
+}
+</script>
+
+
+
+
+
+    
 
         <section class="section_bottom" style="display: inline-flex;width: 100%; height: 150px; background: #A6CAF0; position: relative; left: 50%; transform: translate(-50%);">
             
