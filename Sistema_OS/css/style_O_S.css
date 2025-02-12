@@ -1,0 +1,160 @@
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+#no_ordem{
+    width: 130px;
+    height: 40px;
+    border: 2px solid rgb(63, 63, 63);
+
+}
+#no_ordem:hover{
+    background: rgb(233, 233, 233);
+
+}
+#no_ordem:focus {
+    transition: none !important;
+    animation: none !important;
+    outline: none;
+    box-shadow: none;
+}
+.no_ordem{
+    width: 130px;
+    height: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    top: 25%;
+    left: 3%;
+    transform: translate(none,-50%);
+
+}
+
+
+#data_ordem{
+    width:200px;
+    height: 40px;
+    border: 2px solid rgb(63, 63, 63);
+
+}
+#data_ordem:hover{
+    background: rgb(233, 233, 233);
+
+}
+#data_ordem:focus {
+    transition: none !important;
+    animation: none !important;
+    outline: none;
+    box-shadow: none;
+}
+.data_ordem{
+    width: 230px;
+    height: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    top: 25%;
+    left: 3%;
+    transform: translate(none,-50%);
+
+}
+
+
+
+#razao_ordem{
+    width:550px;
+    height: 40px;
+    border: 2px solid rgb(63, 63, 63);
+
+
+}
+#razao_ordem:hover{
+    background: rgb(233, 233, 233);
+
+}
+#razao_ordem:focus {
+    transition: none !important;
+    animation: none !important;
+    outline: none;
+    box-shadow: none;
+}
+.razao_ordem{
+    width: 600px;
+    height: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    top: 25%;
+    left: 3%;
+    transform: translate(none,-50%);
+
+}
+
+
+
+
+#serie_ordem{
+    width:250px;
+    height: 40px;
+    border: 2px solid rgb(63, 63, 63);
+
+
+}
+#serie_ordem:hover{
+    background: rgb(233, 233, 233);
+
+}
+#serie_ordem:focus {
+    transition: none !important;
+    animation: none !important;
+    outline: none;
+    box-shadow: none;
+}
+.serie_ordem{
+    width: 250x;
+    height: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    top: 25%;
+    left: 3%;
+    transform: translate(none,-50%);
+
+}
+
+
+#entregar_ordem{
+    width:250px;
+    height: 40px;
+    border: 2px solid rgb(63, 63, 63);
+
+
+}
+#entregar_ordem:hover{
+    background: rgb(233, 233, 233);
+
+}
+#entregar_ordem:focus {
+    transition: none !important;
+    animation: none !important;
+    outline: none;
+    box-shadow: none;
+}
+.entregar_ordem{
+    width: 250x;
+    height: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    top: 25%;
+    left: 3%;
+    transform: translate(none,-50%);
+
+}
