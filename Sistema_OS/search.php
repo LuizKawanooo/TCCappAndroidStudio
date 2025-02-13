@@ -1,65 +1,66 @@
 <?php
-// Habilitando a exibição de erros para facilitar a depuração
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
-// Conexão com o banco de dados
-$host = 'bd-os-endo.mysql.uhserver.com'; // seu host
-$dbname = 'bd_os_endo'; // nome do banco de dados
-$username = 'joseendologic'; // seu usuário do banco de dados
-$password = '{[OSluiz2019'; // sua senha do banco de dados
-
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    // Conectando ao banco de dados
+    $pdo = new PDO('mysql:host=bd-os-endo.mysql.uhserver.com;dbname=bd_os_endo', 'joseendologic', '{[OSluiz2019');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo 'Erro de conexão: ' . $e->getMessage();
-    exit;
-}
 
-// Inicializando os parâmetros da consulta
-$no_ordem = isset($_GET['no_ordem']) ? $_GET['no_ordem'] : '';
-$data_ordem = isset($_GET['data_ordem']) ? $_GET['data_ordem'] : '';
-$razao_ordem = isset($_GET['razao_ordem']) ? $_GET['razao_ordem'] : '';
-$serie_ordem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : '';
-$entregar_ordem = isset($_GET['entregar_ordem']) ? $_GET['entregar_ordem'] : '';
+    // Pegando os parâmetros de busca
+    $aparelho = isset($_GET['aparelho_ordem']) ? $_GET['aparelho_ordem'] : '';
+    $marca = isset($_GET['marca_ordem']) ? $_GET['marca_ordem'] : '';
+    $modelo = isset($_GET['modelo_ordem']) ? $_GET['modelo_ordem'] : '';
 
-// Criando a consulta SQL com base nos parâmetros
-$query = "SELECT * FROM ordem_servico WHERE 1=1";
+    // Construindo a consulta SQL
+    $sql = "SELECT * FROM ordem_servico WHERE 1=1"; // A cláusula "WHERE 1=1" facilita a adição de filtros dinamicamente
 
-if ($no_ordem) $query .= " AND no_ordem LIKE :no_ordem";
-if ($data_ordem) $query .= " AND data_ordem LIKE :data_ordem";
-if ($razao_ordem) $query .= " AND razao_ordem LIKE :razao_ordem";
-if ($serie_ordem) $query .= " AND serie_ordem LIKE :serie_ordem";
-if ($entregar_ordem) $query .= " AND entregar_ordem LIKE :entregar_ordem";
-
-// Preparando a consulta
-$stmt = $pdo->prepare($query);
-
-// Ligando os parâmetros dinamicamente
-if ($no_ordem) $stmt->bindValue(':no_ordem', '%' . $no_ordem . '%');
-if ($data_ordem) $stmt->bindValue(':data_ordem', '%' . $data_ordem . '%');
-if ($razao_ordem) $stmt->bindValue(':razao_ordem', '%' . $razao_ordem . '%');
-if ($serie_ordem) $stmt->bindValue(':serie_ordem', '%' . $serie_ordem . '%');
-if ($entregar_ordem) $stmt->bindValue(':entregar_ordem', '%' . $entregar_ordem . '%');
-
-// Executando a consulta
-$stmt->execute();
-
-// Verificando se há resultados
-if ($stmt->rowCount() > 0) {
-    // Exibindo os resultados em formato HTML
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        echo '<tr>';
-        echo '<td>' . $row['no_ordem'] . '</td>';
-        echo '<td>' . $row['data_ordem'] . '</td>';
-        echo '<td>' . $row['razao_ordem'] . '</td>';
-        echo '<td>' . $row['serie_ordem'] . '</td>';
-        echo '<td>' . $row['entregar_ordem'] . '</td>';
-        echo '</tr>';
+    if ($aparelho) {
+        $sql .= " AND aparelho LIKE :aparelho";
     }
-} else {
-    echo '<tr><td colspan="5">Nenhum resultado encontrado</td></tr>';
-}
+    if ($marca) {
+        $sql .= " AND marca LIKE :marca";
+    }
+    if ($modelo) {
+        $sql .= " AND modelo LIKE :modelo";
+    }
 
+    // Preparando a consulta
+    $stmt = $pdo->prepare($sql);
+
+    // Bind dos parâmetros
+    if ($aparelho) {
+        $stmt->bindValue(':aparelho', '%' . $aparelho . '%');
+    }
+    if ($marca) {
+        $stmt->bindValue(':marca', '%' . $marca . '%');
+    }
+    if ($modelo) {
+        $stmt->bindValue(':modelo', '%' . $modelo . '%');
+    }
+
+    // Executando a consulta
+    $stmt->execute();
+
+    // Fetch dos resultados
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Enviando os resultados como HTML
+    foreach ($rows as $row) {
+        echo "<tr>
+                <td>{$row['codigo_cliente']}</td>
+                <td>{$row['aparelho']}</td>
+                <td>{$row['marca']}</td>
+                <td>{$row['modelo']}</td>
+                <td>{$row['serie']}</td>
+                <td>{$row['acessorios']}</td>
+                <td>{$row['condicoes']}</td>
+                <td>{$row['defeito_informado']}</td>
+                <td>{$row['descricao_servico']}</td>
+                <td>{$row['entrega']}</td>
+                <td>{$row['garantia']}</td>
+                <td>{$row['valor']}</td>
+              </tr>";
+    }
+
+} catch (PDOException $e) {
+    echo "Erro: " . $e->getMessage();
+}
 ?>
