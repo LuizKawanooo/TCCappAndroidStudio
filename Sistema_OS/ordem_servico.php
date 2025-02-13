@@ -52,7 +52,7 @@
 
 
     <div class="entregar_ordem" style="display: flex; margin-left: 30px;">
-        <button type="submit" style="background-color: #4fe368; border-radius: 5px; font-weight: bold; font-size: 18px; font-family: monospace; color: white; padding: 20px; margin-left: 10px; text-align: center; cursor: pointer;">Pesquisar</button>
+        <button type="button" onclick="searchFields()" style="background-color: #4fe368; border-radius: 5px; font-weight: bold; font-size: 18px; font-family: monospace; color: white; padding: 20px; margin-left: 10px; text-align: center; cursor: pointer;">Pesquisar</button>
     </div>
     
 </section>
