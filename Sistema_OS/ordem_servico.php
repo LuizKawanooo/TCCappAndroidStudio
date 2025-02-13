@@ -176,6 +176,7 @@ function confirmarCancelamento() {
 <script>
 function abrirPopup() {
     document.getElementById("popup").style.display = "flex";
+    ajustarEscala(); // Ajusta o zoom quando o popup abrir
 }
 
 function fecharPopup() {
@@ -219,35 +220,35 @@ function enviarFormulario() {
     .catch(error => console.error("Erro:", error));
 }
 
-
-
-
-
-
-
-
-
-    function ajustarEscala() {
-    let zoomLevel = Math.round(window.devicePixelRatio * 100); // Obtém o nível de zoom
-    if (zoomLevel >= 125) { 
-        document.popup.style.transform = "scale(0.75)";
-    } else {
-        document.popup.style.transform = "scale(1)";
-    }
-}
-
-// Executa a função ao carregar a página
-window.onload = ajustarEscala;
-
-// Detecta mudanças no zoom (necessário para alguns navegadores)
-window.addEventListener('resize', ajustarEscala);
-
-
-
     
 </script>
 
 
+
+
+
+
+
+    <script>
+// Função que ajusta o scale dependendo do zoom do sistema ou da tela
+function ajustarEscala() {
+    let zoomLevel = Math.round(window.devicePixelRatio * 100); // Obtém o nível de zoom
+    if (zoomLevel >= 125) {
+        document.body.style.transform = "scale(0.75)";
+        document.body.style.transformOrigin = "top left";
+    } else {
+        document.body.style.transform = "scale(1)";
+    }
+}
+
+// Detecta mudanças no zoom (necessário para alguns navegadores)
+window.addEventListener('resize', ajustarEscala);
+</script>
+
+
+
+
+    
 
 </body>
 </html>
