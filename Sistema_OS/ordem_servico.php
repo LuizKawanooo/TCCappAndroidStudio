@@ -60,7 +60,7 @@
 
     <?php
 // Conexão com o banco de dados
-$host = 'localhost';
+$host = 'bd-os-endo.mysql.uhserver.com';
 $db = 'bd_os_endo';
 $user = 'joseendologic';
 $pass = '{[OSluiz2019';
