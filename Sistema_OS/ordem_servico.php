@@ -234,9 +234,9 @@ function enviarFormulario() {
 function ajustarEscala() {
     let zoomLevel = Math.round(window.devicePixelRatio * 100); // Obtém o nível de zoom
     if (zoomLevel >= 125) {
-        document.popup.style.transform = "scale(0.75)";
+        document.popup-content.style.transform = "scale(0.70)";
     } else {
-        document.body.style.transform = "scale(1)";
+        document.popup-content.style.transform = "scale(1)";
     }
 }
 
