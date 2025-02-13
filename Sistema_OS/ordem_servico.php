@@ -73,7 +73,7 @@ function searchFields() {
     var queryString = params.length > 0 ? '?' + params.join('&') : '';
 
     // Usar Fetch API para fazer a requisição ao PHP
-    fetch('seu_script.php' + queryString)
+    fetch('search.php' + queryString)
         .then(response => response.text())
         .then(data => {
             // Exibir os resultados retornados
