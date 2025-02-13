@@ -163,7 +163,7 @@ function searchFields() {
 
 
 <!-- Popup (Exemplo) -->
-<div id="popup" style="display: block; background: lightgray; padding: 20px;">
+<div id="popup" style="display: none; background: lightgray; padding: 20px;">
     <p>Este é um popup!</p>
 </div>
 
@@ -171,7 +171,7 @@ function searchFields() {
 function fecharPopup() {
     let confirmacao = confirm("Tem certeza que deseja cancelar?");
     if (confirmacao) {
-        document.getElementById("popup").style.display = "none";
+        document.getElementById("popup").style.display = "flex";
     }
 }
 </script>
