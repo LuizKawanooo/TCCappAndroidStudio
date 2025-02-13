@@ -154,36 +154,26 @@ function searchFields() {
             <input type="date" name="data_entrega" required> <!-- Tornado obrigatório -->
 
             <button type="button" onclick="enviarFormulario()">OK Enviar</button>
-            <button type="button" onclick="mostrarPopup()">Cancelar</button>
+            <!-- Botão de Cancelar -->
+            <button type="button" onclick="confirmarCancelamento()">Cancelar</button>
         </form>
     </div>
 </div>
 
 
-    <!-- Popup (Inicialmente Escondido) -->
-<div id="popup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 1px solid black; box-shadow: 0px 0px 10px rgba(0,0,0,0.5);">
-    <p>Tem certeza que deseja cancelar?</p>
-    <button onclick="confirmarCancelamento(true)">Sim</button>
-    <button onclick="confirmarCancelamento(false)">Não</button>
-</div>
-
-
-    
-
 <script>
-function mostrarPopup() {
-    document.getElementById("popup").style.display = "block";
-}
-
-function confirmarCancelamento(confirmado) {
-    if (confirmado) {
+function confirmarCancelamento() {
+    let confirmar = confirm("Tem certeza que deseja cancelar?");
+    if (confirmar) {
         alert("Cancelamento confirmado!");
-        // Aqui pode adicionar alguma ação extra, como redirecionar ou fechar um modal
+        // Aqui você pode adicionar qualquer ação extra, como redirecionar ou fechar um modal
+    } else {
+        alert("Cancelamento abortado!");
     }
-    document.getElementById("popup").style.display = "none";
 }
 </script>
 
+    
     
 <script>
 function abrirPopup() {
