@@ -52,7 +52,22 @@
 </section>
 
 <section class="section_bottom" style="display: inline-flex;width: 100%; height: 150px; background: #A6CAF0; position: relative; left: 50%; transform: translate(-50%);">
-    <div id="search-results"></div> <!-- Resultados da pesquisa aqui -->
+    <div id="search-results">
+    <div class="search-result-row">
+        <div class="search-result-header">Coluna 1</div>
+        <div class="search-result-header">Coluna 2</div>
+        <div class="search-result-header">Coluna 3</div>
+        <!-- Adicione mais colunas conforme necessário -->
+    </div>
+    <div class="search-result-row">
+        <div class="search-result-cell">Resultado 1A</div>
+        <div class="search-result-cell">Resultado 1B</div>
+        <div class="search-result-cell">Resultado 1C</div>
+        <!-- Adicione mais células conforme necessário -->
+    </div>
+    <!-- Mais linhas de resultados aqui -->
+</div>
+
 </section>
 
 <script>
