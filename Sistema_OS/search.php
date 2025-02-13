@@ -5,8 +5,8 @@ error_reporting(E_ALL);
 
 // Conexão com o banco de dados
 $host = 'bd-os-endo.mysql.uhserver.com'; // seu host
-$dbname = 'tccappionic_bd'; // nome do banco de dados
-$username = 'ionic_perfil_bd'; // seu usuário do banco de dados
+$dbname = 'bd_os_endo'; // nome do banco de dados
+$username = 'joseendologic'; // seu usuário do banco de dados
 $password = '{[OSluiz2019'; // sua senha do banco de dados
 
 try {
