@@ -181,7 +181,7 @@ function confirmarCancelamento() {
 document.addEventListener("keydown", function(event) {
     let popup = document.getElementById("popup");
 
-    if (popup.style.display === "block") {
+    if (popup.style.display === "flex") {
         if (
             event.key === "Enter" ||        // Bloqueia Enter
             event.key === "F5" ||           // Bloqueia F5
