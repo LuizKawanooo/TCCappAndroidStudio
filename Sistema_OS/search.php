@@ -18,7 +18,7 @@ $serie_ordem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : '';
 $entregar_ordem = isset($_GET['entregar_ordem']) ? $_GET['entregar_ordem'] : '';
 
 // Construindo a consulta SQL com base nos parâmetros fornecidos
-$query = "SELECT * FROM sua_tabela WHERE 1=1";
+$query = "SELECT * FROM ordem_servico WHERE 1=1";
 
 if ($no_ordem != '') {
     $query .= " AND no_ordem LIKE '%$no_ordem%'";
