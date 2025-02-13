@@ -46,12 +46,13 @@
     </div>
 
     <div class="entregar_ordem" style="display: flex; margin-left: 30px;">
+        <label for="entregar_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">ENTREGAR NO DIA</label>
+        <input type="date" id="entregar_ordem" name="entregar_ordem" onkeyup="searchFields()">
+    </div>
+
+    <div class="entregar_ordem" style="display: flex; margin-left: 30px;">
         <button type="button" onclick="searchFields()" style="background-color: #4fe368; border-radius: 5px; font-weight: bold; font-size: 18px; font-family: monospace; color: white; padding: 20px; margin-left: 10px; text-align: center; cursor: pointer;">Pesquisar</button>
     </div>
-</section>
-
-<section class="section_bottom" style="display: inline-flex;width: 100%; height: 150px; background: #A6CAF0; position: relative; left: 50%; transform: translate(-50%);">
-    <div id="search-results"></div>
 </section>
 
 <script>
