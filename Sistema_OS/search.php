@@ -1,4 +1,3 @@
-<?php
 // Conexão com o banco de dados
 $host = 'bd-os-endo.mysql.uhserver.com';  // Ajuste para o seu host
 $user = 'joseendologic';  // Ajuste para seu usuário
@@ -13,50 +12,30 @@ if ($conn->connect_error) {
 }
 
 // Pegando os valores dos campos de pesquisa
-$codigoCliente = isset($_GET['codigo_cliente']) ? $_GET['codigo_cliente'] : '';
-$aparelho = isset($_GET['aparelho']) ? $_GET['aparelho'] : '';
-$marca = isset($_GET['marca']) ? $_GET['marca'] : '';
-$modelo = isset($_GET['modelo']) ? $_GET['modelo'] : '';
-$serie = isset($_GET['serie']) ? $_GET['serie'] : '';
-$acessorios = isset($_GET['acessorios']) ? $_GET['acessorios'] : '';
-$condicoes = isset($_GET['condicoes']) ? $_GET['condicoes'] : '';
-$defeitoInformado = isset($_GET['defeito_informado']) ? $_GET['defeito_informado'] : '';
-$descricaoServico = isset($_GET['descricao_servico']) ? $_GET['descricao_servico'] : '';
-$dataEntrega = isset($_GET['data_entrega']) ? $_GET['data_entrega'] : '';
+$noOrdem = isset($_GET['no_ordem']) ? $_GET['no_ordem'] : '';
+$dataOrdem = isset($_GET['data_ordem']) ? $_GET['data_ordem'] : '';
+$razaoOrdem = isset($_GET['razao_ordem']) ? $_GET['razao_ordem'] : '';
+$serieOrdem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : '';
+$entregarOrdem = isset($_GET['entregar_ordem']) ? $_GET['entregar_ordem'] : '';
 
 // Iniciar a consulta SQL
 $query = "SELECT * FROM ordem_servico WHERE 1=1";  // A consulta começa com WHERE 1=1 para adicionar as condições facilmente
 
 // Adicionando condições se os campos não estão vazios
-if (!empty($codigoCliente)) {
-    $query .= " AND codigo_cliente = '$codigoCliente'";
+if (!empty($noOrdem)) {
+    $query .= " AND no_ordem = '$noOrdem'";
 }
-if (!empty($aparelho)) {
-    $query .= " AND aparelho LIKE '%$aparelho%'";
+if (!empty($dataOrdem)) {
+    $query .= " AND data_ordem = '$dataOrdem'";
 }
-if (!empty($marca)) {
-    $query .= " AND marca LIKE '%$marca%'";
+if (!empty($razaoOrdem)) {
+    $query .= " AND razao_ordem LIKE '%$razaoOrdem%'";
 }
-if (!empty($modelo)) {
-    $query .= " AND modelo LIKE '%$modelo%'";
+if (!empty($serieOrdem)) {
+    $query .= " AND serie_ordem = '$serieOrdem'";
 }
-if (!empty($serie)) {
-    $query .= " AND serie = '$serie'";
-}
-if (!empty($acessorios)) {
-    $query .= " AND acessorios LIKE '%$acessorios%'";
-}
-if (!empty($condicoes)) {
-    $query .= " AND condicoes LIKE '%$condicoes%'";
-}
-if (!empty($defeitoInformado)) {
-    $query .= " AND defeito_informado LIKE '%$defeitoInformado%'";
-}
-if (!empty($descricaoServico)) {
-    $query .= " AND descricao_servico LIKE '%$descricaoServico%'";
-}
-if (!empty($dataEntrega)) {
-    $query .= " AND data_entrega = '$dataEntrega'";
+if (!empty($entregarOrdem)) {
+    $query .= " AND entregar_ordem = '$entregarOrdem'";
 }
 
 // Executando a consulta
@@ -66,31 +45,21 @@ $result = $conn->query($query);
 if ($result->num_rows > 0) {
     // Imprimir os resultados em formato de tabela
     echo '<div class="search-result-row">';
-    echo '<div class="search-result-header">Código Cliente</div>';
-    echo '<div class="search-result-header">Aparelho</div>';
-    echo '<div class="search-result-header">Marca</div>';
-    echo '<div class="search-result-header">Modelo</div>';
+    echo '<div class="search-result-header">No. Ordem</div>';
+    echo '<div class="search-result-header">Data Ordem</div>';
+    echo '<div class="search-result-header">Razão Social</div>';
     echo '<div class="search-result-header">Série</div>';
-    echo '<div class="search-result-header">Acessórios</div>';
-    echo '<div class="search-result-header">Condições</div>';
-    echo '<div class="search-result-header">Defeito Informado</div>';
-    echo '<div class="search-result-header">Descrição do Serviço</div>';
-    echo '<div class="search-result-header">Data de Entrega</div>';
+    echo '<div class="search-result-header">Data Entrega</div>';
     echo '</div>';
     
     // Imprimir cada linha de resultado
     while ($row = $result->fetch_assoc()) {
         echo '<div class="search-result-row">';
-        echo '<div class="search-result-cell">' . htmlspecialchars($row['codigo_cliente']) . '</div>';
-        echo '<div class="search-result-cell">' . htmlspecialchars($row['aparelho']) . '</div>';
-        echo '<div class="search-result-cell">' . htmlspecialchars($row['marca']) . '</div>';
-        echo '<div class="search-result-cell">' . htmlspecialchars($row['modelo']) . '</div>';
-        echo '<div class="search-result-cell">' . htmlspecialchars($row['serie']) . '</div>';
-        echo '<div class="search-result-cell">' . htmlspecialchars($row['acessorios']) . '</div>';
-        echo '<div class="search-result-cell">' . htmlspecialchars($row['condicoes']) . '</div>';
-        echo '<div class="search-result-cell">' . htmlspecialchars($row['defeito_informado']) . '</div>';
-        echo '<div class="search-result-cell">' . htmlspecialchars($row['descricao_servico']) . '</div>';
-        echo '<div class="search-result-cell">' . htmlspecialchars($row['data_entrega']) . '</div>';
+        echo '<div class="search-result-cell">' . htmlspecialchars($row['no_ordem']) . '</div>';
+        echo '<div class="search-result-cell">' . htmlspecialchars($row['data_ordem']) . '</div>';
+        echo '<div class="search-result-cell">' . htmlspecialchars($row['razao_ordem']) . '</div>';
+        echo '<div class="search-result-cell">' . htmlspecialchars($row['serie_ordem']) . '</div>';
+        echo '<div class="search-result-cell">' . htmlspecialchars($row['entregar_ordem']) . '</div>';
         echo '</div>';
     }
 } else {
