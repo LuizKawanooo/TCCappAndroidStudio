@@ -27,62 +27,31 @@
 <section class="section_middle" style="display: inline-flex;width: 100%; height: 150px; background: #A6CAF0; position: relative; left: 50%; transform: translate(-50%);">
     <div class="no_ordem" style="display: flex;">
         <label for="no_ordem" style="font-size: 23px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">No.ORDEM</label>
-        <input type="number" id="no_ordem">
+        <input type="number" id="no_ordem" name="no_ordem" onkeyup="searchFields()">
     </div>
     
     <div class="data_ordem" style="display: flex; margin-left: 80px;">
         <label for="data_ordem" style="font-size: 23px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">DATA DA ORDEM</label>
-        <input type="date" id="data_ordem">
+        <input type="date" id="data_ordem" name="data_ordem" onkeyup="searchFields()">
     </div>
 
     <div class="razao_ordem" style="display: flex; margin-left: 5px;">
         <label for="razao_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">LOCALIZAR PELA RAZAO SOCIAL DO CLIENTE</label>
-        <input type="text" id="razao_ordem">
+        <input type="text" id="razao_ordem" name="razao_ordem" onkeyup="searchFields()">
     </div>
 
     <div class="serie_ordem" style="display: flex; margin-left: 5px;">
         <label for="serie_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">NUMERO DE SÉRIE</label>
-        <input type="number" id="serie_ordem">
+        <input type="number" id="serie_ordem" name="serie_ordem" onkeyup="searchFields()">
     </div>
 
     <div class="entregar_ordem" style="display: flex; margin-left: 30px;">
-        <button type="button" onclick="searchFields()" style="background-color: #4fe368; border-radius: 5px; font-weight: bold; font-size: 18px; font-family: monospace; color: white; padding: 20px; margin-left: 10px; text-align: center; cursor: pointer;">Pesquisar</button>
+        <label for="entregar_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">ENTREGAR NO DIA</label>
+        <input type="date" id="entregar_ordem" name="entregar_ordem" onkeyup="searchFields()">
     </div>
+
+    
 </section>
-
-<section class="section_bottom" style="display: inline-flex;width: 100%; height: 150px; background: #A6CAF0; position: relative; left: 50%; transform: translate(-50%);">
-    <div id="search-results"></div>
-</section>
-
-<script>
-function searchFields() {
-    // Coletando os valores dos campos
-    var noOrdem = document.getElementById('no_ordem').value;
-    var dataOrdem = document.getElementById('data_ordem').value;
-    var razaoOrdem = document.getElementById('razao_ordem').value;
-    var serieOrdem = document.getElementById('serie_ordem').value;
-
-    // Montar a string de parâmetros para a URL
-    var params = [];
-    if (noOrdem) params.push("no_ordem=" + noOrdem);
-    if (dataOrdem) params.push("data_ordem=" + dataOrdem);
-    if (razaoOrdem) params.push("razao_ordem=" + razaoOrdem);
-    if (serieOrdem) params.push("serie_ordem=" + serieOrdem);
-
-    // Se houver parâmetros de busca, cria a URL de consulta
-    var queryString = params.length > 0 ? '?' + params.join('&') : '';
-
-    // Usar Fetch API para fazer a requisição ao PHP
-    fetch('seu_script.php' + queryString)
-        .then(response => response.text())
-        .then(data => {
-            // Exibir os resultados retornados
-            document.getElementById('search-results').innerHTML = data;
-        })
-        .catch(error => console.error('Erro:', error));
-}
-</script>
-
 
 <section class="section_bottom" style="display: inline-flex;width: 100%; height: 150px; background: #A6CAF0; position: relative; left: 50%; transform: translate(-50%);">
     <div id="search-results" style="overflow-x:auto; width: 100%;">
@@ -118,7 +87,26 @@ function searchFields() {
 
 
 
+    <script>
+       function searchFields() {
+    let noOrdem = document.getElementById('no_ordem').value.trim();
+    let dataOrdem = document.getElementById('data_ordem').value.trim();
+    let razaoOrdem = document.getElementById('razao_ordem').value.trim();
+    let serieOrdem = document.getElementById('serie_ordem').value.trim();
+    let entregarOrdem = document.getElementById('entregar_ordem').value.trim();
 
+    // Realizar uma requisição AJAX para o PHP
+    let queryString = `no_ordem=${noOrdem}&data_ordem=${dataOrdem}&razao_ordem=${razaoOrdem}&serie_ordem=${serieOrdem}&entregar_ordem=${entregarOrdem}`;
+
+    fetch('search.php?' + queryString)
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('search-results').innerHTML = data;
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+    </script>
 
 
 
