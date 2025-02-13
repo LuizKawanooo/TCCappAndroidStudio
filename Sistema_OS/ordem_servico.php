@@ -95,6 +95,12 @@ $data_ordem = isset($_GET['data_ordem']) ? $_GET['data_ordem'] : '';
 $serie_ordem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : '';
 $entregar_ordem = isset($_GET['entregar_ordem']) ? $_GET['entregar_ordem'] : '';
 
+// Se não houver parâmetros de pesquisa, não executar a consulta
+if (empty($no_ordem) && empty($data_ordem) && empty($serie_ordem) && empty($entregar_ordem)) {
+    echo "Por favor, preencha algum campo para realizar a pesquisa.";
+    exit();  // Sai do script se não houver parâmetros de pesquisa
+}
+
 // Iniciar a query com um "WHERE 1=1" para facilitar a construção da pesquisa
 $query = "SELECT codigo_cliente, aparelho, marca, modelo, serie, data_entrega, valor FROM ordem_servico WHERE 1=1";
 
