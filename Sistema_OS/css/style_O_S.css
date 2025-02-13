@@ -162,6 +162,34 @@
 
 
 
+#search-results {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.search-result-row {
+    display: table-row;
+}
+
+.search-result-cell {
+    display: table-cell;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.search-result-header {
+    font-weight: bold;
+    background-color: #f4f4f4;
+}
+
+
+
+
+
+
 
 
 
