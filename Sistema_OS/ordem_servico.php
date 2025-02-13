@@ -38,7 +38,7 @@
     
     <div class="serie_ordem" style="display: flex; margin-left: 5px;">
         <label for="serie_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">NUMERO DE SÉRIE</label>
-        <input type="number" id="serie_ordem" name="serie_ordem">
+        <input type="text" id="serie_ordem" name="serie_ordem">
     </div>
     
 
