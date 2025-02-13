@@ -70,6 +70,75 @@
 </section>
 
 
+    <script>
+        function searchFields() {
+    // Pegando os valores dos campos
+    let noOrdem = document.getElementById('no_ordem').value.trim();
+    let dataOrdem = document.getElementById('data_ordem').value.trim();
+    let razaoOrdem = document.getElementById('razao_ordem').value.trim();
+    let serieOrdem = document.getElementById('serie_ordem').value.trim();
+    let entregarOrdem = document.getElementById('entregar_ordem').value.trim();
+
+    // Construindo a consulta SQL baseada nos campos preenchidos
+    let query = "SELECT * FROM orders WHERE 1=1";  // A consulta começa com "WHERE 1=1" para facilitar a adição de condições
+
+    // Adicionando condições aos campos que não estão vazios
+    if (noOrdem) {
+        query += ` AND no_ordem = '${noOrdem}'`;
+    }
+    if (dataOrdem) {
+        query += ` AND data_ordem = '${dataOrdem}'`;
+    }
+    if (razaoOrdem) {
+        query += ` AND razao_ordem LIKE '%${razaoOrdem}%'`;
+    }
+    if (serieOrdem) {
+        query += ` AND serie_ordem = '${serieOrdem}'`;
+    }
+    if (entregarOrdem) {
+        query += ` AND entregar_ordem = '${entregarOrdem}'`;
+    }
+
+    // Aqui você faria a requisição para o banco de dados, com o `query` gerado acima.
+    // Exemplo com fetch ou AJAX para enviar para um servidor e receber os dados.
+
+    fetch('/path-to-api-endpoint', {
+        method: 'POST',
+        body: JSON.stringify({ query: query }),
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(response => response.json())
+    .then(data => {
+        displayResults(data);
+    })
+    .catch(error => console.error('Error fetching data:', error));
+}
+
+function displayResults(data) {
+    let resultsDiv = document.getElementById('search-results');
+    resultsDiv.innerHTML = '';  // Limpar os resultados antigos
+
+    // Criar a tabela de resultados
+    if (data.length > 0) {
+        data.forEach(item => {
+            let row = document.createElement('div');
+            row.classList.add('search-result-row');
+            row.innerHTML = `
+                <div class="search-result-cell">${item.no_ordem}</div>
+                <div class="search-result-cell">${item.data_ordem}</div>
+                <div class="search-result-cell">${item.razao_ordem}</div>
+                <div class="search-result-cell">${item.serie_ordem}</div>
+                <div class="search-result-cell">${item.entregar_ordem}</div>
+            `;
+            resultsDiv.appendChild(row);
+        });
+    } else {
+        resultsDiv.innerHTML = '<p>Nenhum resultado encontrado</p>';
+    }
+}
+
+    </script>
+
 
 
 <script>
