@@ -160,18 +160,11 @@ function searchFields() {
 </div>
 
 
-
-
-<!-- Popup (Exemplo) -->
-<div id="popup" style="display: none; background: lightgray; padding: 20px;">
-    <p>Este é um popup!</p>
-</div>
-
 <script>
 function fecharPopup() {
     let confirmacao = confirm("Tem certeza que deseja cancelar?");
     if (confirmacao) {
-        document.getElementById("popup").style.display = "flex";
+        document.getElementById("popup").style.display = "none";
     }
 }
 </script>
@@ -182,9 +175,9 @@ function abrirPopup() {
     document.getElementById("popup").style.display = "flex";
 }
 
-// function fecharPopup() {
-//     document.getElementById("popup").style.display = "none";
-// }
+function fecharPopup() {
+    document.getElementById("popup").style.display = "none";
+}
 
 function enviarFormulario() {
     let form = document.getElementById("ordemServicoForm");
