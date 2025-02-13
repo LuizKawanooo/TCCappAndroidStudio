@@ -76,51 +76,61 @@
 
 
 
-    <script>
-        // Função que será chamada ao digitar nos campos
-        function searchFields() {
-            // Obtendo os valores dos campos de pesquisa
-            let no_ordem = document.getElementById('no_ordem').value;
-            let data_ordem = document.getElementById('data_ordem').value;
-            let razao_ordem = document.getElementById('razao_ordem').value;
-            let serie_ordem = document.getElementById('serie_ordem').value;
-            let entregar_ordem = document.getElementById('entregar_ordem').value;
+   <script>
+    // Função que será chamada ao digitar nos campos
+    function searchFields() {
+        // Obtendo os valores dos campos de pesquisa
+        let no_ordem = document.getElementById('no_ordem').value;
+        let data_ordem = document.getElementById('data_ordem').value;
+        let razao_ordem = document.getElementById('razao_ordem').value;
+        let serie_ordem = document.getElementById('serie_ordem').value;
+        let entregar_ordem = document.getElementById('entregar_ordem').value;
 
-            // Criando a URL com os parâmetros de pesquisa
-            let url = 'search.php?';
-            if (no_ordem) url += `no_ordem=${no_ordem}&`;
-            if (data_ordem) url += `data_ordem=${data_ordem}&`;
-            if (razao_ordem) url += `razao_ordem=${razao_ordem}&`;
-            if (serie_ordem) url += `serie_ordem=${serie_ordem}&`;
-            if (entregar_ordem) url += `entregar_ordem=${entregar_ordem}&`;
+        // Criando a URL com os parâmetros de pesquisa
+        let url = 'search.php?';
+        if (no_ordem) url += `no_ordem=${no_ordem}&`;
+        if (data_ordem) url += `data_ordem=${data_ordem}&`;
+        if (razao_ordem) url += `razao_ordem=${razao_ordem}&`;
+        if (serie_ordem) url += `serie_ordem=${serie_ordem}&`;
+        if (entregar_ordem) url += `entregar_ordem=${entregar_ordem}&`;
 
-            // Removendo o último "&" caso tenha
-            url = url.slice(0, -1);
+        // Removendo o último "&" caso tenha
+        url = url.slice(0, -1);
 
-            // Realizando a chamada AJAX para buscar os dados
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    // Limpar a tabela antes de adicionar os resultados
-                    let tbody = document.getElementById('resultTable').getElementsByTagName('tbody')[0];
-                    tbody.innerHTML = '';
+        // Realizando a chamada AJAX para buscar os dados
+        fetch(url)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Erro na resposta da rede');
+                }
+            })
+            .then(data => {
+                // Limpar a tabela antes de adicionar os resultados
+                let tbody = document.getElementById('resultTable').getElementsByTagName('tbody')[0];
+                tbody.innerHTML = '';
 
-                    // Adicionando os resultados na tabela
-                    data.forEach(row => {
-                        let tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td>${row.no_ordem}</td>
-                            <td>${row.data_ordem}</td>
-                            <td>${row.razao_ordem}</td>
-                            <td>${row.serie_ordem}</td>
-                            <td>${row.entregar_ordem}</td>
-                        `;
-                        tbody.appendChild(tr);
-                    });
-                })
-                .catch(error => console.error('Erro:', error));
-        }
-    </script>
+                // Adicionando os resultados na tabela
+                data.forEach(row => {
+                    let tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${row.no_ordem}</td>
+                        <td>${row.data_ordem}</td>
+                        <td>${row.razao_ordem}</td>
+                        <td>${row.serie_ordem}</td>
+                        <td>${row.entregar_ordem}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Ocorreu um erro ao buscar os dados.');
+            });
+    }
+</script>
+
     
 
 
