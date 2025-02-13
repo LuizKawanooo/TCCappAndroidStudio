@@ -25,58 +25,54 @@
 
     
 <section class="section_middle" style="display: inline-flex;width: 100%; height: 150px; background: #A6CAF0; position: relative; left: 50%; transform: translate(-50%);">
-    <form id="searchForm" method="GET">
-        <div class="form-group">
-            <label for="no_ordem">No. ORDEM</label>
+    
+        <!-- Formulário de pesquisa -->
+        <div class="no_ordem" style="display: flex;">
+            <label for="no_ordem" style="font-size: 23px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">No.ORDEM</label>
             <input type="number" id="no_ordem" name="no_ordem" onkeyup="searchFields()">
         </div>
-        
-        <div class="form-group">
-            <label for="data_ordem">DATA DA ORDEM</label>
+            
+        <div class="data_ordem" style="display: flex; margin-left: 80px;">
+            <label for="data_ordem" style="font-size: 23px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">DATA DA ORDEM</label>
             <input type="date" id="data_ordem" name="data_ordem" onkeyup="searchFields()">
         </div>
-
-        <div class="form-group">
-            <label for="razao_ordem">LOCALIZAR PELA RAZÃO SOCIAL DO CLIENTE</label>
+        
+        <div class="razao_ordem" style="display: flex; margin-left: 5px;">
+            <label for="razao_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">LOCALIZAR PELA RAZÃO SOCIAL DO CLIENTE</label>
             <input type="text" id="razao_ordem" name="razao_ordem" onkeyup="searchFields()">
         </div>
-
-        <div class="form-group">
-            <label for="serie_ordem">NUMERO DE SÉRIE</label>
+        
+        <div class="serie_ordem" style="display: flex; margin-left: 5px;">
+            <label for="serie_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">NUMERO DE SÉRIE</label>
             <input type="number" id="serie_ordem" name="serie_ordem" onkeyup="searchFields()">
         </div>
-
-        <div class="form-group">
-            <label for="entregar_ordem">ENTREGAR NO DIA</label>
+        
+        <div class="entregar_ordem" style="display: flex; margin-left: 30px;">
+            <label for="entregar_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">ENTREGAR NO DIA</label>
             <input type="date" id="entregar_ordem" name="entregar_ordem" onkeyup="searchFields()">
         </div>
-    </form>
-
-    
+            
 </section>
 
-<section class="section_bottom" style="display: inline-flex;width: 100%; height: 150px; background: #A6CAF0; position: relative; left: 50%; transform: translate(-50%);">
-<table border="1" id="resultTable">
-        <thead>
-            <tr>
-                <th>No. Ordem</th>
-                <th>Data da Ordem</th>
-                <th>Razão Social</th>
-                <th>Número de Série</th>
-                <th>Entregar no Dia</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Os resultados da pesquisa serão exibidos aqui -->
-        </tbody>
-    </table>
-</section>
+<table>
+    <thead>
+        <tr>
+            <th>No. Ordem</th>
+            <th>Data Ordem</th>
+            <th>Razão Ordem</th>
+            <th>Série Ordem</th>
+            <th>Entregar no Dia</th>
+        </tr>
+    </thead>
+    <tbody id="resultTable">
+        <!-- Os resultados da pesquisa serão inseridos aqui -->
+    </tbody>
+</table>
 
 
 
 
-
-   <script>
+<script>
     // Função que será chamada ao digitar nos campos
     function searchFields() {
         // Obtendo os valores dos campos de pesquisa
@@ -99,16 +95,10 @@
 
         // Realizando a chamada AJAX para buscar os dados
         fetch(url)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Erro na resposta da rede');
-                }
-            })
+            .then(response => response.json())
             .then(data => {
                 // Limpar a tabela antes de adicionar os resultados
-                let tbody = document.getElementById('resultTable').getElementsByTagName('tbody')[0];
+                let tbody = document.getElementById('resultTable');
                 tbody.innerHTML = '';
 
                 // Adicionando os resultados na tabela
@@ -124,13 +114,9 @@
                     tbody.appendChild(tr);
                 });
             })
-            .catch(error => {
-                console.error('Erro:', error);
-                alert('Ocorreu um erro ao buscar os dados.');
-            });
+            .catch(error => console.error('Erro:', error));
     }
 </script>
-
     
 
 
