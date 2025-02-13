@@ -30,15 +30,10 @@
         <label for="no_ordem" style="font-size: 23px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">No.ORDEM</label>
         <input type="number" id="no_ordem" name="no_ordem" onkeyup="searchFields()">
     </div>
-        
+
     <div class="data_ordem" style="display: flex; margin-left: 80px;">
         <label for="data_ordem" style="font-size: 23px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">DATA DA ORDEM</label>
         <input type="date" id="data_ordem" name="data_ordem" onkeyup="searchFields()">
-    </div>
-    
-    <div class="razao_ordem" style="display: flex; margin-left: 5px;">
-        <label for="razao_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">LOCALIZAR PELA RAZÃO SOCIAL DO CLIENTE</label>
-        <input type="text" id="razao_ordem" name="razao_ordem" onkeyup="searchFields()">
     </div>
     
     <div class="serie_ordem" style="display: flex; margin-left: 5px;">
@@ -52,73 +47,32 @@
     </div>
 </section>
 
-<div id="resultados"></div> <!-- Aqui os resultados serão exibidos -->
+<!-- Exibição dos resultados -->
+<div id="resultados"></div>
 
+<script>
+function searchFields() {
+    var no_ordem = document.getElementById('no_ordem').value;
+    var data_ordem = document.getElementById('data_ordem').value;
+    var serie_ordem = document.getElementById('serie_ordem').value;
+    var entregar_ordem = document.getElementById('entregar_ordem').value;
 
+    // Construir a URL com os parâmetros de pesquisa
+    var url = 'ordem_servico.php?no_ordem=' + no_ordem + 
+              '&data_ordem=' + data_ordem + 
+              '&serie_ordem=' + serie_ordem + 
+              '&entregar_ordem=' + entregar_ordem;
 
-
-
-    <?php
-// Conexão com o banco de dados
-$host = 'bd-os-endo.mysql.uhserver.com';
-$db = 'bd_os_endo';
-$user = 'joseendologic';
-$pass = '{[OSluiz2019';
-$conn = new mysqli($host, $user, $pass, $db);
-
-if ($conn->connect_error) {
-    die("Falha na conexão: " . $conn->connect_error);
+    // Fazer a requisição para o PHP e mostrar os resultados
+    fetch(url)
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('resultados').innerHTML = data;
+        })
+        .catch(error => console.error('Erro ao buscar ordens:', error));
 }
+</script>
 
-// Recuperando os parâmetros de pesquisa
-$no_ordem = isset($_GET['no_ordem']) ? $_GET['no_ordem'] : '';
-$data_ordem = isset($_GET['data_ordem']) ? $_GET['data_ordem'] : '';
-$razao_ordem = isset($_GET['razao_ordem']) ? $_GET['razao_ordem'] : '';
-$serie_ordem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : '';
-$entregar_ordem = isset($_GET['entregar_ordem']) ? $_GET['entregar_ordem'] : '';
-
-// Consultando a base de dados com os filtros
-$query = "SELECT codigo_cliente, aparelho, marca, modelo, serie, data_entrega, valor 
-          FROM ordem_servico 
-          WHERE 1=1";
-
-if ($no_ordem) {
-    $query .= " AND id = '$no_ordem'";
-}
-if ($data_ordem) {
-    $query .= " AND data_registro = '$data_ordem'";
-}
-if ($razao_ordem) {
-    $query .= " AND codigo_cliente LIKE '%$razao_ordem%'";
-}
-if ($serie_ordem) {
-    $query .= " AND serie = '$serie_ordem'";
-}
-if ($entregar_ordem) {
-    $query .= " AND data_entrega = '$entregar_ordem'";
-}
-
-$result = $conn->query($query);
-
-if ($result->num_rows > 0) {
-    // Exibindo os resultados
-    while($row = $result->fetch_assoc()) {
-        echo "<div class='resultado'>
-                <p><strong>Cliente:</strong> " . $row['codigo_cliente'] . "</p>
-                <p><strong>Aparelho:</strong> " . $row['aparelho'] . "</p>
-                <p><strong>Marca:</strong> " . $row['marca'] . "</p>
-                <p><strong>Modelo:</strong> " . $row['modelo'] . "</p>
-                <p><strong>Série:</strong> " . $row['serie'] . "</p>
-                <p><strong>Data de Entrega:</strong> " . $row['data_entrega'] . "</p>
-                <p><strong>Valor:</strong> " . $row['valor'] . "</p>
-              </div>";
-    }
-} else {
-    echo "Nenhuma ordem encontrada.";
-}
-
-$conn->close();
-?>
 
 
 
