@@ -21,7 +21,7 @@ $serie_ordem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : '';
 $entregar_ordem = isset($_GET['entregar_ordem']) ? $_GET['entregar_ordem'] : '';
 
 // Iniciando a consulta SQL
-$query = "SELECT * FROM sua_tabela WHERE 1=1";  // Inicia com uma condição verdadeira
+$query = "SELECT * FROM ordem_servico WHERE 1=1";  // Inicia com uma condição verdadeira
 
 // Adicionando filtros à consulta dependendo dos parâmetros passados
 if ($no_ordem != '') {
@@ -47,8 +47,12 @@ $result = $conn->query($query);
 if ($result->num_rows > 0) {
     // Exibindo os resultados
     while ($row = $result->fetch_assoc()) {
-        echo "<div>Ordem: " . $row['no_ordem'] . " - Data: " . $row['data_ordem'] . " - Razão: " . $row['razao_ordem'] . "</div>";
-        // Adicione outros campos conforme necessário
+        // Exibe todos os campos da linha encontrada
+        echo "<div>";
+        foreach ($row as $key => $value) {
+            echo "<strong>$key:</strong> $value<br>";  // Exibe o nome da coluna e o valor
+        }
+        echo "</div><br>";
     }
 } else {
     echo "Nenhum resultado encontrado.";
