@@ -7,10 +7,10 @@ error_reporting(E_ALL);
 header('Content-Type: application/json');
 
 // Conectar ao banco de dados
-$host = 'localhost'; // Altere para o seu host
-$dbname = 'seu_banco_de_dados'; // Altere para o seu nome de banco de dados
-$user = 'seu_usuario'; // Altere para o seu usuário
-$pass = 'sua_senha'; // Altere para a sua senha
+$host = 'bd-os-endo.mysql.uhserver.com'; // Altere para o seu host
+$dbname = 'bd_os_endo'; // Altere para o seu nome de banco de dados
+$user = 'joseendologic'; // Altere para o seu usuário
+$pass = '{[OSluiz2019'; // Altere para a sua senha
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
