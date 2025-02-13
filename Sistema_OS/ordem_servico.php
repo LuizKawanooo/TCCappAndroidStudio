@@ -24,7 +24,7 @@
 
 
     
-<section class="section_middle" style="display: inline-flex;width: 100%; height: 150px; background: #A6CAF0; position: relative; left: 50%; transform: translate(-50%);">
+<section class="section_middle" style="display: inline-flex; width: 100%; height: 150px; background: #A6CAF0; position: relative; left: 50%; transform: translate(-50%);">
     <!-- Formulário de pesquisa -->
     <div class="no_ordem" style="display: flex;">
         <label for="no_ordem" style="font-size: 23px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">No.ORDEM</label>
@@ -47,30 +47,41 @@
     </div>
 </section>
 
+
 <!-- Exibição dos resultados -->
 <div id="resultados"></div>
 
 <script>
 function searchFields() {
+    // Pegando os valores dos campos de entrada
     var no_ordem = document.getElementById('no_ordem').value;
     var data_ordem = document.getElementById('data_ordem').value;
     var serie_ordem = document.getElementById('serie_ordem').value;
     var entregar_ordem = document.getElementById('entregar_ordem').value;
 
-    // Construir a URL com os parâmetros de pesquisa
-    var url = 'ordem_servico.php?no_ordem=' + no_ordem + 
-              '&data_ordem=' + data_ordem + 
-              '&serie_ordem=' + serie_ordem + 
-              '&entregar_ordem=' + entregar_ordem;
+    // Construir a URL de pesquisa com os parâmetros preenchidos
+    var query = '?';
 
-    // Fazer a requisição para o PHP e mostrar os resultados
-    fetch(url)
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('resultados').innerHTML = data;
-        })
-        .catch(error => console.error('Erro ao buscar ordens:', error));
+    if (no_ordem) {
+        query += 'no_ordem=' + no_ordem + '&';
+    }
+    if (data_ordem) {
+        query += 'data_ordem=' + data_ordem + '&';
+    }
+    if (serie_ordem) {
+        query += 'serie_ordem=' + serie_ordem + '&';
+    }
+    if (entregar_ordem) {
+        query += 'entregar_ordem=' + entregar_ordem + '&';
+    }
+
+    // Remover o último caractere '&' (se houver)
+    query = query.slice(0, -1);
+
+    // Enviar a pesquisa para o servidor (ajustar o URL conforme necessário)
+    window.location.href = 'ordem_servico.php' + query;
 }
+
 </script>
 
 
@@ -95,36 +106,59 @@ $data_ordem = isset($_GET['data_ordem']) ? $_GET['data_ordem'] : '';
 $serie_ordem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : '';
 $entregar_ordem = isset($_GET['entregar_ordem']) ? $_GET['entregar_ordem'] : '';
 
-// Se não houver parâmetros de pesquisa, não executar a consulta
-if (empty($no_ordem) && empty($data_ordem) && empty($serie_ordem) && empty($entregar_ordem)) {
-    echo "Por favor, preencha algum campo para realizar a pesquisa.";
-    exit();  // Sai do script se não houver parâmetros de pesquisa
-}
-
-// Iniciar a query com um "WHERE 1=1" para facilitar a construção da pesquisa
+// Iniciar a query com "WHERE 1=1" para facilitar a construção das condições
 $query = "SELECT codigo_cliente, aparelho, marca, modelo, serie, data_entrega, valor FROM ordem_servico WHERE 1=1";
+
+// Criar um array de condições para concatenar com a query
+$conditions = [];
 
 // Adicionar as condições conforme os campos preenchidos
 if ($no_ordem != '') {
-    $query .= " AND id = '$no_ordem'";
+    $conditions[] = "id = '$no_ordem'";
 }
 if ($data_ordem != '') {
-    $query .= " AND data_registro = '$data_ordem'";
+    $conditions[] = "data_registro = '$data_ordem'";
 }
 if ($serie_ordem != '') {
-    $query .= " AND serie = '$serie_ordem'";
+    $conditions[] = "serie = '$serie_ordem'";
 }
 if ($entregar_ordem != '') {
-    $query .= " AND data_entrega = '$entregar_ordem'";
+    $conditions[] = "data_entrega = '$entregar_ordem'";
+}
+
+// Concatenar as condições na query se existirem
+if (count($conditions) > 0) {
+    $query .= " AND " . implode(" AND ", $conditions);
+} else {
+    echo "Por favor, preencha algum campo para realizar a pesquisa.";
+    exit();  // Sai do script se não houver parâmetros de pesquisa
 }
 
 // Executar a consulta
 $result = $conn->query($query);
 
-
+// Checar se há resultados
+if ($result->num_rows > 0) {
+    // Mostrar os resultados
+    while($row = $result->fetch_assoc()) {
+        echo "<div>";
+        echo "<p><strong>Código Cliente:</strong> " . $row["codigo_cliente"]. "</p>";
+        echo "<p><strong>Aparelho:</strong> " . $row["aparelho"]. "</p>";
+        echo "<p><strong>Marca:</strong> " . $row["marca"]. "</p>";
+        echo "<p><strong>Modelo:</strong> " . $row["modelo"]. "</p>";
+        echo "<p><strong>Série:</strong> " . $row["serie"]. "</p>";
+        echo "<p><strong>Data de Entrega:</strong> " . $row["data_entrega"]. "</p>";
+        echo "<p><strong>Valor:</strong> R$ " . number_format($row["valor"], 2, ',', '.'). "</p>";
+        echo "</div>";
+    }
+} else {
+    echo "Nenhum resultado encontrado.";
+}
 
 $conn->close();
 ?>
+
+
 
 
 
