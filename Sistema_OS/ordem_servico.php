@@ -165,7 +165,6 @@ function searchFields() {
 function confirmarCancelamento() {
     let confirmar = confirm("Tem certeza que deseja cancelar?");
     if (confirmar) {
-        alert("Cancelamento confirmado!");
         document.getElementById("popup").style.display = "none";
     } else {
         alert("Cancelamento abortado!");
