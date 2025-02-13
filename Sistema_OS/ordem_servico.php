@@ -49,10 +49,30 @@
         <label for="entregar_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">ENTREGAR NO DIA</label>
         <input type="date" id="entregar_ordem" name="entregar_ordem" onkeyup="searchFields()">
     </div>
+
+
+    <div class="entregar_ordem" style="display: flex; margin-left: 30px;">
+        <button type="submit" style="background-color: #4fe368; border-radius: 5px; font-weight: bold; font-size: 18px; font-family: monospace; color: white; padding: 20px; margin-left: 10px; text-align: center; cursor: pointer;">Pesquisar</button>
+    </div>
+    
 </section>
 
 <section class="section_bottom" style="display: inline-flex;width: 100%; height: 150px; background: #A6CAF0; position: relative; left: 50%; transform: translate(-50%);">
-
+    <div id="search-results" style="overflow-x:auto; width: 100%;">
+        <div class="search-result-row">
+        <div class="search-result-header">Coluna 1</div>
+        <div class="search-result-header">Coluna 2</div>
+        <div class="search-result-header">Coluna 3</div>
+        <!-- Adicione mais colunas conforme necessário -->
+    </div>
+    <div class="search-result-row">
+        <div class="search-result-cell">Resultado 1A</div>
+        <div class="search-result-cell">Resultado 1B</div>
+        <div class="search-result-cell">Resultado 1C</div>
+        <!-- Adicione mais células conforme necessário -->
+    </div>
+    <!-- Mais linhas de resultados aqui -->
+    </div>
 </section>
 
 
