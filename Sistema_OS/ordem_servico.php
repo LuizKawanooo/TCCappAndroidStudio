@@ -67,7 +67,7 @@ function searchFields() {
     fetch(url)
         .then(response => response.text())
         .then(data => {
-            document.getElementById('resultados').innerHTML = data;
+            
         })
         .catch(error => console.error('Erro ao buscar ordens:', error));
 }
