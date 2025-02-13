@@ -166,24 +166,23 @@
 
 
 #search-results {
-    display: table;
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+    display: block; /* Para permitir o scroll horizontal */
     overflow-x: auto; /* Permite o scroll horizontal */
-    display: block; /* Faz o container rolar horizontalmente */
-    max-width: 100%; /* Garante que a largura máxima seja 100% */
+    max-width: 100%; /* Limita a largura à tela */
+    margin-top: 20px;
 }
 
 .search-result-row {
-    display: table-row;
+    display: flex; /* Flexbox para exibir as células em uma linha */
+    flex-wrap: nowrap; /* Evita que as células quebrem para a próxima linha */
+    border-bottom: 1px solid #ddd; /* Borda inferior para separar as linhas */
 }
 
-.search-result-cell {
-    display: table-cell;
+.search-result-cell, .search-result-header {
     padding: 10px;
     text-align: center;
     border: 1px solid #ddd;
+    min-width: 150px; /* Tamanho mínimo para as células */
 }
 
 .search-result-header {
