@@ -162,11 +162,17 @@
 
 
 
+
+
+
 #search-results {
     display: table;
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    overflow-x: auto; /* Permite o scroll horizontal */
+    display: block; /* Faz o container rolar horizontalmente */
+    max-width: 100%; /* Garante que a largura máxima seja 100% */
 }
 
 .search-result-row {
@@ -184,6 +190,7 @@
     font-weight: bold;
     background-color: #f4f4f4;
 }
+
 
 
 
