@@ -74,36 +74,36 @@ function searchFields() {
     };
 
     // Enviando a requisição para o servidor
-    fetch('search.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(searchParams)
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Exibindo os resultados no frontend
-        const resultsDiv = document.getElementById('results');
-        resultsDiv.innerHTML = ''; // Limpar resultados anteriores
+.fetch('search.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(searchParams)
+})
+.then(response => response.json())
+.then(data => {
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = ''; // Limpar resultados anteriores
 
-        if (data.length === 0) {
-            resultsDiv.innerHTML = 'Nenhuma ordem encontrada.';
-        } else {
-            const table = document.createElement('table');
-            const header = document.createElement('tr');
-            header.innerHTML = '<th>Código Cliente</th><th>Aparelho</th><th>Marca</th><th>Modelo</th><th>Série</th><th>Data de Entrega</th><th>Valor</th>';
-            table.appendChild(header);
+    if (data.error) {
+        resultsDiv.innerHTML = 'Erro: ' + data.error;
+    } else {
+        const table = document.createElement('table');
+        const header = document.createElement('tr');
+        header.innerHTML = '<th>Código Cliente</th><th>Aparelho</th><th>Marca</th><th>Modelo</th><th>Série</th><th>Data de Entrega</th><th>Valor</th>';
+        table.appendChild(header);
 
-            data.forEach(ordem => {
-                const row = document.createElement('tr');
-                row.innerHTML = `<td>${ordem.codigo_cliente}</td><td>${ordem.aparelho}</td><td>${ordem.marca}</td><td>${ordem.modelo}</td><td>${ordem.serie}</td><td>${ordem.data_entrega}</td><td>${ordem.valor}</td>`;
-                table.appendChild(row);
-            });
-            resultsDiv.appendChild(table);
-        }
-    })
-    .catch(error => console.error('Erro ao buscar ordens:', error));
+        data.forEach(ordem => {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td>${ordem.codigo_cliente}</td><td>${ordem.aparelho}</td><td>${ordem.marca}</td><td>${ordem.modelo}</td><td>${ordem.serie}</td><td>${ordem.data_entrega}</td><td>${ordem.valor}</td>`;
+            table.appendChild(row);
+        });
+        resultsDiv.appendChild(table);
+    }
+})
+.catch(error => console.error('Erro ao buscar ordens:', error));
+
 }
 </script>
 
