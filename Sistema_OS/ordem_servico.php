@@ -54,18 +54,18 @@
             
 </section>
 
-<table>
+<table id="resultTable">
     <thead>
         <tr>
-            <th>No. Ordem</th>
+            <th>No Ordem</th>
             <th>Data Ordem</th>
             <th>Razão Ordem</th>
             <th>Série Ordem</th>
-            <th>Entregar no Dia</th>
+            <th>Entregar Ordem</th>
         </tr>
     </thead>
-    <tbody id="resultTable">
-        <!-- Os resultados da pesquisa serão inseridos aqui -->
+    <tbody>
+        <!-- Aqui serão inseridos os resultados da pesquisa -->
     </tbody>
 </table>
 
@@ -96,9 +96,15 @@
     fetch(url)
         .then(response => response.text()) // Recebe a resposta como texto
         .then(data => {
-            // Limpar a tabela antes de adicionar os resultados
-            let tbody = document.getElementById('resultTable').getElementsByTagName('tbody')[0];
-            tbody.innerHTML = data; // Adiciona o conteúdo HTML retornado
+            // Verificando se o elemento tbody existe antes de tentar acessar
+            let tbody = document.getElementById('resultTable')?.getElementsByTagName('tbody')[0];
+
+            if (tbody) {
+                // Limpar a tabela antes de adicionar os resultados
+                tbody.innerHTML = data; // Adiciona o conteúdo HTML retornado
+            } else {
+                console.error("Elemento tbody não encontrado.");
+            }
         })
         .catch(error => console.error('Erro:', error));
 }
