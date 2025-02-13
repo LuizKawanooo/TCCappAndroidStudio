@@ -170,7 +170,7 @@
 
 @media screen and (max-width: 1280px) {
     popup-content {
-        transform: scale(0.83);
+        transform: scale(0.75);
     }
 }
 
