@@ -28,24 +28,38 @@
     <!-- Formulário de pesquisa -->
     <div class="no_ordem" style="display: flex;">
         <label for="no_ordem" style="font-size: 23px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">No.ORDEM</label>
-        <input type="number" id="no_ordem" name="no_ordem" onkeyup="searchFields()">
+        <input type="number" id="no_ordem" name="no_ordem">
     </div>
 
     <div class="data_ordem" style="display: flex; margin-left: 80px;">
         <label for="data_ordem" style="font-size: 23px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">DATA DA ORDEM</label>
-        <input type="date" id="data_ordem" name="data_ordem" onkeyup="searchFields()">
+        <input type="date" id="data_ordem" name="data_ordem">
     </div>
     
     <div class="serie_ordem" style="display: flex; margin-left: 5px;">
         <label for="serie_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">NUMERO DE SÉRIE</label>
-        <input type="number" id="serie_ordem" name="serie_ordem" onkeyup="searchFields()">
+        <input type="number" id="serie_ordem" name="serie_ordem">
     </div>
+    
+
+    <div class="razao_ordem" style="display: flex; margin-left: 5px;">
+        <label for="razao_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">LOCALIZAR PELA RAZÃO SOCIAL DO CLIENTE</label>
+        <input type="text" id="razao_ordem" name="razao_ordem">
+    </div>
+
+    
     
     <div class="entregar_ordem" style="display: flex; margin-left: 30px;">
         <label for="entregar_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">ENTREGAR NO DIA</label>
-        <input type="date" id="entregar_ordem" name="entregar_ordem" onkeyup="searchFields()">
+        <input type="date" id="entregar_ordem" name="entregar_ordem">
+    </div>
+
+    <!-- Botão de Envio -->
+    <div style="display: flex; align-items: center; margin-left: 30px;">
+        <button onclick="searchFields()" style="font-size: 18px; font-weight: bold; background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer;">Pesquisar</button>
     </div>
 </section>
+
 
 
 <!-- Exibição dos resultados -->
