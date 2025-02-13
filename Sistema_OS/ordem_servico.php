@@ -52,8 +52,8 @@
 </section>
 
 <section class="section_bottom" style="display: inline-flex;width: 100%; height: 150px; background: #A6CAF0; position: relative; left: 50%; transform: translate(-50%);">
-    <div id="search-results">
-    <div class="search-result-row">
+    <div id="search-results" style="overflow-x:auto; width: 100%;">
+         <div class="search-result-row">
         <div class="search-result-header">Coluna 1</div>
         <div class="search-result-header">Coluna 2</div>
         <div class="search-result-header">Coluna 3</div>
@@ -66,9 +66,11 @@
         <!-- Adicione mais células conforme necessário -->
     </div>
     <!-- Mais linhas de resultados aqui -->
-</div>
-
+    </div>
 </section>
+
+
+
 
 <script>
 function searchFields() {
