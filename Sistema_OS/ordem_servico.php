@@ -153,24 +153,36 @@ $result = $conn->query($query);
 
 // Checar se há resultados
 if ($result->num_rows > 0) {
-    echo '<div style="display: flex; flex-direction: column; gap: 10px;">';
+    echo '<div style="overflow-x: auto;">';
+    echo '<table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; text-align: left;">';
+    echo '<tr style="background: yellow; border: 2px solid black;">';
+    echo '<th style="padding: 10px; border: 2px solid black;">Código Cliente</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Aparelho</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Marca</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Modelo</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Série</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Data de Entrega</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Valor</th>';
+    echo '</tr>';
 
     while ($row = $result->fetch_assoc()) {
-        echo '<div style="display: flex; align-items: center; gap: 15px; background: yellow; padding: 10px; border-radius: 5px; font-family: Arial, sans-serif;">';
-        echo "<p><strong>Código Cliente:</strong> " . $row["codigo_cliente"]. "</p>";
-        echo "<p><strong>Aparelho:</strong> " . $row["aparelho"]. "</p>";
-        echo "<p><strong>Marca:</strong> " . $row["marca"]. "</p>";
-        echo "<p><strong>Modelo:</strong> " . $row["modelo"]. "</p>";
-        echo "<p><strong>Série:</strong> " . $row["serie"]. "</p>";
-        echo "<p><strong>Data de Entrega:</strong> " . $row["data_entrega"]. "</p>";
-        echo "<p><strong>Valor:</strong> R$ " . number_format($row["valor"], 2, ',', '.'). "</p>";
-        echo "</div>";
+        echo '<tr style="border: 2px solid black;">';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["codigo_cliente"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["aparelho"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["marca"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["modelo"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["serie"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["data_entrega"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">R$ ' . number_format($row["valor"], 2, ',', '.') . '</td>';
+        echo '</tr>';
     }
 
+    echo '</table>';
     echo '</div>';
 } else {
     echo "Nenhum resultado encontrado.";
 }
+
 
 $conn->close();
 ?>
