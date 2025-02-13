@@ -1,66 +1,43 @@
 <?php
-try {
-    // Conectando ao banco de dados
-    $pdo = new PDO('mysql:host=bd-os-endo.mysql.uhserver.com;dbname=bd_os_endo', 'joseendologic', '{[OSluiz2019');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+header('Content-Type: application/json');
+include 'conexao.php'; // Conexão com o banco de dados
 
-    // Pegando os parâmetros de busca
-    $aparelho = isset($_GET['aparelho_ordem']) ? $_GET['aparelho_ordem'] : '';
-    $marca = isset($_GET['marca_ordem']) ? $_GET['marca_ordem'] : '';
-    $modelo = isset($_GET['modelo_ordem']) ? $_GET['modelo_ordem'] : '';
+// Receber os parâmetros da pesquisa
+$noOrdem = isset($_GET['noOrdem']) ? $_GET['noOrdem'] : '';
+$dataOrdem = isset($_GET['dataOrdem']) ? $_GET['dataOrdem'] : '';
+$razaoOrdem = isset($_GET['razaoOrdem']) ? $_GET['razaoOrdem'] : '';
+$serieOrdem = isset($_GET['serieOrdem']) ? $_GET['serieOrdem'] : '';
+$entregarOrdem = isset($_GET['entregarOrdem']) ? $_GET['entregarOrdem'] : '';
 
-    // Construindo a consulta SQL
-    $sql = "SELECT * FROM ordem_servico WHERE 1=1"; // A cláusula "WHERE 1=1" facilita a adição de filtros dinamicamente
+// Criar a consulta dinâmica
+$query = "SELECT * FROM ordem_servico WHERE 1=1";
 
-    if ($aparelho) {
-        $sql .= " AND aparelho LIKE :aparelho";
-    }
-    if ($marca) {
-        $sql .= " AND marca LIKE :marca";
-    }
-    if ($modelo) {
-        $sql .= " AND modelo LIKE :modelo";
-    }
-
-    // Preparando a consulta
-    $stmt = $pdo->prepare($sql);
-
-    // Bind dos parâmetros
-    if ($aparelho) {
-        $stmt->bindValue(':aparelho', '%' . $aparelho . '%');
-    }
-    if ($marca) {
-        $stmt->bindValue(':marca', '%' . $marca . '%');
-    }
-    if ($modelo) {
-        $stmt->bindValue(':modelo', '%' . $modelo . '%');
-    }
-
-    // Executando a consulta
-    $stmt->execute();
-
-    // Fetch dos resultados
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    // Enviando os resultados como HTML
-    foreach ($rows as $row) {
-        echo "<tr>
-                <td>{$row['codigo_cliente']}</td>
-                <td>{$row['aparelho']}</td>
-                <td>{$row['marca']}</td>
-                <td>{$row['modelo']}</td>
-                <td>{$row['serie']}</td>
-                <td>{$row['acessorios']}</td>
-                <td>{$row['condicoes']}</td>
-                <td>{$row['defeito_informado']}</td>
-                <td>{$row['descricao_servico']}</td>
-                <td>{$row['entrega']}</td>
-                <td>{$row['garantia']}</td>
-                <td>{$row['valor']}</td>
-              </tr>";
-    }
-
-} catch (PDOException $e) {
-    echo "Erro: " . $e->getMessage();
+if ($noOrdem != '') {
+    $query .= " AND id = '$noOrdem'";
 }
+if ($dataOrdem != '') {
+    $query .= " AND data_registro = '$dataOrdem'";
+}
+if ($razaoOrdem != '') {
+    $query .= " AND razao_social LIKE '%$razaoOrdem%'";
+}
+if ($serieOrdem != '') {
+    $query .= " AND serie LIKE '%$serieOrdem%'";
+}
+if ($entregarOrdem != '') {
+    $query .= " AND data_entrega = '$entregarOrdem'";
+}
+
+$result = mysqli_query($conexao, $query);
+
+// Armazenar os resultados em um array
+$ordens = array();
+while ($row = mysqli_fetch_assoc($result)) {
+    $ordens[] = $row;
+}
+
+// Retornar os resultados como JSON
+echo json_encode($ordens);
+
+mysqli_close($conexao);
 ?>
