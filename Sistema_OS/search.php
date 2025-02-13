@@ -5,68 +5,55 @@ $user = 'joseendologic';  // Ajuste para seu usuário
 $password = '{[OSluiz2019';  // Ajuste para sua senha
 $dbname = 'bd_os_endo';  // Ajuste para o nome do seu banco de dados
 
+// Estabelecendo a conexão
 $conn = new mysqli($host, $user, $password, $dbname);
 
-// Verifique se houve algum erro de conexão
+// Verificando a conexão
 if ($conn->connect_error) {
     die("Conexão falhou: " . $conn->connect_error);
 }
 
-// Pegando os valores dos campos de pesquisa
-$noOrdem = isset($_GET['no_ordem']) ? $_GET['no_ordem'] : '';
-$dataOrdem = isset($_GET['data_ordem']) ? $_GET['data_ordem'] : '';
-$razaoOrdem = isset($_GET['razao_ordem']) ? $_GET['razao_ordem'] : '';
-$serieOrdem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : '';
-$entregarOrdem = isset($_GET['entregar_ordem']) ? $_GET['entregar_ordem'] : '';
+// Obtendo os parâmetros da URL (search query)
+$no_ordem = isset($_GET['no_ordem']) ? $_GET['no_ordem'] : '';
+$data_ordem = isset($_GET['data_ordem']) ? $_GET['data_ordem'] : '';
+$razao_ordem = isset($_GET['razao_ordem']) ? $_GET['razao_ordem'] : '';
+$serie_ordem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : '';
+$entregar_ordem = isset($_GET['entregar_ordem']) ? $_GET['entregar_ordem'] : '';
 
-// Iniciar a consulta SQL
-$query = "SELECT * FROM ordem_servico WHERE 1=1";  // A consulta começa com WHERE 1=1 para adicionar as condições facilmente
+// Iniciando a consulta SQL
+$query = "SELECT * FROM sua_tabela WHERE 1=1";  // Inicia com uma condição verdadeira
 
-// Adicionando condições se os campos não estão vazios
-if (!empty($noOrdem)) {
-    $query .= " AND no_ordem = '$noOrdem'";
+// Adicionando filtros à consulta dependendo dos parâmetros passados
+if ($no_ordem != '') {
+    $query .= " AND no_ordem = '$no_ordem'";
 }
-if (!empty($dataOrdem)) {
-    $query .= " AND data_ordem = '$dataOrdem'";
+if ($data_ordem != '') {
+    $query .= " AND data_ordem = '$data_ordem'";
 }
-if (!empty($razaoOrdem)) {
-    $query .= " AND razao_ordem LIKE '%$razaoOrdem%'";
+if ($razao_ordem != '') {
+    $query .= " AND razao_ordem LIKE '%$razao_ordem%'";
 }
-if (!empty($serieOrdem)) {
-    $query .= " AND serie_ordem = '$serieOrdem'";
+if ($serie_ordem != '') {
+    $query .= " AND serie_ordem = '$serie_ordem'";
 }
-if (!empty($entregarOrdem)) {
-    $query .= " AND entregar_ordem = '$entregarOrdem'";
+if ($entregar_ordem != '') {
+    $query .= " AND entregar_ordem = '$entregar_ordem'";
 }
 
 // Executando a consulta
 $result = $conn->query($query);
 
-// Verificando se há resultados
+// Verificando se existem resultados
 if ($result->num_rows > 0) {
-    // Imprimir os resultados em formato de tabela
-    echo '<div class="search-result-row">';
-    echo '<div class="search-result-header">No. Ordem</div>';
-    echo '<div class="search-result-header">Data Ordem</div>';
-    echo '<div class="search-result-header">Razão Social</div>';
-    echo '<div class="search-result-header">Série</div>';
-    echo '<div class="search-result-header">Data Entrega</div>';
-    echo '</div>';
-    
-    // Imprimir cada linha de resultado
+    // Exibindo os resultados
     while ($row = $result->fetch_assoc()) {
-        echo '<div class="search-result-row">';
-        echo '<div class="search-result-cell">' . htmlspecialchars($row['no_ordem']) . '</div>';
-        echo '<div class="search-result-cell">' . htmlspecialchars($row['data_ordem']) . '</div>';
-        echo '<div class="search-result-cell">' . htmlspecialchars($row['razao_ordem']) . '</div>';
-        echo '<div class="search-result-cell">' . htmlspecialchars($row['serie_ordem']) . '</div>';
-        echo '<div class="search-result-cell">' . htmlspecialchars($row['entregar_ordem']) . '</div>';
-        echo '</div>';
+        echo "<div>Ordem: " . $row['no_ordem'] . " - Data: " . $row['data_ordem'] . " - Razão: " . $row['razao_ordem'] . "</div>";
+        // Adicione outros campos conforme necessário
     }
 } else {
-    echo '<p>Nenhum resultado encontrado.</p>';
+    echo "Nenhum resultado encontrado.";
 }
 
-// Fechar a conexão com o banco de dados
+// Fechando a conexão
 $conn->close();
 ?>
