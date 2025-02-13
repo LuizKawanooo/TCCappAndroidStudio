@@ -76,10 +76,10 @@ function searchFields() {
 
 
 <?php
-$servername = "bd_os_endo";
+$servername = "bd-os-endo.mysql.uhserver.com";
 $username = "joseendologic";
 $password = "{[OSluiz2019";
-$dbname = "os";
+$dbname = "bd_os_endo";
 
 // Criar conexão
 $conn = new mysqli($servername, $username, $password, $dbname);
