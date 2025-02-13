@@ -166,7 +166,7 @@ function confirmarCancelamento() {
     let confirmar = confirm("Tem certeza que deseja cancelar?");
     if (confirmar) {
         alert("Cancelamento confirmado!");
-        // Aqui você pode adicionar qualquer ação extra, como redirecionar ou fechar um modal
+        document.getElementById("popup").style.display = "none";
     } else {
         alert("Cancelamento abortado!");
     }
