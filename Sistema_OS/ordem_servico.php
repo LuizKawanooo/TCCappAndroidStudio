@@ -65,7 +65,7 @@
         const serieOrdem = document.getElementById('serie_ordem').value;
         const entregarOrdem = document.getElementById('entregar_ordem').value;
 
-        fetch(`https://seuapi.com/pesquisar_ordens?noOrdem=${noOrdem}&dataOrdem=${dataOrdem}&razaoOrdem=${razaoOrdem}&serieOrdem=${serieOrdem}&entregarOrdem=${entregarOrdem}`)
+        fetch(`https://endologic.com.br/tcc/Sistema_OS/search.php?noOrdem=${noOrdem}&dataOrdem=${dataOrdem}&razaoOrdem=${razaoOrdem}&serieOrdem=${serieOrdem}&entregarOrdem=${entregarOrdem}`)
             .then(response => response.json())
             .then(data => {
                 const resultadosDiv = document.getElementById('resultados');
