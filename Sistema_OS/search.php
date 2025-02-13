@@ -2,7 +2,7 @@
 header('Content-Type: application/json');
 
 // Conexão com o banco de dados
-$host = 'localhost';  // Substitua pelo seu host, se necessário
+$host = 'bd-os-endo.mysql.uhserver.com';  // Substitua pelo seu host, se necessário
 $dbname = 'bd_os_endo';
 $username = 'joseendologic';
 $password = '{[OSluiz2019}';
@@ -22,7 +22,7 @@ $serieOrdem = isset($_GET['serieOrdem']) ? $_GET['serieOrdem'] : '';
 $entregarOrdem = isset($_GET['entregarOrdem']) ? $_GET['entregarOrdem'] : '';
 
 // Criar a consulta dinâmica
-$query = "SELECT * FROM ordens WHERE 1=1";
+$query = "SELECT * FROM ordem_servico WHERE 1=1";
 
 if ($noOrdem != '') {
     $query .= " AND id = '$noOrdem'";
