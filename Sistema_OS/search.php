@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 $host = 'bd-os-endo.mysql.uhserver.com'; // seu host
 $dbname = 'tccappionic_bd'; // nome do banco de dados
 $username = 'ionic_perfil_bd'; // seu usuário do banco de dados
-$password = '{[UOLluiz2019'; // sua senha do banco de dados
+$password = '{[OSluiz2019'; // sua senha do banco de dados
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
