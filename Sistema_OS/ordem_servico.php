@@ -218,13 +218,36 @@ function enviarFormulario() {
     })
     .catch(error => console.error("Erro:", error));
 }
-</script>
 
 
+
+
+
+
+
+
+
+    function ajustarEscala() {
+    let zoomLevel = Math.round(window.devicePixelRatio * 100); // Obtém o nível de zoom
+    if (zoomLevel >= 125) { 
+        document.popup.style.transform = "scale(0.75)";
+    } else {
+        document.popup.style.transform = "scale(1)";
+    }
+}
+
+// Executa a função ao carregar a página
+window.onload = ajustarEscala;
+
+// Detecta mudanças no zoom (necessário para alguns navegadores)
+window.addEventListener('resize', ajustarEscala);
 
 
 
     
+</script>
+
+
 
 </body>
 </html>
