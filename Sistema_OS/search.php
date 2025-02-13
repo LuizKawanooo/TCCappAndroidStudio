@@ -1,3 +1,4 @@
+<?php
 // Conexão com o banco de dados
 $host = 'bd-os-endo.mysql.uhserver.com';  // Ajuste para o seu host
 $user = 'joseendologic';  // Ajuste para seu usuário
