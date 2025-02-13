@@ -1,76 +1,68 @@
 <?php
-header('Content-Type: application/json');
-
-// Conexão com o banco de dados
-$host = 'bd-os-endo.mysql.uhserver.com';  // Substitua pelo seu host, se necessário
+// Dados de conexão ao banco de dados
+$host = 'bd-os-endo.mysql.uhserver.com';
 $dbname = 'bd_os_endo';
 $username = 'joseendologic';
 $password = '{[OSluiz2019}';
 
-$conexao = new mysqli($host, $username, $password, $dbname);
+try {
+    // Conectar ao banco de dados
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// Verificar se a conexão foi bem-sucedida
-if ($conexao->connect_error) {
-    die("Conexão falhou: " . $conexao->connect_error);
-}
+    // Pegando os parâmetros enviados via POST
+    $data = json_decode(file_get_contents('php://input'), true);
 
-// Receber os parâmetros da pesquisa
-$noOrdem = isset($_GET['noOrdem']) ? $_GET['noOrdem'] : '';
-$dataOrdem = isset($_GET['dataOrdem']) ? $_GET['dataOrdem'] : '';
-$razaoOrdem = isset($_GET['razaoOrdem']) ? $_GET['razaoOrdem'] : '';
-$serieOrdem = isset($_GET['serieOrdem']) ? $_GET['serieOrdem'] : '';
-$entregarOrdem = isset($_GET['entregarOrdem']) ? $_GET['entregarOrdem'] : '';
+    // Criando a consulta SQL
+    $query = "SELECT codigo_cliente, aparelho, marca, modelo, serie, data_entrega, valor FROM ordem_servico WHERE 1=1";
 
-// Criar a consulta dinâmica
-$query = "SELECT * FROM ordem_servico WHERE 1=1";
-
-if ($noOrdem != '') {
-    $query .= " AND id = '$noOrdem'";
-}
-if ($dataOrdem != '') {
-    $query .= " AND data_registro = '$dataOrdem'";
-}
-if ($razaoOrdem != '') {
-    $query .= " AND razao_social LIKE '%$razaoOrdem%'";
-}
-if ($serieOrdem != '') {
-    $query .= " AND serie LIKE '%$serieOrdem%'";
-}
-if ($entregarOrdem != '') {
-    $query .= " AND data_entrega = '$entregarOrdem'";
-}
-
-// Executar a consulta no banco
-$result = $conexao->query($query);
-
-// Verificar se houve resultados
-if ($result->num_rows > 0) {
-    // Armazenar os resultados em um array
-    $ordens = array();
-    while ($row = $result->fetch_assoc()) {
-        // Adicionar os campos da ordem aos resultados
-        $ordens[] = array(
-            'codigo_cliente' => $row['codigo_cliente'],
-            'aparelho' => $row['aparelho'],
-            'marca' => $row['marca'],
-            'modelo' => $row['modelo'],
-            'serie' => $row['serie'],
-            'acessorios' => $row['acessorios'],
-            'condicoes' => $row['condicoes'],
-            'defeito_informado' => $row['defeito_informado'],
-            'descricao_servico' => $row['descricao_servico'],
-            'entrega' => $row['entrega'],
-            'garantia' => $row['garantia'],
-            'valor' => $row['valor']
-        );
+    // Adicionando condições à consulta com base nos parâmetros
+    if (!empty($data['no_ordem'])) {
+        $query .= " AND id = :no_ordem";
     }
-    
-    // Retornar os resultados como JSON
-    echo json_encode($ordens);
-} else {
-    echo json_encode(array('message' => 'Nenhuma ordem encontrada.'));
-}
+    if (!empty($data['data_ordem'])) {
+        $query .= " AND data_registro = :data_ordem";
+    }
+    if (!empty($data['razao_ordem'])) {
+        $query .= " AND razao_social LIKE :razao_ordem";
+    }
+    if (!empty($data['serie_ordem'])) {
+        $query .= " AND serie LIKE :serie_ordem";
+    }
+    if (!empty($data['entregar_ordem'])) {
+        $query .= " AND data_entrega = :entregar_ordem";
+    }
 
-// Fechar a conexão
-$conexao->close();
+    // Preparando a consulta
+    $stmt = $pdo->prepare($query);
+
+    // Bind dos parâmetros
+    if (!empty($data['no_ordem'])) {
+        $stmt->bindParam(':no_ordem', $data['no_ordem']);
+    }
+    if (!empty($data['data_ordem'])) {
+        $stmt->bindParam(':data_ordem', $data['data_ordem']);
+    }
+    if (!empty($data['razao_ordem'])) {
+        $stmt->bindParam(':razao_ordem', "%{$data['razao_ordem']}%");
+    }
+    if (!empty($data['serie_ordem'])) {
+        $stmt->bindParam(':serie_ordem', "%{$data['serie_ordem']}%");
+    }
+    if (!empty($data['entregar_ordem'])) {
+        $stmt->bindParam(':entregar_ordem', $data['entregar_ordem']);
+    }
+
+    // Executando a consulta
+    $stmt->execute();
+
+    // Recuperando os resultados
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Retornando os resultados como JSON
+    echo json_encode($result);
+
+} catch (PDOException $e) {
+    echo 'Erro: ' . $e->getMessage();
+}
 ?>
