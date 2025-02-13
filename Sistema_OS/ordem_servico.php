@@ -171,33 +171,7 @@ function confirmarCancelamento() {
     }
 }
 </script>
-
-
-
-
-
-    <script>
-// Bloqueia teclas de atualização quando o pop-up está aberto
-document.addEventListener("keydown", function(event) {
-    let popup = document.getElementById("popup");
-
-    if (popup.style.display === "flex") {
-        if (
-            event.key === "Enter" ||        // Bloqueia Enter
-            event.key === "F5" ||           // Bloqueia F5
-            (event.ctrlKey && event.key === "r") || // Bloqueia Ctrl+R
-            (event.ctrlKey && event.key === "R") || // Bloqueia Ctrl+Shift+R
-            (event.metaKey && event.key === "r")    // Bloqueia Cmd+R no Mac
-        ) {
-            event.preventDefault();
-            alert("Ação bloqueada enquanto o pop-up está aberto.");
-        }
-    }
-});
-
-
-
-    
+   
     
 <script>
 function abrirPopup() {
