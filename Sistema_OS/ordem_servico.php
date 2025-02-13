@@ -128,42 +128,6 @@ $conn->close();
 
     
 
-<script>
-function searchFields() {
-    var no_ordem = document.getElementById('no_ordem').value;
-    var data_ordem = document.getElementById('data_ordem').value;
-    var razao_ordem = document.getElementById('razao_ordem').value;
-    var serie_ordem = document.getElementById('serie_ordem').value;
-    var entregar_ordem = document.getElementById('entregar_ordem').value;
-
-    // Construir a URL com os parâmetros da pesquisa
-    var url = 'ordem_servico.php?no_ordem=' + no_ordem + 
-              '&data_ordem=' + data_ordem + 
-              '&razao_ordem=' + razao_ordem + 
-              '&serie_ordem=' + serie_ordem + 
-              '&entregar_ordem=' + entregar_ordem;
-
-    // Fazer a requisição e atualizar os resultados
-    fetch(url)
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('resultados').innerHTML = data;
-        })
-        .catch(error => console.error('Erro ao buscar ordens:', error));
-}
-
-</script>
-
-
-
-
-
-
-
-
-
-
-
 
 
 
