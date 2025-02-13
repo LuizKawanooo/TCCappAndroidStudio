@@ -75,6 +75,66 @@ function searchFields() {
 
 
 
+<?php
+$servername = "bd_os_endo";
+$username = "joseendologic";
+$password = "{[OSluiz2019";
+$dbname = "os";
+
+// Criar conexão
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Checar a conexão
+if ($conn->connect_error) {
+    die("Conexão falhou: " . $conn->connect_error);
+}
+
+// Pegar os parâmetros da pesquisa
+$no_ordem = isset($_GET['no_ordem']) ? $_GET['no_ordem'] : '';
+$data_ordem = isset($_GET['data_ordem']) ? $_GET['data_ordem'] : '';
+$serie_ordem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : '';
+$entregar_ordem = isset($_GET['entregar_ordem']) ? $_GET['entregar_ordem'] : '';
+
+// Iniciar a query com um "WHERE 1=1" para facilitar a construção da pesquisa
+$query = "SELECT codigo_cliente, aparelho, marca, modelo, serie, data_entrega, valor FROM ordem_servico WHERE 1=1";
+
+// Adicionar as condições conforme os campos preenchidos
+if ($no_ordem != '') {
+    $query .= " AND id = '$no_ordem'";
+}
+if ($data_ordem != '') {
+    $query .= " AND data_registro = '$data_ordem'";
+}
+if ($serie_ordem != '') {
+    $query .= " AND serie = '$serie_ordem'";
+}
+if ($entregar_ordem != '') {
+    $query .= " AND data_entrega = '$entregar_ordem'";
+}
+
+// Executar a consulta
+$result = $conn->query($query);
+
+// Checar se há resultados
+if ($result->num_rows > 0) {
+    // Mostrar os resultados
+    while($row = $result->fetch_assoc()) {
+        echo "<div>";
+        echo "<p><strong>Código Cliente:</strong> " . $row["codigo_cliente"]. "</p>";
+        echo "<p><strong>Aparelho:</strong> " . $row["aparelho"]. "</p>";
+        echo "<p><strong>Marca:</strong> " . $row["marca"]. "</p>";
+        echo "<p><strong>Modelo:</strong> " . $row["modelo"]. "</p>";
+        echo "<p><strong>Série:</strong> " . $row["serie"]. "</p>";
+        echo "<p><strong>Data de Entrega:</strong> " . $row["data_entrega"]. "</p>";
+        echo "<p><strong>Valor:</strong> R$ " . number_format($row["valor"], 2, ',', '.'). "</p>";
+        echo "</div>";
+    }
+} else {
+    echo "Nenhum resultado encontrado.";
+}
+
+$conn->close();
+?>
 
 
 
