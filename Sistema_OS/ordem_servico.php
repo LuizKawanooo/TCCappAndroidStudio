@@ -106,7 +106,7 @@ function searchFields() {
 
 
 
-    <!-- Pop-up -->
+<!-- Pop-up -->
 <div id="popup" class="popup-container">
     <div class="popup-content">
         <h2>Adicionar Ordem de Serviço</h2>
@@ -127,31 +127,31 @@ function searchFields() {
             <input type="text" name="serie" required>
 
             <label>Acessórios:</label>
-            <input type="text" name="acessorios" required> <!-- Tornado obrigatório -->
+            <input type="text" name="acessorios" required>
 
             <label>Condições:</label>
-            <textarea name="condicoes" required></textarea> <!-- Tornado obrigatório -->
+            <textarea name="condicoes" required></textarea>
 
             <label>Defeito Informado:</label>
-            <textarea name="defeito_informado" required></textarea> <!-- Tornado obrigatório -->
+            <textarea name="defeito_informado" required></textarea>
 
             <label>Descrição do Serviço:</label>
-            <textarea name="descricao_servico" required></textarea> <!-- Tornado obrigatório -->
+            <textarea name="descricao_servico" required></textarea>
 
             <label>Entrega:</label>
-            <input type="date" name="entrega" required> <!-- Tornado obrigatório -->
+            <input type="date" name="entrega" required>
 
             <label>Garantia:</label>
-            <input type="text" name="garantia" required> <!-- Tornado obrigatório -->
+            <input type="text" name="garantia" required>
 
             <label>Valor:</label>
             <input type="number" step="0.01" name="valor" required>
 
             <label>Condições de Pagamento:</label>
-            <input type="text" name="condicoes_pagamento" required> <!-- Tornado obrigatório -->
+            <input type="text" name="condicoes_pagamento" required>
 
             <label>Data de Entrega:</label>
-            <input type="date" name="data_entrega" required> <!-- Tornado obrigatório -->
+            <input type="date" name="data_entrega" required>
 
             <button type="button" onclick="enviarFormulario()">OK Enviar</button>
             <!-- Botão de Cancelar -->
@@ -159,6 +159,7 @@ function searchFields() {
         </form>
     </div>
 </div>
+
 
 
 <script>
@@ -176,7 +177,6 @@ function confirmarCancelamento() {
 <script>
 function abrirPopup() {
     document.getElementById("popup").style.display = "flex";
-    ajustarEscala(); // Ajusta o zoom quando o popup abrir
 }
 
 function fecharPopup() {
@@ -221,33 +221,7 @@ function enviarFormulario() {
 }
 
     
-</script>
-
-
-
-
-
-
-
-    <script>
-// Função que ajusta o scale dependendo do zoom do sistema ou da tela
-function ajustarEscala() {
-    let zoomLevel = Math.round(window.devicePixelRatio * 100); // Obtém o nível de zoom
-    if (zoomLevel >= 125) {
-        document.popup-content.style.transform = "scale(0.70)";
-    } else {
-        document.popup-content.style.transform = "scale(1)";
-    }
-}
-
-// Detecta mudanças no zoom (necessário para alguns navegadores)
-window.addEventListener('resize', ajustarEscala);
-</script>
-
-
-
-
-    
+</script>  
 
 </body>
 </html>
