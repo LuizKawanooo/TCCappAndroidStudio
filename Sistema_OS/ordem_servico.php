@@ -153,26 +153,39 @@ $result = $conn->query($query);
 
 // Checar se há resultados
 if ($result->num_rows > 0) {
-    echo '<div style="display: flex; flex-direction: column; gap: 10px;">';
+    echo '<div style="overflow-x: auto;">';
+    echo '<table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; text-align: left;">';
     
-    $row_count = 0; // Contador para alternar as cores
-    
+    // Cabeçalho da tabela
+    echo '<tr style="background: yellow; border: 2px solid black;">';
+    echo '<th style="padding: 10px; border: 2px solid black;">Código Cliente</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Aparelho</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Marca</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Modelo</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Série</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Data de Entrega</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Valor</th>';
+    echo '</tr>';
+
+    $row_count = 0; // Contador para alternar as cores das linhas
+
     while ($row = $result->fetch_assoc()) {
-        $background_color = ($row_count % 2 == 0) ? "#f0f0f0" : "yellow"; // Alterna entre cinza claro e amarelo
-        
-        echo '<div style="display: flex; align-items: center; gap: 15px; background: ' . $background_color . '; padding: 10px; border-radius: 5px; font-family: Arial, sans-serif; border: 1px solid #ccc;">';
-        echo "<p><strong>Código Cliente:</strong> " . $row["codigo_cliente"]. "</p>";
-        echo "<p><strong>Aparelho:</strong> " . $row["aparelho"]. "</p>";
-        echo "<p><strong>Marca:</strong> " . $row["marca"]. "</p>";
-        echo "<p><strong>Modelo:</strong> " . $row["modelo"]. "</p>";
-        echo "<p><strong>Série:</strong> " . $row["serie"]. "</p>";
-        echo "<p><strong>Data de Entrega:</strong> " . $row["data_entrega"]. "</p>";
-        echo "<p><strong>Valor:</strong> R$ " . number_format($row["valor"], 2, ',', '.'). "</p>";
-        echo "</div>";
-        
+        $background_color = ($row_count % 2 == 0) ? "#f0f0f0" : "#ffffff"; // Cinza claro e branco alternados
+
+        echo '<tr style="background: ' . $background_color . '; border: 2px solid black;">';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["codigo_cliente"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["aparelho"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["marca"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["modelo"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["serie"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["data_entrega"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">R$ ' . number_format($row["valor"], 2, ',', '.') . '</td>';
+        echo '</tr>';
+
         $row_count++; // Incrementa o contador
     }
 
+    echo '</table>';
     echo '</div>';
 } else {
     echo "Nenhum resultado encontrado.";
