@@ -74,81 +74,59 @@
 
 
 
-
-
-    
-
-
-
-
-
-
-    
-
-
-
-    <script>
-function searchFields() {
-    let noOrdem = document.getElementById('no_ordem').value.trim();
-    let dataOrdem = document.getElementById('data_ordem').value.trim();
-    let razaoOrdem = document.getElementById('razao_ordem').value.trim();
-    let serieOrdem = document.getElementById('serie_ordem').value.trim();
-    let entregarOrdem = document.getElementById('entregar_ordem').value.trim();
-
-    // Realizar uma requisição AJAX para o PHP
-    let queryString = '';
-
-    // Verificar quais campos estão preenchidos e adicionar à queryString
-    if (noOrdem !== '') queryString += `no_ordem=${noOrdem}&`;
-    if (dataOrdem !== '') queryString += `data_ordem=${dataOrdem}&`;
-    if (razaoOrdem !== '') queryString += `razao_ordem=${razaoOrdem}&`;
-    if (serieOrdem !== '') queryString += `serie_ordem=${serieOrdem}&`;
-    if (entregarOrdem !== '') queryString += `entregar_ordem=${entregarOrdem}&`;
-
-    // Remover o último "&" da string
-    queryString = queryString.slice(0, -1);
-
-    // Enviar a requisição AJAX apenas com os campos preenchidos
-    fetch('search.php?' + queryString)
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('search-results').innerHTML = data;
-        })
-        .catch(error => console.error('Error:', error));
-}
-
-    </script>
-
-
-
 <script>
-function searchFields() {
-    var no_ordem = document.getElementById("no_ordem").value;
-    var data_ordem = document.getElementById("data_ordem").value;
-    var razao_ordem = document.getElementById("razao_ordem").value;
-    var serie_ordem = document.getElementById("serie_ordem").value;
-    var entregar_ordem = document.getElementById("entregar_ordem").value;
+    function searchFields() {
+        let noOrdem = document.getElementById('no_ordem').value.trim();
+        let dataOrdem = document.getElementById('data_ordem').value.trim();
+        let razaoOrdem = document.getElementById('razao_ordem').value.trim();
+        let serieOrdem = document.getElementById('serie_ordem').value.trim();
+        let entregarOrdem = document.getElementById('entregar_ordem').value.trim();
 
-    // Monta a URL para a requisição AJAX, passando todos os campos
-    var query = "no_ordem=" + no_ordem + "&data_ordem=" + data_ordem + "&razao_ordem=" + razao_ordem + "&serie_ordem=" + serie_ordem + "&entregar_ordem=" + entregar_ordem;
+        // Realizar uma requisição AJAX para o PHP com apenas os campos preenchidos
+        let queryString = '';
 
-    // Se algum campo estiver vazio, a pesquisa não é realizada
-    if (no_ordem.length == 0 && data_ordem.length == 0 && razao_ordem.length == 0 && serie_ordem.length == 0 && entregar_ordem.length == 0) {
-        document.getElementById("search-results").innerHTML = "";
-        return;
-    }
-
-    // Requisição AJAX
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "search.php?" + query, true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            document.getElementById("search-results").innerHTML = xhr.responseText;
+        // Adicionando os campos preenchidos à string de consulta
+        if (noOrdem) {
+            queryString += `no_ordem=${noOrdem}&`;
         }
-    };
-    xhr.send();
-}
+        if (dataOrdem) {
+            queryString += `data_ordem=${dataOrdem}&`;
+        }
+        if (razaoOrdem) {
+            queryString += `razao_ordem=${razaoOrdem}&`;
+        }
+        if (serieOrdem) {
+            queryString += `serie_ordem=${serieOrdem}&`;
+        }
+        if (entregarOrdem) {
+            queryString += `entregar_ordem=${entregarOrdem}&`;
+        }
+
+        // Remover o último '&' extra
+        queryString = queryString.slice(0, -1);
+
+        // Verificando se a string de consulta não está vazia antes de enviar a requisição
+        if (queryString) {
+            fetch('search.php?' + queryString)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('search-results').innerHTML = data;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    }
 </script>
+
+    
+
+
+
+
+
+
+    
+
+
 
 
 
