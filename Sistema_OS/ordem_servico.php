@@ -25,34 +25,77 @@
 
     
 <section class="section_middle" style="display: inline-flex;width: 100%; height: 150px; background: #A6CAF0; position: relative; left: 50%; transform: translate(-50%);">
-    
-        <!-- Formulário de pesquisa -->
-        <div class="no_ordem" style="display: flex;">
-            <label for="no_ordem" style="font-size: 23px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">No.ORDEM</label>
-            <input type="number" id="no_ordem" name="no_ordem" onkeyup="searchFields()">
-        </div>
-            
-        <div class="data_ordem" style="display: flex; margin-left: 80px;">
-            <label for="data_ordem" style="font-size: 23px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">DATA DA ORDEM</label>
-            <input type="date" id="data_ordem" name="data_ordem" onkeyup="searchFields()">
-        </div>
-        
-        <div class="razao_ordem" style="display: flex; margin-left: 5px;">
-            <label for="razao_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">LOCALIZAR PELA RAZÃO SOCIAL DO CLIENTE</label>
-            <input type="text" id="razao_ordem" name="razao_ordem" onkeyup="searchFields()">
-        </div>
-        
-        <div class="serie_ordem" style="display: flex; margin-left: 5px;">
-            <label for="serie_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">NUMERO DE SÉRIE</label>
-            <input type="number" id="serie_ordem" name="serie_ordem" onkeyup="searchFields()">
-        </div>
-        
-        <div class="entregar_ordem" style="display: flex; margin-left: 30px;">
-            <label for="entregar_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">ENTREGAR NO DIA</label>
-            <input type="date" id="entregar_ordem" name="entregar_ordem" onkeyup="searchFields()">
-        </div>
-            
+    <!-- Formulário de pesquisa -->
+    <div class="no_ordem" style="display: flex;">
+        <label for="no_ordem" style="font-size: 23px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">No.ORDEM</label>
+        <input type="number" id="no_ordem" name="no_ordem" onkeyup="searchFields()">
+    </div>
+
+    <div class="data_ordem" style="display: flex; margin-left: 80px;">
+        <label for="data_ordem" style="font-size: 23px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">DATA DA ORDEM</label>
+        <input type="date" id="data_ordem" name="data_ordem" onkeyup="searchFields()">
+    </div>
+
+    <div class="razao_ordem" style="display: flex; margin-left: 5px;">
+        <label for="razao_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">LOCALIZAR PELA RAZÃO SOCIAL DO CLIENTE</label>
+        <input type="text" id="razao_ordem" name="razao_ordem" onkeyup="searchFields()">
+    </div>
+
+    <div class="serie_ordem" style="display: flex; margin-left: 5px;">
+        <label for="serie_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">NUMERO DE SÉRIE</label>
+        <input type="number" id="serie_ordem" name="serie_ordem" onkeyup="searchFields()">
+    </div>
+
+    <div class="entregar_ordem" style="display: flex; margin-left: 30px;">
+        <label for="entregar_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">ENTREGAR NO DIA</label>
+        <input type="date" id="entregar_ordem" name="entregar_ordem" onkeyup="searchFields()">
+    </div>
 </section>
+
+<!-- Exibição dos resultados da pesquisa -->
+<section id="resultados">
+    <!-- Os resultados vão aparecer aqui -->
+</section>
+
+<script>
+    function searchFields() {
+        const noOrdem = document.getElementById('no_ordem').value;
+        const dataOrdem = document.getElementById('data_ordem').value;
+        const razaoOrdem = document.getElementById('razao_ordem').value;
+        const serieOrdem = document.getElementById('serie_ordem').value;
+        const entregarOrdem = document.getElementById('entregar_ordem').value;
+
+        fetch(`https://seuapi.com/pesquisar_ordens?noOrdem=${noOrdem}&dataOrdem=${dataOrdem}&razaoOrdem=${razaoOrdem}&serieOrdem=${serieOrdem}&entregarOrdem=${entregarOrdem}`)
+            .then(response => response.json())
+            .then(data => {
+                const resultadosDiv = document.getElementById('resultados');
+                resultadosDiv.innerHTML = ''; // Limpar resultados anteriores
+                data.forEach(ordem => {
+                    const resultadoHTML = `
+                        <div class="resultado">
+                            <p><strong>Código Cliente:</strong> ${ordem.codigo_cliente}</p>
+                            <p><strong>Aparelho:</strong> ${ordem.aparelho}</p>
+                            <p><strong>Marca:</strong> ${ordem.marca}</p>
+                            <p><strong>Modelo:</strong> ${ordem.modelo}</p>
+                            <p><strong>Série:</strong> ${ordem.serie}</p>
+                            <p><strong>Acessórios:</strong> ${ordem.acessorios}</p>
+                            <p><strong>Condições:</strong> ${ordem.condicoes}</p>
+                            <p><strong>Defeito Informado:</strong> ${ordem.defeito_informado}</p>
+                            <p><strong>Descrição Serviço:</strong> ${ordem.descricao_servico}</p>
+                            <p><strong>Entrega:</strong> ${ordem.entrega}</p>
+                            <p><strong>Garantia:</strong> ${ordem.garantia}</p>
+                            <p><strong>Valor:</strong> ${ordem.valor}</p>
+                        </div>
+                    `;
+                    resultadosDiv.innerHTML += resultadoHTML;
+                });
+            })
+            .catch(error => {
+                console.error('Erro ao buscar ordens:', error);
+            });
+    }
+</script>
+
 
 <table id="resultTable">
     <thead>
@@ -72,65 +115,7 @@
 
 
 
-<script>
-  function searchFields() {
-    // Obtendo os valores dos campos de pesquisa
-    let no_ordem = document.getElementById('no_ordem').value;
-    let data_ordem = document.getElementById('data_ordem').value;
-    let razao_ordem = document.getElementById('razao_ordem').value;
-    let serie_ordem = document.getElementById('serie_ordem').value;
-    let entregar_ordem = document.getElementById('entregar_ordem').value;
 
-    // Criando a URL com os parâmetros de pesquisa
-    let url = 'search.php?';
-    if (no_ordem) url += `no_ordem=${no_ordem}&`;
-    if (data_ordem) url += `data_ordem=${data_ordem}&`;
-    if (razao_ordem) url += `razao_ordem=${razao_ordem}&`;
-    if (serie_ordem) url += `serie_ordem=${serie_ordem}&`;
-    if (entregar_ordem) url += `entregar_ordem=${entregar_ordem}&`;
-
-    // Removendo o último "&" caso tenha
-    url = url.slice(0, -1);
-
-    // Realizando a chamada AJAX para buscar os dados
-    fetch(url)
-        .then(response => response.text()) // Recebe a resposta como texto
-        .then(data => {
-            // Verificando se o elemento tbody existe antes de tentar acessar
-            let tbody = document.getElementById('resultTable')?.getElementsByTagName('tbody')[0];
-
-            if (tbody) {
-                // Limpar a tabela antes de adicionar os resultados
-                tbody.innerHTML = data; // Adiciona o conteúdo HTML retornado
-            } else {
-                console.error("Elemento tbody não encontrado.");
-            }
-        })
-        .catch(error => console.error('Erro:', error));
-}
-
-</script>
-    
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-    
-
-        <section class="section_bottom" style="display: inline-flex;width: 100%; height: 150px; background: #A6CAF0; position: relative; left: 50%; transform: translate(-50%);">
-            
-        </section>
 
 
 
