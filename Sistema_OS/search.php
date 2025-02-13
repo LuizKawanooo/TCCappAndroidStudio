@@ -5,6 +5,12 @@ $dbname = 'bd_os_endo';
 $username = 'joseendologic';
 $password = '{[OSluiz2019}';
 
+// Função para enviar erro como JSON
+function sendError($message) {
+    echo json_encode(["error" => $message]);
+    exit;
+}
+
 try {
     // Conectar ao banco de dados
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
@@ -59,10 +65,17 @@ try {
     // Recuperando os resultados
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    // Verificando se há resultados
+    if (empty($result)) {
+        sendError('Nenhuma ordem encontrada.');
+    }
+
     // Retornando os resultados como JSON
     echo json_encode($result);
 
 } catch (PDOException $e) {
-    echo 'Erro: ' . $e->getMessage();
+    sendError('Erro ao conectar ao banco de dados: ' . $e->getMessage());
+} catch (Exception $e) {
+    sendError('Erro inesperado: ' . $e->getMessage());
 }
 ?>
