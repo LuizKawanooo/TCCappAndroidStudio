@@ -74,7 +74,7 @@ function searchFields() {
     };
 
     // Enviando a requisição para o servidor
-    fetch('busca_ordens.php', {
+    fetch('search.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
