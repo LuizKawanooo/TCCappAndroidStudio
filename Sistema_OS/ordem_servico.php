@@ -25,92 +25,87 @@
 
     
 <section class="section_middle" style="display: inline-flex;width: 100%; height: 150px; background: #A6CAF0; position: relative; left: 50%; transform: translate(-50%);">
+    
     <!-- Formulário de pesquisa -->
     <div class="no_ordem" style="display: flex;">
         <label for="no_ordem" style="font-size: 23px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">No.ORDEM</label>
         <input type="number" id="no_ordem" name="no_ordem" onkeyup="searchFields()">
     </div>
-
+        
     <div class="data_ordem" style="display: flex; margin-left: 80px;">
         <label for="data_ordem" style="font-size: 23px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">DATA DA ORDEM</label>
         <input type="date" id="data_ordem" name="data_ordem" onkeyup="searchFields()">
     </div>
-
+    
     <div class="razao_ordem" style="display: flex; margin-left: 5px;">
         <label for="razao_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">LOCALIZAR PELA RAZÃO SOCIAL DO CLIENTE</label>
         <input type="text" id="razao_ordem" name="razao_ordem" onkeyup="searchFields()">
     </div>
-
+    
     <div class="serie_ordem" style="display: flex; margin-left: 5px;">
         <label for="serie_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">NUMERO DE SÉRIE</label>
         <input type="number" id="serie_ordem" name="serie_ordem" onkeyup="searchFields()">
     </div>
-
+    
     <div class="entregar_ordem" style="display: flex; margin-left: 30px;">
         <label for="entregar_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">ENTREGAR NO DIA</label>
         <input type="date" id="entregar_ordem" name="entregar_ordem" onkeyup="searchFields()">
     </div>
 </section>
 
-<!-- Exibição dos resultados da pesquisa -->
-<section id="resultados">
-    <!-- Os resultados vão aparecer aqui -->
-</section>
+<div id="results"></div>
 
 <script>
-    function searchFields() {
-        const noOrdem = document.getElementById('no_ordem').value;
-        const dataOrdem = document.getElementById('data_ordem').value;
-        const razaoOrdem = document.getElementById('razao_ordem').value;
-        const serieOrdem = document.getElementById('serie_ordem').value;
-        const entregarOrdem = document.getElementById('entregar_ordem').value;
+function searchFields() {
+    // Pegando os valores dos campos de pesquisa
+    const noOrdem = document.getElementById('no_ordem').value;
+    const dataOrdem = document.getElementById('data_ordem').value;
+    const razaoOrdem = document.getElementById('razao_ordem').value;
+    const serieOrdem = document.getElementById('serie_ordem').value;
+    const entregarOrdem = document.getElementById('entregar_ordem').value;
 
-        fetch(`https://endologic.com.br/tcc/Sistema_OS/search.php?noOrdem=${noOrdem}&dataOrdem=${dataOrdem}&razaoOrdem=${razaoOrdem}&serieOrdem=${serieOrdem}&entregarOrdem=${entregarOrdem}`)
-            .then(response => response.json())
-            .then(data => {
-                const resultadosDiv = document.getElementById('resultados');
-                resultadosDiv.innerHTML = ''; // Limpar resultados anteriores
-                data.forEach(ordem => {
-                    const resultadoHTML = `
-                        <div class="resultado">
-                            <p><strong>Código Cliente:</strong> ${ordem.codigo_cliente}</p>
-                            <p><strong>Aparelho:</strong> ${ordem.aparelho}</p>
-                            <p><strong>Marca:</strong> ${ordem.marca}</p>
-                            <p><strong>Modelo:</strong> ${ordem.modelo}</p>
-                            <p><strong>Série:</strong> ${ordem.serie}</p>
-                            <p><strong>Acessórios:</strong> ${ordem.acessorios}</p>
-                            <p><strong>Condições:</strong> ${ordem.condicoes}</p>
-                            <p><strong>Defeito Informado:</strong> ${ordem.defeito_informado}</p>
-                            <p><strong>Descrição Serviço:</strong> ${ordem.descricao_servico}</p>
-                            <p><strong>Entrega:</strong> ${ordem.entrega}</p>
-                            <p><strong>Garantia:</strong> ${ordem.garantia}</p>
-                            <p><strong>Valor:</strong> ${ordem.valor}</p>
-                        </div>
-                    `;
-                    resultadosDiv.innerHTML += resultadoHTML;
-                });
-            })
-            .catch(error => {
-                console.error('Erro ao buscar ordens:', error);
+    // Criando o objeto com os parâmetros
+    const searchParams = {
+        no_ordem: noOrdem,
+        data_ordem: dataOrdem,
+        razao_ordem: razaoOrdem,
+        serie_ordem: serieOrdem,
+        entregar_ordem: entregarOrdem
+    };
+
+    // Enviando a requisição para o servidor
+    fetch('busca_ordens.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(searchParams)
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Exibindo os resultados no frontend
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = ''; // Limpar resultados anteriores
+
+        if (data.length === 0) {
+            resultsDiv.innerHTML = 'Nenhuma ordem encontrada.';
+        } else {
+            const table = document.createElement('table');
+            const header = document.createElement('tr');
+            header.innerHTML = '<th>Código Cliente</th><th>Aparelho</th><th>Marca</th><th>Modelo</th><th>Série</th><th>Data de Entrega</th><th>Valor</th>';
+            table.appendChild(header);
+
+            data.forEach(ordem => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${ordem.codigo_cliente}</td><td>${ordem.aparelho}</td><td>${ordem.marca}</td><td>${ordem.modelo}</td><td>${ordem.serie}</td><td>${ordem.data_entrega}</td><td>${ordem.valor}</td>`;
+                table.appendChild(row);
             });
-    }
+            resultsDiv.appendChild(table);
+        }
+    })
+    .catch(error => console.error('Erro ao buscar ordens:', error));
+}
 </script>
-
-
-<table id="resultTable">
-    <thead>
-        <tr>
-            <th>No Ordem</th>
-            <th>Data Ordem</th>
-            <th>Razão Ordem</th>
-            <th>Série Ordem</th>
-            <th>Entregar Ordem</th>
-        </tr>
-    </thead>
-    <tbody>
-        <!-- Aqui serão inseridos os resultados da pesquisa -->
-    </tbody>
-</table>
 
 
 
