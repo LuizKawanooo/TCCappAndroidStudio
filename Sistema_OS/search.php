@@ -40,16 +40,36 @@ if ($entregarOrdem != '') {
     $query .= " AND data_entrega = '$entregarOrdem'";
 }
 
+// Executar a consulta no banco
 $result = $conexao->query($query);
 
-// Armazenar os resultados em um array
-$ordens = array();
-while ($row = $result->fetch_assoc()) {
-    $ordens[] = $row;
+// Verificar se houve resultados
+if ($result->num_rows > 0) {
+    // Armazenar os resultados em um array
+    $ordens = array();
+    while ($row = $result->fetch_assoc()) {
+        // Adicionar os campos da ordem aos resultados
+        $ordens[] = array(
+            'codigo_cliente' => $row['codigo_cliente'],
+            'aparelho' => $row['aparelho'],
+            'marca' => $row['marca'],
+            'modelo' => $row['modelo'],
+            'serie' => $row['serie'],
+            'acessorios' => $row['acessorios'],
+            'condicoes' => $row['condicoes'],
+            'defeito_informado' => $row['defeito_informado'],
+            'descricao_servico' => $row['descricao_servico'],
+            'entrega' => $row['entrega'],
+            'garantia' => $row['garantia'],
+            'valor' => $row['valor']
+        );
+    }
+    
+    // Retornar os resultados como JSON
+    echo json_encode($ordens);
+} else {
+    echo json_encode(array('message' => 'Nenhuma ordem encontrada.'));
 }
-
-// Retornar os resultados como JSON
-echo json_encode($ordens);
 
 // Fechar a conexão
 $conexao->close();
