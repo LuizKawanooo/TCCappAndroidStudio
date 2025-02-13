@@ -20,7 +20,7 @@ $serieOrdem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : '';
 $entregarOrdem = isset($_GET['entregar_ordem']) ? $_GET['entregar_ordem'] : '';
 
 // Iniciar a consulta SQL
-$query = "SELECT * FROM orders WHERE 1=1";  // A consulta começa com WHERE 1=1 para adicionar as condições facilmente
+$query = "SELECT * FROM ordem_servico WHERE 1=1";  // A consulta começa com WHERE 1=1 para adicionar as condições facilmente
 
 // Adicionando condições se os campos não estão vazios
 if (!empty($noOrdem)) {
