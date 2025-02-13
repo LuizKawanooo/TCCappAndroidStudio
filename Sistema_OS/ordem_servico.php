@@ -141,32 +141,32 @@ if ($entregar_ordem != '') {
 }
 
 // Concatenar as condições na query se existirem
+if (count($conditions) > 0) {
+    $query .= " AND " . implode(" AND ", $conditions);
+} else {
+    echo "Por favor, preencha algum campo para realizar a pesquisa.";
+    exit();  // Sai do script se não houver parâmetros de pesquisa
+}
+
+// Executar a consulta
+$result = $conn->query($query);
+
+// Checar se há resultados
 if ($result->num_rows > 0) {
-    echo '<div class="result-container">';
-    echo '<table class="result-table">';
-    echo '<tr>
-            <th>Código Cliente</th>
-            <th>Aparelho</th>
-            <th>Marca</th>
-            <th>Modelo</th>
-            <th>Série</th>
-            <th>Data de Entrega</th>
-            <th>Valor</th>
-          </tr>';
+    echo '<div style="display: flex; flex-direction: column; gap: 10px;">';
 
     while ($row = $result->fetch_assoc()) {
-        echo "<tr>
-                <td>{$row['codigo_cliente']}</td>
-                <td>{$row['aparelho']}</td>
-                <td>{$row['marca']}</td>
-                <td>{$row['modelo']}</td>
-                <td>{$row['serie']}</td>
-                <td>{$row['data_entrega']}</td>
-                <td>R$ " . number_format($row["valor"], 2, ',', '.') . "</td>
-              </tr>";
+        echo '<div style="display: flex; align-items: center; gap: 15px; background: yellow; padding: 10px; border-radius: 5px; font-family: Arial, sans-serif;">';
+        echo "<p><strong>Código Cliente:</strong> " . $row["codigo_cliente"]. "</p>";
+        echo "<p><strong>Aparelho:</strong> " . $row["aparelho"]. "</p>";
+        echo "<p><strong>Marca:</strong> " . $row["marca"]. "</p>";
+        echo "<p><strong>Modelo:</strong> " . $row["modelo"]. "</p>";
+        echo "<p><strong>Série:</strong> " . $row["serie"]. "</p>";
+        echo "<p><strong>Data de Entrega:</strong> " . $row["data_entrega"]. "</p>";
+        echo "<p><strong>Valor:</strong> R$ " . number_format($row["valor"], 2, ',', '.'). "</p>";
+        echo "</div>";
     }
 
-    echo '</table>';
     echo '</div>';
 } else {
     echo "Nenhum resultado encontrado.";
@@ -174,6 +174,7 @@ if ($result->num_rows > 0) {
 
 $conn->close();
 ?>
+
 
 
 
