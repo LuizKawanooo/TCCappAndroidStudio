@@ -87,7 +87,7 @@
             let entregar_ordem = document.getElementById('entregar_ordem').value;
 
             // Criando a URL com os parâmetros de pesquisa
-            let url = 'pesquisar.php?';
+            let url = 'search.php?';
             if (no_ordem) url += `no_ordem=${no_ordem}&`;
             if (data_ordem) url += `data_ordem=${data_ordem}&`;
             if (razao_ordem) url += `razao_ordem=${razao_ordem}&`;
