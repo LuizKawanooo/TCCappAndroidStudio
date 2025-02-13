@@ -1,14 +1,33 @@
 /* Estilos gerais */
 body {
     font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
+/* Layout Sections */
 section {
-    display: inline-flex;
+    display: flex;
+    justify-content: center;
     width: 100%;
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
+    padding: 10px 0;
+}
+
+.incluir {
+    display: inline-block;
+    margin: 15px;
+    text-align: center;
+}
+
+.button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+}
+
+button {
+    margin-top: 10px;
 }
 
 /* Ajustes para telas menores (celular) */
@@ -21,10 +40,6 @@ section {
     .section_middle, .section_bottom {
         flex-direction: column;
         align-items: flex-start;
-    }
-
-    .incluir {
-        margin: 10px 0;
     }
 
     .section_middle label, .section_bottom label {
@@ -41,18 +56,6 @@ section {
         width: 100%;
         padding: 20px;
         overflow: auto;
-    }
-
-    .popup-container {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: rgba(0, 0, 0, 0.6);
-        display: none;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
     }
 }
 
