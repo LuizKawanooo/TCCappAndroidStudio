@@ -25,98 +25,102 @@
 
     
 <section class="section_middle" style="display: inline-flex;width: 100%; height: 150px; background: #A6CAF0; position: relative; left: 50%; transform: translate(-50%);">
-    <div class="no_ordem" style="display: flex;">
-        <label for="no_ordem" style="font-size: 23px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">No.ORDEM</label>
-        <input type="number" id="no_ordem" name="no_ordem" onkeyup="searchFields()">
-    </div>
-    
-    <div class="data_ordem" style="display: flex; margin-left: 80px;">
-        <label for="data_ordem" style="font-size: 23px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">DATA DA ORDEM</label>
-        <input type="date" id="data_ordem" name="data_ordem" onkeyup="searchFields()">
-    </div>
+    <form id="searchForm" method="GET">
+        <div class="form-group">
+            <label for="no_ordem">No. ORDEM</label>
+            <input type="number" id="no_ordem" name="no_ordem" onkeyup="searchFields()">
+        </div>
+        
+        <div class="form-group">
+            <label for="data_ordem">DATA DA ORDEM</label>
+            <input type="date" id="data_ordem" name="data_ordem" onkeyup="searchFields()">
+        </div>
 
-    <div class="razao_ordem" style="display: flex; margin-left: 5px;">
-        <label for="razao_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">LOCALIZAR PELA RAZAO SOCIAL DO CLIENTE</label>
-        <input type="text" id="razao_ordem" name="razao_ordem" onkeyup="searchFields()">
-    </div>
+        <div class="form-group">
+            <label for="razao_ordem">LOCALIZAR PELA RAZÃO SOCIAL DO CLIENTE</label>
+            <input type="text" id="razao_ordem" name="razao_ordem" onkeyup="searchFields()">
+        </div>
 
-    <div class="serie_ordem" style="display: flex; margin-left: 5px;">
-        <label for="serie_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">NUMERO DE SÉRIE</label>
-        <input type="number" id="serie_ordem" name="serie_ordem" onkeyup="searchFields()">
-    </div>
+        <div class="form-group">
+            <label for="serie_ordem">NUMERO DE SÉRIE</label>
+            <input type="number" id="serie_ordem" name="serie_ordem" onkeyup="searchFields()">
+        </div>
 
-    <div class="entregar_ordem" style="display: flex; margin-left: 30px;">
-        <label for="entregar_ordem" style="font-size: 23px; font-weight: bold; position: relative; font-family: Arial, Helvetica, sans-serif;">ENTREGAR NO DIA</label>
-        <input type="date" id="entregar_ordem" name="entregar_ordem" onkeyup="searchFields()">
-    </div>
+        <div class="form-group">
+            <label for="entregar_ordem">ENTREGAR NO DIA</label>
+            <input type="date" id="entregar_ordem" name="entregar_ordem" onkeyup="searchFields()">
+        </div>
+    </form>
 
     
 </section>
 
 <section class="section_bottom" style="display: inline-flex;width: 100%; height: 150px; background: #A6CAF0; position: relative; left: 50%; transform: translate(-50%);">
-    <div id="search-results" style="overflow-x:auto; width: 100%;">
-        <div class="search-result-row">
-        <div class="search-result-header">Coluna 1</div>
-        <div class="search-result-header">Coluna 2</div>
-        <div class="search-result-header">Coluna 3</div>
-        <!-- Adicione mais colunas conforme necessário -->
-    </div>
-    <div class="search-result-row">
-        <div class="search-result-cell">Resultado 1A</div>
-        <div class="search-result-cell">Resultado 1B</div>
-        <div class="search-result-cell">Resultado 1C</div>
-        <!-- Adicione mais células conforme necessário -->
-    </div>
-    <!-- Mais linhas de resultados aqui -->
-    </div>
+<table border="1" id="resultTable">
+        <thead>
+            <tr>
+                <th>No. Ordem</th>
+                <th>Data da Ordem</th>
+                <th>Razão Social</th>
+                <th>Número de Série</th>
+                <th>Entregar no Dia</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Os resultados da pesquisa serão exibidos aqui -->
+        </tbody>
+    </table>
 </section>
 
 
 
 
-<script>
-    function searchFields() {
-        let noOrdem = document.getElementById('no_ordem').value.trim();
-        let dataOrdem = document.getElementById('data_ordem').value.trim();
-        let razaoOrdem = document.getElementById('razao_ordem').value.trim();
-        let serieOrdem = document.getElementById('serie_ordem').value.trim();
-        let entregarOrdem = document.getElementById('entregar_ordem').value.trim();
 
-        // Realizar uma requisição AJAX para o PHP com apenas os campos preenchidos
-        let queryString = '';
+    <script>
+        // Função que será chamada ao digitar nos campos
+        function searchFields() {
+            // Obtendo os valores dos campos de pesquisa
+            let no_ordem = document.getElementById('no_ordem').value;
+            let data_ordem = document.getElementById('data_ordem').value;
+            let razao_ordem = document.getElementById('razao_ordem').value;
+            let serie_ordem = document.getElementById('serie_ordem').value;
+            let entregar_ordem = document.getElementById('entregar_ordem').value;
 
-        // Adicionando os campos preenchidos à string de consulta
-        if (noOrdem) {
-            queryString += `no_ordem=${noOrdem}&`;
-        }
-        if (dataOrdem) {
-            queryString += `data_ordem=${dataOrdem}&`;
-        }
-        if (razaoOrdem) {
-            queryString += `razao_ordem=${razaoOrdem}&`;
-        }
-        if (serieOrdem) {
-            queryString += `serie_ordem=${serieOrdem}&`;
-        }
-        if (entregarOrdem) {
-            queryString += `entregar_ordem=${entregarOrdem}&`;
-        }
+            // Criando a URL com os parâmetros de pesquisa
+            let url = 'pesquisar.php?';
+            if (no_ordem) url += `no_ordem=${no_ordem}&`;
+            if (data_ordem) url += `data_ordem=${data_ordem}&`;
+            if (razao_ordem) url += `razao_ordem=${razao_ordem}&`;
+            if (serie_ordem) url += `serie_ordem=${serie_ordem}&`;
+            if (entregar_ordem) url += `entregar_ordem=${entregar_ordem}&`;
 
-        // Remover o último '&' extra
-        queryString = queryString.slice(0, -1);
+            // Removendo o último "&" caso tenha
+            url = url.slice(0, -1);
 
-        // Verificando se a string de consulta não está vazia antes de enviar a requisição
-        if (queryString) {
-            fetch('search.php?' + queryString)
-                .then(response => response.text())
+            // Realizando a chamada AJAX para buscar os dados
+            fetch(url)
+                .then(response => response.json())
                 .then(data => {
-                    document.getElementById('search-results').innerHTML = data;
-                })
-                .catch(error => console.error('Error:', error));
-        }
-    }
-</script>
+                    // Limpar a tabela antes de adicionar os resultados
+                    let tbody = document.getElementById('resultTable').getElementsByTagName('tbody')[0];
+                    tbody.innerHTML = '';
 
+                    // Adicionando os resultados na tabela
+                    data.forEach(row => {
+                        let tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${row.no_ordem}</td>
+                            <td>${row.data_ordem}</td>
+                            <td>${row.razao_ordem}</td>
+                            <td>${row.serie_ordem}</td>
+                            <td>${row.entregar_ordem}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                })
+                .catch(error => console.error('Erro:', error));
+        }
+    </script>
     
 
 
