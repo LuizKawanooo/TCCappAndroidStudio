@@ -88,7 +88,7 @@
 
 
     <script>
-       function searchFields() {
+function searchFields() {
     let noOrdem = document.getElementById('no_ordem').value.trim();
     let dataOrdem = document.getElementById('data_ordem').value.trim();
     let razaoOrdem = document.getElementById('razao_ordem').value.trim();
@@ -96,8 +96,19 @@
     let entregarOrdem = document.getElementById('entregar_ordem').value.trim();
 
     // Realizar uma requisição AJAX para o PHP
-    let queryString = `no_ordem=${noOrdem}&data_ordem=${dataOrdem}&razao_ordem=${razaoOrdem}&serie_ordem=${serieOrdem}&entregar_ordem=${entregarOrdem}`;
+    let queryString = '';
 
+    // Verificar quais campos estão preenchidos e adicionar à queryString
+    if (noOrdem !== '') queryString += `no_ordem=${noOrdem}&`;
+    if (dataOrdem !== '') queryString += `data_ordem=${dataOrdem}&`;
+    if (razaoOrdem !== '') queryString += `razao_ordem=${razaoOrdem}&`;
+    if (serieOrdem !== '') queryString += `serie_ordem=${serieOrdem}&`;
+    if (entregarOrdem !== '') queryString += `entregar_ordem=${entregarOrdem}&`;
+
+    // Remover o último "&" da string
+    queryString = queryString.slice(0, -1);
+
+    // Enviar a requisição AJAX apenas com os campos preenchidos
     fetch('search.php?' + queryString)
         .then(response => response.text())
         .then(data => {
