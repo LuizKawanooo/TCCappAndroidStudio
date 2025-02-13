@@ -67,7 +67,7 @@ function searchFields() {
     fetch(url)
         .then(response => response.text())
         .then(data => {
-            
+            document.getElementById('resultados').innerHTML = data;
         })
         .catch(error => console.error('Erro ao buscar ordens:', error));
 }
@@ -121,23 +121,7 @@ if ($entregar_ordem != '') {
 // Executar a consulta
 $result = $conn->query($query);
 
-// Checar se há resultados
-if ($result->num_rows > 0) {
-    // Mostrar os resultados
-    while($row = $result->fetch_assoc()) {
-        echo "<div>";
-        echo "<p><strong>Código Cliente:</strong> " . $row["codigo_cliente"]. "</p>";
-        echo "<p><strong>Aparelho:</strong> " . $row["aparelho"]. "</p>";
-        echo "<p><strong>Marca:</strong> " . $row["marca"]. "</p>";
-        echo "<p><strong>Modelo:</strong> " . $row["modelo"]. "</p>";
-        echo "<p><strong>Série:</strong> " . $row["serie"]. "</p>";
-        echo "<p><strong>Data de Entrega:</strong> " . $row["data_entrega"]. "</p>";
-        echo "<p><strong>Valor:</strong> R$ " . number_format($row["valor"], 2, ',', '.'). "</p>";
-        echo "</div>";
-    }
-} else {
-    echo "Nenhum resultado encontrado.";
-}
+
 
 $conn->close();
 ?>
