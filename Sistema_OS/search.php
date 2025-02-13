@@ -1,9 +1,9 @@
 <?php
 // Conexão com o banco de dados
-$host = 'localhost';  // Ajuste para o seu host
-$user = 'root';  // Ajuste para seu usuário
-$password = '';  // Ajuste para sua senha
-$dbname = 'tccappionic_bd';  // Ajuste para o nome do seu banco de dados
+$host = 'bd-os-endo.mysql.uhserver.com';  // Ajuste para o seu host
+$user = 'joseendologic';  // Ajuste para seu usuário
+$password = '{[OSluiz2019';  // Ajuste para sua senha
+$dbname = 'bd_os_endo';  // Ajuste para o nome do seu banco de dados
 
 $conn = new mysqli($host, $user, $password, $dbname);
 
