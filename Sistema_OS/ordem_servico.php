@@ -316,7 +316,7 @@ $conn->close();
 
 
 <!-- Pop-up -->
-<div id="popup" class="popup-container">
+<div id="popupadd" class="popup-container">
     <div class="popup-content">
         <h2>Adicionar Ordem de Serviço</h2>
         <form id="ordemServicoForm">
@@ -375,7 +375,7 @@ $conn->close();
 function confirmarCancelamento() {
     let confirmar = confirm("Tem certeza que deseja cancelar?");
     if (confirmar) {
-        document.getElementById("popup").style.display = "none";
+        document.getElementById("popupadd").style.display = "none";
     } else {
         alert("Cancelamento abortado!");
     }
@@ -385,11 +385,11 @@ function confirmarCancelamento() {
     
 <script>
 function abrirPopupAdd() {
-    document.getElementById("popup").style.display = "flex";
+    document.getElementById("popupadd").style.display = "flex";
 }
 
 function fecharPopup() {
-    document.getElementById("popup").style.display = "none";
+    document.getElementById("popupadd").style.display = "none";
 }
 
 function enviarFormulario() {
