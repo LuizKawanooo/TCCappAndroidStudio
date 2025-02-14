@@ -298,32 +298,41 @@ $conn->close();
 <div id="overlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999;"></div>
 
 <script>
-    function openPopup(id) {
-        // Buscar os dados da ordem de serviço usando o ID
-        fetch('get_ordem.php?id=' + id)
-            .then(response => response.json())
-            .then(data => {
-                // Preencher os campos do formulário com os dados da ordem de serviço
-                document.getElementById('orderId').value = data.id;
-                document.getElementById('codigo_cliente').value = data.codigo_cliente;
-                document.getElementById('aparelho').value = data.aparelho;
-                document.getElementById('marca').value = data.marca;
-                document.getElementById('modelo').value = data.modelo;
-                document.getElementById('serie').value = data.serie;
-                document.getElementById('data_entrega').value = data.data_entrega;
-                document.getElementById('valor').value = data.valor;
+function openPopup(id) {
+    // Buscar os dados da ordem de serviço usando o ID
+    fetch('get_ordem.php?id=' + id)
+        .then(response => response.json())
+        .then(data => {
+            // Preencher os campos do formulário
+            document.getElementById('orderId').value = data.id;
+            document.getElementById('codigo_cliente').value = data.codigo_cliente;
+            document.getElementById('aparelho').value = data.aparelho;
+            document.getElementById('marca').value = data.marca;
+            document.getElementById('modelo').value = data.modelo;
+            document.getElementById('serie').value = data.serie;
+            document.getElementById('acessorios').value = data.acessorios;
+            document.getElementById('condicoes').value = data.condicoes;
+            document.getElementById('defeito_informado').value = data.defeito_informado;
+            document.getElementById('descricao_servico').value = data.descricao_servico;
+            document.getElementById('entrega').value = data.entrega;
+            document.getElementById('garantia').value = data.garantia;
+            document.getElementById('valor').value = data.valor;
+            document.getElementById('condicoes_pagamento').value = data.condicoes_pagamento;
+            document.getElementById('data_entrega').value = data.data_entrega;
+            document.getElementById('data_registro').value = data.data_registro;
 
-                // Exibir o popup
-                document.getElementById('popupModal').style.display = 'block';
-                document.getElementById('overlay').style.display = 'block';
-            });
-    }
+            // Exibir o popup
+            document.getElementById('popupModal').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        });
+}
 
-    function closePopup() {
-        // Fechar o popup e o fundo
-        document.getElementById('popupModal').style.display = 'none';
-        document.getElementById('overlay').style.display = 'none';
-    }
+function closePopup() {
+    // Fechar o popup e o fundo
+    document.getElementById('popupModal').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+}
+
 </script>
 
 
