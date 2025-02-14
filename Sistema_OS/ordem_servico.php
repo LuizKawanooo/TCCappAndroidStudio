@@ -27,8 +27,8 @@ $ordens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
     <section class="section_top" style="display: inline-flex;width: 100%; background: #FFFBF0; position: relative; left: 50%; transform: translate(-50%);">
+            <!-- Botão para abrir o popup de adicionar -->
             <div class="incluir">
-                <!-- A div abaixo agora chama a função 'abrirPopup()' ao ser clicada -->
                 <div onclick="abrirPopup()" style="display: inline-block; align-items: center; text-align: center; margin: 15px; cursor: pointer;">
                     <img src="img/adicionar_icon.png" alt="Adicionar OS" width="60px" style="position: relative; left: 50%; transform: translate(-50%);">
                     <p style="position: relative;">Adicionar</p>
@@ -323,7 +323,7 @@ $conn->close();
 
 
 
-<!-- Pop-up -->
+<!-- Popup de Adicionar -->
 <div id="popupadd" class="popup-container" style="display: none;">
     <div class="popup-content">
         <h2>Adicionar Ordem de Serviço</h2>
@@ -380,22 +380,12 @@ $conn->close();
 <script>
 // Função para abrir o popup
 function abrirPopup() {
-    document.getElementById("popupadd").style.display = "block"; // Abre o popup
+    document.getElementById("popupadd").style.display = "flex"; // Exibe o popup
 }
 
 // Função para fechar o popup
 function fecharPopup() {
-    document.getElementById("popupadd").style.display = "none"; // Fecha o popup
-}
-
-// Função para confirmar o cancelamento
-function confirmarCancelamento() {
-    let confirmar = confirm("Tem certeza que deseja cancelar?");
-    if (confirmar) {
-        fecharPopup(); // Fecha o popup
-    } else {
-        alert("Cancelamento abortado!");
-    }
+    document.getElementById("popupadd").style.display = "none"; // Oculta o popup
 }
 
 // Função para enviar o formulário
@@ -435,6 +425,7 @@ function enviarFormulario() {
     })
     .catch(error => console.error("Erro:", error));
 }
+
 </script>
 
 
