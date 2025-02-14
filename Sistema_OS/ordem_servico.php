@@ -140,7 +140,7 @@ $serie_ordem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : '';
 $entregar_ordem = isset($_GET['entregar_ordem']) ? $_GET['entregar_ordem'] : '';
 
 // Iniciar a query com "WHERE 1=1" para facilitar a construção das condições
-$query = "SELECT id, codigo_cliente, aparelho, marca, modelo, serie, data_entrega, valor FROM ordem_servico WHERE 1=1";
+$query = "SELECT * FROM ordem_servico WHERE 1=1";
 
 // Criar um array de condições para concatenar com a query
 $conditions = [];
@@ -170,6 +170,7 @@ if (count($conditions) > 0) {
 // Executar a consulta
 $result = $conn->query($query);
 
+
 // Checar se há resultados
 if ($result->num_rows > 0) {
     echo '<div style="overflow-x: auto;">';
@@ -182,8 +183,16 @@ if ($result->num_rows > 0) {
     echo '<th style="padding: 10px; border: 2px solid black;">Marca</th>';
     echo '<th style="padding: 10px; border: 2px solid black;">Modelo</th>';
     echo '<th style="padding: 10px; border: 2px solid black;">Série</th>';
-    echo '<th style="padding: 10px; border: 2px solid black;">Data de Entrega</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Acessórios</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Condições</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Defeito Informado</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Descrição Serviço</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Entrega</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Garantia</th>';
     echo '<th style="padding: 10px; border: 2px solid black;">Valor</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Condições Pagamento</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Data Entrega</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Data Registro</th>';
     echo '<th style="padding: 10px; border: 2px solid black;">Ações</th>';
     echo '</tr>';
 
@@ -198,8 +207,16 @@ if ($result->num_rows > 0) {
         echo '<td style="padding: 10px; border: 2px solid black;">' . $row["marca"] . '</td>';
         echo '<td style="padding: 10px; border: 2px solid black;">' . $row["modelo"] . '</td>';
         echo '<td style="padding: 10px; border: 2px solid black;">' . $row["serie"] . '</td>';
-        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["data_entrega"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["acessorios"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["condicoes"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["defeito_informado"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["descricao_servico"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["entrega"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["garantia"] . '</td>';
         echo '<td style="padding: 10px; border: 2px solid black;">R$ ' . number_format($row["valor"], 2, ',', '.') . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["condicoes_pagamento"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . date("d/m/Y", strtotime($row["data_entrega"])) . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . date("d/m/Y", strtotime($row["data_registro"])) . '</td>';
         echo '<td style="padding: 10px; border: 2px solid black; text-align: center;">
             <a href="javascript:void(0);" onclick="openPopup(' . $row['id'] . ')" class="editar-btn" style="text-decoration: none; background: blue; color: white; padding: 5px 10px; border-radius: 5px;">Editar</a>
           </td>';
@@ -212,6 +229,7 @@ if ($result->num_rows > 0) {
 } else {
     echo "Nenhum resultado encontrado.";
 }
+
 
 $conn->close();
 ?>
