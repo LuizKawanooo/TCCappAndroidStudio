@@ -12,6 +12,14 @@ if ($conn->connect_error) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Verifica se o ID foi enviado
+    if (!isset($_POST['orderId']) || empty($_POST['orderId'])) {
+        die("Erro: ID da ordem de serviço não foi enviado.");
+    }
+
+    // Obtém o ID da ordem de serviço
+    $id_ordem = intval($_POST['orderId']); // Garante que seja um número inteiro
+
     $codigo_cliente = $_POST['codigo_cliente'];
     $aparelho = $_POST['aparelho'];
     $marca = $_POST['marca'];
@@ -29,27 +37,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Atualiza no banco
     $update_query = "UPDATE ordem_servico SET 
-                        codigo_cliente = '$codigo_cliente', 
-                        aparelho = '$aparelho', 
-                        marca = '$marca', 
-                        modelo = '$modelo', 
-                        serie = '$serie', 
-                        acessorios = '$acessorios', 
-                        condicoes = '$condicoes', 
-                        defeito_informado = '$defeito_informado', 
-                        descricao_servico = '$descricao_servico', 
-                        entrega = '$entrega', 
-                        garantia = '$garantia', 
-                        valor = '$valor', 
-                        condicoes_pagamento = '$condicoes_pagamento', 
-                        data_entrega = '$data_entrega'
-                    WHERE id = $id_ordem";
+                        codigo_cliente = ?, 
+                        aparelho = ?, 
+                        marca = ?, 
+                        modelo = ?, 
+                        serie = ?, 
+                        acessorios = ?, 
+                        condicoes = ?, 
+                        defeito_informado = ?, 
+                        descricao_servico = ?, 
+                        entrega = ?, 
+                        garantia = ?, 
+                        valor = ?, 
+                        condicoes_pagamento = ?, 
+                        data_entrega = ?
+                    WHERE id = ?";
 
-    if ($conn->query($update_query) === TRUE) {
+    // Preparando a query para evitar SQL Injection
+    $stmt = $conn->prepare($update_query);
+    $stmt->bind_param("ssssssssssssssi", $codigo_cliente, $aparelho, $marca, $modelo, $serie, $acessorios, $condicoes, $defeito_informado, $descricao_servico, $entrega, $garantia, $valor, $condicoes_pagamento, $data_entrega, $id_ordem);
+
+    if ($stmt->execute()) {
         echo "Ordem de serviço atualizada com sucesso!";
     } else {
-        echo "Erro ao atualizar ordem de serviço: " . $conn->error;
+        echo "Erro ao atualizar ordem de serviço: " . $stmt->error;
     }
 
+    // Fechando a conexão
+    $stmt->close();
+    $conn->close();
 }
 ?>
