@@ -201,7 +201,7 @@ if ($result->num_rows > 0) {
         echo '<td style="padding: 10px; border: 2px solid black;">' . $row["data_entrega"] . '</td>';
         echo '<td style="padding: 10px; border: 2px solid black;">R$ ' . number_format($row["valor"], 2, ',', '.') . '</td>';
         echo '<td style="padding: 10px; border: 2px solid black; text-align: center;">
-                <a href="editar_ordem.php?id=' . $row["id"] . '" style="text-decoration: none; background: blue; color: white; padding: 5px 10px; border-radius: 5px;">Editar</a>
+                <a href="#" class="editar-btn" data-id="<?= $row['id'] ?>" style="text-decoration: none; background: blue; color: white; padding: 5px 10px; border-radius: 5px;">Editar</a>
               </td>';
         echo '</tr>';
 
@@ -216,6 +216,8 @@ if ($result->num_rows > 0) {
 
 $conn->close();
 ?>
+
+
 
 
 
@@ -350,6 +352,93 @@ function enviarFormulario() {
 
     
 </script>  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Modal de Edição -->
+<div id="editModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); border-radius: 8px; width: 300px;">
+    <h3>Editar Ordem de Serviço</h3>
+    <form id="editForm">
+        <input type="hidden" id="ordem_id" name="id">
+        <label>Aparelho:</label>
+        <input type="text" id="aparelho" name="aparelho" required><br>
+        <label>Marca:</label>
+        <input type="text" id="marca" name="marca" required><br>
+        <label>Modelo:</label>
+        <input type="text" id="modelo" name="modelo" required><br>
+        <label>Série:</label>
+        <input type="text" id="serie" name="serie" required><br>
+        <label>Data de Entrega:</label>
+        <input type="date" id="data_entrega" name="data_entrega" required><br>
+        <label>Valor:</label>
+        <input type="text" id="valor" name="valor" required><br>
+        <button type="submit">Salvar</button>
+        <button type="button" id="fecharModal">Fechar</button>
+    </form>
+</div>
+
+
+
+
+
+
+    <script>
+// Abrir modal ao clicar em "Editar"
+document.querySelectorAll(".editar-btn").forEach(btn => {
+    btn.addEventListener("click", function(event) {
+        event.preventDefault();
+        let ordemId = this.getAttribute("data-id");
+        
+        // Carregar os dados via AJAX
+        fetch("buscar_ordem.php?id=" + ordemId)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("ordem_id").value = data.id;
+            document.getElementById("aparelho").value = data.aparelho;
+            document.getElementById("marca").value = data.marca;
+            document.getElementById("modelo").value = data.modelo;
+            document.getElementById("serie").value = data.serie;
+            document.getElementById("data_entrega").value = data.data_entrega;
+            document.getElementById("valor").value = data.valor;
+            document.getElementById("editModal").style.display = "block";
+        });
+    });
+});
+
+// Fechar modal
+document.getElementById("fecharModal").addEventListener("click", function() {
+    document.getElementById("editModal").style.display = "none";
+});
+
+// Salvar alterações via AJAX
+document.getElementById("editForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    let formData = new FormData(this);
+    
+    fetch("editar_ordem.php", {
+        method: "POST",
+        body: formData
+    }).then(response => response.text())
+    .then(result => {
+        alert(result);
+        document.getElementById("editModal").style.display = "none";
+        location.reload(); // Atualizar a página
+    });
+});
+</script>
 
 
 
