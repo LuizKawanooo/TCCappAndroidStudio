@@ -67,11 +67,41 @@ try {
 
     // Verificando se há resultados
     if (empty($result)) {
-        sendError('Nenhuma ordem encontrada.');
+        echo '<p>Nenhuma ordem encontrada.</p>';
+        exit;
     }
 
-    // Retornando os resultados como JSON
-    echo json_encode($result);
+    // Exibição dos resultados em uma tabela
+    echo '<table border="1">';
+    echo '<tr>
+            <th>Código Cliente</th>
+            <th>Aparelho</th>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>Série</th>
+            <th>Data Entrega</th>
+            <th>Valor</th>
+            <th>Ações</th>
+          </tr>';
+
+    foreach ($result as $row) {
+        echo '<tr>';
+        echo '<td>' . htmlspecialchars($row['codigo_cliente']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['aparelho']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['marca']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['modelo']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['serie']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['data_entrega']) . '</td>';
+        echo '<td>R$ ' . number_format($row['valor'], 2, ',', '.') . '</td>';
+        echo '<td>
+                <a href="editar_ordem.php?codigo=' . urlencode($row['codigo_cliente']) . '">
+                    <button>Editar</button>
+                </a>
+              </td>';
+        echo '</tr>';
+    }
+
+    echo '</table>';
 
 } catch (PDOException $e) {
     sendError('Erro ao conectar ao banco de dados: ' . $e->getMessage());
