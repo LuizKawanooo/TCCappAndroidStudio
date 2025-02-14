@@ -32,7 +32,10 @@ $ordens = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div onclick="abrirPopup()" style="display: inline-block; align-items: center; text-align: center; margin: 15px; cursor: pointer;">
                     <img src="img/adicionar_icon.png" alt="Adicionar OS" width="60px" style="position: relative; left: 50%; transform: translate(-50%);">
                     <p style="position: relative;">Adicionar</p>
+                            <button onclick="abrirPopup()" style="font-size: 18px; font-weight: bold; background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer;">add</button>
+
                 </div>
+                
             </div>
 
         <div class="incluir">
