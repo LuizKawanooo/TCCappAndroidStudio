@@ -37,6 +37,13 @@ $ordens = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
     </section>
+
+    <script>
+    function abrirPopup() {
+        document.getElementById("popupadd").style.display = "flex";
+    }
+</script>
+
     
 <hr style="width: 100%; background: rgb(164, 164, 164); height: 10px;" >
 
@@ -384,9 +391,7 @@ function confirmarCancelamento() {
    
     
 <script>
-function abrirPopupAdd() {
-    document.getElementById("popupadd").style.display = "flex";
-}
+
 
 function fecharPopup() {
     document.getElementById("popupadd").style.display = "none";
