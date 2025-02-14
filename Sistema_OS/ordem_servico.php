@@ -55,7 +55,7 @@
     </div>
 
     <!-- Botão de Envio -->
-    <div style="display: flex; align-items: center; margin-left: 30px;">
+    <div style="display: flex; align-items: center; margin-left: 70px; margin-top: 20px;">
         <button onclick="searchFields()" style="font-size: 18px; font-weight: bold; background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer;">Pesquisar</button>
     </div>
 </section>
