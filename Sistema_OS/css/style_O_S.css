@@ -222,16 +222,15 @@
 
 /* Caixa do pop-up */
 .popup-content {
-    background: #f3f3f3;
-    padding: 10px; /* Reduzido para melhorar o espaçamento */
-    width: 800px; /* Aumentado para 800px */
-    border-radius: 5px;
-    border: 2px solid #ccc;
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
-    text-align: left;
-    font-family: Arial, sans-serif;
+    background: rgb(233, 233, 233);
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translate(-50%);
     position: relative;
-    transform: scale(0.98);
+    left: 50%;
+    transform: scale(0.96);
 }
 
 /* Título */
