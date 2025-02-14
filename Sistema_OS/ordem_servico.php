@@ -45,8 +45,8 @@ $ordens = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <section class="section_top" style="display: inline-flex;width: 100%; background: #FFFBF0; position: relative; left: 50%; transform: translate(-50%);">
             <!-- Botão para abrir o popup de adicionar -->
             <div class="incluir">
-            <div style="display: inline-block; align-items: center;text-align: center; margin: 15px;" id="openPopupBtn" ><img src="img/adicionar_icon.png" alt="Alterar OS" width="60px" height="60px" style="position: relative; left: 50%; transform: translate(-50%);"><p style="position: relative;">Alterar</p></div>
-
+            <div style="display: inline-block; align-items: center;text-align: center; margin: 15px;" id="openPopupBtn" ><img src="img/adicionar_icon.png" alt="Alterar OS" width="60px" height="60px" style="position: relative; left: 50%; transform: translate(-50%);"><button id="openPopupBtn">Adicionar</button></div>
+            
                 
             </div>
 
