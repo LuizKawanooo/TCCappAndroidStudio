@@ -27,10 +27,13 @@ $ordens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
     <section class="section_top" style="display: inline-flex;width: 100%; background: #FFFBF0; position: relative; left: 50%; transform: translate(-50%);">
-        <div class="incluir">
-            <div onclick="abrirPopup()" style="display: inline-block; align-items: center;text-align: center; margin: 15px;"><img src="img/adicionar_icon.png" alt="Adicionar OS" width="60px" style="position: relative; left: 50%; transform: translate(-50%);"><p style="position: relative;">Adicionar</p></div>
-            
-        </div>
+            <div class="incluir">
+                <!-- A div abaixo agora chama a função 'abrirPopup()' ao ser clicada -->
+                <div onclick="abrirPopup()" style="display: inline-block; align-items: center; text-align: center; margin: 15px; cursor: pointer;">
+                    <img src="img/adicionar_icon.png" alt="Adicionar OS" width="60px" style="position: relative; left: 50%; transform: translate(-50%);">
+                    <p style="position: relative;">Adicionar</p>
+                </div>
+            </div>
 
         <div class="incluir">
             <div style="display: inline-block; align-items: center;text-align: center; margin: 15px;"><img src="img/alterar_icon.png" alt="Alterar OS" width="60px" height="60px" style="position: relative; left: 50%; transform: translate(-50%);"><p style="position: relative;">Alterar</p></div>
@@ -38,12 +41,6 @@ $ordens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     </section>
 
-    <script>
-        function abrirPopup() {
-    document.getElementById("popupadd").style.display = "flex";
-}
-
-    </script>
 
 
     
@@ -324,8 +321,7 @@ $conn->close();
 
 
 
-<!-- Botão para abrir o popup -->
-<button type="button" onclick="abrirPopup()">Adicionar Ordem de Serviço</button>
+
 
 <!-- Pop-up -->
 <div id="popupadd" class="popup-container" style="display: none;">
