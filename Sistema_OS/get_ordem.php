@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 $id = $_GET['id'];
 
 // Consulta para pegar os dados da ordem de serviço
-$query = "SELECT id, codigo_cliente, aparelho, marca, modelo, serie, data_entrega, valor FROM ordem_servico WHERE id = ?";
+$query = "SELECT id, codigo_cliente, aparelho, marca, modelo, serie, acessorios, condicoes, defeito_informado, descricao_servico, entrega, garantia, valor, condicoes_pagamento, data_entrega, data_registro FROM ordem_servico WHERE id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $id);
 $stmt->execute();
