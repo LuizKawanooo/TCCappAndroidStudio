@@ -28,7 +28,7 @@ $ordens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
     <section class="section_top" style="display: inline-flex;width: 100%; background: #FFFBF0; position: relative; left: 50%; transform: translate(-50%);">
         <div class="incluir">
-            <div onclick="abrirPopupAdd()" style="display: inline-block; align-items: center;text-align: center; margin: 15px;"><img src="img/adicionar_icon.png" alt="Adicionar OS" width="60px" style="position: relative; left: 50%; transform: translate(-50%);"><p style="position: relative;">Adicionar</p></div>
+            <div onclick="abrirPopup()" style="display: inline-block; align-items: center;text-align: center; margin: 15px;"><img src="img/adicionar_icon.png" alt="Adicionar OS" width="60px" style="position: relative; left: 50%; transform: translate(-50%);"><p style="position: relative;">Adicionar</p></div>
             
         </div>
 
@@ -39,10 +39,12 @@ $ordens = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </section>
 
     <script>
-    function abrirPopup() {
-        document.getElementById("popupadd").style.display = "flex";
-    }
-</script>
+        function abrirPopup() {
+    document.getElementById("popupadd").style.display = "flex";
+}
+
+    </script>
+
 
     
 <hr style="width: 100%; background: rgb(164, 164, 164); height: 10px;" >
@@ -322,8 +324,11 @@ $conn->close();
 
 
 
+<!-- Botão para abrir o popup -->
+<button type="button" onclick="abrirPopup()">Adicionar Ordem de Serviço</button>
+
 <!-- Pop-up -->
-<div id="popupadd" class="popup-container">
+<div id="popupadd" class="popup-container" style="display: none;">
     <div class="popup-content">
         <h2>Adicionar Ordem de Serviço</h2>
         <form id="ordemServicoForm">
@@ -376,33 +381,34 @@ $conn->close();
     </div>
 </div>
 
-
-
 <script>
+// Função para abrir o popup
+function abrirPopup() {
+    document.getElementById("popupadd").style.display = "block"; // Abre o popup
+}
+
+// Função para fechar o popup
+function fecharPopup() {
+    document.getElementById("popupadd").style.display = "none"; // Fecha o popup
+}
+
+// Função para confirmar o cancelamento
 function confirmarCancelamento() {
     let confirmar = confirm("Tem certeza que deseja cancelar?");
     if (confirmar) {
-        document.getElementById("popupadd").style.display = "none";
+        fecharPopup(); // Fecha o popup
     } else {
         alert("Cancelamento abortado!");
     }
 }
-</script>
-   
-    
-<script>
 
-
-function fecharPopup() {
-    document.getElementById("popupadd").style.display = "none";
-}
-
+// Função para enviar o formulário
 function enviarFormulario() {
     let form = document.getElementById("ordemServicoForm");
     let isValid = true;
 
     // Verificar se todos os campos obrigatórios estão preenchidos
-    let inputs = form.querySelectorAll('input[required], textarea[required]'); 
+    let inputs = form.querySelectorAll('input[required], textarea[required]');
     inputs.forEach(input => {
         if (input.value.trim() === "") {
             isValid = false;
@@ -433,9 +439,8 @@ function enviarFormulario() {
     })
     .catch(error => console.error("Erro:", error));
 }
+</script>
 
-    
-</script>  
 
 
 
