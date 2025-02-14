@@ -3,7 +3,7 @@
 $host = 'bd-os-endo.mysql.uhserver.com';
 $dbname = 'bd_os_endo';
 $username = 'joseendologic';
-$password = '{[OSluiz2019}';
+$password = '{[OSluiz2019';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
