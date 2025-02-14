@@ -270,58 +270,62 @@ $conn->close();
 
 
 <!-- Popup Modal -->
-<div id="popupModal" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 2px solid black; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); z-index: 1000;">
-    <h3>Editar Ordem de Serviço</h3>
-<form id="editForm" method="POST" action="atualizar_ordem.php">
-    <input type="hidden" id="orderId" name="orderId">
+<div id="popupModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; z-index: 1000;">
+    <div style="background: rgb(233, 233, 233); padding: 20px; border-radius: 8px; width: 400px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); position: relative; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+        <h3 style="text-align: center; font-size: 16px; margin-bottom: 8px; background: #d9d9d9; padding: 6px; border-bottom: 2px solid #ccc;">Editar Ordem de Serviço</h3>
 
-    <label for="codigo_cliente">Código Cliente:</label>
-    <input type="text" id="codigo_cliente" name="codigo_cliente" required><br><br>
+        <form id="editForm" method="POST" action="atualizar_ordem.php">
+            <input type="hidden" id="orderId" name="orderId">
 
-    <label for="aparelho">Aparelho:</label>
-    <input type="text" id="aparelho" name="aparelho" required><br><br>
+            <label for="codigo_cliente" style="display: block; font-weight: bold; margin-top: 6px; font-size: 12px;">Código Cliente:</label>
+            <input type="text" id="codigo_cliente" name="codigo_cliente" required style="width: calc(100% - 10px); height: 13px; margin: 3px 0; padding: 5px; border: 1px solid #888; border-radius: 3px; background: white; font-size: 12px;"><br><br>
 
-    <label for="marca">Marca:</label>
-    <input type="text" id="marca" name="marca" required><br><br>
+            <label for="aparelho" style="display: block; font-weight: bold; margin-top: 6px; font-size: 12px;">Aparelho:</label>
+            <input type="text" id="aparelho" name="aparelho" required style="width: calc(100% - 10px); height: 13px; margin: 3px 0; padding: 5px; border: 1px solid #888; border-radius: 3px; background: white; font-size: 12px;"><br><br>
 
-    <label for="modelo">Modelo:</label>
-    <input type="text" id="modelo" name="modelo" required><br><br>
+            <label for="marca" style="display: block; font-weight: bold; margin-top: 6px; font-size: 12px;">Marca:</label>
+            <input type="text" id="marca" name="marca" required style="width: calc(100% - 10px); height: 13px; margin: 3px 0; padding: 5px; border: 1px solid #888; border-radius: 3px; background: white; font-size: 12px;"><br><br>
 
-    <label for="serie">Série:</label>
-    <input type="text" id="serie" name="serie" required><br><br>
+            <label for="modelo" style="display: block; font-weight: bold; margin-top: 6px; font-size: 12px;">Modelo:</label>
+            <input type="text" id="modelo" name="modelo" required style="width: calc(100% - 10px); height: 13px; margin: 3px 0; padding: 5px; border: 1px solid #888; border-radius: 3px; background: white; font-size: 12px;"><br><br>
 
-    <label for="acessorios">Acessórios:</label>
-    <input type="text" id="acessorios" name="acessorios"><br><br>
+            <label for="serie" style="display: block; font-weight: bold; margin-top: 6px; font-size: 12px;">Série:</label>
+            <input type="text" id="serie" name="serie" required style="width: calc(100% - 10px); height: 13px; margin: 3px 0; padding: 5px; border: 1px solid #888; border-radius: 3px; background: white; font-size: 12px;"><br><br>
 
-    <label for="condicoes">Condições:</label>
-    <input type="text" id="condicoes" name="condicoes"><br><br>
+            <label for="acessorios" style="display: block; font-weight: bold; margin-top: 6px; font-size: 12px;">Acessórios:</label>
+            <input type="text" id="acessorios" name="acessorios" style="width: calc(100% - 10px); height: 13px; margin: 3px 0; padding: 5px; border: 1px solid #888; border-radius: 3px; background: white; font-size: 12px;"><br><br>
 
-    <label for="defeito_informado">Defeito Informado:</label>
-    <input type="text" id="defeito_informado" name="defeito_informado"><br><br>
+            <label for="condicoes" style="display: block; font-weight: bold; margin-top: 6px; font-size: 12px;">Condições:</label>
+            <input type="text" id="condicoes" name="condicoes" style="width: calc(100% - 10px); height: 13px; margin: 3px 0; padding: 5px; border: 1px solid #888; border-radius: 3px; background: white; font-size: 12px;"><br><br>
 
-    <label for="descricao_servico">Descrição do Serviço:</label>
-    <textarea id="descricao_servico" name="descricao_servico"></textarea><br><br>
+            <label for="defeito_informado" style="display: block; font-weight: bold; margin-top: 6px; font-size: 12px;">Defeito Informado:</label>
+            <input type="text" id="defeito_informado" name="defeito_informado" style="width: calc(100% - 10px); height: 13px; margin: 3px 0; padding: 5px; border: 1px solid #888; border-radius: 3px; background: white; font-size: 12px;"><br><br>
 
-    <label for="entrega">Entrega:</label>
-    <input type="text" id="entrega" name="entrega"><br><br>
+            <label for="descricao_servico" style="display: block; font-weight: bold; margin-top: 6px; font-size: 12px;">Descrição do Serviço:</label>
+            <textarea id="descricao_servico" name="descricao_servico" style="width: calc(100% - 10px); height: 40px; margin: 3px 0; padding: 5px; border: 1px solid #888; border-radius: 3px; background: white; font-size: 12px;"></textarea><br><br>
 
-    <label for="garantia">Garantia:</label>
-    <input type="text" id="garantia" name="garantia"><br><br>
+            <label for="entrega" style="display: block; font-weight: bold; margin-top: 6px; font-size: 12px;">Entrega:</label>
+            <input type="text" id="entrega" name="entrega" style="width: calc(100% - 10px); height: 13px; margin: 3px 0; padding: 5px; border: 1px solid #888; border-radius: 3px; background: white; font-size: 12px;"><br><br>
 
-    <label for="valor">Valor:</label>
-    <input type="text" id="valor" name="valor" required><br><br>
+            <label for="garantia" style="display: block; font-weight: bold; margin-top: 6px; font-size: 12px;">Garantia:</label>
+            <input type="text" id="garantia" name="garantia" style="width: calc(100% - 10px); height: 13px; margin: 3px 0; padding: 5px; border: 1px solid #888; border-radius: 3px; background: white; font-size: 12px;"><br><br>
 
-    <label for="condicoes_pagamento">Condições de Pagamento:</label>
-    <input type="text" id="condicoes_pagamento" name="condicoes_pagamento"><br><br>
+            <label for="valor" style="display: block; font-weight: bold; margin-top: 6px; font-size: 12px;">Valor:</label>
+            <input type="text" id="valor" name="valor" required style="width: calc(100% - 10px); height: 13px; margin: 3px 0; padding: 5px; border: 1px solid #888; border-radius: 3px; background: white; font-size: 12px;"><br><br>
 
-    <label for="data_entrega">Data de Entrega:</label>
-    <input type="date" id="data_entrega" name="data_entrega" required><br><br>
+            <label for="condicoes_pagamento" style="display: block; font-weight: bold; margin-top: 6px; font-size: 12px;">Condições de Pagamento:</label>
+            <input type="text" id="condicoes_pagamento" name="condicoes_pagamento" style="width: calc(100% - 10px); height: 13px; margin: 3px 0; padding: 5px; border: 1px solid #888; border-radius: 3px; background: white; font-size: 12px;"><br><br>
 
-    <button type="submit" style="background: green; color: white;">Salvar Alterações</button>
-</form>
+            <label for="data_entrega" style="display: block; font-weight: bold; margin-top: 6px; font-size: 12px;">Data de Entrega:</label>
+            <input type="date" id="data_entrega" name="data_entrega" required style="width: calc(100% - 10px); height: 13px; margin: 3px 0; padding: 5px; border: 1px solid #888; border-radius: 3px; background: white; font-size: 12px;"><br><br>
 
-    <button onclick="closePopup()">Fechar</button>
+            <button type="submit" style="padding: 8px 12px; background: green; color: white; border: none; border-radius: 3px; font-size: 12px; cursor: pointer; transition: 0.3s;">Salvar Alterações</button>
+        </form>
+
+        <button onclick="closePopup()" style="padding: 8px 12px; margin-top: 12px; background: red; color: white; border: none; border-radius: 3px; font-size: 12px; cursor: pointer; transition: 0.3s;">Fechar</button>
+    </div>
 </div>
+
 
 <!-- Background Overlay -->
 <div id="overlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999;"></div>
