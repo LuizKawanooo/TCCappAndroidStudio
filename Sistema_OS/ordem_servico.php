@@ -272,25 +272,31 @@ $conn->close();
 <!-- Popup Modal -->
 <div id="popupModal" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 2px solid black; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); z-index: 1000;">
     <h3>Editar Ordem de Serviço</h3>
-    <form method="POST" action="">
-    <input type="text" name="codigo_cliente" value="<?php echo htmlspecialchars($row['codigo_cliente']); ?>" placeholder="Código Cliente" required>
-    <input type="text" name="aparelho" value="<?php echo htmlspecialchars($row['aparelho']); ?>" placeholder="Aparelho" required>
-    <input type="text" name="marca" value="<?php echo htmlspecialchars($row['marca']); ?>" placeholder="Marca" required>
-    <input type="text" name="modelo" value="<?php echo htmlspecialchars($row['modelo']); ?>" placeholder="Modelo" required>
-    <input type="text" name="serie" value="<?php echo htmlspecialchars($row['serie']); ?>" placeholder="Série" required>
-    <input type="text" name="acessorios" value="<?php echo htmlspecialchars($row['acessorios']); ?>" placeholder="Acessórios">
-    <input type="text" name="condicoes" value="<?php echo htmlspecialchars($row['condicoes']); ?>" placeholder="Condições">
-    <input type="text" name="defeito_informado" value="<?php echo htmlspecialchars($row['defeito_informado']); ?>" placeholder="Defeito Informado">
-    <input type="text" name="descricao_servico" value="<?php echo htmlspecialchars($row['descricao_servico']); ?>" placeholder="Descrição do Serviço">
-    <input type="text" name="entrega" value="<?php echo htmlspecialchars($row['entrega']); ?>" placeholder="Entrega">
-    <input type="text" name="garantia" value="<?php echo htmlspecialchars($row['garantia']); ?>" placeholder="Garantia">
-    <input type="number" step="0.01" name="valor" value="<?php echo htmlspecialchars($row['valor']); ?>" placeholder="Valor" required>
-    <input type="text" name="condicoes_pagamento" value="<?php echo htmlspecialchars($row['condicoes_pagamento']); ?>" placeholder="Condições de Pagamento">
-    <input type="date" name="data_entrega" value="<?php echo htmlspecialchars($row['data_entrega']); ?>" placeholder="Data de Entrega" required>
-    <input type="date" name="data_registro" value="<?php echo htmlspecialchars($row['data_registro']); ?>" placeholder="Data de Registro" readonly>
-    <input type="submit" value="Atualizar Ordem de Serviço">
-</form>
+    <form id="editForm" method="POST" action="atualizar_ordem.php">
+        <input type="hidden" id="orderId" name="orderId">
+        <label for="codigo_cliente">Código Cliente:</label>
+        <input type="text" id="codigo_cliente" name="codigo_cliente" required><br><br>
 
+        <label for="aparelho">Aparelho:</label>
+        <input type="text" id="aparelho" name="aparelho" required><br><br>
+
+        <label for="marca">Marca:</label>
+        <input type="text" id="marca" name="marca" required><br><br>
+
+        <label for="modelo">Modelo:</label>
+        <input type="text" id="modelo" name="modelo" required><br><br>
+
+        <label for="serie">Série:</label>
+        <input type="text" id="serie" name="serie" required><br><br>
+
+        <label for="data_entrega">Data de Entrega:</label>
+        <input type="date" id="data_entrega" name="data_entrega" required><br><br>
+
+        <label for="valor">Valor:</label>
+        <input type="text" id="valor" name="valor" required><br><br>
+
+        <button type="submit" style="background: green; color: white;">Salvar Alterações</button>
+    </form>
     <button onclick="closePopup()">Fechar</button>
 </div>
 
@@ -298,41 +304,32 @@ $conn->close();
 <div id="overlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999;"></div>
 
 <script>
-function openPopup(id) {
-    // Buscar os dados da ordem de serviço usando o ID
-    fetch('get_ordem.php?id=' + id)
-        .then(response => response.json())
-        .then(data => {
-            // Preencher os campos do formulário
-            document.getElementById('orderId').value = data.id;
-            document.getElementById('codigo_cliente').value = data.codigo_cliente;
-            document.getElementById('aparelho').value = data.aparelho;
-            document.getElementById('marca').value = data.marca;
-            document.getElementById('modelo').value = data.modelo;
-            document.getElementById('serie').value = data.serie;
-            document.getElementById('acessorios').value = data.acessorios;
-            document.getElementById('condicoes').value = data.condicoes;
-            document.getElementById('defeito_informado').value = data.defeito_informado;
-            document.getElementById('descricao_servico').value = data.descricao_servico;
-            document.getElementById('entrega').value = data.entrega;
-            document.getElementById('garantia').value = data.garantia;
-            document.getElementById('valor').value = data.valor;
-            document.getElementById('condicoes_pagamento').value = data.condicoes_pagamento;
-            document.getElementById('data_entrega').value = data.data_entrega;
-            document.getElementById('data_registro').value = data.data_registro;
+    function openPopup(id) {
+        // Buscar os dados da ordem de serviço usando o ID
+        fetch('get_ordem.php?id=' + id)
+            .then(response => response.json())
+            .then(data => {
+                // Preencher os campos do formulário com os dados da ordem de serviço
+                document.getElementById('orderId').value = data.id;
+                document.getElementById('codigo_cliente').value = data.codigo_cliente;
+                document.getElementById('aparelho').value = data.aparelho;
+                document.getElementById('marca').value = data.marca;
+                document.getElementById('modelo').value = data.modelo;
+                document.getElementById('serie').value = data.serie;
+                document.getElementById('data_entrega').value = data.data_entrega;
+                document.getElementById('valor').value = data.valor;
 
-            // Exibir o popup
-            document.getElementById('popupModal').style.display = 'block';
-            document.getElementById('overlay').style.display = 'block';
-        });
-}
+                // Exibir o popup
+                document.getElementById('popupModal').style.display = 'block';
+                document.getElementById('overlay').style.display = 'block';
+            });
+    }
 
-function closePopup() {
-    // Fechar o popup e o fundo
-    document.getElementById('popupModal').style.display = 'none';
-    document.getElementById('overlay').style.display = 'none';
-}
-
+    function closePopup() {
+        // Fechar o popup e o fundo
+        document.getElementById('popupModal').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+    }
 </script>
 
 
