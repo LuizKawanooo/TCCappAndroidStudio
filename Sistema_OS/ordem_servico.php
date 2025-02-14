@@ -24,16 +24,29 @@ $ordens = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ORDEM DE SERVIÇO</title>
     <link rel="stylesheet" href="css/style_O_S.css">
+
+    <style>
+        /* Estilo básico do popup */
+        #popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+    </style>
+    
 </head>
 <body>
     <section class="section_top" style="display: inline-flex;width: 100%; background: #FFFBF0; position: relative; left: 50%; transform: translate(-50%);">
             <!-- Botão para abrir o popup de adicionar -->
             <div class="incluir">
-                    <div id="popup">
-                        <h2>Ordem de Serviço</h2>
-                        <p>A série da ordem é: <?php echo htmlspecialchars($serie_ordem); ?></p>
-                        <button id="closeBtn">Fechar</button>
-                    </div>
+            <div style="display: inline-block; align-items: center;text-align: center; margin: 15px;" id="openPopupBtn" ><img src="img/adicionar_icon.png" alt="Alterar OS" width="60px" height="60px" style="position: relative; left: 50%; transform: translate(-50%);"><p style="position: relative;">Alterar</p></div>
+
                 
             </div>
 
@@ -325,62 +338,137 @@ $conn->close();
 
 
 
-<!-- Popup de Adicionar -->
-<div id="popupadd" class="popup-container" style="display: none;">
-    <div class="popup-content">
-        <h2>Adicionar Ordem de Serviço</h2>
-        <form id="ordemServicoForm">
+    <!-- Popup com formulário -->
+    <div id="popup">
+        <h2>Ordem de Serviço</h2>
+        <form method="POST" action="ordem_servico.php">
+            <input type="hidden" name="serie" value="<?php echo htmlspecialchars($serie_ordem); ?>" />
+
             <label>Código do Cliente:</label>
-            <input type="text" name="codigo_cliente" required>
+            <input type="text" name="codigo_cliente" required><br><br>
 
             <label>Aparelho:</label>
-            <input type="text" name="aparelho" required>
+            <input type="text" name="aparelho" required><br><br>
 
             <label>Marca:</label>
-            <input type="text" name="marca" required>
+            <input type="text" name="marca" required><br><br>
 
             <label>Modelo:</label>
-            <input type="text" name="modelo" required>
+            <input type="text" name="modelo" required><br><br>
 
             <label>Número de Série:</label>
-            <input type="text" name="serie" required>
+            <input type="text" name="serie" required><br><br>
 
             <label>Acessórios:</label>
-            <input type="text" name="acessorios" required>
+            <input type="text" name="acessorios" required><br><br>
 
             <label>Condições:</label>
-            <textarea name="condicoes" required></textarea>
+            <textarea name="condicoes" required></textarea><br><br>
 
             <label>Defeito Informado:</label>
-            <textarea name="defeito_informado" required></textarea>
+            <textarea name="defeito_informado" required></textarea><br><br>
 
             <label>Descrição do Serviço:</label>
-            <textarea name="descricao_servico" required></textarea>
+            <textarea name="descricao_servico" required></textarea><br><br>
 
             <label>Entrega:</label>
-            <input type="date" name="entrega" required>
+            <input type="date" name="entrega" required><br><br>
 
             <label>Garantia:</label>
-            <input type="text" name="garantia" required>
+            <input type="text" name="garantia" required><br><br>
 
             <label>Valor:</label>
-            <input type="number" step="0.01" name="valor" required>
+            <input type="number" step="0.01" name="valor" required><br><br>
 
             <label>Condições de Pagamento:</label>
-            <input type="text" name="condicoes_pagamento" required>
+            <input type="text" name="condicoes_pagamento" required><br><br>
 
             <label>Data de Entrega:</label>
-            <input type="date" name="data_entrega" required>
+            <input type="date" name="data_entrega" required><br><br>
 
-            <button type="button" onclick="enviarFormulario()">OK Enviar</button>
-            <!-- Botão de Cancelar -->
-            <button type="button" onclick="confirmarCancelamento()">Cancelar</button>
+            <button type="submit">OK Enviar</button>
+            <button type="button" id="closePopupBtn">Cancelar</button>
         </form>
     </div>
-</div>
+
+
+
+
+
+
+
+
+
+
+
+<?php
+// Conexão com o banco de dados
+$servername = "bd-os-endo.mysql.uhserver.com";
+$username = "joseendologic";
+$password = "{[OSluiz2019";
+$database = "bd_os_endo";
+
+$conn = new mysqli($servername, $username, $password, $database);
+
+if ($conn->connect_error) {
+    die("Erro na conexão: " . $conn->connect_error);
+}
+
+$serie_ordem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : ''; 
+
+// Verificar se o formulário foi enviado
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Coletando dados do formulário
+    $codigo_cliente = $_POST['codigo_cliente'];
+    $aparelho = $_POST['aparelho'];
+    $marca = $_POST['marca'];
+    $modelo = $_POST['modelo'];
+    $serie = $_POST['serie'];
+    $acessorios = $_POST['acessorios'];
+    $condicoes = $_POST['condicoes'];
+    $defeito_informado = $_POST['defeito_informado'];
+    $descricao_servico = $_POST['descricao_servico'];
+    $entrega = $_POST['entrega'];
+    $garantia = $_POST['garantia'];
+    $valor = $_POST['valor'];
+    $condicoes_pagamento = $_POST['condicoes_pagamento'];
+    $data_entrega = $_POST['data_entrega'];
+
+    // Inserir dados no banco de dados
+    if (empty($codigo_cliente) || empty($aparelho) || empty($marca) || empty($modelo) || empty($serie) || empty($valor)) {
+        echo "Por favor, preencha todos os campos obrigatórios!";
+    } else {
+        $sql = "INSERT INTO ordem_servico (codigo_cliente, aparelho, marca, modelo, serie, acessorios, condicoes, defeito_informado, descricao_servico, entrega, garantia, valor, condicoes_pagamento, data_entrega)
+                VALUES ('$codigo_cliente', '$aparelho', '$marca', '$modelo', '$serie', '$acessorios', '$condicoes', '$defeito_informado', '$descricao_servico', '$entrega', '$garantia', '$valor', '$condicoes_pagamento', '$data_entrega')";
+
+        if ($conn->query($sql) === TRUE) {
+            echo "Ordem de serviço cadastrada com sucesso!";
+        } else {
+            echo "Erro: " . $conn->error;
+        }
+    }
+}
+
+$conn->close();
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <script>
- // Função para abrir o popup
+// Função para abrir o popup
         function abrirPopup() {
             document.getElementById('popup').style.display = 'block';
         }
@@ -390,17 +478,11 @@ $conn->close();
             document.getElementById('popup').style.display = 'none';
         }
 
-        // Abrir o popup automaticamente após a página carregar (sem uso de onclick)
-        window.onload = function() {
-            // Verificando se existe o parâmetro 'serie_ordem' na URL
-            const serieOrdem = new URLSearchParams(window.location.search).get('serie_ordem');
-            if (serieOrdem) {
-                abrirPopup();
-            }
-        };
+        // Abrir o popup ao clicar no botão
+        document.getElementById('openPopupBtn').addEventListener('click', abrirPopup);
 
-        // Fechar o popup quando clicar no botão de fechar
-        document.getElementById('closeBtn').addEventListener('click', fecharPopup);
+        // Fechar o popup ao clicar no botão de fechar
+        document.getElementById('closePopupBtn').addEventListener('click', fecharPopup);
 
 // Função para enviar o formulário
 function enviarFormulario() {
