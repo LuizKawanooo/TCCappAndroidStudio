@@ -406,7 +406,7 @@ document.querySelectorAll(".editar-btn").forEach(btn => {
         let ordemId = this.getAttribute("data-id");
         
         // Carregar os dados via AJAX
-        fetch("buscar_ordem.php?id=" + ordemId)
+        fetch("search.php?id=" + ordemId)
         .then(response => response.json())
         .then(data => {
             document.getElementById("ordem_id").value = data.id;
