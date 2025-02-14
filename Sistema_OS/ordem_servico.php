@@ -201,12 +201,10 @@ if ($result->num_rows > 0) {
         echo '<td style="padding: 10px; border: 2px solid black;">' . $row["data_entrega"] . '</td>';
         echo '<td style="padding: 10px; border: 2px solid black;">R$ ' . number_format($row["valor"], 2, ',', '.') . '</td>';
         echo '<td style="padding: 10px; border: 2px solid black; text-align: center;">
-                <a href="editar_ordem.php?id=' . $row['id'] . '" class="editar-btn" style="text-decoration: none; background: blue; color: white; padding: 5px 10px; border-radius: 5px;">Editar</a>
-              </td>';
-
-        echo '</tr>';
-
-        $row_count++;
+            <a href="javascript:void(0);" onclick="openPopup(' . $row['id'] . ')" class="editar-btn" style="text-decoration: none; background: blue; color: white; padding: 5px 10px; border-radius: 5px;">Editar</a>
+          </td>';
+       echo '</tr>';
+    $row_count++;
     }
 
     echo '</table>';
@@ -224,7 +222,32 @@ $conn->close();
 
 
 
+<!-- Popup Modal -->
+<div id="popupModal" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 2px solid black; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); z-index: 1000;">
+    <h3>Editar Ordem de Serviço</h3>
+    <p id="popupContent"></p>
+    <button onclick="closePopup()">Fechar</button>
+</div>
 
+<!-- Background Overlay -->
+<div id="overlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999;"></div>
+
+<script>
+    function openPopup(id) {
+        // Aqui você pode buscar os dados da ordem de serviço ou preencher com o id.
+        document.getElementById('popupContent').innerText = "Você está editando a ordem de serviço com ID: " + id;
+        
+        // Exibir o popup e o fundo
+        document.getElementById('popupModal').style.display = 'block';
+        document.getElementById('overlay').style.display = 'block';
+    }
+
+    function closePopup() {
+        // Fechar o popup e o fundo
+        document.getElementById('popupModal').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+    }
+</script>
 
 
 
@@ -355,93 +378,6 @@ function enviarFormulario() {
 </script>  
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- Modal de Edição -->
-<div id="editModal" class="popup-container">
-    <div class="popup-content">
-        <h3>Editar Ordem de Serviço</h3>
-        <form id="editForm">
-            <input type="hidden" id="ordem_id" name="id">
-            <label>Aparelho:</label>
-            <input type="text" id="aparelho" name="aparelho" required><br>
-            <label>Marca:</label>
-            <input type="text" id="marca" name="marca" required><br>
-            <label>Modelo:</label>
-            <input type="text" id="modelo" name="modelo" required><br>
-            <label>Série:</label>
-            <input type="text" id="serie" name="serie" required><br>
-            <label>Data de Entrega:</label>
-            <input type="date" id="data_entrega" name="data_entrega" required><br>
-            <label>Valor:</label>
-            <input type="text" id="valor" name="valor" required><br>
-            <button type="submit">Salvar</button>
-            <button type="button" id="fecharModal">Fechar</button>
-        </form>
-    </div>
-</div>
-
-
-
-
-
-
-    <script>
-// Abrir modal ao clicar em "Editar"
-document.querySelectorAll(".editar-btn").forEach(btn => {
-    btn.addEventListener("click", function(event) {
-        event.preventDefault();
-        let ordemId = this.getAttribute("data-id");
-        
-        // Carregar os dados via AJAX
-        fetch("search.php?id=" + ordemId)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById("ordem_id").value = data.id;
-            document.getElementById("aparelho").value = data.aparelho;
-            document.getElementById("marca").value = data.marca;
-            document.getElementById("modelo").value = data.modelo;
-            document.getElementById("serie").value = data.serie;
-            document.getElementById("data_entrega").value = data.data_entrega;
-            document.getElementById("valor").value = data.valor;
-            document.getElementById("editModal").style.display = "block";
-        });
-    });
-});
-
-// Fechar modal
-document.getElementById("fecharModal").addEventListener("click", function() {
-    document.getElementById("editModal").style.display = "none";
-});
-
-// Salvar alterações via AJAX
-document.getElementById("editForm").addEventListener("submit", function(event) {
-    event.preventDefault();
-    let formData = new FormData(this);
-    
-    fetch("editar_ordem.php", {
-        method: "POST",
-        body: formData
-    }).then(response => response.text())
-    .then(result => {
-        alert(result);
-        document.getElementById("editModal").style.display = "none";
-        location.reload(); // Atualizar a página
-    });
-});
-</script>
 
 
 
