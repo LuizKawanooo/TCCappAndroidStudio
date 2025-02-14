@@ -17,7 +17,11 @@ if (isset($_GET['id'])) {
     $id_ordem = $_GET['id'];
 
     // Buscar os dados da ordem de serviço para editar
-    $query = "SELECT id, codigo_cliente, aparelho, marca, modelo, serie, data_entrega, valor FROM ordem_servico WHERE id = $id_ordem";
+    $query = "SELECT id, codigo_cliente, aparelho, marca, modelo, serie, acessorios, condicoes, 
+          defeito_informado, descricao_servico, entrega, garantia, valor, 
+          condicoes_pagamento, data_entrega, data_registro 
+          FROM ordem_servico WHERE id = $id_ordem";
+
     $result = $conn->query($query);
 
     // Se a ordem for encontrada, preencher o formulário de edição
