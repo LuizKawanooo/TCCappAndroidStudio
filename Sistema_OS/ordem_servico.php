@@ -170,12 +170,38 @@ if (count($conditions) > 0) {
 // Executar a consulta
 $result = $conn->query($query);
 
+
+
+
+
+
+
+
+
+
+
+
 // Checar se há resultados
+if (!$result) {
+    error_log("Erro na consulta: " . $conn->error);
+    die("Erro ao buscar dados.");
+}
+
+// Se a query foi bem-sucedida, oferecer opção de retorno JSON
+if (isset($_GET['format']) && $_GET['format'] === 'json') {
+    $data = [];
+    while ($row = $result->fetch_assoc()) {
+        $data[] = $row;
+    }
+    header('Content-Type: application/json');
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    exit();
+}
+
 if ($result->num_rows > 0) {
     echo '<div style="overflow-x: auto;">';
     echo '<table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; text-align: left;">';
     
-    // Cabeçalho da tabela
     echo '<tr style="background: yellow; border: 2px solid black;">';
     echo '<th style="padding: 10px; border: 2px solid black;">Código Cliente</th>';
     echo '<th style="padding: 10px; border: 2px solid black;">Aparelho</th>';
@@ -186,22 +212,21 @@ if ($result->num_rows > 0) {
     echo '<th style="padding: 10px; border: 2px solid black;">Valor</th>';
     echo '</tr>';
 
-    $row_count = 0; // Contador para alternar as cores das linhas
-
+    $row_count = 0;
     while ($row = $result->fetch_assoc()) {
-        $background_color = ($row_count % 2 == 0) ? "#f0f0f0" : "#ffffff"; // Cinza claro e branco alternados
+        $background_color = ($row_count % 2 == 0) ? "#f0f0f0" : "#ffffff";
 
         echo '<tr style="background: ' . $background_color . '; border: 2px solid black;">';
-        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["codigo_cliente"] . '</td>';
-        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["aparelho"] . '</td>';
-        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["marca"] . '</td>';
-        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["modelo"] . '</td>';
-        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["serie"] . '</td>';
-        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["data_entrega"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . htmlspecialchars($row["codigo_cliente"]) . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . htmlspecialchars($row["aparelho"]) . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . htmlspecialchars($row["marca"]) . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . htmlspecialchars($row["modelo"]) . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . htmlspecialchars($row["serie"]) . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . htmlspecialchars($row["data_entrega"]) . '</td>';
         echo '<td style="padding: 10px; border: 2px solid black;">R$ ' . number_format($row["valor"], 2, ',', '.') . '</td>';
         echo '</tr>';
 
-        $row_count++; // Incrementa o contador
+        $row_count++;
     }
 
     echo '</table>';
@@ -210,11 +235,8 @@ if ($result->num_rows > 0) {
     echo "Nenhum resultado encontrado.";
 }
 
-
-
 $conn->close();
 ?>
-
 
 
 
