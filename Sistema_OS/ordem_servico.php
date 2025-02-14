@@ -152,7 +152,7 @@ if ($conn->connect_error) {
     die("Conexão falhou: " . $conn->connect_error);
 }
 
-// Pegar os parâmetros da pesquisa de forma segura (usando prepared statements)
+// Pegar os parâmetros da pesquisa
 $no_ordem = isset($_GET['no_ordem']) ? $_GET['no_ordem'] : '';
 $data_ordem = isset($_GET['data_ordem']) ? $_GET['data_ordem'] : '';
 $serie_ordem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : ''; 
@@ -166,16 +166,16 @@ $conditions = [];
 
 // Adicionar as condições conforme os campos preenchidos
 if ($no_ordem != '') {
-    $conditions[] = "id = ?";
+    $conditions[] = "id = '$no_ordem'";
 }
 if ($data_ordem != '') {
-    $conditions[] = "data_registro = ?";
+    $conditions[] = "data_registro = '$data_ordem'";
 }
 if ($serie_ordem != '') {
-    $conditions[] = "serie = ?";
+    $conditions[] = "serie = '$serie_ordem'";
 }
 if ($entregar_ordem != '') {
-    $conditions[] = "data_entrega = ?";
+    $conditions[] = "data_entrega = '$entregar_ordem'";
 }
 
 // Concatenar as condições na query se existirem
@@ -186,27 +186,9 @@ if (count($conditions) > 0) {
     exit();
 }
 
-// Preparar a query
-$stmt = $conn->prepare($query);
-
-// Verificar se a preparação foi bem-sucedida
-if ($stmt === false) {
-    die("Erro na preparação da consulta: " . $conn->error);
-}
-
-// Bind dos parâmetros
-$types = str_repeat("s", count($conditions));  // Todos os parâmetros são strings
-$params = array_merge([$types], array_map(function ($param) use ($no_ordem, $data_ordem, $serie_ordem, $entregar_ordem) {
-    return $$param;
-}, ['no_ordem', 'data_ordem', 'serie_ordem', 'entregar_ordem']));
-
-call_user_func_array([$stmt, 'bind_param'], $params);
-
 // Executar a consulta
-$stmt->execute();
+$result = $conn->query($query);
 
-// Obter os resultados
-$result = $stmt->get_result();
 
 // Checar se há resultados
 if ($result->num_rows > 0) {
@@ -267,7 +249,7 @@ if ($result->num_rows > 0) {
     echo "Nenhum resultado encontrado.";
 }
 
-// Fechar a conexão
+
 $conn->close();
 ?>
 
