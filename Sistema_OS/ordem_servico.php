@@ -152,7 +152,7 @@ if ($conn->connect_error) {
     die("Conexão falhou: " . $conn->connect_error);
 }
 
-// Pegar os parâmetros da pesquisa
+// Pegar os parâmetros da pesquisa de forma segura (usando prepared statements)
 $no_ordem = isset($_GET['no_ordem']) ? $_GET['no_ordem'] : '';
 $data_ordem = isset($_GET['data_ordem']) ? $_GET['data_ordem'] : '';
 $serie_ordem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : ''; 
@@ -166,16 +166,16 @@ $conditions = [];
 
 // Adicionar as condições conforme os campos preenchidos
 if ($no_ordem != '') {
-    $conditions[] = "id = '$no_ordem'";
+    $conditions[] = "id = ?";
 }
 if ($data_ordem != '') {
-    $conditions[] = "data_registro = '$data_ordem'";
+    $conditions[] = "data_registro = ?";
 }
 if ($serie_ordem != '') {
-    $conditions[] = "serie = '$serie_ordem'";
+    $conditions[] = "serie = ?";
 }
 if ($entregar_ordem != '') {
-    $conditions[] = "data_entrega = '$entregar_ordem'";
+    $conditions[] = "data_entrega = ?";
 }
 
 // Concatenar as condições na query se existirem
@@ -186,9 +186,27 @@ if (count($conditions) > 0) {
     exit();
 }
 
-// Executar a consulta
-$result = $conn->query($query);
+// Preparar a query
+$stmt = $conn->prepare($query);
 
+// Verificar se a preparação foi bem-sucedida
+if ($stmt === false) {
+    die("Erro na preparação da consulta: " . $conn->error);
+}
+
+// Bind dos parâmetros
+$types = str_repeat("s", count($conditions));  // Todos os parâmetros são strings
+$params = array_merge([$types], array_map(function ($param) use ($no_ordem, $data_ordem, $serie_ordem, $entregar_ordem) {
+    return $$param;
+}, ['no_ordem', 'data_ordem', 'serie_ordem', 'entregar_ordem']));
+
+call_user_func_array([$stmt, 'bind_param'], $params);
+
+// Executar a consulta
+$stmt->execute();
+
+// Obter os resultados
+$result = $stmt->get_result();
 
 // Checar se há resultados
 if ($result->num_rows > 0) {
@@ -249,9 +267,10 @@ if ($result->num_rows > 0) {
     echo "Nenhum resultado encontrado.";
 }
 
-
+// Fechar a conexão
 $conn->close();
 ?>
+
 
 
 
@@ -406,12 +425,13 @@ function confirmarCancelamento() {
     
 <script>
 function abrirPopup() {
-    document.getElementById("popup").style.display = "flex";
+    document.getElementById("popup").style.display = "block"; // Open the popup
 }
 
 function fecharPopup() {
-    document.getElementById("popup").style.display = "none";
+    document.getElementById("popup").style.display = "none"; // Close the popup
 }
+
 
 function enviarFormulario() {
     let form = document.getElementById("ordemServicoForm");
