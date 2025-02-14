@@ -140,7 +140,7 @@ $serie_ordem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : '';
 $entregar_ordem = isset($_GET['entregar_ordem']) ? $_GET['entregar_ordem'] : '';
 
 // Iniciar a query com "WHERE 1=1" para facilitar a construção das condições
-$query = "SELECT codigo_cliente, aparelho, marca, modelo, serie, data_entrega, valor FROM ordem_servico WHERE 1=1";
+$query = "SELECT id, codigo_cliente, aparelho, marca, modelo, serie, data_entrega, valor FROM ordem_servico WHERE 1=1";
 
 // Criar um array de condições para concatenar com a query
 $conditions = [];
@@ -164,44 +164,18 @@ if (count($conditions) > 0) {
     $query .= " AND " . implode(" AND ", $conditions);
 } else {
     echo "Por favor, preencha algum campo para realizar a pesquisa.";
-    exit();  // Sai do script se não houver parâmetros de pesquisa
+    exit();
 }
 
 // Executar a consulta
 $result = $conn->query($query);
 
-
-
-
-
-
-
-
-
-
-
-
 // Checar se há resultados
-if (!$result) {
-    error_log("Erro na consulta: " . $conn->error);
-    die("Erro ao buscar dados.");
-}
-
-// Se a query foi bem-sucedida, oferecer opção de retorno JSON
-if (isset($_GET['format']) && $_GET['format'] === 'json') {
-    $data = [];
-    while ($row = $result->fetch_assoc()) {
-        $data[] = $row;
-    }
-    header('Content-Type: application/json');
-    echo json_encode($data, JSON_UNESCAPED_UNICODE);
-    exit();
-}
-
 if ($result->num_rows > 0) {
     echo '<div style="overflow-x: auto;">';
     echo '<table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; text-align: left;">';
     
+    // Cabeçalho da tabela
     echo '<tr style="background: yellow; border: 2px solid black;">';
     echo '<th style="padding: 10px; border: 2px solid black;">Código Cliente</th>';
     echo '<th style="padding: 10px; border: 2px solid black;">Aparelho</th>';
@@ -210,20 +184,25 @@ if ($result->num_rows > 0) {
     echo '<th style="padding: 10px; border: 2px solid black;">Série</th>';
     echo '<th style="padding: 10px; border: 2px solid black;">Data de Entrega</th>';
     echo '<th style="padding: 10px; border: 2px solid black;">Valor</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Ações</th>';
     echo '</tr>';
 
-    $row_count = 0;
+    $row_count = 0; // Contador para alternar as cores das linhas
+
     while ($row = $result->fetch_assoc()) {
-        $background_color = ($row_count % 2 == 0) ? "#f0f0f0" : "#ffffff";
+        $background_color = ($row_count % 2 == 0) ? "#f0f0f0" : "#ffffff"; // Cinza claro e branco alternados
 
         echo '<tr style="background: ' . $background_color . '; border: 2px solid black;">';
-        echo '<td style="padding: 10px; border: 2px solid black;">' . htmlspecialchars($row["codigo_cliente"]) . '</td>';
-        echo '<td style="padding: 10px; border: 2px solid black;">' . htmlspecialchars($row["aparelho"]) . '</td>';
-        echo '<td style="padding: 10px; border: 2px solid black;">' . htmlspecialchars($row["marca"]) . '</td>';
-        echo '<td style="padding: 10px; border: 2px solid black;">' . htmlspecialchars($row["modelo"]) . '</td>';
-        echo '<td style="padding: 10px; border: 2px solid black;">' . htmlspecialchars($row["serie"]) . '</td>';
-        echo '<td style="padding: 10px; border: 2px solid black;">' . htmlspecialchars($row["data_entrega"]) . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["codigo_cliente"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["aparelho"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["marca"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["modelo"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["serie"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["data_entrega"] . '</td>';
         echo '<td style="padding: 10px; border: 2px solid black;">R$ ' . number_format($row["valor"], 2, ',', '.') . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black; text-align: center;">
+                <a href="editar_ordem.php?id=' . $row["id"] . '" style="text-decoration: none; background: blue; color: white; padding: 5px 10px; border-radius: 5px;">Editar</a>
+              </td>';
         echo '</tr>';
 
         $row_count++;
@@ -237,6 +216,9 @@ if ($result->num_rows > 0) {
 
 $conn->close();
 ?>
+
+
+
 
 
 
