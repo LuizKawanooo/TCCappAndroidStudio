@@ -51,10 +51,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Erro ao atualizar ordem de serviço: " . $conn->error;
     }
 
-
-
-    // Fechando a conexão
-    $stmt->close();
-    $conn->close();
 }
 ?>
