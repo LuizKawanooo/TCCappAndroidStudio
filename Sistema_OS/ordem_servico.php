@@ -25,20 +25,7 @@ $ordens = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>ORDEM DE SERVIÇO</title>
     <link rel="stylesheet" href="css/style_O_S.css">
 
-    <style>
-        /* Estilo básico do popup */
-        #popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #fff;
-            padding: 20px;
-            border: 1px solid #ccc;
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
-        }
-    </style>
+
     
 </head>
 <body>
