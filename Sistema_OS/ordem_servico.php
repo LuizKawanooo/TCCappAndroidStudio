@@ -272,31 +272,54 @@ $conn->close();
 <!-- Popup Modal -->
 <div id="popupModal" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 2px solid black; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); z-index: 1000;">
     <h3>Editar Ordem de Serviço</h3>
-    <form id="editForm" method="POST" action="atualizar_ordem.php">
-        <input type="hidden" id="orderId" name="orderId">
-        <label for="codigo_cliente">Código Cliente:</label>
-        <input type="text" id="codigo_cliente" name="codigo_cliente" required><br><br>
+<form id="editForm" method="POST" action="atualizar_ordem.php">
+    <input type="hidden" id="orderId" name="orderId">
 
-        <label for="aparelho">Aparelho:</label>
-        <input type="text" id="aparelho" name="aparelho" required><br><br>
+    <label for="codigo_cliente">Código Cliente:</label>
+    <input type="text" id="codigo_cliente" name="codigo_cliente" required><br><br>
 
-        <label for="marca">Marca:</label>
-        <input type="text" id="marca" name="marca" required><br><br>
+    <label for="aparelho">Aparelho:</label>
+    <input type="text" id="aparelho" name="aparelho" required><br><br>
 
-        <label for="modelo">Modelo:</label>
-        <input type="text" id="modelo" name="modelo" required><br><br>
+    <label for="marca">Marca:</label>
+    <input type="text" id="marca" name="marca" required><br><br>
 
-        <label for="serie">Série:</label>
-        <input type="text" id="serie" name="serie" required><br><br>
+    <label for="modelo">Modelo:</label>
+    <input type="text" id="modelo" name="modelo" required><br><br>
 
-        <label for="data_entrega">Data de Entrega:</label>
-        <input type="date" id="data_entrega" name="data_entrega" required><br><br>
+    <label for="serie">Série:</label>
+    <input type="text" id="serie" name="serie" required><br><br>
 
-        <label for="valor">Valor:</label>
-        <input type="text" id="valor" name="valor" required><br><br>
+    <label for="acessorios">Acessórios:</label>
+    <input type="text" id="acessorios" name="acessorios"><br><br>
 
-        <button type="submit" style="background: green; color: white;">Salvar Alterações</button>
-    </form>
+    <label for="condicoes">Condições:</label>
+    <input type="text" id="condicoes" name="condicoes"><br><br>
+
+    <label for="defeito_informado">Defeito Informado:</label>
+    <input type="text" id="defeito_informado" name="defeito_informado"><br><br>
+
+    <label for="descricao_servico">Descrição do Serviço:</label>
+    <textarea id="descricao_servico" name="descricao_servico"></textarea><br><br>
+
+    <label for="entrega">Entrega:</label>
+    <input type="text" id="entrega" name="entrega"><br><br>
+
+    <label for="garantia">Garantia:</label>
+    <input type="text" id="garantia" name="garantia"><br><br>
+
+    <label for="valor">Valor:</label>
+    <input type="text" id="valor" name="valor" required><br><br>
+
+    <label for="condicoes_pagamento">Condições de Pagamento:</label>
+    <input type="text" id="condicoes_pagamento" name="condicoes_pagamento"><br><br>
+
+    <label for="data_entrega">Data de Entrega:</label>
+    <input type="date" id="data_entrega" name="data_entrega" required><br><br>
+
+    <button type="submit" style="background: green; color: white;">Salvar Alterações</button>
+</form>
+
     <button onclick="closePopup()">Fechar</button>
 </div>
 
@@ -310,14 +333,23 @@ $conn->close();
             .then(response => response.json())
             .then(data => {
                 // Preencher os campos do formulário com os dados da ordem de serviço
-                document.getElementById('orderId').value = data.id;
-                document.getElementById('codigo_cliente').value = data.codigo_cliente;
-                document.getElementById('aparelho').value = data.aparelho;
-                document.getElementById('marca').value = data.marca;
-                document.getElementById('modelo').value = data.modelo;
-                document.getElementById('serie').value = data.serie;
-                document.getElementById('data_entrega').value = data.data_entrega;
-                document.getElementById('valor').value = data.valor;
+            // Preencher os campos do formulário com os dados da ordem de serviço
+            document.getElementById('orderId').value = data.id;
+            document.getElementById('codigo_cliente').value = data.codigo_cliente;
+            document.getElementById('aparelho').value = data.aparelho;
+            document.getElementById('marca').value = data.marca;
+            document.getElementById('modelo').value = data.modelo;
+            document.getElementById('serie').value = data.serie;
+            document.getElementById('acessorios').value = data.acessorios;
+            document.getElementById('condicoes').value = data.condicoes;
+            document.getElementById('defeito_informado').value = data.defeito_informado;
+            document.getElementById('descricao_servico').value = data.descricao_servico;
+            document.getElementById('entrega').value = data.entrega;
+            document.getElementById('garantia').value = data.garantia;
+            document.getElementById('valor').value = data.valor;
+            document.getElementById('condicoes_pagamento').value = data.condicoes_pagamento;
+            document.getElementById('data_entrega').value = data.data_entrega;
+
 
                 // Exibir o popup
                 document.getElementById('popupModal').style.display = 'block';
