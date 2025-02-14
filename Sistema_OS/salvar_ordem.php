@@ -32,8 +32,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Por favor, preencha todos os campos obrigatórios!";
     } else {
         // Inserindo dados no banco de dados
-        $sql = "INSERT INTO ordem_servico (codigo_cliente, aparelho, marca, modelo, serie, acessorios, condicoes, defeito_informado, descricao_servico, entrega, garantia, valor, condicoes_pagamento, data_entrega)
-                VALUES ('$codigo_cliente', '$aparelho', '$marca', '$modelo', '$serie', '$acessorios', '$condicoes', '$defeito_informado', '$descricao_servico', '$entrega', '$garantia', '$valor', '$condicoes_pagamento', '$data_entrega')";
+        $sql = "INSERT INTO ordem_servico (codigo_cliente, aparelho, marca, modelo, serie, acessorios, condicoes, defeito_informado, descricao_servico, entrega, garantia, valor, condicoes_pagamento, data_entrega, data_registro)
+                VALUES ('$codigo_cliente', '$aparelho', '$marca', '$modelo', '$serie', '$acessorios', '$condicoes', '$defeito_informado', '$descricao_servico', '$entrega', '$garantia', '$valor', '$condicoes_pagamento', '$data_entrega', NOW())";
 
         if ($conn->query($sql) === TRUE) {
             echo "Ordem de serviço cadastrada com sucesso!";
