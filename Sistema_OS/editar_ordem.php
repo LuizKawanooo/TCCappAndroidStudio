@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     try {
         // Atualiza os dados na tabela
-        $sql = "UPDATE ordens SET 
+        $sql = "UPDATE ordem_servico SET 
                     aparelho = :aparelho,
                     marca = :marca,
                     modelo = :modelo,
