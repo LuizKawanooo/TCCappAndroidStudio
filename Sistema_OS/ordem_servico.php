@@ -203,8 +203,8 @@ if ($result->num_rows > 0) {
         echo '<td style="padding: 10px; border: 2px solid black; text-align: center;">
             <a href="javascript:void(0);" onclick="openPopup(' . $row['id'] . ')" class="editar-btn" style="text-decoration: none; background: blue; color: white; padding: 5px 10px; border-radius: 5px;">Editar</a>
           </td>';
-       echo '</tr>';
-    $row_count++;
+        echo '</tr>';
+        $row_count++;
     }
 
     echo '</table>';
@@ -225,7 +225,31 @@ $conn->close();
 <!-- Popup Modal -->
 <div id="popupModal" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 2px solid black; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); z-index: 1000;">
     <h3>Editar Ordem de Serviço</h3>
-    <p id="popupContent"></p>
+    <form id="editForm" method="POST" action="atualizar_ordem.php">
+        <input type="hidden" id="orderId" name="orderId">
+        <label for="codigo_cliente">Código Cliente:</label>
+        <input type="text" id="codigo_cliente" name="codigo_cliente" required><br><br>
+
+        <label for="aparelho">Aparelho:</label>
+        <input type="text" id="aparelho" name="aparelho" required><br><br>
+
+        <label for="marca">Marca:</label>
+        <input type="text" id="marca" name="marca" required><br><br>
+
+        <label for="modelo">Modelo:</label>
+        <input type="text" id="modelo" name="modelo" required><br><br>
+
+        <label for="serie">Série:</label>
+        <input type="text" id="serie" name="serie" required><br><br>
+
+        <label for="data_entrega">Data de Entrega:</label>
+        <input type="date" id="data_entrega" name="data_entrega" required><br><br>
+
+        <label for="valor">Valor:</label>
+        <input type="text" id="valor" name="valor" required><br><br>
+
+        <button type="submit" style="background: green; color: white;">Salvar Alterações</button>
+    </form>
     <button onclick="closePopup()">Fechar</button>
 </div>
 
@@ -234,12 +258,24 @@ $conn->close();
 
 <script>
     function openPopup(id) {
-        // Aqui você pode buscar os dados da ordem de serviço ou preencher com o id.
-        document.getElementById('popupContent').innerText = "Você está editando a ordem de serviço com ID: " + id;
-        
-        // Exibir o popup e o fundo
-        document.getElementById('popupModal').style.display = 'block';
-        document.getElementById('overlay').style.display = 'block';
+        // Buscar os dados da ordem de serviço usando o ID
+        fetch('get_ordem.php?id=' + id)
+            .then(response => response.json())
+            .then(data => {
+                // Preencher os campos do formulário com os dados da ordem de serviço
+                document.getElementById('orderId').value = data.id;
+                document.getElementById('codigo_cliente').value = data.codigo_cliente;
+                document.getElementById('aparelho').value = data.aparelho;
+                document.getElementById('marca').value = data.marca;
+                document.getElementById('modelo').value = data.modelo;
+                document.getElementById('serie').value = data.serie;
+                document.getElementById('data_entrega').value = data.data_entrega;
+                document.getElementById('valor').value = data.valor;
+
+                // Exibir o popup
+                document.getElementById('popupModal').style.display = 'block';
+                document.getElementById('overlay').style.display = 'block';
+            });
     }
 
     function closePopup() {
@@ -248,6 +284,7 @@ $conn->close();
         document.getElementById('overlay').style.display = 'none';
     }
 </script>
+
 
 
 
