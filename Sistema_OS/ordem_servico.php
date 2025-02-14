@@ -200,9 +200,8 @@ if ($result->num_rows > 0) {
         echo '<td style="padding: 10px; border: 2px solid black;">' . $row["serie"] . '</td>';
         echo '<td style="padding: 10px; border: 2px solid black;">' . $row["data_entrega"] . '</td>';
         echo '<td style="padding: 10px; border: 2px solid black;">R$ ' . number_format($row["valor"], 2, ',', '.') . '</td>';
-        echo '<td style="padding: 10px; border: 2px solid black; text-align: center;">
-                <a href="#" class="editar-btn" data-id="<?= $row['id'] ?>" style="text-decoration: none; background: blue; color: white; padding: 5px 10px; border-radius: 5px;">Editar</a>
-              </td>';
+        echo '<td style="padding: 10px; border: 2px solid black; text-align: center;"> <a href="#" class="editar-btn" data-id="<?= $row['id'] ?>" style="text-decoration: none; background: blue; color: white; padding: 5px 10px; border-radius: 5px;">Editar</a>
+</td>';
         echo '</tr>';
 
         $row_count++;
