@@ -271,7 +271,7 @@ $conn->close();
 
 <!-- Popup Modal -->
 <div id="popupModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; z-index: 1000;">
-    <div style="background: rgb(233, 233, 233); padding: 20px; border-radius: 8px; width: 400px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); position: relative; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+    <div style="max-height: 650px; overflow-y: auto;background: rgb(233, 233, 233); padding: 20px; border-radius: 8px; width: 400px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); position: relative; left: 50%; top: 50%; transform: translate(-50%, -50%);">
         <h3 style="text-align: center; font-size: 16px; margin-bottom: 8px; background: #d9d9d9; padding: 6px; border-bottom: 2px solid #ccc;">Editar Ordem de Serviço</h3>
 
         <form id="editForm" method="POST" action="atualizar_ordem.php">
