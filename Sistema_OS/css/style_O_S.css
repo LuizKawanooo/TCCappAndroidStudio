@@ -233,6 +233,8 @@
     top: 50%;
     transform: scale(0.96);
     transform: translate(-50%, -50%);
+    max-height: 650px;
+    overflow-y: auto;
 }
 
 /* Título */
