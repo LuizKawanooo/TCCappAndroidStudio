@@ -72,7 +72,7 @@ try {
     }
 
     // Exibição dos resultados em uma tabela
-    echo '<table border="1">';
+    echo '<table>';
     echo '<tr>
             <th>Código Cliente</th>
             <th>Aparelho</th>
