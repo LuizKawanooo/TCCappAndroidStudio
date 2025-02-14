@@ -1,5 +1,5 @@
 <?php
-// Dados de conexão ao banco de dados
+// Configurações do banco de dados
 $host = 'bd-os-endo.mysql.uhserver.com';
 $dbname = 'bd_os_endo';
 $username = 'joseendologic';
@@ -65,106 +65,101 @@ try {
     // Recuperando os resultados
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Verificando se há resultados
-if (empty($result)) {
-    echo '<p>Nenhuma ordem encontrada.</p>';
-    exit;
+    // Verificando se há resultados
+    if (empty($result)) {
+        echo '<p>Nenhuma ordem encontrada.</p>';
+        exit;
+    }
+
+    // Exibição dos resultados em uma tabela
+    echo '<table border="1">';
+    echo '<tr>
+            <th>Código Cliente</th>
+            <th>Aparelho</th>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>Série</th>
+            <th>Data Entrega</th>
+            <th>Valor</th>
+            <th>Ações</th>
+          </tr>';
+
+    foreach ($result as $row) {
+        echo '<tr>';
+        echo '<td>' . htmlspecialchars($row['codigo_cliente']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['aparelho']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['marca']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['modelo']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['serie']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['data_entrega']) . '</td>';
+        echo '<td>R$ ' . number_format($row['valor'], 2, ',', '.') . '</td>';
+        echo '<td>
+                <button onclick="openEditPopup(`' . htmlspecialchars(json_encode($row)) . '`)">Editar</button>
+              </td>';
+        echo '</tr>';
+    }
+
+    echo '</table>';
+
+} catch (PDOException $e) {
+    sendError('Erro ao conectar ao banco de dados: ' . $e->getMessage());
+} catch (Exception $e) {
+    sendError('Erro inesperado: ' . $e->getMessage());
 }
-
-// Exibição dos resultados em uma tabela
-echo '<table border="1">';
-echo '<tr>
-        <th>Código Cliente</th>
-        <th>Aparelho</th>
-        <th>Marca</th>
-        <th>Modelo</th>
-        <th>Série</th>
-        <th>Data Entrega</th>
-        <th>Valor</th>
-        <th>Ações</th>
-      </tr>';
-
-foreach ($result as $row) {
-    echo '<tr>';
-    echo '<td>' . htmlspecialchars($row['codigo_cliente']) . '</td>';
-    echo '<td>' . htmlspecialchars($row['aparelho']) . '</td>';
-    echo '<td>' . htmlspecialchars($row['marca']) . '</td>';
-    echo '<td>' . htmlspecialchars($row['modelo']) . '</td>';
-    echo '<td>' . htmlspecialchars($row['serie']) . '</td>';
-    echo '<td>' . htmlspecialchars($row['data_entrega']) . '</td>';
-    echo '<td>R$ ' . number_format($row['valor'], 2, ',', '.') . '</td>';
-    echo '<td>
-            <button onclick="abrirModal(' . htmlspecialchars(json_encode($row)) . ')">Editar</button>
-          </td>';
-    echo '</tr>';
-}
-
-echo '</table>';
 ?>
 
-<!-- Modal de Edição -->
-<div id="modalEditar" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    background: white; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-    
-    <h2>Editar Ordem de Serviço</h2>
-    <form id="formEditar">
+<!-- Popup de edição -->
+<div id="editPopup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; box-shadow: 0px 0px 10px #000;">
+    <h3>Editar Ordem de Serviço</h3>
+    <form id="editForm">
         <input type="hidden" id="codigo_cliente" name="codigo_cliente">
         <label>Aparelho:</label>
         <input type="text" id="aparelho" name="aparelho"><br>
-
         <label>Marca:</label>
         <input type="text" id="marca" name="marca"><br>
-
         <label>Modelo:</label>
         <input type="text" id="modelo" name="modelo"><br>
-
         <label>Série:</label>
         <input type="text" id="serie" name="serie"><br>
-
-        <label>Data de Entrega:</label>
+        <label>Data Entrega:</label>
         <input type="date" id="data_entrega" name="data_entrega"><br>
-
         <label>Valor:</label>
-        <input type="number" step="0.01" id="valor" name="valor"><br>
-
-        <button type="submit">Salvar Alterações</button>
-        <button type="button" onclick="fecharModal()">Cancelar</button>
+        <input type="text" id="valor" name="valor"><br>
+        <button type="button" onclick="saveEdit()">Salvar Alterações</button>
+        <button type="button" onclick="closeEditPopup()">Cancelar</button>
     </form>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    function abrirModal(ordem) {
-        document.getElementById('codigo_cliente').value = ordem.codigo_cliente;
-        document.getElementById('aparelho').value = ordem.aparelho;
-        document.getElementById('marca').value = ordem.marca;
-        document.getElementById('modelo').value = ordem.modelo;
-        document.getElementById('serie').value = ordem.serie;
-        document.getElementById('data_entrega').value = ordem.data_entrega;
-        document.getElementById('valor').value = ordem.valor;
-        document.getElementById('modalEditar').style.display = 'block';
-    }
+function openEditPopup(data) {
+    var ordem = JSON.parse(data);
+    document.getElementById("codigo_cliente").value = ordem.codigo_cliente;
+    document.getElementById("aparelho").value = ordem.aparelho;
+    document.getElementById("marca").value = ordem.marca;
+    document.getElementById("modelo").value = ordem.modelo;
+    document.getElementById("serie").value = ordem.serie;
+    document.getElementById("data_entrega").value = ordem.data_entrega;
+    document.getElementById("valor").value = ordem.valor;
+    document.getElementById("editPopup").style.display = "block";
+}
 
-    function fecharModal() {
-        document.getElementById('modalEditar').style.display = 'none';
-    }
+function closeEditPopup() {
+    document.getElementById("editPopup").style.display = "none";
+}
 
-    $('#formEditar').submit(function(event) {
-        event.preventDefault();
+function saveEdit() {
+    var formData = new FormData(document.getElementById("editForm"));
 
-        $.ajax({
-            url: 'editar_ordem.php',
-            type: 'POST',
-            data: $('#formEditar').serialize(),
-            success: function(response) {
-                alert(response);
-                location.reload();  // Recarregar a página após salvar
-            },
-            error: function() {
-                alert('Erro ao salvar as alterações.');
-            }
-        });
-    });
+    fetch("editar_ordem.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert(data);
+        closeEditPopup();
+        location.reload(); // Recarrega a página para atualizar os dados
+    })
+    .catch(error => console.error("Erro ao atualizar:", error));
+}
 </script>
-
-?>
