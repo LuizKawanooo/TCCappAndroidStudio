@@ -29,12 +29,11 @@ $ordens = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <section class="section_top" style="display: inline-flex;width: 100%; background: #FFFBF0; position: relative; left: 50%; transform: translate(-50%);">
             <!-- Botão para abrir o popup de adicionar -->
             <div class="incluir">
-                <div onclick="abrirPopup()" style="display: inline-block; align-items: center; text-align: center; margin: 15px; cursor: pointer;">
-                    <img src="img/adicionar_icon.png" alt="Adicionar OS" width="60px" style="position: relative; left: 50%; transform: translate(-50%);">
-                    <p style="position: relative;">Adicionar</p>
-                            <button onclick="abrirPopup()" style="font-size: 18px; font-weight: bold; background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer;">add</button>
-
-                </div>
+                    <div id="popup">
+                        <h2>Ordem de Serviço</h2>
+                        <p>A série da ordem é: <?php echo htmlspecialchars($serie_ordem); ?></p>
+                        <button id="closeBtn">Fechar</button>
+                    </div>
                 
             </div>
 
@@ -145,7 +144,7 @@ if ($conn->connect_error) {
 // Pegar os parâmetros da pesquisa
 $no_ordem = isset($_GET['no_ordem']) ? $_GET['no_ordem'] : '';
 $data_ordem = isset($_GET['data_ordem']) ? $_GET['data_ordem'] : '';
-$serie_ordem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : '';
+$serie_ordem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : ''; 
 $entregar_ordem = isset($_GET['entregar_ordem']) ? $_GET['entregar_ordem'] : '';
 
 // Iniciar a query com "WHERE 1=1" para facilitar a construção das condições
@@ -381,15 +380,27 @@ $conn->close();
 </div>
 
 <script>
-// Função para abrir o popup
-function abrirPopup() {
-    document.getElementById("popupadd").style.display = "flex"; // Exibe o popup
-}
+ // Função para abrir o popup
+        function abrirPopup() {
+            document.getElementById('popup').style.display = 'block';
+        }
 
-// Função para fechar o popup
-function fecharPopup() {
-    document.getElementById("popupadd").style.display = "none"; // Oculta o popup
-}
+        // Função para fechar o popup
+        function fecharPopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        // Abrir o popup automaticamente após a página carregar (sem uso de onclick)
+        window.onload = function() {
+            // Verificando se existe o parâmetro 'serie_ordem' na URL
+            const serieOrdem = new URLSearchParams(window.location.search).get('serie_ordem');
+            if (serieOrdem) {
+                abrirPopup();
+            }
+        };
+
+        // Fechar o popup quando clicar no botão de fechar
+        document.getElementById('closeBtn').addEventListener('click', fecharPopup);
 
 // Função para enviar o formulário
 function enviarFormulario() {
