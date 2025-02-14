@@ -11,39 +11,47 @@ if ($conn->connect_error) {
     die("Conexão falhou: " . $conn->connect_error);
 }
 
-// Verificando se os dados do formulário foram enviados
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Recebendo os dados do formulário
-    $orderId = $_POST['orderId'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $codigo_cliente = $_POST['codigo_cliente'];
     $aparelho = $_POST['aparelho'];
     $marca = $_POST['marca'];
     $modelo = $_POST['modelo'];
     $serie = $_POST['serie'];
-    $data_entrega = $_POST['data_entrega'];
+    $acessorios = $_POST['acessorios'];
+    $condicoes = $_POST['condicoes'];
+    $defeito_informado = $_POST['defeito_informado'];
+    $descricao_servico = $_POST['descricao_servico'];
+    $entrega = $_POST['entrega'];
+    $garantia = $_POST['garantia'];
     $valor = $_POST['valor'];
+    $condicoes_pagamento = $_POST['condicoes_pagamento'];
+    $data_entrega = $_POST['data_entrega'];
 
-    // Validando os dados (opcional, dependendo da sua aplicação)
-    if (empty($codigo_cliente) || empty($aparelho) || empty($marca) || empty($modelo) || empty($serie) || empty($data_entrega) || empty($valor)) {
-        echo "Todos os campos são obrigatórios!";
-        exit;
-    }
+    // Atualiza no banco
+    $update_query = "UPDATE ordem_servico SET 
+                        codigo_cliente = '$codigo_cliente', 
+                        aparelho = '$aparelho', 
+                        marca = '$marca', 
+                        modelo = '$modelo', 
+                        serie = '$serie', 
+                        acessorios = '$acessorios', 
+                        condicoes = '$condicoes', 
+                        defeito_informado = '$defeito_informado', 
+                        descricao_servico = '$descricao_servico', 
+                        entrega = '$entrega', 
+                        garantia = '$garantia', 
+                        valor = '$valor', 
+                        condicoes_pagamento = '$condicoes_pagamento', 
+                        data_entrega = '$data_entrega'
+                    WHERE id = $id_ordem";
 
-    // Preparando a consulta para atualizar os dados no banco
-    $query = "UPDATE ordem_servico SET
-                codigo_cliente = ?, aparelho = ?, marca = ?, modelo = ?, serie = ?, data_entrega = ?, valor = ?
-                WHERE id = ?";
-
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("ssssssdi", $codigo_cliente, $aparelho, $marca, $modelo, $serie, $data_entrega, $valor, $orderId);
-
-    // Executando a consulta
-    if ($stmt->execute()) {
-        // Redireciona para a página da tabela ou exibe uma mensagem de sucesso
+    if ($conn->query($update_query) === TRUE) {
         echo "Ordem de serviço atualizada com sucesso!";
     } else {
-        echo "Erro ao atualizar a ordem de serviço: " . $stmt->error;
+        echo "Erro ao atualizar ordem de serviço: " . $conn->error;
     }
+
+
 
     // Fechando a conexão
     $stmt->close();
