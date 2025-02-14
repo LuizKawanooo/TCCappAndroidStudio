@@ -28,7 +28,7 @@ $ordens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
     <section class="section_top" style="display: inline-flex;width: 100%; background: #FFFBF0; position: relative; left: 50%; transform: translate(-50%);">
         <div class="incluir">
-            <div onclick="abrirPopup()" style="display: inline-block; align-items: center;text-align: center; margin: 15px;"><img src="img/adicionar_icon.png" alt="Adicionar OS" width="60px" style="position: relative; left: 50%; transform: translate(-50%);"><p style="position: relative;">Adicionar</p></div>
+            <div onclick="abrirPopupAdd()" style="display: inline-block; align-items: center;text-align: center; margin: 15px;"><img src="img/adicionar_icon.png" alt="Adicionar OS" width="60px" style="position: relative; left: 50%; transform: translate(-50%);"><p style="position: relative;">Adicionar</p></div>
             
         </div>
 
@@ -384,7 +384,7 @@ function confirmarCancelamento() {
    
     
 <script>
-function abrirPopup() {
+function abrirPopupAdd() {
     document.getElementById("popup").style.display = "flex";
 }
 
