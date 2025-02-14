@@ -1,4 +1,25 @@
 <?php
+// Verifica se o parâmetro 'serie_ordem' não está presente na URL
+if (!isset($_GET['serie_ordem'])) {
+    // Redireciona para a URL com o parâmetro 'serie_ordem=-'
+    header("Location: ordem_servico.php?serie_ordem=-");
+    exit(); // Garante que o script pare a execução após o redirecionamento
+}
+
+
+
+// Variável para armazenar a mensagem
+$mensagem_alerta = "";
+
+// Se a URL contiver exatamente 'serie_ordem=-', define a mensagem
+if (isset($_GET['serie_ordem']) && $_GET['serie_ordem'] === '-') {
+    $mensagem_alerta = "<h1>POR FAVOR, PREENCHA ALGUM CAMPO PARA REALIZAR A PESQUISA...</h1>";
+}
+
+    
+?>
+
+<?php
 // Conexão com o banco
 $host = 'bd-os-endo.mysql.uhserver.com';
 $dbname = 'bd_os_endo';
@@ -84,8 +105,9 @@ $ordens = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <button onclick="searchFields()" style="font-size: 18px; font-weight: bold; background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer;">Pesquisar</button>
     </div>
 </section>
+    
 
-
+<div id="alertasearch"><?php echo $mensagem_alerta; ?></div>
 
 <!-- Exibição dos resultados -->
 <div id="resultados"></div>
