@@ -115,36 +115,40 @@ $ordens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <script>
 function searchFields() {
     // Pegando os valores dos campos de entrada
-    var no_ordem = document.getElementById('no_ordem').value;
-    var data_ordem = document.getElementById('data_ordem').value;
-    var serie_ordem = document.getElementById('serie_ordem').value;
-    var entregar_ordem = document.getElementById('entregar_ordem').value;
+    var no_ordem = document.getElementById('no_ordem').value.trim();
+    var data_ordem = document.getElementById('data_ordem').value.trim();
+    var serie_ordem = document.getElementById('serie_ordem').value.trim();
+    var entregar_ordem = document.getElementById('entregar_ordem').value.trim();
 
     // Construir a URL de pesquisa com os parâmetros preenchidos
-    var query = '?';
+    var queryParams = [];
 
     if (no_ordem) {
-        query += 'no_ordem=' + no_ordem + '&';
-    }
-    if ($data_ordem != '') {
-        // Converter de 'DD/MM/YYYY' para 'YYYY-MM-DD' (se necessário)
-        $data_ordem_formatada = date('Y-m-d', strtotime(str_replace('/', '-', $data_ordem)));
-        $conditions[] = "data_registro = '$data_ordem_formatada'";
+        queryParams.push('no_ordem=' + encodeURIComponent(no_ordem));
     }
 
+    if (data_ordem) {
+        // Converter de 'DD/MM/YYYY' para 'YYYY-MM-DD'
+        var partesData = data_ordem.split('/');
+        if (partesData.length === 3) {
+            var dataFormatada = partesData[2] + '-' + partesData[1] + '-' + partesData[0];
+            queryParams.push('data_ordem=' + encodeURIComponent(dataFormatada));
+        }
+    }
 
     if (serie_ordem) {
-        query += 'serie_ordem=' + serie_ordem + '&';
+        queryParams.push('serie_ordem=' + encodeURIComponent(serie_ordem));
     }
+
     if (entregar_ordem) {
-        query += 'entregar_ordem=' + entregar_ordem + '&';
+        queryParams.push('entregar_ordem=' + encodeURIComponent(entregar_ordem));
     }
 
-    // Remover o último caractere '&' (se houver)
-    query = query.slice(0, -1);
+    // Construir a URL final
+    var queryString = queryParams.length > 0 ? '?' + queryParams.join('&') : '';
 
-    // Enviar a pesquisa para o servidor (ajustar o URL conforme necessário)
-    window.location.href = 'ordem_servico.php' + query;
+    // Redirecionar para a página com os parâmetros
+    window.location.href = 'ordem_servico.php' + queryString;
 }
 
 </script>
