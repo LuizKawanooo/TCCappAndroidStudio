@@ -114,13 +114,11 @@ $ordens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <script>
 function searchFields() {
-    // Pegando os valores dos campos de entrada
     var no_ordem = document.getElementById('no_ordem').value.trim();
     var data_ordem = document.getElementById('data_ordem').value.trim();
     var serie_ordem = document.getElementById('serie_ordem').value.trim();
     var entregar_ordem = document.getElementById('entregar_ordem').value.trim();
 
-    // Construir a URL de pesquisa com os parâmetros preenchidos
     var queryParams = [];
 
     if (no_ordem) {
@@ -128,12 +126,7 @@ function searchFields() {
     }
 
     if (data_ordem) {
-        // Converter de 'DD/MM/YYYY' para 'YYYY-MM-DD'
-        var partesData = data_ordem.split('/');
-        if (partesData.length === 3) {
-            var dataFormatada = partesData[2] + '-' + partesData[1] + '-' + partesData[0];
-            queryParams.push('data_ordem=' + encodeURIComponent(dataFormatada));
-        }
+        queryParams.push('data_ordem=' + encodeURIComponent(data_ordem));
     }
 
     if (serie_ordem) {
@@ -144,10 +137,7 @@ function searchFields() {
         queryParams.push('entregar_ordem=' + encodeURIComponent(entregar_ordem));
     }
 
-    // Construir a URL final
     var queryString = queryParams.length > 0 ? '?' + queryParams.join('&') : '';
-
-    // Redirecionar para a página com os parâmetros
     window.location.href = 'ordem_servico.php' + queryString;
 }
 
@@ -171,39 +161,38 @@ if ($conn->connect_error) {
 
 // Pegar os parâmetros da pesquisa
 $no_ordem = isset($_GET['no_ordem']) ? $_GET['no_ordem'] : '';
-$data_ordem = isset($_GET['data_ordem']) ? $_GET['data_ordem'] : '';
+$data_registro = isset($_GET['data_ordem']) ? $_GET['data_ordem'] : ''; // Corrigindo para data_registro
 $serie_ordem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : ''; 
 $entregar_ordem = isset($_GET['entregar_ordem']) ? $_GET['entregar_ordem'] : '';
 
-// Iniciar a query com "WHERE 1=1" para facilitar a construção das condições
 $query = "SELECT * FROM ordem_servico WHERE 1=1";
 
-// Criar um array de condições para concatenar com a query
 $conditions = [];
 
-// Adicionar as condições conforme os campos preenchidos
 if (!empty($no_ordem)) {
-    $no_ordem = intval($no_ordem); // Garante que seja um número inteiro
+    $no_ordem = intval($no_ordem);
     $conditions[] = "id = $no_ordem";
 }
 
-if ($data_ordem != '') {
-    $conditions[] = "data_registro = '$data_ordem'";
+if ($data_registro != '') {
+    $conditions[] = "data_registro = '$data_registro'";
 }
+
 if ($serie_ordem != '') {
     $conditions[] = "serie = '$serie_ordem'";
 }
+
 if ($entregar_ordem != '') {
     $conditions[] = "data_entrega = '$entregar_ordem'";
 }
 
-// Concatenar as condições na query se existirem
 if (count($conditions) > 0) {
     $query .= " AND " . implode(" AND ", $conditions);
 } else {
     echo "Por favor, preencha algum campo para realizar a pesquisa.";
     exit();
 }
+
 
 // Executar a consulta
 $result = $conn->query($query);
