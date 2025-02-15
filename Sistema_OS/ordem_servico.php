@@ -178,9 +178,11 @@ $query = "SELECT * FROM ordem_servico WHERE 1=1";
 $conditions = [];
 
 // Adicionar as condições conforme os campos preenchidos
-if ($no_ordem != '') {
-    $conditions[] = "id = '$no_ordem'";
+if (!empty($no_ordem)) {
+    $no_ordem = intval($no_ordem); // Garante que seja um número inteiro
+    $conditions[] = "id = $no_ordem";
 }
+
 if ($data_ordem != '') {
     $conditions[] = "data_registro = '$data_ordem'";
 }
