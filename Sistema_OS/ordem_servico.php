@@ -121,21 +121,10 @@ function searchFields() {
 
     var queryParams = [];
 
-    if (no_ordem) {
-        queryParams.push('no_ordem=' + encodeURIComponent(no_ordem));
-    }
-
-    if (data_ordem) {
-        queryParams.push('data_ordem=' + encodeURIComponent(data_ordem));
-    }
-
-    if (serie_ordem) {
-        queryParams.push('serie_ordem=' + encodeURIComponent(serie_ordem));
-    }
-
-    if (entregar_ordem) {
-        queryParams.push('entregar_ordem=' + encodeURIComponent(entregar_ordem));
-    }
+    if (no_ordem) queryParams.push('no_ordem=' + encodeURIComponent(no_ordem));
+    if (data_ordem) queryParams.push('data_ordem=' + encodeURIComponent(data_ordem));
+    if (serie_ordem) queryParams.push('serie_ordem=' + encodeURIComponent(serie_ordem));
+    if (entregar_ordem) queryParams.push('entregar_ordem=' + encodeURIComponent(entregar_ordem));
 
     var queryString = queryParams.length > 0 ? '?' + queryParams.join('&') : '';
     window.location.href = 'ordem_servico.php' + queryString;
@@ -151,58 +140,52 @@ $username = "joseendologic";
 $password = "{[OSluiz2019";
 $dbname = "bd_os_endo";
 
-// Criar conexão
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Checar a conexão
 if ($conn->connect_error) {
     die("Conexão falhou: " . $conn->connect_error);
 }
 
-// Pegar os parâmetros da pesquisa
+// Captura os parâmetros
 $no_ordem = isset($_GET['no_ordem']) ? $_GET['no_ordem'] : '';
-$data_registro = isset($_GET['data_ordem']) ? $_GET['data_ordem'] : ''; // Corrigindo para data_registro
-$serie_ordem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : ''; 
+$data_ordem = isset($_GET['data_ordem']) ? $_GET['data_ordem'] : '';
+$serie_ordem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : '';
 $entregar_ordem = isset($_GET['entregar_ordem']) ? $_GET['entregar_ordem'] : '';
 
 $query = "SELECT * FROM ordem_servico WHERE 1=1";
-
 $conditions = [];
 
+// Aplicando os filtros
 if (!empty($no_ordem)) {
     $no_ordem = intval($no_ordem);
     $conditions[] = "id = $no_ordem";
 }
 
-if ($data_registro != '') {
-    $conditions[] = "data_registro = '$data_registro'";
+if (!empty($data_ordem)) {
+    $conditions[] = "data_registro = '$data_ordem'";
 }
 
-if ($serie_ordem != '') {
+if (!empty($serie_ordem)) {
     $conditions[] = "serie = '$serie_ordem'";
 }
 
-if ($entregar_ordem != '') {
+if (!empty($entregar_ordem)) {
     $conditions[] = "data_entrega = '$entregar_ordem'";
 }
 
+// Adiciona condições à query
 if (count($conditions) > 0) {
     $query .= " AND " . implode(" AND ", $conditions);
-} else {
-    echo "Por favor, preencha algum campo para realizar a pesquisa.";
-    exit();
 }
 
-
-// Executar a consulta
+// Executa a consulta
 $result = $conn->query($query);
 
-
-// Checar se há resultados
+// Exibir tabela formatada
 if ($result->num_rows > 0) {
     echo '<div style="overflow-x: auto;">';
     echo '<table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; text-align: left;">';
-    
+
     // Cabeçalho da tabela
     echo '<tr style="background: yellow; border: 2px solid black;">';
     echo '<th style="padding: 10px; border: 2px solid black;">Código Cliente</th>';
@@ -223,10 +206,10 @@ if ($result->num_rows > 0) {
     echo '<th style="padding: 10px; border: 2px solid black;">Ações</th>';
     echo '</tr>';
 
-    $row_count = 0; // Contador para alternar as cores das linhas
+    $row_count = 0;
 
     while ($row = $result->fetch_assoc()) {
-        $background_color = ($row_count % 2 == 0) ? "#f0f0f0" : "#ffffff"; // Cinza claro e branco alternados
+        $background_color = ($row_count % 2 == 0) ? "#f0f0f0" : "#ffffff"; 
 
         echo '<tr style="background: ' . $background_color . '; border: 2px solid black;">';
         echo '<td style="padding: 10px; border: 2px solid black;">' . $row["codigo_cliente"] . '</td>';
@@ -245,9 +228,10 @@ if ($result->num_rows > 0) {
         echo '<td style="padding: 10px; border: 2px solid black;">' . date("d/m/Y", strtotime($row["data_entrega"])) . '</td>';
         echo '<td style="padding: 10px; border: 2px solid black;">' . date("d/m/Y", strtotime($row["data_registro"])) . '</td>';
         echo '<td style="padding: 10px; border: 2px solid black; text-align: center;">
-            <a href="javascript:void(0);" onclick="openPopup(' . $row['id'] . ')" class="editar-btn" style="text-decoration: none; background: blue; color: white; padding: 5px 10px; border-radius: 5px;">Editar</a>
-          </td>';
+                <a href="javascript:void(0);" onclick="openPopup(' . $row['id'] . ')" class="editar-btn" style="text-decoration: none; background: blue; color: white; padding: 5px 10px; border-radius: 5px;">Editar</a>
+              </td>';
         echo '</tr>';
+
         $row_count++;
     }
 
@@ -256,7 +240,6 @@ if ($result->num_rows > 0) {
 } else {
     echo "Nenhum resultado encontrado.";
 }
-
 
 $conn->close();
 ?>
