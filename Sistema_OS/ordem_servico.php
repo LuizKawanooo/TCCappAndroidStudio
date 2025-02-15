@@ -126,9 +126,13 @@ function searchFields() {
     if (no_ordem) {
         query += 'no_ordem=' + no_ordem + '&';
     }
-    if (data_ordem) {
-        query += 'data_ordem=' + data_ordem + '&';
+    if ($data_ordem != '') {
+        // Converter de 'DD/MM/YYYY' para 'YYYY-MM-DD' (se necessário)
+        $data_ordem_formatada = date('Y-m-d', strtotime(str_replace('/', '-', $data_ordem)));
+        $conditions[] = "data_registro = '$data_ordem_formatada'";
     }
+
+
     if (serie_ordem) {
         query += 'serie_ordem=' + serie_ordem + '&';
     }
