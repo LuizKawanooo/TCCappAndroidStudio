@@ -114,20 +114,33 @@ $ordens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <script>
 function searchFields() {
-    var no_ordem = document.getElementById('no_ordem').value.trim();
-    var data_ordem = document.getElementById('data_ordem').value.trim();
-    var serie_ordem = document.getElementById('serie_ordem').value.trim();
-    var entregar_ordem = document.getElementById('entregar_ordem').value.trim();
+    // Pegando os valores dos campos de entrada
+    var no_ordem = document.getElementById('no_ordem').value;
+    var data_ordem = document.getElementById('data_ordem').value;
+    var serie_ordem = document.getElementById('serie_ordem').value;
+    var entregar_ordem = document.getElementById('entregar_ordem').value;
 
-    var queryParams = [];
+    // Construir a URL de pesquisa com os parâmetros preenchidos
+    var query = '?';
 
-    if (no_ordem) queryParams.push('no_ordem=' + encodeURIComponent(no_ordem));
-    if (data_ordem) queryParams.push('data_ordem=' + encodeURIComponent(data_ordem));
-    if (serie_ordem) queryParams.push('serie_ordem=' + encodeURIComponent(serie_ordem));
-    if (entregar_ordem) queryParams.push('entregar_ordem=' + encodeURIComponent(entregar_ordem));
+    if (no_ordem) {
+        query += 'no_ordem=' + no_ordem + '&';
+    }
+    if (data_ordem) {
+        query += 'data_ordem=' + data_ordem + '&';
+    }
+    if (serie_ordem) {
+        query += 'serie_ordem=' + serie_ordem + '&';
+    }
+    if (entregar_ordem) {
+        query += 'entregar_ordem=' + entregar_ordem + '&';
+    }
 
-    var queryString = queryParams.length > 0 ? '?' + queryParams.join('&') : '';
-    window.location.href = 'ordem_servico.php' + queryString;
+    // Remover o último caractere '&' (se houver)
+    query = query.slice(0, -1);
+
+    // Enviar a pesquisa para o servidor (ajustar o URL conforme necessário)
+    window.location.href = 'ordem_servico.php' + query;
 }
 
 </script>
@@ -140,96 +153,114 @@ $username = "joseendologic";
 $password = "{[OSluiz2019";
 $dbname = "bd_os_endo";
 
-// Conexão com o banco
+// Criar conexão
 $conn = new mysqli($servername, $username, $password, $dbname);
+
+// Checar a conexão
 if ($conn->connect_error) {
     die("Conexão falhou: " . $conn->connect_error);
 }
 
-// Captura os parâmetros do GET
+// Pegar os parâmetros da pesquisa
 $no_ordem = isset($_GET['no_ordem']) ? $_GET['no_ordem'] : '';
 $data_ordem = isset($_GET['data_ordem']) ? $_GET['data_ordem'] : '';
-$serie_ordem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : '';
+$serie_ordem = isset($_GET['serie_ordem']) ? $_GET['serie_ordem'] : ''; 
 $entregar_ordem = isset($_GET['entregar_ordem']) ? $_GET['entregar_ordem'] : '';
 
-// Definição dinâmica dos campos de SELECT
-$campos = [];
-if (!empty($no_ordem)) {
-    $campos[] = "id";
-}
-if (!empty($data_ordem)) {
-    $campos[] = "data_registro";
-}
-if (!empty($serie_ordem)) {
-    $campos[] = "serie";
-}
-if (!empty($entregar_ordem)) {
-    $campos[] = "data_entrega";
-}
+// Iniciar a query com "WHERE 1=1" para facilitar a construção das condições
+$query = "SELECT * FROM ordem_servico WHERE 1=1";
 
-// Se nenhum campo foi selecionado, retorna todos os dados
-$select_fields = !empty($campos) ? implode(",", $campos) : "*";
-
-// Monta a query
-$query = "SELECT $select_fields FROM ordem_servico WHERE 1=1";
+// Criar um array de condições para concatenar com a query
 $conditions = [];
 
-// Adiciona as condições apenas se os campos não estiverem vazios
-if (!empty($no_ordem)) {
-    $conditions[] = "id = " . intval($no_ordem);
+// Adicionar as condições conforme os campos preenchidos
+if ($no_ordem != '') {
+    $conditions[] = "id = '$no_ordem'";
 }
-if (!empty($data_ordem)) {
+if ($data_ordem != '') {
     $conditions[] = "data_registro = '$data_ordem'";
 }
-if (!empty($serie_ordem)) {
+if ($serie_ordem != '') {
     $conditions[] = "serie = '$serie_ordem'";
 }
-if (!empty($entregar_ordem)) {
+if ($entregar_ordem != '') {
     $conditions[] = "data_entrega = '$entregar_ordem'";
 }
 
-// Adiciona as condições à query
-if (!empty($conditions)) {
+// Concatenar as condições na query se existirem
+if (count($conditions) > 0) {
     $query .= " AND " . implode(" AND ", $conditions);
+} else {
+    echo "Por favor, preencha algum campo para realizar a pesquisa.";
+    exit();
 }
 
-// Debug: Exibe a query gerada (remova depois)
-echo "<p>Query gerada: $query</p>";
-
-// Executa a consulta
+// Executar a consulta
 $result = $conn->query($query);
 
-// Exibe os resultados
+
+// Checar se há resultados
 if ($result->num_rows > 0) {
     echo '<div style="overflow-x: auto;">';
     echo '<table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; text-align: left;">';
     
-    // Cabeçalho dinâmico
+    // Cabeçalho da tabela
     echo '<tr style="background: yellow; border: 2px solid black;">';
-    foreach ($campos as $campo) {
-        echo "<th style='padding: 10px; border: 2px solid black;'>" . ucfirst(str_replace('_', ' ', $campo)) . "</th>";
-    }
+    echo '<th style="padding: 10px; border: 2px solid black;">Código Cliente</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Aparelho</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Marca</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Modelo</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Série</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Acessórios</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Condições</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Defeito Informado</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Descrição Serviço</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Entrega</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Garantia</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Valor</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Condições Pagamento</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Data Entrega</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Data Registro</th>';
+    echo '<th style="padding: 10px; border: 2px solid black;">Ações</th>';
     echo '</tr>';
 
-    // Corpo da tabela
+    $row_count = 0; // Contador para alternar as cores das linhas
+
     while ($row = $result->fetch_assoc()) {
-        echo '<tr style="border: 2px solid black;">';
-        foreach ($campos as $campo) {
-            echo "<td style='padding: 10px; border: 2px solid black;'>" . $row[$campo] . "</td>";
-        }
+        $background_color = ($row_count % 2 == 0) ? "#f0f0f0" : "#ffffff"; // Cinza claro e branco alternados
+
+        echo '<tr style="background: ' . $background_color . '; border: 2px solid black;">';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["codigo_cliente"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["aparelho"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["marca"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["modelo"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["serie"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["acessorios"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["condicoes"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["defeito_informado"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["descricao_servico"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["entrega"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["garantia"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">R$ ' . number_format($row["valor"], 2, ',', '.') . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["condicoes_pagamento"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . date("d/m/Y", strtotime($row["data_entrega"])) . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . date("d/m/Y", strtotime($row["data_registro"])) . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black; text-align: center;">
+            <a href="javascript:void(0);" onclick="openPopup(' . $row['id'] . ')" class="editar-btn" style="text-decoration: none; background: blue; color: white; padding: 5px 10px; border-radius: 5px;">Editar</a>
+          </td>';
         echo '</tr>';
+        $row_count++;
     }
-    
+
     echo '</table>';
     echo '</div>';
 } else {
     echo "Nenhum resultado encontrado.";
 }
 
-// Fecha a conexão
+
 $conn->close();
 ?>
-
 
 
 
