@@ -239,7 +239,7 @@ if ($result->num_rows > 0) {
         echo '<td style="padding: 10px; border: 2px solid black;">' . $row["condicoes"] . '</td>';
         echo '<td style="padding: 10px; border: 2px solid black;">' . $row["defeito_informado"] . '</td>';
         echo '<td style="padding: 10px; border: 2px solid black;">' . $row["descricao_servico"] . '</td>';
-        echo '<td style="padding: 10px; border: 2px solid black;">' . $row["entrega"] . '</td>';
+        echo '<td style="padding: 10px; border: 2px solid black;">' . date("d/m/Y", strtotime($row["entrega"])) . '</td>';
         echo '<td style="padding: 10px; border: 2px solid black;">' . $row["garantia"] . '</td>';
         echo '<td style="padding: 10px; border: 2px solid black;">R$ ' . number_format($row["valor"], 2, ',', '.') . '</td>';
         echo '<td style="padding: 10px; border: 2px solid black;">' . $row["condicoes_pagamento"] . '</td>';
