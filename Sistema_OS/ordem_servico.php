@@ -21,10 +21,10 @@ if (isset($_GET['serie_ordem']) && $_GET['serie_ordem'] === '-') {
 
 <?php
 // Conexão com o banco
-$host = 'bd-os-endo.mysql.uhserver.com';
-$dbname = 'bd_os_endo';
-$username = 'joseendologic';
-$password = '{[OSluiz2019';
+$host = '';
+$dbname = '';
+$username = '';
+$password = '';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
@@ -527,3 +527,4 @@ function enviarFormulario() {
     
 </body>
 </html>
+
