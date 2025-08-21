@@ -1,9 +1,9 @@
 <?php
 // Conexão com o banco
-$servername = "bd-os-endo.mysql.uhserver.com";
-$username = "joseendologic";
-$password = "{[OSluiz2019";
-$dbname = "bd_os_endo";
+$servername = "";
+$username = "";
+$password = "";
+$dbname = "";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
